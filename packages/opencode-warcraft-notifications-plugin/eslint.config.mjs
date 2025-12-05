@@ -1,20 +1,11 @@
+import rootConfig from '../../eslint.config.mjs';
+
 export default [
+  ...rootConfig,
   {
-    extends: ['../../.eslintrc.json'],
-    ignorePatterns: ['!**/*'],
-    overrides: [
-      {
-        files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
-        rules: {},
-      },
-      {
-        files: ['*.ts', '*.tsx'],
-        rules: {},
-      },
-      {
-        files: ['*.js', '*.jsx'],
-        rules: {},
-      },
-    ],
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {
+      // Plugin-specific rule overrides can go here
+    },
   },
 ];
