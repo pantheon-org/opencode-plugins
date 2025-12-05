@@ -1,6 +1,6 @@
-# WarcraftNotifications
+# OpencodeWarcraftNotificationsPlugin
 
-OpenCode plugin for warcraft-notifications
+OpenCode plugin for opencode-warcraft-notifications-plugin
 
 > **Note**: This plugin is part of the `pantheon-org/opencode-plugins` monorepo. All development and contributions
 > should be made in the main repository at: **https://github.com/pantheon-org/opencode-plugins**

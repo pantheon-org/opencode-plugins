@@ -1,5 +1,5 @@
 {
-  "name": "warcraft-notifications-docs-builder",
+  "name": "opencode-warcraft-notifications-plugin-docs-builder",
   "type": "module",
   "version": "1.0.0",
   "private": true,
