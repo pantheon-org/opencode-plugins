@@ -1,19 +1,19 @@
 {
-  "name": "@<%= npmScope %>/<%= projectName %>",
+  "name": "@pantheon-org/opencode-warcraft-notifications-plugin",
   "version": "0.1.0",
-  "description": "<%= description %>",
+  "description": "warcraft notifications plugins for opencode",
   "keywords": [
     "opencode",
     "plugin",
     "typescript"
   ],
-  "homepage": "https://github.com/<%= npmScope %>/<%= projectName %>#readme",
+  "homepage": "https://github.com/pantheon-org/opencode-warcraft-notifications-plugin#readme",
   "bugs": {
-    "url": "https://github.com/<%= npmScope %>/<%= projectName %>/issues"
+    "url": "https://github.com/pantheon-org/opencode-warcraft-notifications-plugin/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/<%= npmScope %>/<%= projectName %>.git"
+    "url": "git+https://github.com/pantheon-org/opencode-warcraft-notifications-plugin.git"
   },
   "license": "MIT",
   "type": "module",
@@ -64,7 +64,7 @@
     "typescript": "^5.0.0"
   },
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=20.0.0",
     "bun": ">=1.0.0"
   }
 }

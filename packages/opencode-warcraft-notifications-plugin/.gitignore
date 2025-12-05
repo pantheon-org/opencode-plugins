@@ -1,0 +1,24 @@
+# dependencies (bun install)
+node_modules
+
+# Lock files
+# Keep bun.lock for reproducible builds
+# Ignore npm lockfile since we use Bun
+package-lock.json
+
+# Opencode instructions
+.opencode/
+.opencode-sounds/
+.context/
+
+# Session directories
+.session/
+.sessions/
+
+# Generated documentation artifacts
+dist/
+.astro/
+
+# Temporary directories
+tmp_*/
+.tmp*/

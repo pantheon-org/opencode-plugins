@@ -1,0 +1,1 @@
+export { OpencodeWarcraftNotificationsPlugin } from './src';
