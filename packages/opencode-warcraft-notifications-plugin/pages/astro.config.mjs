@@ -5,15 +5,15 @@ import rehypeMermaid from 'rehype-mermaid';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://pantheon-org.github.io',
-  base: '/opencode-opencode-warcraft-notifications-plugin',
+  base: '/opencode-warcraft-notifications',
   outDir: './dist',
   markdown: {
     rehypePlugins: [[rehypeMermaid, { strategy: 'img-svg' }]],
   },
   integrations: [
     starlight({
-      title: 'OpencodeWarcraftNotificationsPlugin',
-      description: 'OpenCode plugin for OpencodeWarcraftNotificationsPlugin',
+      title: 'WarcraftNotifications',
+      description: 'OpenCode plugin for WarcraftNotifications',
       logo: {
         light: './src/assets/logo-dark.svg',
         dark: './src/assets/logo-light.svg',
@@ -55,7 +55,7 @@ export default defineConfig({
         {
           icon: 'github',
           label: 'GitHub',
-          href: 'https://github.com/pantheon-org/opencode-opencode-warcraft-notifications-plugin',
+          href: 'https://github.com/pantheon-org/opencode-warcraft-notifications',
         },
         {
           icon: 'discord',
@@ -64,7 +64,7 @@ export default defineConfig({
         },
       ],
       editLink: {
-        baseUrl: 'https://github.com/pantheon-org/opencode-opencode-warcraft-notifications-plugin/edit/main/docs/',
+        baseUrl: 'https://github.com/pantheon-org/opencode-warcraft-notifications/edit/main/docs/',
       },
       customCss: ['./src/styles/custom.css'],
       defaultLocale: 'root',

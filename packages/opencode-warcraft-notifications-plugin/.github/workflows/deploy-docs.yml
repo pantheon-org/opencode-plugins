@@ -1,0 +1,93 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'pages/**'
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2.0.2
+        with:
+          bun-version: 'latest'
+
+      - name: Install dependencies
+        working-directory: ./pages
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        working-directory: ./pages
+        run: |
+          bunx playwright install --with-deps chromium
+          echo "✅ Playwright browsers installed"
+
+      - name: Transform documentation
+        working-directory: ./pages
+        run: |
+          node transform-docs.js
+          echo "✅ Documentation transformed from ./docs/ to ./pages/src/content/docs/"
+
+      - name: Build and upload with Astro action
+        uses: withastro/action@v3
+        with:
+          path: ./pages
+          package-manager: bun@latest
+
+      - name: Verify internal links
+        working-directory: ./pages
+        run: |
+          bun run verify
+          echo "✅ All internal links verified"
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Summary
+        run: |
+          echo "## 🎉 Documentation Deployment Complete!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Deployment Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL**: ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Build Process" >> $GITHUB_STEP_SUMMARY
+          echo "1. 📄 Source docs from \`./docs/\`" >> $GITHUB_STEP_SUMMARY
+          echo "2. 🔄 Transform to \`./pages/src/content/docs/\`" >> $GITHUB_STEP_SUMMARY
+          echo "3. 🏗️  Build Astro site to \`./pages/dist/\`" >> $GITHUB_STEP_SUMMARY
+          echo "4. 🔗 Fix and verify internal links" >> $GITHUB_STEP_SUMMARY
+          echo "5. 🚀 Deploy to GitHub Pages via Actions" >> $GITHUB_STEP_SUMMARY

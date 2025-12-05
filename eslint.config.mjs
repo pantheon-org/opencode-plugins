@@ -10,6 +10,14 @@ import prettierPlugin from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 
 export default [
+  {
+    files: ['**/*.json'],
+    // Override or add rules here
+    rules: {},
+    languageOptions: {
+      parser: await import('jsonc-eslint-parser'),
+    },
+  },
   js.configs.recommended,
   {
     files: ['**/*.ts', '**/*.tsx'],
@@ -49,7 +57,6 @@ export default [
     },
     rules: {
       ...tsPlugin.configs.recommended.rules,
-
       // Prettier integration
       'prettier/prettier': [
         'error',
@@ -60,12 +67,10 @@ export default [
           trailingComma: 'all',
         },
       ],
-
       // Code quality rules
       'max-lines': ['warn', { max: 200, skipBlankLines: true, skipComments: true }],
       'max-statements': ['error', 30],
       complexity: ['warn', 10],
-
       // TypeScript rules
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
@@ -76,12 +81,10 @@ export default [
           varsIgnorePattern: '^_',
         },
       ],
-
       // Modern JavaScript
       'no-var': 'error',
       'prefer-const': 'error',
       'no-undef': 'off', // TypeScript handles this
-
       // Arrow functions
       'prefer-arrow/prefer-arrow-functions': [
         'error',
@@ -91,7 +94,6 @@ export default [
           classPropertiesAllowed: false,
         },
       ],
-
       // Import rules
       'import/max-dependencies': ['warn', { max: 10 }],
       'import/no-cycle': 'error',
@@ -106,10 +108,8 @@ export default [
           },
         },
       ],
-
       // TSDoc
       'tsdoc/syntax': 'error',
-
       // JSDoc rules (TypeScript-friendly)
       'jsdoc/require-jsdoc': [
         'error',

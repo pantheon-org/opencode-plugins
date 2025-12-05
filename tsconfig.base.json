@@ -25,7 +25,8 @@
       ],
       "@pantheon-org/opencode-warcraft-notifications": [
         "packages/opencode-warcraft-notifications/src/index.ts"
-      ]
+      ],
+      "warcraft-notifications": ["warcraft-notifications/src/index.ts"]
     }
   }
 }

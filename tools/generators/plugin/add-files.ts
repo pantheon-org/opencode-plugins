@@ -67,9 +67,7 @@ export const addFiles = (tree: Tree, options: NormalizedOptions): void => {
     if (srcExists) preserved.push('src/');
     if (docsExists) preserved.push('docs/');
 
-    console.log(
-      `\n⚠️  Existing plugin detected. Preserving ${preserved.join(' and ')} directories...`,
-    );
+    console.log(`\n⚠️  Existing plugin detected. Preserving ${preserved.join(' and ')} directories...`);
 
     // Store existing content before generation
     const existingContent: Map<string, Buffer> = new Map();
@@ -80,6 +78,13 @@ export const addFiles = (tree: Tree, options: NormalizedOptions): void => {
 
     if (docsExists) {
       collectFilesFromTree(tree, docsPath, existingContent);
+    }
+
+    // Clean up .github/ directory before regenerating
+    const githubPath = path.join(options.projectRoot, '.github');
+    if (tree.exists(githubPath)) {
+      console.log('  ✓ Cleaning .github/ directory...');
+      tree.delete(githubPath);
     }
 
     // Generate all files (including src/ and docs/)
