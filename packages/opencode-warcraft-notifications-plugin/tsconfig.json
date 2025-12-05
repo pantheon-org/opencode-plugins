@@ -15,5 +15,5 @@
     "types": ["node", "bun-types"]
   },
   "include": ["**/*.ts", "**/*.js"],
-  "exclude": ["node_modules", "docs", ".astro-build", "pages"]
+  "exclude": ["node_modules", "docs", ".astro-build"]
 }
