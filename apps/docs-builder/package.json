@@ -21,6 +21,7 @@
   "dependencies": {
     "@astrojs/check": "^0.9.0",
     "@astrojs/starlight": "^0.36.0",
+    "@pantheon-org/opencode-font": "workspace:*",
     "@types/figlet": "^1.7.0",
     "astro": "^5.15.0",
     "astro-diagram": "^0.7.0",

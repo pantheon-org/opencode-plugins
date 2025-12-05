@@ -54,12 +54,7 @@ const buildSVGAttributes = (options: {
 /**
  * Build text element with font styling
  */
-const buildTextElement = (
-  text: string,
-  fontSize: number,
-  fontFamily: string,
-  color: string,
-): string => {
+const buildTextElement = (text: string, fontSize: number, fontFamily: string, color: string): string => {
   return `<text x="0" y="14" font-family="${fontFamily}" font-size="${fontSize}" fill="${color}">${escapeXml(text)}</text>`;
 };
 

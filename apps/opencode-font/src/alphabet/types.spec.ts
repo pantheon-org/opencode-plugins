@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'bun:test';
+
 import { ALPHABET } from './types';
 
 describe('Letter row widths', () => {

@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'bun:test';
+
+import { getColorFromLetter, themeType, darkTheme } from './theme';
 import { ALPHABET } from './types';
 import { cellType } from './types';
-import { getColorFromLetter, themeType, darkTheme } from './theme';
 
 describe('ALPHABET structure', () => {
   it('should contain 26 letters A-Z', () => {
@@ -20,9 +21,7 @@ describe('Glyph consistency', () => {
         expect(Array.isArray(data.rows[r])).toBe(true);
         // each cell should be one of the cellType values or numeric 0/1
         data.rows[r].forEach((cell) => {
-          const validValue = [cellType.PRIMARY, cellType.SECONDARY, cellType.BLANK].includes(
-            cell as any,
-          );
+          const validValue = [cellType.PRIMARY, cellType.SECONDARY, cellType.BLANK].includes(cell as any);
           const validNumber = typeof cell === 'number' && (cell === 0 || cell === 1);
           expect(validValue || validNumber).toBe(true);
         });
@@ -45,8 +44,7 @@ describe('Color mapping with actual letter data', () => {
         // normalize numeric rows (0/1) to cellType
         let cell = raw as any;
         if (typeof raw === 'number') {
-          cell =
-            raw === 1 ? (r >= 3 && r <= 5 ? cellType.SECONDARY : cellType.PRIMARY) : cellType.BLANK;
+          cell = raw === 1 ? (r >= 3 && r <= 5 ? cellType.SECONDARY : cellType.PRIMARY) : cellType.BLANK;
         }
         if (!foundPrimary && cell === cellType.PRIMARY) {
           const col = getColorFromLetter(sampleLetter, themeType.DARK, cell);

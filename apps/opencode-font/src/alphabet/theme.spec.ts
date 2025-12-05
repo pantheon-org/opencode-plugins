@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'bun:test';
+
 import { getColorFromLetter, themeType } from './theme';
 import { cellType } from './types';
 

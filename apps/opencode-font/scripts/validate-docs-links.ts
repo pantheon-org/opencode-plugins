@@ -367,9 +367,7 @@ function main(): void {
   console.log(`${colors.cyan}Scanning documentation...${colors.reset}`);
 
   if (!fs.existsSync(DOCS_DIR)) {
-    console.error(
-      `${colors.red}Error: Documentation directory not found: ${DOCS_DIR}${colors.reset}`,
-    );
+    console.error(`${colors.red}Error: Documentation directory not found: ${DOCS_DIR}${colors.reset}`);
     process.exit(1);
   }
 

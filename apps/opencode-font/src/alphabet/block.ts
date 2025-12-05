@@ -1,7 +1,7 @@
-import { cellType, type CellType } from './types';
-import { getColorFromLetter, themeType, type ThemeType } from './theme';
-import { ALPHABET, SYMBOLS } from './types';
 import { optimizeBlocksToSVGPaths } from './svg-optimizer';
+import { getColorFromLetter, themeType, type ThemeType } from './theme';
+import { cellType, type CellType } from './types';
+import { ALPHABET, SYMBOLS } from './types';
 
 export interface BlockyTextOptions {
   theme?: ThemeType;
@@ -124,8 +124,7 @@ export const calculateWidth = (text: string, options: Required<BlockyTextOptions
   let totalWidth = 0;
 
   for (const char of text.toUpperCase()) {
-    const charData =
-      ALPHABET[char as keyof typeof ALPHABET] || SYMBOLS[char as keyof typeof SYMBOLS];
+    const charData = ALPHABET[char as keyof typeof ALPHABET] || SYMBOLS[char as keyof typeof SYMBOLS];
     if (!charData) {
       // For missing characters, assume 4-column width
       totalWidth += 4 * blockSize + charSpacing * blockSize;

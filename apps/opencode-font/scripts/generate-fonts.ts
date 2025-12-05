@@ -132,9 +132,7 @@ function gridToSVGPath(rows: Record<number, number[]>): string {
         const x = col * blockSize;
         const y = row * blockSize;
         // Create a rectangle path for each filled cell
-        paths.push(
-          `M${x},${y} L${x + blockSize},${y} L${x + blockSize},${y + blockSize} L${x},${y + blockSize} Z`,
-        );
+        paths.push(`M${x},${y} L${x + blockSize},${y} L${x + blockSize},${y + blockSize} L${x},${y + blockSize} Z`);
       }
     }
   }
@@ -247,10 +245,7 @@ function generateWOFF2(ttfBuffer: Buffer): Buffer {
   console.log('📦 Compressing to WOFF2...');
 
   const woff2Buffer = ttf2woff2(ttfBuffer);
-  const compressionRatio = (
-    ((ttfBuffer.length - woff2Buffer.length) / ttfBuffer.length) *
-    100
-  ).toFixed(1);
+  const compressionRatio = (((ttfBuffer.length - woff2Buffer.length) / ttfBuffer.length) * 100).toFixed(1);
 
   console.log(`✅ WOFF2 generated (${compressionRatio}% compression)`);
   return woff2Buffer;
@@ -263,10 +258,7 @@ function generateWOFF(ttfBuffer: Buffer): Buffer {
   console.log('📦 Compressing to WOFF...');
 
   const woffBuffer = Buffer.from(ttf2woff(ttfBuffer).buffer);
-  const compressionRatio = (
-    ((ttfBuffer.length - woffBuffer.length) / ttfBuffer.length) *
-    100
-  ).toFixed(1);
+  const compressionRatio = (((ttfBuffer.length - woffBuffer.length) / ttfBuffer.length) * 100).toFixed(1);
 
   console.log(`✅ WOFF generated (${compressionRatio}% compression)`);
   return woffBuffer;
