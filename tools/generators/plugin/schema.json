@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "OpencodePlugin",
+  "title": "Create an OpenCode Plugin",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the plugin (without 'opencode-' prefix)",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What is the name of the plugin?"
+    },
+    "description": {
+      "type": "string",
+      "description": "A brief description of what the plugin does",
+      "default": "",
+      "x-prompt": "Provide a description for the plugin (optional):"
+    },
+    "directory": {
+      "type": "string",
+      "description": "A directory where the plugin is placed",
+      "default": "packages"
+    },
+    "addTests": {
+      "type": "boolean",
+      "description": "Add test configuration",
+      "default": false
+    },
+    "addLint": {
+      "type": "boolean",
+      "description": "Add lint configuration",
+      "default": false
+    }
+  },
+  "required": ["name"]
+}

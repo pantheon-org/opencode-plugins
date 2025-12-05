@@ -1,0 +1,7 @@
+// Entry point for <%= projectName %> plugin
+
+export function pluginName() {
+  return '<%= projectName %>';
+}
+
+// TODO: Implement your plugin functionality here

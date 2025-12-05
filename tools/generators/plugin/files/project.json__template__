@@ -1,0 +1,91 @@
+{
+  "name": "<%= projectName %>",
+  "$schema": "<%= offsetFromRoot %>node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "<%= projectRoot %>/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx tsup src/index.ts --format esm,cjs --dts --out-dir dist"
+          }
+        ],
+        "cwd": "<%= projectRoot %>",
+        "parallel": false
+      }
+    },
+    "pack": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx npm pack --prefix <%= projectRoot %>"
+          }
+        ],
+        "parallel": false
+      }
+    }<% if (addLint) { %>,
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx eslint src --ext .ts"
+          }
+        ],
+        "cwd": "<%= projectRoot %>",
+        "parallel": false
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx prettier --write src"
+          }
+        ],
+        "cwd": "<%= projectRoot %>",
+        "parallel": false
+      }
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx tsc --noEmit"
+          }
+        ],
+        "cwd": "<%= projectRoot %>",
+        "parallel": false
+      }
+    }<% } %><% if (addTests) { %>,
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bun test"
+          }
+        ],
+        "cwd": "<%= projectRoot %>",
+        "parallel": false
+      }
+    }<% } else { %>,
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "echo \"No tests configured\""
+          }
+        ],
+        "cwd": "<%= projectRoot %>",
+        "parallel": false
+      }
+    }<% } %>
+  }
+}

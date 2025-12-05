@@ -1,0 +1,21 @@
+{
+  "name": "@<%= npmScope %>/<%= projectName %>",
+  "version": "0.1.0",
+  "private": false,
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bunx tsup src/index.ts --format esm,cjs --dts --out-dir dist",
+    "pack": "bunx npm pack --prefix .",
+    "test": "echo \"No tests configured\"",
+    "lint": "echo \"No lint configured\""
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "tsup": "^6.0.0"
+  }
+}
