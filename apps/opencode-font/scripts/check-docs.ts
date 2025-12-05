@@ -13,12 +13,7 @@ function readDirRecursive(dir: string, filelist: string[] = []): string[] {
     const stat = fs.statSync(full);
     if (stat.isDirectory()) {
       readDirRecursive(full, filelist);
-    } else if (
-      stat.isFile() &&
-      file.endsWith('.ts') &&
-      !file.endsWith('.test.ts') &&
-      !file.endsWith('.spec.ts')
-    ) {
+    } else if (stat.isFile() && file.endsWith('.ts') && !file.endsWith('.test.ts') && !file.endsWith('.spec.ts')) {
       filelist.push(full);
     }
   });
@@ -37,12 +32,7 @@ function hasJSDoc(node: ts.Node): boolean {
 /**
  * Reports if JSDoc is missing for a node
  */
-function reportIfMissing(
-  filePath: string,
-  sourceFile: ts.SourceFile,
-  node: ts.Node,
-  name: string,
-): string | null {
+function reportIfMissing(filePath: string, sourceFile: ts.SourceFile, node: ts.Node, name: string): string | null {
   if (hasJSDoc(node)) return null;
   const start = node.getFullStart();
   const substr = sourceFile.text.slice(Math.max(0, start - 200), start);

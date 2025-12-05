@@ -147,7 +147,8 @@ Character widths vary:
 
 ## SVG Optimization
 
-When `optimize: true` (default), the module merges adjacent blocks of the same color into compound SVG paths. This typically reduces file size by 30-40%.
+When `optimize: true` (default), the module merges adjacent blocks of the same color into compound SVG paths. This
+typically reduces file size by 30-40%.
 
 **Without optimization:**
 

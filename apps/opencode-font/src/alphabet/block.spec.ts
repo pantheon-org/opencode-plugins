@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'bun:test';
+
 import { textToBlocks, calculateWidth, blocksToSVGPaths, blockyTextToSVG } from './block';
 
 describe('textToBlocks', () => {

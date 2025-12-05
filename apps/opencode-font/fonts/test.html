@@ -171,17 +171,13 @@
       <div class="test-section">
         <h2>Full Alphabet (A-Z)</h2>
         <div class="font-test">ABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
-        <div class="reference">
-          ✓ Expected: All 26 uppercase letters should render as blocky pixel art
-        </div>
+        <div class="reference">✓ Expected: All 26 uppercase letters should render as blocky pixel art</div>
       </div>
 
       <div class="test-section">
         <h2>Symbols</h2>
         <div class="font-test">- | ' " ? !</div>
-        <div class="reference">
-          ✓ Expected: Hyphen, pipe, apostrophe, quote, question, exclamation as blocky glyphs
-        </div>
+        <div class="reference">✓ Expected: Hyphen, pipe, apostrophe, quote, question, exclamation as blocky glyphs</div>
       </div>
 
       <div class="test-section">
@@ -257,8 +253,7 @@
 
           if (loaded) {
             statusEl.className = 'status success';
-            statusEl.textContent =
-              '✅ Font loaded successfully! All glyphs should render as blocky pixel art.';
+            statusEl.textContent = '✅ Font loaded successfully! All glyphs should render as blocky pixel art.';
             console.log('✅ OpenCodeLogo font loaded successfully');
 
             // Get font details
@@ -274,8 +269,7 @@
             });
           } else {
             statusEl.className = 'status error';
-            statusEl.textContent =
-              '❌ Font failed to load! You will see fallback monospace font instead.';
+            statusEl.textContent = '❌ Font failed to load! You will see fallback monospace font instead.';
             console.error('❌ OpenCodeLogo font failed to load');
           }
         })

@@ -8,7 +8,7 @@
  * is generated before Astro builds the site.
  */
 
-import { blockyTextToSVG } from './src/utils/alphabet/index.ts';
+import { blockyTextToSVG } from '@pantheon-org/opencode-font';
 import { writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
