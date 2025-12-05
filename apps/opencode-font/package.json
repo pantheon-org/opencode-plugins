@@ -1,0 +1,53 @@
+{
+  "name": "@pantheon-org/opencode-font",
+  "type": "module",
+  "version": "0.1.0",
+  "private": false,
+  "description": "OpenCode-style font package with text-to-SVG conversion",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "fonts/",
+    "css/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pantheon-org/opencode-font.git"
+  },
+  "scripts": {
+    "dev": "bun dev",
+    "start": "bun run src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
+    "lint:fix": "eslint 'src/**/*.{ts,tsx,js,jsx}' --fix",
+    "format": "prettier --write '**/*.{ts,tsx,js,jsx,json,md,css,scss,html}'",
+    "format:check": "prettier --check '**/*.{ts,tsx,js,jsx,json,md,css,scss,html}'",
+    "clean": "rm -rf dist/ .bun-cache/ coverage/",
+    "generate:fonts": "bun run scripts/generate-fonts.ts",
+    "validate:fonts": "bun run scripts/validate-fonts.ts"
+  },
+  "keywords": [
+    "font",
+    "svg",
+    "text-to-svg",
+    "opencode"
+  ],
+  "author": "Pantheon",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/svg2ttf": "^5.0.3",
+    "@types/ttf2woff": "^2.0.4",
+    "@types/ttf2woff2": "^6.0.0",
+    "bun-types": "^1.2.0",
+    "svg2ttf": "^6.0.3",
+    "svgicons2svgfont": "^15.0.1",
+    "ttf2woff": "^3.0.0",
+    "ttf2woff2": "^8.0.0"
+  }
+}
