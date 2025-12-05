@@ -134,6 +134,11 @@ jobs:
           MIRROR_URL="${{ needs.detect-package.outputs.mirror-url }}"
           VERSION="${{ needs.detect-package.outputs.version }}"
 
+          # Configure git to use the token
+          git config --global credential.helper store
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+
           # Convert https://github.com/org/repo to git URL with token
           GIT_URL=$(echo "$MIRROR_URL" | sed "s|https://|https://x-access-token:${MIRROR_REPO_TOKEN}@|")
 
