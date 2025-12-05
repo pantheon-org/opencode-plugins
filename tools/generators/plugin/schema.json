@@ -27,12 +27,19 @@
     "addTests": {
       "type": "boolean",
       "description": "Add test configuration",
-      "default": false
+      "default": true
     },
     "addLint": {
       "type": "boolean",
       "description": "Add lint configuration",
-      "default": false
+      "default": true
+    },
+    "regenerate": {
+      "type": "boolean",
+      "description": "Regenerate the plugin files, preserving src/ and docs/ directories",
+      "alias": "r",
+      "default": false,
+      "x-prompt": "Plugin exists. Regenerate configuration files? (src/ and docs/ will be preserved)"
     }
   },
   "required": ["name"]

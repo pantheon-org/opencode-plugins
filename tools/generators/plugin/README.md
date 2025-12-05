@@ -24,8 +24,9 @@ nx workspace-generator plugin my-plugin --description "My awesome plugin" --addT
 | `name`        | `string`  | (required)   | The name of the plugin (without 'opencode-' prefix) |
 | `description` | `string`  | `""`         | A brief description of what the plugin does         |
 | `directory`   | `string`  | `"packages"` | A directory where the plugin is placed              |
-| `addTests`    | `boolean` | `false`      | Add test configuration                              |
-| `addLint`     | `boolean` | `false`      | Add lint configuration                              |
+| `addTests`    | `boolean` | `true`       | Add test configuration                              |
+| `addLint`     | `boolean` | `true`       | Add lint configuration                              |
+| `regenerate`  | `boolean` | `false`      | Regenerate plugin files (preserves src/ and docs/)  |
 
 ## Examples
 
@@ -78,6 +79,71 @@ packages/opencode-<name>/
    ```bash
    nx pack opencode-<name>
    ```
+
+## Regenerating Existing Plugins
+
+⚠️ **Protection Against Accidental Regeneration**
+
+If you try to run the generator on an existing plugin without the `--regenerate` flag, you'll get an
+error:
+
+```bash
+nx workspace-generator plugin my-existing-plugin
+
+# Error: Plugin already exists at: packages/opencode-my-existing-plugin
+#
+# To regenerate this plugin and update configuration files (while preserving src/ and docs/), run:
+#   nx g ./tools/generators:plugin my-existing-plugin --regenerate
+#
+# Or use the shorthand:
+#   nx g ./tools/generators:plugin my-existing-plugin -r
+```
+
+### To Regenerate a Plugin
+
+Use the `--regenerate` (or `-r`) flag to explicitly allow regeneration:
+
+```bash
+# Full flag
+nx workspace-generator plugin my-existing-plugin --regenerate
+
+# Shorthand
+nx workspace-generator plugin my-existing-plugin -r
+```
+
+**What gets regenerated:**
+
+- ✅ Configuration files (`package.json`, `tsconfig.json`, `eslint.config.mjs`, etc.)
+- ✅ GitHub workflows (`.github/workflows/*`)
+- ✅ Documentation site (`pages/*`)
+- ✅ Root-level files (`README.md`, `LICENSE`, etc.)
+
+**What is preserved:**
+
+- 🔒 `src/` - Your plugin source code
+- 🔒 `docs/` - Your documentation markdown files
+
+This allows you to:
+
+- Update generator templates and apply changes to existing plugins
+- Fix configuration issues without losing your work
+- Adopt new best practices from updated templates
+- Regenerate build configurations after template improvements
+
+**Example workflow:**
+
+```bash
+# 1. Update the generator templates (in tools/generators/plugin/files/)
+# 2. Regenerate your plugin
+nx workspace-generator plugin my-plugin
+
+# 3. Review changes
+git diff packages/opencode-my-plugin
+
+# 4. Commit the updated configuration
+git add packages/opencode-my-plugin
+git commit -m "chore: regenerate plugin configuration"
+```
 
 ## Development Workflow
 
