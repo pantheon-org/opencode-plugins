@@ -9,6 +9,12 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@pantheon-org/opencode-foo": ["packages/opencode-foo/src/index.ts"],
+      "@pantheon-org/opencode-foo-plugin": [
+        "packages/opencode-foo-plugin/src/index.ts"
+      ]
+    }
   }
 }

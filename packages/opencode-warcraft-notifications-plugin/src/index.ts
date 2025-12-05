@@ -1,5 +1,5 @@
 /**
- * <%= projectName %> - <%= description %>
+ * opencode-warcraft-notifications-plugin - warcraft notifications plugins for opencode
  *
  * This is an OpenCode plugin scaffolded from the generator.
  * Replace this comment and implementation with your plugin's functionality.
@@ -15,7 +15,7 @@ import type { Plugin } from '@opencode-ai/plugin';
  *
  * @example
  * ```typescript
- * export const <%= pluginName %>: Plugin = async (ctx) => {
+ * export const OpencodeWarcraftNotificationsPlugin: Plugin = async (ctx) => {
  *   const { client, $, project, worktree } = ctx;
  *
  *   return {
@@ -27,19 +27,19 @@ import type { Plugin } from '@opencode-ai/plugin';
  * };
  * ```
  */
-export const <%= pluginName %>: Plugin = async (ctx) => {
+export const OpencodeWarcraftNotificationsPlugin: Plugin = async (ctx) => {
   const { client, $, project, worktree } = ctx;
 
   // Log plugin initialization
-  console.log('[<%= projectName %>] Plugin loaded');
-  console.log('[<%= projectName %>] Project:', project.id);
-  console.log('[<%= projectName %>] Worktree:', worktree);
+  console.log('[opencode-warcraft-notifications-plugin] Plugin loaded');
+  console.log('[opencode-warcraft-notifications-plugin] Project:', project.id);
+  console.log('[opencode-warcraft-notifications-plugin] Worktree:', worktree);
 
   // Return plugin hooks
   return {
     // Example: Handle session events
     event: async ({ event }) => {
-      console.log('[<%= projectName %>] Event:', event.type);
+      console.log('[opencode-warcraft-notifications-plugin] Event:', event.type);
     },
 
     // TODO: Add your plugin implementation here

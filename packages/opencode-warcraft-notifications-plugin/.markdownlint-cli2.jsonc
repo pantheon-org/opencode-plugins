@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/markdownlint-cli2-config",
+  "config": {
+    "MD013": false,
+    "MD033": false,
+    "MD041": false,
+  },
+  "globs": ["**/*.md"],
+  "ignores": ["node_modules", "dist", "coverage"],
+}
