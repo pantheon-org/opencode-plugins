@@ -1,12 +1,16 @@
 import { Tree, formatFiles } from '@nx/devkit';
 
 import { addFiles } from './add-files';
+import { checkUpdate } from './check-update';
 import { normalizeOptions } from './normalize-options';
 import type { PluginGeneratorSchema } from './schema';
 import { updateTsconfigPaths } from './update-ts-config-paths';
 
 const pluginGenerator = async (tree: Tree, options: PluginGeneratorSchema): Promise<() => void> => {
   const normalizedOptions = normalizeOptions(tree, options);
+
+  // Check if plugin already exists and validate regenerate flag
+  const isUpdate = checkUpdate(tree, options, normalizedOptions);
 
   addFiles(tree, normalizedOptions);
 
@@ -16,7 +20,31 @@ const pluginGenerator = async (tree: Tree, options: PluginGeneratorSchema): Prom
   await formatFiles(tree);
 
   return () => {
-    console.log(`
+    if (isUpdate) {
+      console.log(`
+✅ Successfully updated plugin: ${normalizedOptions.projectName}
+
+Updated files:
+  • Configuration files (package.json, tsconfig.json, etc.)
+  • GitHub workflows (.github/workflows/*)
+  • Documentation site (pages/*)
+
+Preserved directories:
+  • src/ - Your plugin source code
+  • docs/ - Your documentation files
+
+Next steps:
+  1. Review the changes:
+     git diff ${normalizedOptions.projectRoot}
+
+  2. Build the plugin:
+     nx build ${normalizedOptions.projectName}
+
+  3. Test the plugin:
+     nx pack ${normalizedOptions.projectName}
+`);
+    } else {
+      console.log(`
 ✨ Successfully created plugin: ${normalizedOptions.projectName}
 
 Next steps:
@@ -38,6 +66,7 @@ Next steps:
 The plugin can now be imported from other packages using:
   import { ${normalizedOptions.pluginName} } from '${normalizedOptions.packageName}'
 `);
+    }
   };
 };
 
