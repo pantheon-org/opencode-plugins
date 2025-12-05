@@ -1,0 +1,79 @@
+{
+  "name": "opencode-warcraft-notifications",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/opencode-warcraft-notifications/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx tsup src/index.ts --format esm,cjs --dts --out-dir dist"
+          }
+        ],
+        "cwd": "packages/opencode-warcraft-notifications",
+        "parallel": false
+      }
+    },
+    "pack": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx npm pack --prefix packages/opencode-warcraft-notifications"
+          }
+        ],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx eslint src/"
+          }
+        ],
+        "cwd": "packages/opencode-warcraft-notifications",
+        "parallel": false
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\""
+          }
+        ],
+        "cwd": "packages/opencode-warcraft-notifications",
+        "parallel": false
+      }
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx tsc --noEmit"
+          }
+        ],
+        "cwd": "packages/opencode-warcraft-notifications",
+        "parallel": false
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "echo \"No tests configured\""
+          }
+        ],
+        "cwd": "packages/opencode-warcraft-notifications",
+        "parallel": false
+      }
+    }
+  }
+}
