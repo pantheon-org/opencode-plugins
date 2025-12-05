@@ -11,7 +11,7 @@ const pluginGenerator = async (tree: Tree, options: PluginGeneratorSchema): Prom
   addFiles(tree, normalizedOptions);
 
   // Add TypeScript path mapping for Nx-style imports
-  updateTsconfigPaths(tree, normalizedOptions.projectRoot);
+  updateTsconfigPaths(tree, normalizedOptions.packageName, normalizedOptions.projectRoot);
 
   await formatFiles(tree);
 
