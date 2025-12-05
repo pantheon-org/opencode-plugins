@@ -50,3 +50,7 @@ coverage/
 # Package manager
 .pnpm-store/
 .yarn/
+
+# Github workflows
+!.github/workflows/*.yml
+!.github/workflows/*.yaml
