@@ -27,18 +27,6 @@
         "parallel": false
       }
     },
-    "test": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          {
-            "command": "echo \"No tests configured\""
-          }
-        ],
-        "cwd": "packages/opencode-warcraft-notifications-plugin",
-        "parallel": false
-      }
-    },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
@@ -69,6 +57,18 @@
         "commands": [
           {
             "command": "bunx tsc --noEmit"
+          }
+        ],
+        "cwd": "packages/opencode-warcraft-notifications-plugin",
+        "parallel": false
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "echo \"No tests configured\""
           }
         ],
         "cwd": "packages/opencode-warcraft-notifications-plugin",
