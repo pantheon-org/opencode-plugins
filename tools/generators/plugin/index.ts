@@ -36,7 +36,7 @@ Next steps:
      ${normalizedOptions.projectRoot}/src/index.ts
 
 The plugin can now be imported from other packages using:
-  import { YourPlugin } from '${packageName}'
+  import { ${normalizedOptions.pluginName} } from '${normalizedOptions.packageName}'
 `);
   };
 };
