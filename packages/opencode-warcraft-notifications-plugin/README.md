@@ -1,6 +1,6 @@
-# OpencodeWarcraftNotificationsPlugin
+# OpenCode Warcraft Notifications Plugin
 
-OpenCode plugin for opencode-warcraft-notifications-plugin
+Enhance your OpenCode experience with iconic Warcraft-style audio notifications for development events.
 
 > **Note**: This plugin is part of the `pantheon-org/opencode-plugins` monorepo. All development and contributions
 > should be made in the main repository at: **https://github.com/pantheon-org/opencode-plugins**
@@ -11,26 +11,37 @@ OpenCode plugin for opencode-warcraft-notifications-plugin
 <!-- START doctoc -->
 <!-- END doctoc -->
 
+## Features
+
+- 🎮 **Audio Feedback** - Get Warcraft-style notifications for important development events
+- ⚡ **Event Listening** - Automatically responds to OpenCode session and file events
+- 🔊 **Smart Notifications** - Different sounds for different event types
+- 🎯 **Zero Configuration** - Works out of the box once installed
+
 ## Installation
 
 ```bash
-# Install dependencies
-bun install
+npm install @pantheon-org/opencode-warcraft-notifications-plugin
+```
 
-# Build the plugin
-nx build opencode-warcraft-notifications-plugin
+Or add to your `opencode.json`:
 
-# Pack the plugin for distribution
-nx pack opencode-warcraft-notifications-plugin
+```json
+{
+  "plugin": ["@pantheon-org/opencode-warcraft-notifications-plugin"]
+}
 ```
 
 ## Usage
 
-```typescript
-import { pluginName } from '@pantheon-org/opencode-warcraft-notifications-plugin';
+The plugin automatically activates when OpenCode starts. It listens for the following events:
 
-console.log(pluginName()); // opencode-warcraft-notifications-plugin
-```
+- **Session Created** - When a new OpenCode session begins
+- **Session Error** - When an error occurs in the session
+- **File Edited** - When files are modified
+- **Command Executed** - When commands complete
+
+No additional configuration required!
 
 ## Building
 
