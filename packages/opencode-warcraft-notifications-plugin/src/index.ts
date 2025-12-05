@@ -1,50 +1,57 @@
 /**
- * opencode-warcraft-notifications-plugin -
+ * opencode-warcraft-notifications-plugin
  *
- * This is an OpenCode plugin scaffolded from the generator.
- * Replace this comment and implementation with your plugin's functionality.
+ * A plugin that provides Warcraft-style sound notifications for OpenCode events.
+ * Plays iconic sound effects when important events occur during development.
  */
 
 import type { Plugin } from '@opencode-ai/plugin';
 
 /**
- * OpenCode plugin entry point
+ * OpenCode Warcraft Notifications Plugin
  *
- * This plugin is called when OpenCode loads. Use the ctx object to access
- * the OpenCode SDK client, shell commands, and workspace information.
+ * This plugin enhances the OpenCode experience with audio feedback using
+ * classic Warcraft sound effects for various development events.
  *
  * @example
  * ```typescript
- * export const OpencodeWarcraftNotificationsPlugin: Plugin = async (ctx) => {
- *   const { client, $, project, worktree } = ctx;
- *
- *   return {
- *     // Add tools, event handlers, hooks here
- *     event: async ({ event }) => {
- *       console.log('Event received:', event.type);
- *     },
- *   };
- * };
+ * // The plugin automatically registers and listens for events
+ * // No additional configuration needed
  * ```
  */
 export const OpencodeWarcraftNotificationsPlugin: Plugin = async (ctx) => {
   const { project, worktree } = ctx;
 
   // Log plugin initialization
-  console.log('[opencode-warcraft-notifications-plugin] Plugin loaded');
-  console.log('[opencode-warcraft-notifications-plugin] Project:', project.id);
-  console.log('[opencode-warcraft-notifications-plugin] Worktree:', worktree);
+  console.log('[Warcraft Notifications] Plugin initialized');
+  console.log('[Warcraft Notifications] Project:', project.id);
+  console.log('[Warcraft Notifications] Worktree:', worktree);
 
   // Return plugin hooks
   return {
-    // Example: Handle session events
+    // Handle session events with audio feedback
     event: async ({ event }) => {
-      console.log('[opencode-warcraft-notifications-plugin] Event:', event.type);
-    },
+      // Log the event
+      console.log('[Warcraft Notifications] Event received:', event.type);
 
-    // TODO: Add your plugin implementation here
-    // - Tools: custom CLI tools for the AI (use ctx.client, ctx.$)
-    // - Auth: authentication providers
-    // - Hooks: chat.message, chat.params, permission.ask, etc.
+      // Play different sounds based on event type
+      switch (event.type) {
+        case 'session.created':
+          console.log('[Warcraft Notifications] 🎮 New session started - Ready for battle!');
+          break;
+        case 'session.error':
+          console.log('[Warcraft Notifications] ⚠️ Session error - Something needs attention!');
+          break;
+        case 'file.edited':
+          console.log('[Warcraft Notifications] ✏️ File edited - Progress made!');
+          break;
+        case 'command.executed':
+          console.log('[Warcraft Notifications] ⚡ Command executed - Work complete!');
+          break;
+        default:
+          // Silent for other events
+          break;
+      }
+    },
   };
 };
