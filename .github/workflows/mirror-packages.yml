@@ -1,0 +1,184 @@
+name: Mirror Packages to Repositories
+
+on:
+  push:
+    tags:
+      - '*@v*' # Matches any package tag like opencode-foo-plugin@v1.0.0
+
+jobs:
+  detect-package:
+    runs-on: ubuntu-latest
+    outputs:
+      package-name: ${{ steps.parse.outputs.package }}
+      package-dir: ${{ steps.parse.outputs.dir }}
+      version: ${{ steps.parse.outputs.version }}
+      mirror-url: ${{ steps.validate.outputs.url }}
+      has-changes: ${{ steps.changes.outputs.has-changes }}
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Parse tag to get package name
+        id: parse
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          PACKAGE="${TAG%@v*}"
+          VERSION="${TAG#*@}"
+          echo "package=$PACKAGE" >> $GITHUB_OUTPUT
+          echo "dir=packages/$PACKAGE" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Package: $PACKAGE"
+          echo "📂 Directory: packages/$PACKAGE"
+          echo "🏷️  Version: $VERSION"
+
+      - name: Check if package directory exists
+        id: check-dir
+        run: |
+          if [ ! -d "packages/${{ steps.parse.outputs.package }}" ]; then
+            echo "❌ Package directory packages/${{ steps.parse.outputs.package }} does not exist"
+            exit 1
+          fi
+          echo "✅ Package directory exists"
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Validate mirror repository URL
+        id: validate
+        run: |
+          PACKAGE_JSON="packages/${{ steps.parse.outputs.package }}/package.json"
+
+          if [ ! -f "$PACKAGE_JSON" ]; then
+            echo "❌ package.json not found at $PACKAGE_JSON"
+            exit 1
+          fi
+
+          # Extract repository URL from package.json using Bun
+          REPO_URL=$(bun -e "
+            const pkg = require('./$PACKAGE_JSON');
+            const repoUrl = typeof pkg.repository === 'string' ? pkg.repository : pkg.repository?.url || '';
+            console.log(repoUrl);
+          ")
+
+          if [ -z "$REPO_URL" ]; then
+            echo "❌ No repository URL found in $PACKAGE_JSON"
+            echo "   Add a 'repository' field like:"
+            echo '   "repository": {"type": "git", "url": "git+https://github.com/org/repo.git"}'
+            exit 1
+          fi
+
+          # Convert git+https://github.com/org/repo.git to https://github.com/org/repo
+          MIRROR_URL=$(echo "$REPO_URL" | sed 's|git+||' | sed 's|\.git$||')
+
+          echo "url=$MIRROR_URL" >> $GITHUB_OUTPUT
+          echo "✅ Mirror URL: $MIRROR_URL"
+
+      - name: Detect changes in package
+        id: changes
+        run: |
+          PACKAGE_DIR="${{ steps.parse.outputs.dir }}"
+          PACKAGE_NAME="${{ steps.parse.outputs.package }}"
+
+          # Get the previous tag for this package
+          PREV_TAG=$(git tag -l "${PACKAGE_NAME}@v*" --sort=-version:refname | sed -n '2p')
+
+          if [ -z "$PREV_TAG" ]; then
+            echo "ℹ️  No previous tag found - this is the first release for $PACKAGE_NAME"
+            echo "has-changes=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "🔍 Comparing with previous tag: $PREV_TAG"
+
+          # Check if any files changed in package directory since last tag
+          CHANGES=$(git diff --name-only "$PREV_TAG" HEAD -- "$PACKAGE_DIR" 2>/dev/null || true)
+
+          if [ -n "$CHANGES" ]; then
+            echo "✅ Changes detected in $PACKAGE_DIR since $PREV_TAG:"
+            echo "$CHANGES" | head -20
+            CHANGE_COUNT=$(echo "$CHANGES" | wc -l)
+            if [ "$CHANGE_COUNT" -gt 20 ]; then
+              echo "... and $((CHANGE_COUNT - 20)) more files"
+            fi
+            echo "has-changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️  No changes detected in $PACKAGE_DIR since $PREV_TAG"
+            echo "   Skipping mirror sync to avoid unnecessary deployment"
+            echo "has-changes=false" >> $GITHUB_OUTPUT
+          fi
+
+  mirror-to-repo:
+    needs: detect-package
+    runs-on: ubuntu-latest
+    if: needs.detect-package.outputs.has-changes == 'true'
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract package subdirectory
+        run: |
+          echo "🔧 Extracting ${{ needs.detect-package.outputs.package-dir }} to temporary branch..."
+          git subtree split --prefix=${{ needs.detect-package.outputs.package-dir }} -b temp-branch
+          echo "✅ Subtree split complete"
+
+      - name: Push to mirror repo
+        env:
+          MIRROR_REPO_TOKEN: ${{ secrets.MIRROR_REPO_TOKEN }}
+        run: |
+          MIRROR_URL="${{ needs.detect-package.outputs.mirror-url }}"
+          VERSION="${{ needs.detect-package.outputs.version }}"
+
+          # Convert https://github.com/org/repo to git URL with token
+          GIT_URL=$(echo "$MIRROR_URL" | sed "s|https://|https://x-access-token:${MIRROR_REPO_TOKEN}@|")
+
+          echo "🔗 Setting up remote for $MIRROR_URL"
+          git remote add mirror "$GIT_URL"
+
+          echo "⬆️  Pushing to mirror repository main branch..."
+          git push mirror temp-branch:main --force
+
+          echo "🏷️  Pushing version tag $VERSION..."
+          git push mirror temp-branch:refs/tags/${VERSION} --force
+
+          echo "✅ Mirror sync complete!"
+          echo "   Repository: $MIRROR_URL"
+          echo "   Branch: main"
+          echo "   Tag: $VERSION"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          echo "🧹 Cleaning up temporary branch..."
+          git branch -D temp-branch 2>/dev/null || true
+          git remote remove mirror 2>/dev/null || true
+          echo "✅ Cleanup complete"
+
+  summary:
+    needs: [detect-package, mirror-to-repo]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Job Summary
+        run: |
+          echo "## 🪞 Mirror Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Package:** \`${{ needs.detect-package.outputs.package-name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** \`${{ needs.detect-package.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Mirror URL:** ${{ needs.detect-package.outputs.mirror-url }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.detect-package.outputs.has-changes }}" == "true" ]; then
+            if [ "${{ needs.mirror-to-repo.result }}" == "success" ]; then
+              echo "✅ **Status:** Mirror sync completed successfully" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ **Status:** Mirror sync failed" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "⚠️  **Status:** No changes detected - mirror sync skipped" >> $GITHUB_STEP_SUMMARY
+          fi

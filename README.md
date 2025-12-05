@@ -85,7 +85,7 @@ opencode-plugins/
 │   └── <other-plugins>/                 # Future plugins follow same structure
 ├── .github/
 │   └── workflows/
-│       └── mirror-<plugin>.yml          # Mirror sync workflow per plugin
+│       └── mirror-packages.yml          # Dynamic mirror sync workflow (all plugins)
 ├── nx.json                              # NX workspace config
 ├── workspace.json                       # NX project definitions
 └── package.json                         # Root workspace config
@@ -99,10 +99,37 @@ git tag <plugin-name>@v1.0.0
 git push origin <plugin-name>@v1.0.0
 
 # This triggers:
-# 1. Monorepo extracts packages/<plugin>/
-# 2. Pushes to mirror repo pantheon-org/<plugin>
-# 3. Mirror repo publishes to npm + deploys docs
+# 1. Dynamic workflow detects the package from tag
+# 2. Validates package.json has repository URL
+# 3. Checks if package has changes since last tag
+# 4. If changes exist: extracts packages/<plugin>/ and pushes to mirror repo
+# 5. Mirror repo publishes to npm + deploys docs
 ```
+
+### Mirror Workflow Features
+
+The `mirror-packages.yml` workflow automatically:
+
+- **Discovers packages** from tag format (`<package-name>@v*`)
+- **Validates** package directory exists and `package.json` has `repository.url`
+- **Detects changes** by comparing with previous version tag
+- **Skips mirroring** if no changes detected (saves CI time)
+- **Extracts subtree** using `git subtree split`
+- **Pushes to mirror** repository's `main` branch and creates version tag
+
+**Requirements for each plugin:**
+
+1. Package must have `repository.url` in `package.json`:
+   ```json
+   {
+     "repository": {
+       "type": "git",
+       "url": "git+https://github.com/pantheon-org/<plugin-name>.git"
+     }
+   }
+   ```
+2. Mirror repository must exist and `MIRROR_REPO_TOKEN` must have write access
+3. Tag format must be: `<package-name>@v<version>` (e.g., `opencode-foo-plugin@v1.0.0`)
 
 ## Resources
 
