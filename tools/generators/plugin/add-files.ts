@@ -3,6 +3,7 @@ import * as path from 'path';
 import { Tree, names, offsetFromRoot, generateFiles } from '@nx/devkit';
 
 import { astroDependencies, astroDevDependencies } from './dependencies';
+import { getFlattenedActions } from './github-actions-versions';
 import { NormalizedOptions } from './normalize-options';
 
 /**
@@ -48,6 +49,7 @@ export const addFiles = (tree: Tree, options: NormalizedOptions): void => {
     npmScope: 'pantheon-org',
     astroDependencies,
     astroDevDependencies,
+    actions: getFlattenedActions(),
   };
 
   const templatePath = path.join(__dirname, 'files');
@@ -65,9 +67,7 @@ export const addFiles = (tree: Tree, options: NormalizedOptions): void => {
     if (srcExists) preserved.push('src/');
     if (docsExists) preserved.push('docs/');
 
-    console.log(
-      `\n⚠️  Existing plugin detected. Preserving ${preserved.join(' and ')} directories...`,
-    );
+    console.log(`\n⚠️  Existing plugin detected. Preserving ${preserved.join(' and ')} directories...`);
 
     // Store existing content before generation
     const existingContent: Map<string, Buffer> = new Map();
