@@ -46,17 +46,7 @@ coverage/
 *.tmp
 *.temp
 .cache/
-tmp/
 
 # Package manager
 .pnpm-store/
 .yarn/
-
-# Github workflows
-.cursor/rules/nx-rules.mdc
-.github/instructions/nx.instructions.md
-
-# OpenCode
-.opencode/
-.context/
-.nx/

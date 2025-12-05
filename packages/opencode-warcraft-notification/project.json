@@ -1,7 +1,7 @@
 {
-  "name": "<%= projectName %>",
-  "$schema": "<%= offsetFromRoot %>node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "<%= projectRoot %>/src",
+  "name": "opencode-warcraft-notification",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/opencode-warcraft-notification/src",
   "projectType": "library",
   "targets": {
     "build": {
@@ -12,7 +12,7 @@
             "command": "bunx tsup src/index.ts --format esm,cjs --dts --out-dir dist"
           }
         ],
-        "cwd": "<%= projectRoot %>",
+        "cwd": "packages/opencode-warcraft-notification",
         "parallel": false
       }
     },
@@ -21,12 +21,12 @@
       "options": {
         "commands": [
           {
-            "command": "bunx npm pack --prefix <%= projectRoot %>"
+            "command": "bunx npm pack --prefix packages/opencode-warcraft-notification"
           }
         ],
         "parallel": false
       }
-    }<% if (addLint) { %>,
+    },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
@@ -35,7 +35,7 @@
             "command": "bunx eslint src --ext .ts"
           }
         ],
-        "cwd": "<%= projectRoot %>",
+        "cwd": "packages/opencode-warcraft-notification",
         "parallel": false
       }
     },
@@ -47,7 +47,7 @@
             "command": "bunx prettier --write src"
           }
         ],
-        "cwd": "<%= projectRoot %>",
+        "cwd": "packages/opencode-warcraft-notification",
         "parallel": false
       }
     },
@@ -59,22 +59,10 @@
             "command": "bunx tsc --noEmit"
           }
         ],
-        "cwd": "<%= projectRoot %>",
+        "cwd": "packages/opencode-warcraft-notification",
         "parallel": false
       }
-    }<% } %><% if (addTests) { %>,
-    "test": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          {
-            "command": "bun test"
-          }
-        ],
-        "cwd": "<%= projectRoot %>",
-        "parallel": false
-      }
-    }<% } else { %>,
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {
@@ -83,9 +71,9 @@
             "command": "echo \"No tests configured\""
           }
         ],
-        "cwd": "<%= projectRoot %>",
+        "cwd": "packages/opencode-warcraft-notification",
         "parallel": false
       }
-    }<% } %>
+    }
   }
 }

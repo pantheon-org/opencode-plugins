@@ -9,15 +9,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "baseUrl": ".",
-    "paths": {
-      "@pantheon-org/opencode-warcraft-notifications-plugin": [
-        "packages/opencode-warcraft-notifications-plugin/src/index.ts"
-      ],
-      "@pantheon-org/opencode-agent-loader-plugin": [
-        "packages/opencode-agent-loader-plugin/src/index.ts"
-      ],
-      "@pantheon-org/tools": ["tools/index.ts"]
-    }
+    "baseUrl": "."
   }
 }

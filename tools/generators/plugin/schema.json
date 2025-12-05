@@ -6,7 +6,7 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "The name of the plugin (without 'opencode' prefix or 'pantheon-org' scope or 'plugin' suffix)",
+      "description": "The name of the plugin (without 'opencode-' prefix)",
       "$default": {
         "$source": "argv",
         "index": 0
@@ -27,19 +27,12 @@
     "addTests": {
       "type": "boolean",
       "description": "Add test configuration",
-      "default": true
+      "default": false
     },
     "addLint": {
       "type": "boolean",
       "description": "Add lint configuration",
-      "default": true
-    },
-    "regenerate": {
-      "type": "boolean",
-      "description": "Regenerate the plugin files, preserving src/ and docs/ directories",
-      "alias": "r",
-      "default": false,
-      "x-prompt": "Plugin exists. Regenerate configuration files? (src/ and docs/ will be preserved)"
+      "default": false
     }
   },
   "required": ["name"]

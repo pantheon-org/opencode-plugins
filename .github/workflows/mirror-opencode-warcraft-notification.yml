@@ -1,0 +1,33 @@
+name: "Mirror: opencode-warcraft-notification"
+
+on:
+  push:
+    tags:
+      - 'opencode-warcraft-notification@v*'
+
+jobs:
+  mirror-to-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract plugin subdirectory
+        run: |
+          git subtree split --prefix=packages/opencode-warcraft-notification -b temp-branch
+
+      - name: Push to mirror repo
+        env:
+          MIRROR_REPO_TOKEN: ${{ secrets.MIRROR_REPO_TOKEN }}
+        run: |
+          git remote add mirror https://x-access-token:${MIRROR_REPO_TOKEN}@github.com/pantheon-org/opencode-warcraft-notification.git
+          git push mirror temp-branch:main --force
+          
+          # Extract version from tag (opencode-warcraft-notification@v1.0.0 -> v1.0.0)
+          VERSION_TAG=${GITHUB_REF#refs/tags/opencode-warcraft-notification@}
+          git push mirror temp-branch:refs/tags/${VERSION_TAG} --force
+
+      - name: Cleanup
+        run: git branch -D temp-branch

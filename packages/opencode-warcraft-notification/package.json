@@ -1,5 +1,5 @@
 {
-  "name": "@<%= npmScope %>/<%= projectName %>",
+  "name": "@pantheon-org/opencode-warcraft-notification",
   "version": "0.1.0",
   "private": false,
   "main": "dist/index.cjs",
@@ -12,7 +12,10 @@
     "build": "bunx tsup src/index.ts --format esm,cjs --dts --out-dir dist",
     "pack": "bunx npm pack --prefix .",
     "test": "echo \"No tests configured\"",
-    "lint": "echo \"No lint configured\""
+    "lint": "bunx eslint src --ext .ts",
+    "lint:fix": "bunx eslint src --ext .ts --fix",
+    "format": "bunx prettier --write src",
+    "type-check": "bunx tsc --noEmit"
   },
   "dependencies": {},
   "devDependencies": {
