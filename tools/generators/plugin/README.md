@@ -122,11 +122,29 @@ tools/generators/plugin/
 
 ## Modifying the Generator
 
+> **Note**: All modifications to this generator should be made in the main monorepo at:  
+> **Repository**: `pantheon-org/opencode-plugins`  
+> **Path**: `tools/generators/plugin/`
+>
+> Generated plugins are read-only mirrors. Submit any changes, improvements, or bug fixes to the
+> generator itself in the main repository.
+
 To customize the generator:
 
 1. Edit `tools/generators/plugin/index.ts` for generator logic
 2. Update `tools/generators/plugin/schema.json` to add/modify options
 3. Modify template files in `tools/generators/plugin/files/` to change generated structure
+
+### Contributing Generator Improvements
+
+If you find issues or want to improve the generator:
+
+1. Fork the main repository: `https://github.com/pantheon-org/opencode-plugins`
+2. Make your changes in `tools/generators/plugin/`
+3. Test the generator with: `bun run generate:plugin test-plugin --dry-run`
+4. Submit a pull request to the main repository
+
+This ensures all future generated plugins benefit from your improvements.
 
 ## Troubleshooting
 
