@@ -1,6 +1,8 @@
 import { Tree, names } from '@nx/devkit';
 
+import { devDependencies } from '../dependencies';
 import { PluginGeneratorSchema } from './schema';
+import { DevDependencies } from './dependencies';
 
 export interface NormalizedOptions extends PluginGeneratorSchema {
   projectName: string;
@@ -8,6 +10,7 @@ export interface NormalizedOptions extends PluginGeneratorSchema {
   projectDirectory: string;
   parsedTags: string[];
   pluginName: string;
+  devDependencies: DevDependencies;
 }
 
 const pascalCase = (str: string): string => {
@@ -21,6 +24,7 @@ export const normalizeOptions = (tree: Tree, options: PluginGeneratorSchema): No
   const projectRoot = `${projectDirectory}/${projectName}`;
   const parsedTags: string[] = [];
   const pluginName = pascalCase(projectName);
+  const devDependencies = devDependencies();
 
   return {
     ...options,
