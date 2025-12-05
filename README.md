@@ -5,6 +5,7 @@ This repository is the **single source of truth** for all [OpenCode](https://ope
 ## Architecture
 
 This is an NX monorepo with Bun + TypeScript that:
+
 - Develops multiple OpenCode plugins under `packages/`
 - Mirrors each plugin to dedicated read-only GitHub repos for distribution
 - Publishes each plugin independently to npm under `@pantheon-org/<plugin-name>`
@@ -13,12 +14,14 @@ This is an NX monorepo with Bun + TypeScript that:
 ### Plugins
 
 Each plugin:
+
 - Lives under `packages/<plugin-name>/`
 - Has its own npm package: `@pantheon-org/<plugin-name>`
 - Is mirrored to: `pantheon-org/<plugin-name>` (read-only)
 - Has independent versioning and releases
 
 **Example Plugin** (reference template):
+
 - `packages/opencode-warcraft-notification/` - Use this as a template for new plugins
 
 ## Quick Start
@@ -55,6 +58,7 @@ nx workspace-generator plugin my-feature --description "My awesome feature" --ad
 ```
 
 This will create a new plugin in `packages/opencode-<name>/` with:
+
 - TypeScript configuration
 - Build setup with tsup
 - Package.json with correct naming
@@ -75,12 +79,15 @@ All development happens in this monorepo. Mirror repos are read-only distributio
 ## Documentation
 
 ### Core Documentation
+
 - **[Developer Guide](docs/PLUGINS_MIGRATION.md)** - Commands for building, testing, releasing plugins
 - **[Mirror Setup Guide](docs/MIRROR_SETUP.md)** - Complete guide for creating and configuring mirror repos
 
 ### Migration Documentation (Temporary)
+
 - **[Migration Plan](docs/MIGRATION_PLAN.md)** - Initial project setup and architecture checklist
-- **[Plugin Inventory](docs/PLUGIN_INVENTORY.md)** - Plugins being migrated from parent directory (temporary, will be archived post-migration)
+- **[Plugin Inventory](docs/PLUGIN_INVENTORY.md)** - Plugins being migrated from parent directory (temporary, will be
+  archived post-migration)
 
 ## Project Structure
 
