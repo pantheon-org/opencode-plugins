@@ -90,9 +90,7 @@ async function copyMarkdownFiles(sourceDir, targetDir, relativePath = '') {
       console.log(`  ✓ ${currentRelativePath}`);
     } else if (
       entry.isFile() &&
-      (entry.name.endsWith('.json') ||
-        entry.name.endsWith('.example') ||
-        entry.name.endsWith('.schema'))
+      (entry.name.endsWith('.json') || entry.name.endsWith('.example') || entry.name.endsWith('.schema'))
     ) {
       // Copy non-markdown files as-is
       await copyFile(sourcePath, targetPath);

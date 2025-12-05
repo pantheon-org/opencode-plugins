@@ -2,7 +2,7 @@ import * as path from 'path';
 
 import { Tree, names, offsetFromRoot, generateFiles } from '@nx/devkit';
 
-import { astroDependencies, astroDevDependencies } from './dependencies';
+import { dependencies, devDependencies } from './dependencies';
 import { getFlattenedActions } from './github-actions-versions';
 import { NormalizedOptions } from './normalize-options';
 
@@ -47,8 +47,8 @@ export const addFiles = (tree: Tree, options: NormalizedOptions): void => {
     offsetFromRoot: offsetFromRoot(options.projectRoot),
     template: '',
     npmScope: 'pantheon-org',
-    astroDependencies,
-    astroDevDependencies,
+    dependencies: dependencies,
+    devDependencies: devDependencies(),
     actions: getFlattenedActions(),
   };
 

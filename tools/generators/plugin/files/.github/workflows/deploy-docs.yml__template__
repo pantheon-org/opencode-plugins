@@ -5,7 +5,6 @@ on:
     branches: [main]
     paths:
       - 'docs/**'
-      - 'pages/**'
   release:
     types: [published]
   workflow_dispatch:
@@ -35,30 +34,34 @@ jobs:
         with:
           bun-version: 'latest'
 
-      - name: Install dependencies
-        working-directory: ./pages
+      - name: Clone docs-builder
+        run: |
+          git clone --depth 1 https://github.com/pantheon-org/opencode-docs-builder.git docs-builder
+          echo "✅ Docs builder cloned"
+
+      - name: Install docs-builder dependencies
+        working-directory: ./docs-builder
         run: bun install --frozen-lockfile
 
       - name: Install Playwright browsers
-        working-directory: ./pages
+        working-directory: ./docs-builder
         run: |
           bunx playwright install --with-deps chromium
           echo "✅ Playwright browsers installed"
 
-      - name: Transform documentation
-        working-directory: ./pages
+      - name: Copy plugin documentation
         run: |
-          node transform-docs.js
-          echo "✅ Documentation transformed from ./docs/ to ./pages/src/content/docs/"
+          cp -r ./docs/* ./docs-builder/src/content/docs/ || mkdir -p ./docs-builder/src/content/docs/
+          echo "✅ Plugin docs copied to docs-builder"
 
-      - name: Build and upload with Astro action
+      - name: Build documentation with Astro action
         uses: withastro/action@v3
         with:
-          path: ./pages
+          path: ./docs-builder
           package-manager: bun@latest
 
       - name: Verify internal links
-        working-directory: ./pages
+        working-directory: ./docs-builder
         run: |
           bun run verify
           echo "✅ All internal links verified"
@@ -86,8 +89,9 @@ jobs:
           echo "- **Trigger**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Build Process" >> $GITHUB_STEP_SUMMARY
-          echo "1. 📄 Source docs from \`./docs/\`" >> $GITHUB_STEP_SUMMARY
-          echo "2. 🔄 Transform to \`./pages/src/content/docs/\`" >> $GITHUB_STEP_SUMMARY
-          echo "3. 🏗️  Build Astro site to \`./pages/dist/\`" >> $GITHUB_STEP_SUMMARY
-          echo "4. 🔗 Fix and verify internal links" >> $GITHUB_STEP_SUMMARY
-          echo "5. 🚀 Deploy to GitHub Pages via Actions" >> $GITHUB_STEP_SUMMARY
+          echo "1. 📥 Clone docs-builder from \`pantheon-org/opencode-docs-builder\`" >> $GITHUB_STEP_SUMMARY
+          echo "2. 📄 Copy plugin docs from \`./docs/\`" >> $GITHUB_STEP_SUMMARY
+          echo "3. 🔄 Transform to Astro content" >> $GITHUB_STEP_SUMMARY
+          echo "4. 🏗️  Build Astro site" >> $GITHUB_STEP_SUMMARY
+          echo "5. 🔗 Fix and verify internal links" >> $GITHUB_STEP_SUMMARY
+          echo "6. 🚀 Deploy to GitHub Pages via Actions" >> $GITHUB_STEP_SUMMARY

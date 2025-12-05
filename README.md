@@ -7,9 +7,11 @@ This repository is the **single source of truth** for all [OpenCode](https://ope
 This is an NX monorepo with Bun + TypeScript that:
 
 - Develops multiple OpenCode plugins under `packages/`
+- Provides a shared documentation builder in `apps/docs-builder/`
 - Mirrors each plugin to dedicated read-only GitHub repos for distribution
+- Mirrors the docs-builder to a separate read-only repo
 - Publishes each plugin independently to npm under `@pantheon-org/<plugin-name>`
-- Deploys plugin documentation to GitHub Pages per plugin
+- Deploys plugin documentation to GitHub Pages per plugin using the shared docs-builder
 
 ### Plugins
 
@@ -17,12 +19,23 @@ Each plugin:
 
 - Lives under `packages/<plugin-name>/`
 - Has its own npm package: `@pantheon-org/<plugin-name>`
+- Contains only plugin code and markdown docs (no Astro infrastructure)
 - Is mirrored to: `pantheon-org/<plugin-name>` (read-only)
 - Has independent versioning and releases
 
 **Example Plugin** (reference template):
 
 - `packages/opencode-warcraft-notification/` - Use this as a template for new plugins
+
+### Documentation Builder
+
+The shared documentation builder:
+
+- Lives in `apps/docs-builder/`
+- Is mirrored to: `pantheon-org/opencode-docs-builder` (read-only)
+- Contains Astro + Starlight configuration
+- Is pulled by plugin mirror repos during GitHub Pages deployment
+- Has independent versioning (tagged as `docs-builder@v1.0.0`)
 
 ## Quick Start
 
@@ -80,18 +93,30 @@ All development happens in this monorepo. Mirror repos are read-only distributio
 
 ```
 opencode-plugins/
+├── apps/
+│   └── docs-builder/                    # Shared Astro documentation builder
+│       ├── src/                         # Astro components, styles
+│       ├── astro.config.mjs             # Astro configuration
+│       ├── package.json                 # Astro dependencies
+│       └── transform-docs.js            # Doc transformation scripts
 ├── packages/
 │   ├── opencode-warcraft-notification/  # Example plugin (reference template)
+│   │   ├── docs/                        # Plugin-specific markdown docs
+│   │   ├── src/                         # Plugin TypeScript source
+│   │   └── package.json                 # Plugin dependencies (no Astro)
 │   └── <other-plugins>/                 # Future plugins follow same structure
 ├── .github/
 │   └── workflows/
-│       └── mirror-packages.yml          # Dynamic mirror sync workflow (all plugins)
+│       ├── mirror-packages.yml          # Mirror plugins to separate repos
+│       └── mirror-docs-builder.yml      # Mirror docs-builder to separate repo
 ├── nx.json                              # NX workspace config
 ├── workspace.json                       # NX project definitions
 └── package.json                         # Root workspace config
 ```
 
 ## Release Process
+
+### Plugin Releases
 
 ```bash
 # Tag a plugin release (use plugin-specific tag format)
@@ -103,7 +128,21 @@ git push origin <plugin-name>@v1.0.0
 # 2. Validates package.json has repository URL
 # 3. Checks if package has changes since last tag
 # 4. If changes exist: extracts packages/<plugin>/ and pushes to mirror repo
-# 5. Mirror repo publishes to npm + deploys docs
+# 5. Mirror repo publishes to npm + deploys docs (pulling docs-builder)
+```
+
+### Docs Builder Releases
+
+```bash
+# Tag a docs-builder release (use docs-builder tag format)
+git tag docs-builder@v1.0.0
+git push origin docs-builder@v1.0.0
+
+# This triggers:
+# 1. Workflow detects docs-builder tag
+# 2. Checks for changes in apps/docs-builder/
+# 3. If changes exist: extracts apps/docs-builder/ and pushes to mirror repo
+# 4. Plugins can pull the new version during their next deployment
 ```
 
 ### Mirror Workflow Features

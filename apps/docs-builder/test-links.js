@@ -35,12 +35,7 @@ async function extractLinks(filePath) {
     const href = match[1];
 
     // Only include internal links (starting with / or the base path)
-    if (
-      href.startsWith('/') &&
-      !href.startsWith('//') &&
-      !href.startsWith('http://') &&
-      !href.startsWith('https://')
-    ) {
+    if (href.startsWith('/') && !href.startsWith('//') && !href.startsWith('http://') && !href.startsWith('https://')) {
       links.add(href);
     }
   }

@@ -1,0 +1,56 @@
+{
+  "name": "docs-builder",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/docs-builder/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bun run build"
+          }
+        ],
+        "cwd": "apps/docs-builder",
+        "parallel": false
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bun run dev"
+          }
+        ],
+        "cwd": "apps/docs-builder",
+        "parallel": false
+      }
+    },
+    "preview": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bun run preview"
+          }
+        ],
+        "cwd": "apps/docs-builder",
+        "parallel": false
+      }
+    },
+    "verify": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bun run verify"
+          }
+        ],
+        "cwd": "apps/docs-builder",
+        "parallel": false
+      }
+    }
+  }
+}
