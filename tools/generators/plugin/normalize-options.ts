@@ -25,6 +25,7 @@ export const normalizeOptions = (tree: Tree, options: PluginGeneratorSchema): No
   const projectRoot = `${projectDirectory}/${projectName}`;
   const parsedTags: string[] = [];
   const pluginName = pascalCase(projectName);
+  const packageName = `@pantheon-org/${projectName}`;
 
   return {
     ...options,
@@ -33,6 +34,7 @@ export const normalizeOptions = (tree: Tree, options: PluginGeneratorSchema): No
     projectDirectory,
     parsedTags,
     pluginName,
+    packageName,
     devDependencies: devDependencies(),
     dependencies: dependencies,
   };
