@@ -1,5 +1,5 @@
 /**
- * opencode-warcraft-notifications-plugin - warcraft notifications plugins for opencode
+ * opencode-warcraft-notifications-plugin -
  *
  * This is an OpenCode plugin scaffolded from the generator.
  * Replace this comment and implementation with your plugin's functionality.

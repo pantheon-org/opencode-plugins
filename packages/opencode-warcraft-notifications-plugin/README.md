@@ -1,6 +1,9 @@
 # WarcraftNotifications
 
-warcraft notifications plugins for opencode
+OpenCode plugin for warcraft-notifications
+
+<!-- START doctoc -->
+<!-- END doctoc -->
 
 ## Installation
 
