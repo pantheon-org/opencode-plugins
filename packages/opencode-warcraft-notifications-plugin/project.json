@@ -68,7 +68,7 @@
       "options": {
         "commands": [
           {
-            "command": "echo \"No tests configured\""
+            "command": "bun test"
           }
         ],
         "cwd": "packages/opencode-warcraft-notifications-plugin",
