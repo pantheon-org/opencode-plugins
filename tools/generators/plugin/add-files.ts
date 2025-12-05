@@ -67,7 +67,9 @@ export const addFiles = (tree: Tree, options: NormalizedOptions): void => {
     if (srcExists) preserved.push('src/');
     if (docsExists) preserved.push('docs/');
 
-    console.log(`\n⚠️  Existing plugin detected. Preserving ${preserved.join(' and ')} directories...`);
+    console.log(
+      `\n⚠️  Existing plugin detected. Preserving ${preserved.join(' and ')} directories...`,
+    );
 
     // Store existing content before generation
     const existingContent: Map<string, Buffer> = new Map();
