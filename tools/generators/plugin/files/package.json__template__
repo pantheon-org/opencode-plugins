@@ -44,7 +44,7 @@
   "dependencies": {
     "zod": "^4.1.8"
   },
-  "devDependencies": <%= parseJson(devDependencies) %>,
+  "devDependencies": <%- JSON.stringify(devDependencies, null, 2) %>,
   "engines": {
     "node": ">=20.0.0",
     "bun": ">=1.0.0"
