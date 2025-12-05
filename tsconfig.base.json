@@ -11,9 +11,8 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "@pantheon-org/opencode-foo": ["packages/opencode-foo/src/index.ts"],
-      "@pantheon-org/opencode-foo-plugin": [
-        "packages/opencode-foo-plugin/src/index.ts"
+      "@pantheon-org/opencode-warcraft-notifications-plugin": [
+        "packages/opencode-warcraft-notifications-plugin/src/index.ts"
       ]
     }
   }
