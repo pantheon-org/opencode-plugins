@@ -54,11 +54,39 @@ nx workspace-generator plugin analytics --description "Analytics tracking plugin
 
 ```
 packages/opencode-<name>/
+├── .github/
+│   ├── workflows/
+│   │   ├── 1-validate.yml           # PR validation (lint, test, build, security)
+│   │   ├── 2-publish.yml            # Release publishing (npm + docs + GitHub release)
+│   │   ├── release-please.yml       # Automated version bumping
+│   │   ├── chores-pages.yml         # Documentation site maintenance
+│   │   └── deploy-docs.yml          # Documentation deployment
+│   ├── release-please-config.json   # Release Please configuration
+│   ├── .release-please-manifest.json # Version tracking
+│   └── dependabot.yml               # Automated dependency updates
+├── docs/
+│   ├── README.md                    # Main documentation
+│   ├── api.md                       # API reference
+│   ├── development.md               # Development guide
+│   ├── troubleshooting.md           # Troubleshooting guide
+│   └── user-guide.md                # User guide
+├── pages/                           # Astro-based documentation site
+│   ├── src/
+│   │   ├── assets/                  # Site assets (logos, etc.)
+│   │   ├── components/              # Astro components
+│   │   ├── content/                 # Content configuration
+│   │   └── styles/                  # Custom styles
+│   ├── astro.config.mjs             # Astro configuration
+│   ├── package.json                 # Documentation site dependencies
+│   └── transform-docs.js            # Documentation transformation script
 ├── src/
-│   └── index.ts          # Main plugin entry point
-├── package.json          # Package configuration
-├── tsconfig.json         # TypeScript configuration
-└── README.md            # Plugin documentation
+│   └── index.ts                     # Main plugin entry point
+├── package.json                     # Package configuration
+├── tsconfig.json                    # TypeScript configuration
+├── eslint.config.mjs                # ESLint configuration
+├── .prettierrc.json                 # Prettier configuration
+├── LICENSE                          # MIT License
+└── README.md                        # Plugin documentation
 ```
 
 ## After Generation
@@ -76,16 +104,187 @@ packages/opencode-<name>/
    ```
 
 3. Pack the plugin for distribution:
+
    ```bash
    nx pack opencode-<name>
    ```
+
+## Release & Publishing Workflow
+
+Each generated plugin is **self-contained** with complete build, release, and publishing capabilities.
+
+### Automated Release Process
+
+The generator creates a complete CI/CD pipeline with three core workflows:
+
+#### 1. **PR Validation** (`1-validate.yml`)
+
+Automatically runs on every pull request:
+
+- ✅ Code formatting check
+- ✅ Markdown linting
+- ✅ ESLint validation
+- ✅ Type checking
+- ✅ Test suite with coverage
+- ✅ Build verification
+- ✅ Security scanning (Trivy)
+- ✅ PR size analysis
+
+#### 2. **Release Automation** (`release-please.yml`)
+
+Automatically manages versions and changelogs:
+
+- Runs on every push to `main` branch
+- Analyzes commit messages (follows [Conventional Commits](https://www.conventionalcommits.org/))
+- Creates/updates a release PR with:
+  - Version bump (semantic versioning)
+  - Updated CHANGELOG.md
+  - Updated package.json version
+- When release PR is merged:
+  - Creates a GitHub release with tag
+  - Triggers the publish workflow
+
+#### 3. **Publishing** (`2-publish.yml`)
+
+Automatically publishes on tag push:
+
+- 📦 Publishes to npm with provenance
+- 📚 Deploys documentation to GitHub Pages
+- 🏷️ Creates GitHub release with changelog
+- ✅ Full validation before publish
+
+### Release Workflow Example
+
+```bash
+# 1. Make changes and commit using conventional commits
+git commit -m "feat: add awesome new feature"
+git commit -m "fix: resolve issue with X"
+git push
+
+# 2. Release Please automatically creates a release PR
+
+# 3. Review and merge the release PR
+
+# 4. On merge, Release Please:
+#    - Creates a tag (e.g., v1.2.0)
+#    - Pushes the tag to GitHub
+
+# 5. The publish workflow automatically:
+#    - Publishes to npm
+#    - Deploys documentation
+#    - Creates GitHub release
+
+# No manual intervention needed! 🎉
+```
+
+### Conventional Commit Messages
+
+Use these commit prefixes to trigger appropriate version bumps:
+
+| Prefix      | Version Bump | Description                                |
+| ----------- | ------------ | ------------------------------------------ |
+| `feat:`     | Minor        | New feature                                |
+| `fix:`      | Patch        | Bug fix                                    |
+| `perf:`     | Patch        | Performance improvement                    |
+| `docs:`     | None\*       | Documentation only changes                 |
+| `refactor:` | Patch        | Code refactoring                           |
+| `BREAKING:` | Major        | Breaking change (can be combined with any) |
+| `feat!:`    | Major        | Breaking feature (alternative syntax)      |
+| `chore:`    | None\*       | Maintenance tasks (deps, config)           |
+| `test:`     | None\*       | Test additions/changes                     |
+| `ci:`       | None\*       | CI/CD changes                              |
+
+\*_Included in changelog but doesn't trigger a release_
+
+**Examples:**
+
+```bash
+# Patch release (1.0.0 → 1.0.1)
+git commit -m "fix: resolve memory leak in cache"
+
+# Minor release (1.0.1 → 1.1.0)
+git commit -m "feat: add new notification sound"
+
+# Major release (1.1.0 → 2.0.0)
+git commit -m "feat!: redesign API interface"
+# or
+git commit -m "feat: redesign API interface
+
+BREAKING CHANGE: API endpoints have been restructured"
+```
+
+### Manual Publishing (Emergency)
+
+If you need to publish manually:
+
+```bash
+# 1. Update version in package.json
+npm version patch  # or minor, or major
+
+# 2. Build and test
+bun run build
+bun test
+
+# 3. Verify package contents
+bun run verify:package
+
+# 4. Create and push tag
+git push && git push --tags
+
+# This triggers the automated publish workflow
+```
+
+### Required Secrets
+
+Each plugin repository needs these GitHub secrets configured:
+
+| Secret          | Purpose                              | Required |
+| --------------- | ------------------------------------ | -------- |
+| `NPM_TOKEN`     | Publishing to npm                    | ✅ Yes   |
+| `CODECOV_TOKEN` | Code coverage reporting              | Optional |
+| `WORKFLOW_PAT`  | Enhanced Release Please capabilities | Optional |
+
+**Setting up NPM_TOKEN:**
+
+1. Create an npm access token at https://www.npmjs.com/settings/tokens
+2. Choose "Automation" token type
+3. Add token to GitHub repository secrets
+4. Token needs publish permissions for `@pantheon-org` scope
+
+### Dependency Management
+
+Dependabot is pre-configured to:
+
+- Update GitHub Actions weekly (Mondays)
+- Update npm dependencies weekly (Tuesdays)
+- Update documentation site dependencies
+- Auto-label PRs by dependency type
+- Limit open PRs to prevent overwhelming
+- Ignore major version updates (requires manual review)
+
+### Documentation Deployment
+
+Documentation is automatically deployed on every release:
+
+- Built with Astro from `pages/` directory
+- Markdown files from `docs/` are transformed
+- Deployed to `docs` branch
+- Available at `https://<username>.github.io/<plugin-name>/`
+
+**Local documentation development:**
+
+```bash
+cd pages
+bun install
+bun run dev     # Start dev server
+bun run build   # Build for production
+```
 
 ## Regenerating Existing Plugins
 
 ⚠️ **Protection Against Accidental Regeneration**
 
-If you try to run the generator on an existing plugin without the `--regenerate` flag, you'll get an
-error:
+If you try to run the generator on an existing plugin without the `--regenerate` flag, you'll get an error:
 
 ```bash
 nx workspace-generator plugin my-existing-plugin
@@ -192,8 +391,8 @@ tools/generators/plugin/
 > **Repository**: `pantheon-org/opencode-plugins`  
 > **Path**: `tools/generators/plugin/`
 >
-> Generated plugins are read-only mirrors. Submit any changes, improvements, or bug fixes to the
-> generator itself in the main repository.
+> Generated plugins are read-only mirrors. Submit any changes, improvements, or bug fixes to the generator itself in the
+> main repository.
 
 To customize the generator:
 
