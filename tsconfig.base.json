@@ -13,6 +13,9 @@
     "paths": {
       "@pantheon-org/opencode-warcraft-notifications-plugin": [
         "packages/opencode-warcraft-notifications-plugin/src/index.ts"
+      ],
+      "@pantheon-org/opencode-demo-plugin": [
+        "packages/opencode-demo-plugin/src/index.ts"
       ]
     }
   }
