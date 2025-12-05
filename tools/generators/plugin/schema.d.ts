@@ -4,4 +4,5 @@ export interface PluginGeneratorSchema {
   directory?: string;
   addTests?: boolean;
   addLint?: boolean;
+  regenerate?: boolean;
 }
