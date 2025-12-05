@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenCodeLogo Font Test</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        padding: 2rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: #667eea;
+      }
+
+      .subtitle {
+        color: #666;
+        margin-bottom: 2rem;
+        font-size: 0.9rem;
+      }
+
+      /* Font face definition */
+      @font-face {
+        font-family: 'OpenCodeLogo';
+        src:
+          url('OpenCodeLogo.woff2') format('woff2'),
+          url('OpenCodeLogo.woff') format('woff'),
+          url('OpenCodeLogo.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: block;
+      }
+
+      .test-section {
+        margin: 2rem 0;
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 0.5rem;
+        border-left: 4px solid #667eea;
+      }
+
+      .test-section h2 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: #764ba2;
+      }
+
+      .font-test {
+        font-family: 'OpenCodeLogo', monospace;
+        font-size: 48px;
+        line-height: 1.5;
+        letter-spacing: 0.05em;
+        padding: 1rem;
+        background: white;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      .font-test.large {
+        font-size: 72px;
+      }
+
+      .font-test.small {
+        font-size: 24px;
+      }
+
+      .reference {
+        font-family: monospace;
+        font-size: 0.9rem;
+        color: #666;
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        background: #e9ecef;
+        border-radius: 0.25rem;
+      }
+
+      .status {
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 0.5rem;
+        font-weight: 500;
+      }
+
+      .status.loading {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffc107;
+      }
+
+      .status.success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #28a745;
+      }
+
+      .status.error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #dc3545;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .info-box {
+        padding: 1rem;
+        background: white;
+        border-radius: 0.5rem;
+        border: 1px solid #dee2e6;
+      }
+
+      .info-box h3 {
+        font-size: 0.9rem;
+        color: #667eea;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .info-box p {
+        font-size: 0.9rem;
+        color: #666;
+        line-height: 1.6;
+      }
+
+      code {
+        background: #f1f3f5;
+        padding: 0.2em 0.4em;
+        border-radius: 0.25rem;
+        font-size: 0.85em;
+        color: #e83e8c;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>OpenCodeLogo Font Rendering Test</h1>
+      <p class="subtitle">Visual validation of generated web fonts (WOFF2, WOFF, TTF)</p>
+
+      <div id="status" class="status loading">⏳ Loading font...</div>
+
+      <div class="test-section">
+        <h2>Full Alphabet (A-Z)</h2>
+        <div class="font-test">ABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
+        <div class="reference">
+          ✓ Expected: All 26 uppercase letters should render as blocky pixel art
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h2>Symbols</h2>
+        <div class="font-test">- | ' " ? !</div>
+        <div class="reference">
+          ✓ Expected: Hyphen, pipe, apostrophe, quote, question, exclamation as blocky glyphs
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h2>Sample Text (Large)</h2>
+        <div class="font-test large">OPENCODE</div>
+        <div class="reference">✓ Expected: "OPENCODE" in large blocky letters</div>
+      </div>
+
+      <div class="test-section">
+        <h2>Sample Text (Small)</h2>
+        <div class="font-test small">HELLO WORLD!</div>
+        <div class="reference">✓ Expected: "HELLO WORLD!" in smaller blocky letters</div>
+      </div>
+
+      <div class="test-section">
+        <h2>Mixed Content</h2>
+        <div class="font-test">A-Z | "QUICK FIX?" | 'YES!'</div>
+        <div class="reference">✓ Expected: Letters and symbols should blend seamlessly</div>
+      </div>
+
+      <div class="test-section">
+        <h2>Font Information</h2>
+        <div class="grid">
+          <div class="info-box">
+            <h3>Font Family</h3>
+            <p><code>OpenCodeLogo</code></p>
+          </div>
+          <div class="info-box">
+            <h3>Formats</h3>
+            <p>WOFF2 (primary), WOFF (fallback), TTF (development)</p>
+          </div>
+          <div class="info-box">
+            <h3>Character Set</h3>
+            <p>26 uppercase letters (A-Z) + 6 symbols (<code>- | ' " ? !</code>)</p>
+          </div>
+          <div class="info-box">
+            <h3>Design</h3>
+            <p>7×4 grid-based blocky pixel art style</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h2>CSS Usage</h2>
+        <div class="reference">
+          <pre style="margin: 0; font-size: 0.85rem; line-height: 1.6">
+@font-face {
+  font-family: 'OpenCodeLogo';
+  src: url('OpenCodeLogo.woff2') format('woff2'),
+       url('OpenCodeLogo.woff') format('woff'),
+       url('OpenCodeLogo.ttf') format('truetype');
+  font-display: block;
+}
+
+.logo {
+  font-family: 'OpenCodeLogo', monospace;
+  font-size: 48px;
+  letter-spacing: 0.05em;
+}</pre
+          >
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Font loading detection
+      const statusEl = document.getElementById('status');
+
+      document.fonts.ready
+        .then(() => {
+          // Check if OpenCodeLogo font is loaded
+          const loaded = document.fonts.check('48px OpenCodeLogo');
+
+          if (loaded) {
+            statusEl.className = 'status success';
+            statusEl.textContent =
+              '✅ Font loaded successfully! All glyphs should render as blocky pixel art.';
+            console.log('✅ OpenCodeLogo font loaded successfully');
+
+            // Get font details
+            document.fonts.forEach((font) => {
+              if (font.family.includes('OpenCodeLogo')) {
+                console.log('Font details:', {
+                  family: font.family,
+                  style: font.style,
+                  weight: font.weight,
+                  status: font.status,
+                });
+              }
+            });
+          } else {
+            statusEl.className = 'status error';
+            statusEl.textContent =
+              '❌ Font failed to load! You will see fallback monospace font instead.';
+            console.error('❌ OpenCodeLogo font failed to load');
+          }
+        })
+        .catch((error) => {
+          statusEl.className = 'status error';
+          statusEl.textContent = '❌ Font loading error: ' + error.message;
+          console.error('Font loading error:', error);
+        });
+
+      // Additional check after 2 seconds
+      setTimeout(() => {
+        const loaded = document.fonts.check('48px OpenCodeLogo');
+        if (!loaded) {
+          console.warn('⚠️  Font still not loaded after 2 seconds');
+          console.warn('Check that font files exist in the same directory as this HTML file:');
+          console.warn('  - OpenCodeLogo.woff2');
+          console.warn('  - OpenCodeLogo.woff');
+          console.warn('  - OpenCodeLogo.ttf');
+        }
+      }, 2000);
+    </script>
+  </body>
+</html>

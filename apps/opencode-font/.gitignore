@@ -1,0 +1,53 @@
+node_modules/
+dist/
+coverage/
+*.tgz
+
+# GitHub Actions - override global gitignore that excludes .github directories
+# Note: Global gitignore has **/.github pattern, so we need to explicitly include
+!.github/
+!.github/workflows/
+!.github/workflows/**
+!.github/scripts/
+!.github/scripts/**
+
+# Astro documentation build (pages directory)
+pages/node_modules/
+pages/.astro/
+pages/dist/
+
+# Generated documentation (transformed from README.md)
+pages/src/content/docs/index.md
+
+# Generated documentation artifacts (deployed to docs branch)
+dist/
+.astro/
+
+# OpenCode context (project-specific, not for repo)
+.context/
+
+# TypeScript outputs/ide files
+*.tsbuildinfo
+.vscode
+
+# Generated font files (created by scripts/generate-fonts.ts)
+fonts/*.woff2
+fonts/*.woff
+fonts/*.ttf
+fonts/*.otf
+
+# Keep directory structure and test files
+!fonts/.gitkeep
+!fonts/test.html
+
+# Playwright test artifacts
+test-results/
+playwright-report/
+playwright/.cache/
+.playwright/
+
+# Visual regression test screenshots (exclude all except baseline)
+tests/screenshots/**/*.png
+!tests/screenshots/baseline/
+!tests/screenshots/baseline/**/*.png
+
