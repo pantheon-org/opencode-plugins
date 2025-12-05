@@ -1,0 +1,27 @@
+{
+  "npmScope": "pantheon-org",
+  "implicitDependencies": {},
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": [
+          "build",
+          "test",
+          "lint"
+        ]
+      }
+    }
+  },
+  "generators": {
+    "@nrwl/workspace": {
+      "plugin": {
+        "directory": "packages"
+      }
+    }
+  },
+  "workspaceLayout": {
+    "appsDir": "packages",
+    "libsDir": "packages"
+  }
+}

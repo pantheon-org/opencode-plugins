@@ -1,0 +1,45 @@
+# Lefthook configuration for opencode-plugins
+# Leverages Nx to run tasks on affected packages
+# For more information: https://lefthook.dev/configuration/
+
+pre-commit:
+  parallel: true
+  commands:
+    # Format affected packages using Nx
+    format:
+      run: bunx nx affected --target=format --base=HEAD~1 --head=HEAD --parallel=3
+    
+    # Lint affected packages using Nx (with auto-fix)
+    lint:
+      run: bunx nx affected --target=lint --base=HEAD~1 --head=HEAD --parallel=3 --fix
+    
+    # Type-check affected packages using Nx
+    type-check:
+      run: bunx nx affected --target=type-check --base=HEAD~1 --head=HEAD --parallel=3
+    
+    # Lint markdown files in root
+    markdown-lint:
+      glob: "*.md"
+      run: bunx markdownlint-cli2 {staged_files}
+
+pre-push:
+  commands:
+    # Run tests on affected packages
+    test:
+      run: bunx nx affected --target=test --base=origin/main --head=HEAD --parallel=3
+    
+    # Build affected packages
+    build:
+      run: bunx nx affected --target=build --base=origin/main --head=HEAD --parallel=3
+    
+    # Lint all affected packages (final check)
+    lint-all:
+      run: bunx nx affected --target=lint --base=origin/main --head=HEAD --parallel=3
+
+# Skip hooks configuration
+# To skip a hook, run: LEFTHOOK=0 git commit
+# To skip specific commands: LEFTHOOK_EXCLUDE=lint git commit
+
+output:
+  - execution
+  - execution_info

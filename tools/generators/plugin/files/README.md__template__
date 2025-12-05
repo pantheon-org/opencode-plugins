@@ -1,0 +1,40 @@
+# <%= className %>
+
+<% if (description) { %><%= description %><% } else { %>OpenCode plugin for <%= name %><% } %>
+
+## Installation
+
+```bash
+# Install dependencies
+bun install
+
+# Build the plugin
+nx build <%= projectName %>
+
+# Pack the plugin for distribution
+nx pack <%= projectName %>
+```
+
+## Development
+
+The main plugin logic is in `src/index.ts`. Implement your OpenCode plugin functionality there.
+
+## Usage
+
+```typescript
+import { pluginName } from '@<%= npmScope %>/<%= projectName %>';
+
+console.log(pluginName()); // <%= projectName %>
+```
+
+## Building
+
+```bash
+nx build <%= projectName %>
+```
+
+## Testing
+
+```bash
+nx test <%= projectName %>
+```

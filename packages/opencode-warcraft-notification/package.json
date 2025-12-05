@@ -1,0 +1,24 @@
+{
+  "name": "@pantheon-org/opencode-warcraft-notification",
+  "version": "0.1.0",
+  "private": false,
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bunx tsup src/index.ts --format esm,cjs --dts --out-dir dist",
+    "pack": "bunx npm pack --prefix .",
+    "test": "echo \"No tests configured\"",
+    "lint": "bunx eslint src --ext .ts",
+    "lint:fix": "bunx eslint src --ext .ts --fix",
+    "format": "bunx prettier --write src",
+    "type-check": "bunx tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "tsup": "^6.0.0"
+  }
+}

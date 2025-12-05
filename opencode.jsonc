@@ -1,0 +1,20 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "README.md",
+    "docs/MIGRATION_PLAN.md",
+    "docs/MIRROR_SETUP.md",
+    "docs/PLUGIN_INVENTORY.md",
+    "docs/PLUGINS_MIGRATION.md",
+    ".opencode/knowledge-base/bun-typescript-development.md",
+    ".opencode/knowledge-base/extending-nx-plugins.md",
+    ".opencode/knowledge-base/creating-nx-generators.md",
+    ".opencode/knowledge-base/opencode-development-plugin-guide.md"
+  ],
+  "mcp": {
+    "nx": {
+      "type": "local",
+      "command": ["npx", "nx-mcp@latest"]
+    }
+  }
+}

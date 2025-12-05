@@ -1,0 +1,7 @@
+{
+  "generators": {
+    "@pantheon-org/opencode-plugins:plugin": {
+      "directory": "packages"
+    }
+  }
+}
