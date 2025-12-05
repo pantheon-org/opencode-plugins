@@ -2,6 +2,9 @@
 
 <% if (description) { %><%= description %><% } else { %>OpenCode plugin for <%= name %><% } %>
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 ## Installation
 
 ```bash
