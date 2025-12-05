@@ -28,7 +28,7 @@ import type { Plugin } from '@opencode-ai/plugin';
  * ```
  */
 export const OpencodeWarcraftNotificationsPlugin: Plugin = async (ctx) => {
-  const { client, $, project, worktree } = ctx;
+  const { project, worktree } = ctx;
 
   // Log plugin initialization
   console.log('[opencode-warcraft-notifications-plugin] Plugin loaded');
@@ -43,7 +43,7 @@ export const OpencodeWarcraftNotificationsPlugin: Plugin = async (ctx) => {
     },
 
     // TODO: Add your plugin implementation here
-    // - Tools: custom CLI tools for the AI
+    // - Tools: custom CLI tools for the AI (use ctx.client, ctx.$)
     // - Auth: authentication providers
     // - Hooks: chat.message, chat.params, permission.ask, etc.
   };

@@ -41,9 +41,7 @@
     "verify:package": "npm pack --dry-run",
     "prepublishOnly": "bun run build && bun test && bun run verify:package"
   },
-  "dependencies": {
-    "zod": "^4.1.8"
-  },
+  "dependencies": <%= JSON.stringify(dependencies, null, 2) %>,
   "devDependencies": <%- JSON.stringify(devDependencies, null, 2) %>,
   "engines": {
     "node": ">=20.0.0",
