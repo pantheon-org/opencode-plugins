@@ -5,7 +5,7 @@ export interface DevDependencies {
 }
 
 export const devDependencies = (): DevDependencies => {
-  const packageJson: string = fs.readFileSync('../../package.json', 'utf-8');
+  const packageJson: string = fs.readFileSync('./package.json', 'utf-8');
 
   return JSON.parse(packageJson).devDependencies;
 };
