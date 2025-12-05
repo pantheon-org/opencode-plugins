@@ -23,10 +23,6 @@ nx build <%= projectName %>
 nx pack <%= projectName %>
 ```
 
-## Development
-
-The main plugin logic is in `src/index.ts`. Implement your OpenCode plugin functionality there.
-
 ## Usage
 
 ```typescript
