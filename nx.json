@@ -14,7 +14,7 @@
     }
   },
   "generators": {
-    "@nrwl/workspace": {
+    "@nx/workspace": {
       "plugin": {
         "directory": "packages"
       }

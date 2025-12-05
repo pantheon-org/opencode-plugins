@@ -2,10 +2,13 @@
   "$schema": "https://opencode.ai/config.json",
   "instructions": [
     "README.md",
+    "docs/GENERATOR_SETUP.md",
+    "docs/GIT_HOOKS.md",
     "docs/MIGRATION_PLAN.md",
     "docs/MIRROR_SETUP.md",
     "docs/PLUGIN_INVENTORY.md",
     "docs/PLUGINS_MIGRATION.md",
+    "docs/QUICK_REFERENCE.md",
     ".opencode/knowledge-base/bun-typescript-development.md",
     ".opencode/knowledge-base/extending-nx-plugins.md",
     ".opencode/knowledge-base/creating-nx-generators.md",
