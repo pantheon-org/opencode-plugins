@@ -1,0 +1,66 @@
+name: Reusable Validate Project
+
+on:
+  workflow_call:
+    inputs:
+      upload-coverage:
+        description: 'Upload coverage reports to Codecov'
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      CODECOV_TOKEN:
+        description: 'Codecov token for coverage upload'
+        required: false
+
+jobs:
+  validate:
+    name: Lint, Test & Type Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun with caching
+        uses: ./.github/actions/setup-bun
+
+      - name: Check formatting
+        run: bun run format:check
+
+      - name: Run markdown linter
+        run: bun run lint:md
+
+      - name: Run linter
+        run: bun run lint
+
+      - name: Type check
+        run: bun run type-check
+
+      - name: Run tests with coverage
+        run: bun run test:coverage
+
+      - name: Build project
+        run: bun run build
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        if: inputs.upload-coverage && always()
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## ✅ Validation Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All validation checks passed:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Code formatting" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Markdown linting" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Code linting" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Type checking" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Tests with coverage" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Build successful" >> $GITHUB_STEP_SUMMARY

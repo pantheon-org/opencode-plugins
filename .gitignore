@@ -52,8 +52,6 @@ coverage/
 .yarn/
 
 # Github workflows
-!.github/workflows/*.yml
-!.github/workflows/*.yaml
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
 

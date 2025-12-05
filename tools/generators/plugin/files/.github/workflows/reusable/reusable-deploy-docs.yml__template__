@@ -1,0 +1,58 @@
+name: Reusable Deploy Documentation
+
+on:
+  workflow_call:
+    inputs:
+      commit-sha:
+        description: 'Git commit SHA for deployment message'
+        required: false
+        type: string
+        default: ''
+    secrets:
+      GITHUB_TOKEN:
+        description: 'GitHub token for deployment'
+        required: true
+
+jobs:
+  deploy-docs:
+    name: Deploy Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: <%= actions.checkout %>
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun with caching
+        uses: ./.github/actions/setup-bun
+
+      - name: Install pages dependencies
+        run: |
+          cd pages
+          bun install
+
+      - name: Build documentation
+        run: |
+          cd pages
+          bun run build
+
+      - name: Deploy to docs branch
+        uses: <%= actions.ghPages %>
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: docs
+          publish_dir: ./pages/dist
+          force_orphan: false
+          enable_jekyll: false
+          commit_message: 'docs: Deploy documentation from ${{ inputs.commit-sha || github.sha }}'
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Summary
+        run: |
+          echo "## ✅ Documentation Deployed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: docs" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ inputs.commit-sha || github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL**: https://github.com/${{ github.repository }}/tree/docs" >> $GITHUB_STEP_SUMMARY
