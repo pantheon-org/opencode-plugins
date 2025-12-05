@@ -1,0 +1,131 @@
+name: Mirror Docs Builder to Repository
+
+on:
+  push:
+    tags:
+      - 'docs-builder@v*' # Matches docs-builder tags like docs-builder@v1.0.0
+
+jobs:
+  detect-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.parse.outputs.version }}
+      has-changes: ${{ steps.changes.outputs.has-changes }}
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Parse tag to get version
+        id: parse
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          VERSION="${TAG#docs-builder@}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "🏷️  Version: $VERSION"
+
+      - name: Detect changes in docs-builder
+        id: changes
+        run: |
+          DOCS_BUILDER_DIR="apps/docs-builder"
+
+          # Get the previous tag for docs-builder
+          PREV_TAG=$(git tag -l "docs-builder@v*" --sort=-version:refname | sed -n '2p')
+
+          if [ -z "$PREV_TAG" ]; then
+            echo "ℹ️  No previous tag found - this is the first release for docs-builder"
+            echo "has-changes=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "🔍 Comparing with previous tag: $PREV_TAG"
+
+          # Check if any files changed in docs-builder directory since last tag
+          CHANGES=$(git diff --name-only "$PREV_TAG" HEAD -- "$DOCS_BUILDER_DIR" 2>/dev/null || true)
+
+          if [ -n "$CHANGES" ]; then
+            echo "✅ Changes detected in $DOCS_BUILDER_DIR since $PREV_TAG:"
+            echo "$CHANGES" | head -20
+            CHANGE_COUNT=$(echo "$CHANGES" | wc -l)
+            if [ "$CHANGE_COUNT" -gt 20 ]; then
+              echo "... and $((CHANGE_COUNT - 20)) more files"
+            fi
+            echo "has-changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️  No changes detected in $DOCS_BUILDER_DIR since $PREV_TAG"
+            echo "   Skipping mirror sync to avoid unnecessary deployment"
+            echo "has-changes=false" >> $GITHUB_OUTPUT
+          fi
+
+  mirror-to-repo:
+    needs: detect-version
+    runs-on: ubuntu-latest
+    if: needs.detect-version.outputs.has-changes == 'true'
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract docs-builder subdirectory
+        run: |
+          echo "🔧 Extracting apps/docs-builder to temporary branch..."
+          git subtree split --prefix=apps/docs-builder -b temp-branch
+          echo "✅ Subtree split complete"
+
+      - name: Push to mirror repo
+        env:
+          MIRROR_REPO_TOKEN: ${{ secrets.MIRROR_REPO_TOKEN }}
+        run: |
+          MIRROR_URL="https://github.com/pantheon-org/opencode-docs-builder"
+          VERSION="${{ needs.detect-version.outputs.version }}"
+
+          # Convert https URL to git URL with token
+          GIT_URL=$(echo "$MIRROR_URL" | sed "s|https://|https://x-access-token:${MIRROR_REPO_TOKEN}@|")
+
+          echo "🔗 Setting up remote for $MIRROR_URL"
+          git remote add mirror "$GIT_URL"
+
+          echo "⬆️  Pushing to mirror repository main branch..."
+          git push mirror temp-branch:main --force
+
+          echo "🏷️  Pushing version tag $VERSION..."
+          git push mirror temp-branch:refs/tags/${VERSION} --force
+
+          echo "✅ Mirror sync complete!"
+          echo "   Repository: $MIRROR_URL"
+          echo "   Branch: main"
+          echo "   Tag: $VERSION"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          echo "🧹 Cleaning up temporary branch..."
+          git branch -D temp-branch 2>/dev/null || true
+          git remote remove mirror 2>/dev/null || true
+          echo "✅ Cleanup complete"
+
+  summary:
+    needs: [detect-version, mirror-to-repo]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Job Summary
+        run: |
+          echo "## 🪞 Docs Builder Mirror Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Package:** \`docs-builder\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** \`${{ needs.detect-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Mirror URL:** https://github.com/pantheon-org/opencode-docs-builder" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.detect-version.outputs.has-changes }}" == "true" ]; then
+            if [ "${{ needs.mirror-to-repo.result }}" == "success" ]; then
+              echo "✅ **Status:** Mirror sync completed successfully" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ **Status:** Mirror sync failed" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "⚠️  **Status:** No changes detected - mirror sync skipped" >> $GITHUB_STEP_SUMMARY
+          fi

@@ -28,8 +28,7 @@ const BASE_PATH = '/opencode-warcraft-notifications';
 // Matches: href="/something/" but not href="/opencode-warcraft-notifications/something/"
 // Also matches: href="/something/#anchor" and href="/"
 // But not href="/opencode-warcraft-notifications" (exact match)
-const INTERNAL_LINK_PATTERN =
-  /href="(\/(?!opencode-warcraft-notifications(?:\/|"|$))(?:[^"#\s][^"]*?)?)"/g;
+const INTERNAL_LINK_PATTERN = /href="(\/(?!opencode-warcraft-notifications(?:\/|"|$))(?:[^"#\s][^"]*?)?)"/g;
 
 /**
  * Fix links in a single HTML file

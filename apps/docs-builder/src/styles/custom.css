@@ -788,9 +788,7 @@ body > .page > .main-frame .main-pane > main > .content-panel + .content-panel {
   margin-top: 0.625rem;
 }
 
-.sl-markdown-content
-  li
-  > :last-child:not(li, ul, ol):not(a, strong, em, del, span, input, :where(.not-content *)) {
+.sl-markdown-content li > :last-child:not(li, ul, ol):not(a, strong, em, del, span, input, :where(.not-content *)) {
   margin-bottom: calc(var(--paragraph-spacing) + 0.5rem);
 }
 
