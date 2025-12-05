@@ -76,19 +76,6 @@ All development happens in this monorepo. Mirror repos are read-only distributio
 3. Submit PR to this repo
 4. On merge and tag push, plugin is auto-mirrored and published
 
-## Documentation
-
-### Core Documentation
-
-- **[Developer Guide](docs/PLUGINS_MIGRATION.md)** - Commands for building, testing, releasing plugins
-- **[Mirror Setup Guide](docs/MIRROR_SETUP.md)** - Complete guide for creating and configuring mirror repos
-
-### Migration Documentation (Temporary)
-
-- **[Migration Plan](docs/MIGRATION_PLAN.md)** - Initial project setup and architecture checklist
-- **[Plugin Inventory](docs/PLUGIN_INVENTORY.md)** - Plugins being migrated from parent directory (temporary, will be
-  archived post-migration)
-
 ## Project Structure
 
 ```
@@ -99,7 +86,6 @@ opencode-plugins/
 ├── .github/
 │   └── workflows/
 │       └── mirror-<plugin>.yml          # Mirror sync workflow per plugin
-├── docs/                                # Project documentation
 ├── nx.json                              # NX workspace config
 ├── workspace.json                       # NX project definitions
 └── package.json                         # Root workspace config
