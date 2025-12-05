@@ -21,7 +21,8 @@ const pascalCase = (str: string): string => {
 export const normalizeOptions = (tree: Tree, options: PluginGeneratorSchema): NormalizedOptions => {
   const name = names(options.name).fileName;
   const projectDirectory = options.directory || 'packages';
-  const projectName = `opencode-${name}-plugin`;
+  // Only add prefix "opencode-" if not already present
+  const projectName = name.startsWith('opencode-') ? name : `opencode-${name}`;
   const projectRoot = `${projectDirectory}/${projectName}`;
   const parsedTags: string[] = [];
   const pluginName = pascalCase(projectName);
