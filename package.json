@@ -58,6 +58,7 @@
     "jest-environment-node": "^30.0.2",
     "jest-util": "^30.0.2",
     "jsonc-eslint-parser": "^2.1.0",
+    "jsonc-parser": "3.0.0",
     "lefthook": "^2.0.8",
     "markdownlint-cli2": "^0.19.1",
     "nx": "^22.1.3",
