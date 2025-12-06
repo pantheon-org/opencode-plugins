@@ -1,10 +1,8 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { applyEdits, modify as modifyJsonC, parse as parseJsonC } from 'jsonc-parser';
+import fs from 'fs';
+import path from 'path';
 
-/**
- *
- */
+import { parse as parseJsonC, modify as modifyJsonC, applyEdits } from 'jsonc-parser';
+
 export function readJsonc(file: string): { json: any; raw: string } {
   const raw = fs.readFileSync(file, 'utf8');
   const errors: any[] = [];
@@ -13,9 +11,6 @@ export function readJsonc(file: string): { json: any; raw: string } {
   return { json, raw };
 }
 
-/**
- *
- */
 export function writeJsonc(file: string, originalRaw: string | null, obj: any) {
   const base = originalRaw || '';
   const edits = modifyJsonC(base, ['plugin'], obj.plugin || [], {
@@ -25,9 +20,6 @@ export function writeJsonc(file: string, originalRaw: string | null, obj: any) {
   fs.writeFileSync(file, newText, 'utf8');
 }
 
-/**
- *
- */
 export async function createSymlink(target: string, linkPath: string, forceFail = false) {
   try {
     // Simulate symlink failure when forceFail is true
@@ -37,15 +29,12 @@ export async function createSymlink(target: string, linkPath: string, forceFail 
       await fs.promises.rm(linkPath, { recursive: true });
     } catch {}
     await fs.promises.symlink(target, linkPath, 'junction');
-  } catch (_err) {
+  } catch (err) {
     // fallback to copy
     await copyDir(target, linkPath);
   }
 }
 
-/**
- *
- */
 export async function copyDir(src: string, dest: string) {
   await fs.promises.mkdir(dest, { recursive: true });
   const entries = await fs.promises.readdir(src, { withFileTypes: true });
@@ -57,9 +46,6 @@ export async function copyDir(src: string, dest: string) {
   }
 }
 
-/**
- *
- */
 export function getLatestMtime(dir: string): number {
   let latest = 0;
   try {
@@ -84,11 +70,8 @@ export function getLatestMtime(dir: string): number {
 }
 
 // network helpers for tests (mirror production logic)
-import net from 'node:net';
+import net from 'net';
 
-/**
- *
- */
 export async function isServerListening(disposeUrl: string, timeoutMs = 500): Promise<boolean> {
   try {
     const u = new URL(disposeUrl);
@@ -112,14 +95,11 @@ export async function isServerListening(disposeUrl: string, timeoutMs = 500): Pr
         resolve(false);
       });
     });
-  } catch (_err) {
+  } catch (err) {
     return false;
   }
 }
 
-/**
- *
- */
 export async function tryDispose(url: string, timeoutMs = 2000, retries = 2): Promise<boolean> {
   if (!url) return false;
   for (let attempt = 0; attempt <= retries; attempt++) {
@@ -134,7 +114,7 @@ export async function tryDispose(url: string, timeoutMs = 2000, retries = 2): Pr
       });
       clearTimeout(id);
       if (res.ok) return true;
-    } catch (_err) {
+    } catch (err) {
       // swallow
     }
     await new Promise((r) => setTimeout(r, 200 * (attempt + 1)));

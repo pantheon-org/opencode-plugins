@@ -1,13 +1,13 @@
-import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
-import fs from 'node:fs';
-import { tmpdir } from 'node:os';
-import path from 'node:path';
+import { describe, it, expect, afterEach, beforeEach } from 'bun:test';
+import fs from 'fs';
+import path from 'path';
+import { tmpdir } from 'os';
 
 import {
-  createSymlink as createSymlinkUtil,
-  getLatestMtime as getLatestMtimeUtil,
   readJsonc as readJsoncUtil,
   writeJsonc as writeJsoncUtil,
+  createSymlink as createSymlinkUtil,
+  getLatestMtime as getLatestMtimeUtil,
 } from './opencode-dev-test-helpers';
 
 const WORK = path.join(tmpdir(), 'opencode-dev-test');
@@ -68,10 +68,9 @@ describe('getLatestMtime detects changes', () => {
   });
 });
 
-import http from 'node:http';
 // Tests for opencode-dev network helpers
-import net from 'node:net';
-
+import net from 'net';
+import http from 'http';
 import { isServerListening as isServerListeningUtil, tryDispose as tryDisposeUtil } from './opencode-dev-test-helpers';
 
 describe('network helpers', () => {
