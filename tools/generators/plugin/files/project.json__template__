@@ -26,13 +26,13 @@
         ],
         "parallel": false
       }
-    }<% if (addLint) { %>,
+    },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
           {
-            "command": "bunx eslint src --ext .ts"
+            "command": "bunx eslint src/"
           }
         ],
         "cwd": "<%= projectRoot %>",
@@ -44,7 +44,7 @@
       "options": {
         "commands": [
           {
-            "command": "bunx prettier --write src"
+            "command": "bunx prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\""
           }
         ],
         "cwd": "<%= projectRoot %>",
@@ -62,7 +62,15 @@
         "cwd": "<%= projectRoot %>",
         "parallel": false
       }
-    }<% } %><% if (addTests) { %>,
+    },
+    "dev-proxy": {
+      "executor": "@pantheon-org/tools:dev-proxy",
+      "options": {
+        "plugins": ["<%= projectName %>"],
+        "symlinkRoot": ".opencode/plugin",
+        "apply": true
+      }
+    }<% if (addTests) { %>,
     "test": {
       "executor": "nx:run-commands",
       "options": {
