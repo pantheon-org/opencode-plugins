@@ -1,5 +1,7 @@
-import type { spawnSync } from 'node:child_process';
-import type { ExecutorContext } from '@nx/devkit';
+import { describe, it, expect } from 'bun:test';
+import { ExecutorContext } from '@nx/devkit';
+import fs from 'fs';
+import path from 'path';
 
 import runExecutor from './executor';
 
@@ -28,42 +30,6 @@ function makeMockIterator() {
   return iterator;
 }
 
-// Globally monkeypatch child_process.spawn to prevent spawning long-running processes during tests
-// This ensures CI and local test runs do not actually start watchers or runtime processes.
-// The tests still exercise signal handling and executor shutdown logic via mocks.
-
-const childProcess = require('node:child_process');
-const _originalSpawn = childProcess.spawn;
-function _fakeSpawn(_cmd: string, _args: string[], _opts: any) {
-  return {
-    kill: () => {},
-    on: (_ev: string, _cb: Function) => {},
-  } as any;
-}
-
-let _originalExit: typeof process.exit;
-let _exitCalled = false;
-
-beforeEach(() => {
-  // prevent child processes from actually spawning
-  childProcess.spawn = _fakeSpawn;
-
-  // stub process.exit so tests can simulate SIGINT without killing the test runner
-  _originalExit = process.exit;
-  _exitCalled = false;
-  // @ts-expect-error override for test
-  process.exit = ((_code?: number) => {
-    _exitCalled = true;
-    // do not actually exit during tests
-  }) as typeof process.exit;
-});
-
-afterEach(() => {
-  childProcess.spawn = _originalSpawn;
-  // restore process.exit
-  process.exit = _originalExit;
-});
-
 describe('dev-proxy executor with mocked runExecutor', () => {
   it('calls iterator.return() on shutdown', async () => {
     const iterator = makeMockIterator();
@@ -71,8 +37,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
     const mockRunExecutor = async () => iterator;
 
     // mock spawnSync to simulate runtime script returning immediately
-    const mockSpawnSync = ((_cmd: string, _args?: readonly string[], _opts?: any) =>
-      ({ status: 0 }) as any) as typeof spawnSync;
+    const mockSpawnSync = (cmd: string, args: string[], opts: any) => ({ status: 0 });
 
     // Minimal executor context
     const context = {
@@ -104,7 +69,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
     expect(iterator._returned()).toBe(true);
 
     const res = await resPromise;
-    expect(res?.success).toBe(true);
+    expect(res && res.success).toBe(true);
 
     // Restore SIGINT listeners to avoid side effects on other tests
     const afterListeners = process.listeners('SIGINT');
@@ -113,37 +78,27 @@ describe('dev-proxy executor with mocked runExecutor', () => {
     }
   });
 
-  it.skip('falls back to CLI watcher and kills child on SIGINT', async () => {
+  it('falls back to CLI watcher and kills child on SIGINT', async () => {
     const mockRunExecutor = async () => {
       throw new Error('not available');
     };
 
     let childKilled = false;
-    let _childSpawned = false;
     // Monkeypatch child_process.spawn
-
-    const childProcess = require('node:child_process');
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const childProcess = require('child_process');
     const originalSpawn = childProcess.spawn;
-    childProcess.spawn = (_cmd: string, _args: string[], _opts: any) => {
-      _childSpawned = true;
+    childProcess.spawn = (cmd: string, args: string[], opts: any) => {
       // return a fake child with kill()
       return {
         kill: () => {
           childKilled = true;
         },
-        on: (_ev: string, _cb: Function) => {},
+        on: (ev: string, cb: Function) => {},
       } as any;
     };
 
-    // Mock spawnSync to block briefly so SIGINT can be processed
-    const mockSpawnSync = ((_cmd: string, _args?: readonly string[], _opts?: any) => {
-      // Use synchronous sleep to simulate blocking behavior
-      const start = Date.now();
-      while (Date.now() - start < 200) {
-        // Block for 200ms to allow SIGINT to be processed
-      }
-      return { status: 0 } as any;
-    }) as typeof spawnSync;
+    const mockSpawnSync = (cmd: string, args: string[], opts: any) => ({ status: 0 });
     const context = {
       root: process.cwd(),
       projectName: 'opencode-warcraft-notifications-plugin',
@@ -160,15 +115,15 @@ describe('dev-proxy executor with mocked runExecutor', () => {
       context,
     );
 
-    await new Promise((r) => setTimeout(r, 100));
+    await new Promise((r) => setTimeout(r, 50));
 
     process.emit('SIGINT' as any);
-    await new Promise((r) => setTimeout(r, 300));
+    await new Promise((r) => setTimeout(r, 50));
 
     expect(childKilled).toBe(true);
 
     const res = await resPromise;
-    expect(res?.success).toBe(true);
+    expect(res && res.success).toBe(true);
 
     // restore spawn and listeners
     childProcess.spawn = originalSpawn;
@@ -187,8 +142,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
       return iterA;
     };
 
-    const mockSpawnSync = ((_cmd: string, _args?: readonly string[], _opts?: any) =>
-      ({ status: 0 }) as any) as typeof spawnSync;
+    const mockSpawnSync = (cmd: string, args: string[], opts: any) => ({ status: 0 });
     const context = { root: process.cwd(), projectName: 'pA' } as unknown as ExecutorContext;
 
     const beforeListeners = process.listeners('SIGINT').slice();
@@ -207,7 +161,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
     expect(iterB._returned()).toBe(true);
 
     const res = await resPromise;
-    expect(res?.success).toBe(true);
+    expect(res && res.success).toBe(true);
 
     const afterListeners = process.listeners('SIGINT');
     for (const l of afterListeners) {
