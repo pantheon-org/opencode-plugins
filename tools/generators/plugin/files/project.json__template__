@@ -62,6 +62,14 @@
         "cwd": "<%= projectRoot %>",
         "parallel": false
       }
+    },
+    "dev-proxy": {
+      "executor": "@pantheon-org/tools:dev-proxy",
+      "options": {
+        "plugins": ["<%= projectName %>"],
+        "symlinkRoot": ".opencode/plugin",
+        "apply": true
+      }
     }<% if (addTests) { %>,
     "test": {
       "executor": "nx:run-commands",
