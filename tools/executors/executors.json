@@ -1,0 +1,9 @@
+{
+  "executors": {
+    "dev-proxy": {
+      "implementation": "./dev-proxy/executor",
+      "schema": "./dev-proxy/schema.json",
+      "description": "Run opencode with local plugin symlinks and watchers"
+    }
+  }
+}
