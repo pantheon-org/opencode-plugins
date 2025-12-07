@@ -1,0 +1,26 @@
+name: Check Duplicate Local Type Declarations
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  detect-duplicate-types:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Search for local type declarations
+        run: |
+          set -e
+          # Fail if a file declares 'declare module \'bun:test\'' or declares core node modules locally
+          if rg "declare module 'bun:test'" --hidden --glob '!node_modules' ; then
+            echo "Found local 'bun:test' declaration - please reference types/bun-test-shim.d.ts instead" >&2
+            exit 1
+          fi
+          if rg "declare module '\\b(fs|path|child_process|net|http|os)\\b'" --hidden --glob '!node_modules' ; then
+            echo "Found local declaration of Node core modules - prefer @types/node or centralized augmentations" >&2
+            exit 1
+          fi
+      - name: Lint TS
+        run: bunx tsc -p tsconfig.base.json --noEmit

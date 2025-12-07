@@ -1,7 +1,3 @@
-declare module 'semver' {
-  export function valid(v: string | null | undefined): string | null;
-  export function satisfies(version: string, range: string): boolean;
-  export function gt(v1: string, v2: string): boolean;
-  export function lt(v1: string, v2: string): boolean;
-  export const SEMVER_SPEC_VERSION: string;
-}
+// Consolidated into types/augmentations.d.ts
+// This per-package shim was removed in favor of a workspace augmentation.
+export {};

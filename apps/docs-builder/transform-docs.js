@@ -12,6 +12,7 @@
  */
 
 import { readdir, mkdir, copyFile, readFile, writeFile } from 'fs/promises';
+import { existsSync } from 'fs';
 import { join, dirname, relative, basename } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -21,12 +22,7 @@ const __dirname = dirname(__filename);
 // Prefer workspace docs/ at repo root if it exists, otherwise fall back to ../docs
 const ROOT_DOCS = join(__dirname, '..', '..', 'docs');
 const DEFAULT_SOURCE = join(__dirname, '../docs');
-const SOURCE_DIR = (function () {
-  const fs = require('fs');
-  if (fs.existsSync(ROOT_DOCS)) return ROOT_DOCS;
-  if (fs.existsSync(DEFAULT_SOURCE)) return DEFAULT_SOURCE;
-  return null;
-})();
+const SOURCE_DIR = existsSync(ROOT_DOCS) ? ROOT_DOCS : existsSync(DEFAULT_SOURCE) ? DEFAULT_SOURCE : null;
 const TARGET_DIR = join(__dirname, 'src/content/docs');
 
 /**

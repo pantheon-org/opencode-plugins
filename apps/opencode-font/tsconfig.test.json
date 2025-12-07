@@ -9,7 +9,9 @@
     "strict": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "typeRoots": ["./types"],
+    "typeRoots": ["./types", "../../types"],
+
+    "files": ["../../types/bun-test-shim.d.ts"],
 
     "baseUrl": "."
   },
