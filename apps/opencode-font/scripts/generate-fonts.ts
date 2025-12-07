@@ -25,8 +25,9 @@
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { Readable } from 'node:stream';
-import { SVGIcons2SVGFontStream } from 'svgicons2svgfont';
+
 import svg2ttf from 'svg2ttf';
+import { SVGIcons2SVGFontStream } from 'svgicons2svgfont';
 import ttf2woff from 'ttf2woff';
 import ttf2woff2 from 'ttf2woff2';
 
@@ -188,8 +189,8 @@ async function generateSVGFont(): Promise<string> {
 
     let svgFont = '';
 
-    fontStream.on('data', (chunk: Buffer) => {
-      svgFont += chunk.toString();
+    fontStream.on('data', (chunk: Buffer | Uint8Array) => {
+      svgFont += Buffer.from(chunk).toString();
     });
 
     fontStream.on('finish', () => {
@@ -235,7 +236,9 @@ function generateTTF(svgFont: string): Buffer {
   });
 
   console.log('✅ TTF generated');
-  return Buffer.from(ttf.buffer);
+  // svg2ttf returns an object with a Uint8Array `buffer` property — convert to Buffer
+  const buf = Buffer.from(ttf.buffer as unknown as Uint8Array);
+  return buf;
 }
 
 /**
@@ -244,7 +247,8 @@ function generateTTF(svgFont: string): Buffer {
 function generateWOFF2(ttfBuffer: Buffer): Buffer {
   console.log('📦 Compressing to WOFF2...');
 
-  const woff2Buffer = ttf2woff2(ttfBuffer);
+  const woff2Uint8 = ttf2woff2(ttfBuffer as unknown as Uint8Array);
+  const woff2Buffer = Buffer.from(woff2Uint8);
   const compressionRatio = (((ttfBuffer.length - woff2Buffer.length) / ttfBuffer.length) * 100).toFixed(1);
 
   console.log(`✅ WOFF2 generated (${compressionRatio}% compression)`);
@@ -257,7 +261,8 @@ function generateWOFF2(ttfBuffer: Buffer): Buffer {
 function generateWOFF(ttfBuffer: Buffer): Buffer {
   console.log('📦 Compressing to WOFF...');
 
-  const woffBuffer = Buffer.from(ttf2woff(ttfBuffer).buffer);
+  const woffResult = ttf2woff(ttfBuffer as unknown as Buffer);
+  const woffBuffer = Buffer.from((woffResult as any).buffer || woffResult);
   const compressionRatio = (((ttfBuffer.length - woffBuffer.length) / ttfBuffer.length) * 100).toFixed(1);
 
   console.log(`✅ WOFF generated (${compressionRatio}% compression)`);

@@ -1,8 +1,8 @@
 #!/usr/bin/env bunx tsx
-import fs from 'fs';
-import path from 'path';
 import { spawn, ChildProcess } from 'child_process';
+import fs from 'fs';
 import net from 'net';
+import path from 'path';
 
 type Opts = {
   plugins: string[];

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "declaration": true,
     "sourceMap": true,
     "strict": true,
@@ -10,6 +10,8 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
+    "types": ["node"],
+    "typeRoots": ["./types", "./node_modules", "./node_modules/@types"],
     "paths": {
       "@pantheon-org/opencode-warcraft-notifications-plugin": [
         "packages/opencode-warcraft-notifications-plugin/src/index.ts"
@@ -28,5 +30,14 @@
       ],
       "warcraft-notifications": ["warcraft-notifications/src/index.ts"]
     }
-  }
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "files": ["types/bun-test-shim.d.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/test/**"
+  ]
 }

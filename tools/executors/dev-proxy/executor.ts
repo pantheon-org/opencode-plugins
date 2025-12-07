@@ -1,16 +1,19 @@
-import { ExecutorContext } from '@nx/devkit';
 import path from 'path';
+
+import { ExecutorContext } from '@nx/devkit';
 
 // Use require-style imports for nx devkit functions to keep runtime compatibility
 const tryRequireNx = () => {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     return require('@nx/devkit');
   } catch (e) {
     return null;
   }
 };
 
+/**
+ *
+ */
 export default async function runExecutor(
   options: { plugins?: string[]; symlinkRoot?: string; apply?: boolean; __runExecutor?: any; __spawnSync?: any },
   context: ExecutorContext,
@@ -72,7 +75,7 @@ export default async function runExecutor(
     options.__spawnSync ??
     ((cmd: string, args: string[], opts: any) => {
       // lazy require child_process.spawnSync to avoid bundler issues
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+
       const child = require('child_process');
       return child.spawnSync(cmd, args, opts);
     });
@@ -122,7 +125,7 @@ export default async function runExecutor(
         // use spawnSyncImpl to start a background process; we start it detached so it doesn't block
         // but spawnSync is synchronous; instead we use spawn via child_process to start background.
         // For simplicity, use child_process.spawn here and push a stop function.
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
+
         const child = require('child_process').spawn('bunx', ['nx', 'run', `${projName}:build`, '--watch'], {
           stdio: 'inherit',
           cwd: workspaceRoot,

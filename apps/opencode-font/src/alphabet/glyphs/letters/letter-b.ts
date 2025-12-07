@@ -48,7 +48,7 @@ import { type Glyph } from '../../types';
  * This design creates two hollow sections typical of the letter 'B', with
  * the SECONDARY color transition at row 3 adding visual depth.
  *
- * @type {Glyph}
+ * Type: Glyph
  *
  * @example
  * ```typescript
