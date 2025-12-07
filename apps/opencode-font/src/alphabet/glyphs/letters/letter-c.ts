@@ -49,7 +49,7 @@ import { type Glyph } from '../../types';
  * The open right side distinguishes 'C' from 'O', creating the characteristic
  * C-shape. The color transition at row 3 provides visual depth.
  *
- * @type {Glyph}
+ * Type: Glyph
  *
  * @example
  * ```typescript

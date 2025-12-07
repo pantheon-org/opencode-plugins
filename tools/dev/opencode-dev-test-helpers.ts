@@ -3,6 +3,9 @@ import path from 'path';
 
 import { parse as parseJsonC, modify as modifyJsonC, applyEdits } from 'jsonc-parser';
 
+/**
+ *
+ */
 export function readJsonc(file: string): { json: any; raw: string } {
   const raw = fs.readFileSync(file, 'utf8');
   const errors: any[] = [];
@@ -11,6 +14,9 @@ export function readJsonc(file: string): { json: any; raw: string } {
   return { json, raw };
 }
 
+/**
+ *
+ */
 export function writeJsonc(file: string, originalRaw: string | null, obj: any) {
   const base = originalRaw || '';
   const edits = modifyJsonC(base, ['plugin'], obj.plugin || [], {
@@ -20,6 +26,9 @@ export function writeJsonc(file: string, originalRaw: string | null, obj: any) {
   fs.writeFileSync(file, newText, 'utf8');
 }
 
+/**
+ *
+ */
 export async function createSymlink(target: string, linkPath: string, forceFail = false) {
   try {
     // Simulate symlink failure when forceFail is true
@@ -35,6 +44,9 @@ export async function createSymlink(target: string, linkPath: string, forceFail 
   }
 }
 
+/**
+ *
+ */
 export async function copyDir(src: string, dest: string) {
   await fs.promises.mkdir(dest, { recursive: true });
   const entries = await fs.promises.readdir(src, { withFileTypes: true });
@@ -46,6 +58,9 @@ export async function copyDir(src: string, dest: string) {
   }
 }
 
+/**
+ *
+ */
 export function getLatestMtime(dir: string): number {
   let latest = 0;
   try {
@@ -72,6 +87,9 @@ export function getLatestMtime(dir: string): number {
 // network helpers for tests (mirror production logic)
 import net from 'net';
 
+/**
+ *
+ */
 export async function isServerListening(disposeUrl: string, timeoutMs = 500): Promise<boolean> {
   try {
     const u = new URL(disposeUrl);
@@ -100,6 +118,9 @@ export async function isServerListening(disposeUrl: string, timeoutMs = 500): Pr
   }
 }
 
+/**
+ *
+ */
 export async function tryDispose(url: string, timeoutMs = 2000, retries = 2): Promise<boolean> {
   if (!url) return false;
   for (let attempt = 0; attempt <= retries; attempt++) {

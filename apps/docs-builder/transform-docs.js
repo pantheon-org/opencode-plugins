@@ -18,7 +18,15 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const SOURCE_DIR = join(__dirname, '../docs');
+// Prefer workspace docs/ at repo root if it exists, otherwise fall back to ../docs
+const ROOT_DOCS = join(__dirname, '..', '..', 'docs');
+const DEFAULT_SOURCE = join(__dirname, '../docs');
+const SOURCE_DIR = (function () {
+  const fs = require('fs');
+  if (fs.existsSync(ROOT_DOCS)) return ROOT_DOCS;
+  if (fs.existsSync(DEFAULT_SOURCE)) return DEFAULT_SOURCE;
+  return null;
+})();
 const TARGET_DIR = join(__dirname, 'src/content/docs');
 
 /**
@@ -108,6 +116,12 @@ async function transform() {
   console.log(`Target: ${relative(process.cwd(), TARGET_DIR)}\n`);
 
   try {
+    // If no source directory was found, skip transform gracefully
+    if (!SOURCE_DIR) {
+      console.log('⚠️  No docs source found; skipping documentation transformation.');
+      process.exit(0);
+    }
+
     // Ensure target directory exists
     await mkdir(TARGET_DIR, { recursive: true });
 

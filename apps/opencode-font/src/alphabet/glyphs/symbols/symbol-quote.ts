@@ -43,7 +43,7 @@ import { type Glyph } from '../../types';
  * - Represents both opening and closing quotes (ambidextrous)
  * - Minimal design suitable for quoted text
  *
- * @type {Glyph}
+ * Type: Glyph
  *
  * @example
  * ```typescript

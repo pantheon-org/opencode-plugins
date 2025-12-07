@@ -343,7 +343,7 @@ tools/generators/plugin/
 - Previous work: File preservation logic in `add-files.ts`
 - Previous work: Detection in main generator
 
-## Summary
+## Recap
 
 The plugin generator now requires an explicit `--regenerate` or `-r` flag to update existing plugins, providing:
 

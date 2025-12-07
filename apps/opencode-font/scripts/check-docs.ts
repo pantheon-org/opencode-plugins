@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
 import fs from 'fs';
 import path from 'path';
+
 import ts from 'typescript';
 
 /**
@@ -8,7 +9,7 @@ import ts from 'typescript';
  */
 function readDirRecursive(dir: string, filelist: string[] = []): string[] {
   const files = fs.readdirSync(dir);
-  files.forEach((file) => {
+  files.forEach((file: string) => {
     const full = path.join(dir, file);
     const stat = fs.statSync(full);
     if (stat.isDirectory()) {

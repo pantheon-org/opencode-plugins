@@ -141,6 +141,17 @@ export default [
       'jsdoc/require-jsdoc': 'off',
     },
   },
+  // Relax TSDoc checks for the opencode-font app where many glyph
+  // comment blocks intentionally include characters that TSDoc treats
+  // as tags (e.g. @module, @type, @font-face). These comments are
+  // documentation for glyph shapes and not strict TSDoc usage.
+  {
+    files: ['apps/opencode-font/src/**'],
+    rules: {
+      'tsdoc/syntax': 'off',
+      'jsdoc/require-jsdoc': 'off',
+    },
+  },
   {
     files: ['**/*.js', '**/*.jsx'],
     languageOptions: {

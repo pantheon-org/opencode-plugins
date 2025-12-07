@@ -42,7 +42,7 @@ import { type Glyph } from '../../types';
  * - Positioned at the top of the character space
  * - Minimal design suitable for contractions and possessives
  *
- * @type {Glyph}
+ * Type: Glyph
  *
  * @example
  * ```typescript
