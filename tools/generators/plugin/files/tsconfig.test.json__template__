@@ -9,6 +9,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "typeRoots": ["./types", "./node_modules", "./node_modules/@types"],
+    "files": ["../../types/bun-test-shim.d.ts"],
     "baseUrl": "."
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.spec.ts", "src/**/*.test.ts"],
