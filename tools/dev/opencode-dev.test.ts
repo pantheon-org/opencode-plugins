@@ -1,7 +1,9 @@
-import { describe, it, expect, afterEach, beforeEach } from 'bun:test';
 import fs from 'fs';
-import path from 'path';
 import { tmpdir } from 'os';
+import path from 'path';
+
+import { describe, it, expect, afterEach, beforeEach } from 'bun:test';
+
 
 import {
   readJsonc as readJsoncUtil,
@@ -71,6 +73,7 @@ describe('getLatestMtime detects changes', () => {
 // Tests for opencode-dev network helpers
 import net from 'net';
 import http from 'http';
+
 import { isServerListening as isServerListeningUtil, tryDispose as tryDisposeUtil } from './opencode-dev-test-helpers';
 
 describe('network helpers', () => {

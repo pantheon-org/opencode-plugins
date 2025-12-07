@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'bun:test';
-import { ExecutorContext } from '@nx/devkit';
 import fs from 'fs';
 import path from 'path';
+
+import { ExecutorContext } from '@nx/devkit';
 
 import runExecutor from './executor';
 
@@ -29,6 +29,42 @@ function makeMockIterator() {
   } as any;
   return iterator;
 }
+
+// Globally monkeypatch child_process.spawn to prevent spawning long-running processes during tests
+// This ensures CI and local test runs do not actually start watchers or runtime processes.
+// The tests still exercise signal handling and executor shutdown logic via mocks.
+
+const childProcess = require('child_process');
+const _originalSpawn = childProcess.spawn;
+function _fakeSpawn(cmd: string, args: string[], opts: any) {
+  return {
+    kill: () => {},
+    on: (ev: string, cb: Function) => {},
+  } as any;
+}
+
+let _originalExit: typeof process.exit;
+let _exitCalled = false;
+
+beforeEach(() => {
+  // prevent child processes from actually spawning
+  childProcess.spawn = _fakeSpawn;
+
+  // stub process.exit so tests can simulate SIGINT without killing the test runner
+  _originalExit = process.exit;
+  _exitCalled = false;
+  // @ts-ignore override for test
+  process.exit = ((code?: number) => {
+    _exitCalled = true;
+    // do not actually exit during tests
+  }) as typeof process.exit;
+});
+
+afterEach(() => {
+  childProcess.spawn = _originalSpawn;
+  // restore process.exit
+  process.exit = _originalExit;
+});
 
 describe('dev-proxy executor with mocked runExecutor', () => {
   it('calls iterator.return() on shutdown', async () => {
@@ -85,7 +121,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
 
     let childKilled = false;
     // Monkeypatch child_process.spawn
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+
     const childProcess = require('child_process');
     const originalSpawn = childProcess.spawn;
     childProcess.spawn = (cmd: string, args: string[], opts: any) => {

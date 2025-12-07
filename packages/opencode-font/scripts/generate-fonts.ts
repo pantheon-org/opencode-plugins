@@ -22,16 +22,17 @@
  *   bun run generate:fonts
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { Readable } from 'node:stream';
+
 import svg2ttf from 'svg2ttf';
 import { SVGIcons2SVGFontStream } from 'svgicons2svgfont';
 import ttf2woff from 'ttf2woff';
 import ttf2woff2 from 'ttf2woff2';
 
 // Import alphabet module as single source of truth
-import { ALPHABET, type Glyph, SYMBOLS } from '../src/alphabet/index';
+import { ALPHABET, SYMBOLS, type Glyph } from '../src/alphabet/index';
 
 // ============================================================================
 // Configuration
@@ -111,6 +112,8 @@ for (const [symbol, glyph] of Object.entries(SYMBOLS)) {
   };
 }
 
+console.log(`📖 Loaded ${Object.keys(GLYPHS).length} glyphs from alphabet module`);
+
 // ============================================================================
 // Helper Functions
 // ============================================================================
@@ -143,11 +146,13 @@ function gridToSVGPath(rows: Record<number, number[]>): string {
  * Handles variable-width characters (1-5 columns) from alphabet module
  */
 function generateGlyphSVGs(): void {
+  console.log('📐 Generating SVG glyphs from alphabet module...');
+
   if (!existsSync(CONFIG.tempDir)) {
     mkdirSync(CONFIG.tempDir, { recursive: true });
   }
 
-  let _count = 0;
+  let count = 0;
   for (const [char, { glyph }] of Object.entries(GLYPHS)) {
     const svgPath = gridToSVGPath(glyph.rows);
 
@@ -162,14 +167,18 @@ function generateGlyphSVGs(): void {
 </svg>`;
 
     writeFileSync(join(CONFIG.tempDir, `${char}.svg`), svg);
-    _count++;
+    count++;
   }
+
+  console.log(`✅ Generated ${count} SVG glyphs from alphabet module`);
 }
 
 /**
  * Generate SVG font from individual SVG glyph files
  */
 async function generateSVGFont(): Promise<string> {
+  console.log('🔤 Creating SVG font...');
+
   return new Promise((resolve, reject) => {
     const fontStream = new SVGIcons2SVGFontStream({
       fontName: CONFIG.fontName,
@@ -180,11 +189,12 @@ async function generateSVGFont(): Promise<string> {
 
     let svgFont = '';
 
-    fontStream.on('data', (chunk: Buffer) => {
-      svgFont += chunk.toString();
+    fontStream.on('data', (chunk: Buffer | Uint8Array) => {
+      svgFont += Buffer.from(chunk).toString();
     });
 
     fontStream.on('finish', () => {
+      console.log(`✅ SVG font created with ${Object.keys(GLYPHS).length} glyphs`);
       resolve(svgFont);
     });
 
@@ -217,20 +227,31 @@ async function generateSVGFont(): Promise<string> {
  * Convert SVG font to TTF
  */
 function generateTTF(svgFont: string): Buffer {
+  console.log('🔨 Converting SVG font to TTF...');
+
   const ttf = svg2ttf(svgFont, {
     copyright: 'OpenCode Logo Font',
     description: 'Custom blocky font for OpenCode branding',
     url: 'https://opencode.ai',
   });
-  return Buffer.from(ttf.buffer);
+
+  console.log('✅ TTF generated');
+  // svg2ttf returns an object with a Uint8Array `buffer` property — convert to Buffer
+  const buf = Buffer.from(ttf.buffer as unknown as Uint8Array);
+  return buf;
 }
 
 /**
  * Convert TTF to WOFF2 (primary web format)
  */
 function generateWOFF2(ttfBuffer: Buffer): Buffer {
-  const woff2Buffer = ttf2woff2(ttfBuffer);
-  const _compressionRatio = (((ttfBuffer.length - woff2Buffer.length) / ttfBuffer.length) * 100).toFixed(1);
+  console.log('📦 Compressing to WOFF2...');
+
+  const woff2Uint8 = ttf2woff2(ttfBuffer as unknown as Uint8Array);
+  const woff2Buffer = Buffer.from(woff2Uint8);
+  const compressionRatio = (((ttfBuffer.length - woff2Buffer.length) / ttfBuffer.length) * 100).toFixed(1);
+
+  console.log(`✅ WOFF2 generated (${compressionRatio}% compression)`);
   return woff2Buffer;
 }
 
@@ -238,8 +259,13 @@ function generateWOFF2(ttfBuffer: Buffer): Buffer {
  * Convert TTF to WOFF (fallback web format)
  */
 function generateWOFF(ttfBuffer: Buffer): Buffer {
-  const woffBuffer = Buffer.from(ttf2woff(ttfBuffer).buffer);
-  const _compressionRatio = (((ttfBuffer.length - woffBuffer.length) / ttfBuffer.length) * 100).toFixed(1);
+  console.log('📦 Compressing to WOFF...');
+
+  const woffResult = ttf2woff(ttfBuffer as unknown as Buffer);
+  const woffBuffer = Buffer.from((woffResult as any).buffer || woffResult);
+  const compressionRatio = (((ttfBuffer.length - woffBuffer.length) / ttfBuffer.length) * 100).toFixed(1);
+
+  console.log(`✅ WOFF generated (${compressionRatio}% compression)`);
   return woffBuffer;
 }
 
@@ -247,6 +273,8 @@ function generateWOFF(ttfBuffer: Buffer): Buffer {
  * Save font files to output directory
  */
 function saveFonts(ttf: Buffer, woff2: Buffer, woff: Buffer): void {
+  console.log('💾 Saving font files...');
+
   if (!existsSync(CONFIG.outputDir)) {
     mkdirSync(CONFIG.outputDir, { recursive: true });
   }
@@ -254,16 +282,25 @@ function saveFonts(ttf: Buffer, woff2: Buffer, woff: Buffer): void {
   writeFileSync(join(CONFIG.outputDir, `${CONFIG.fontName}.ttf`), ttf);
   writeFileSync(join(CONFIG.outputDir, `${CONFIG.fontName}.woff2`), woff2);
   writeFileSync(join(CONFIG.outputDir, `${CONFIG.fontName}.woff`), woff);
+
+  // Log file sizes
+  console.log(`  TTF:   ${(ttf.length / 1024).toFixed(2)} KB`);
+  console.log(`  WOFF2: ${(woff2.length / 1024).toFixed(2)} KB`);
+  console.log(`  WOFF:  ${(woff.length / 1024).toFixed(2)} KB`);
 }
 
 /**
  * Clean up temporary files
  */
 function cleanup(): void {
+  console.log('🧹 Cleaning up temporary files...');
+
   if (existsSync(CONFIG.tempDir)) {
     const { rmSync } = require('node:fs');
     rmSync(CONFIG.tempDir, { recursive: true, force: true });
   }
+
+  console.log('✅ Cleanup complete');
 }
 
 // ============================================================================
@@ -271,6 +308,8 @@ function cleanup(): void {
 // ============================================================================
 
 async function main() {
+  console.log('🚀 Starting font generation...\n');
+
   const startTime = Date.now();
 
   try {
@@ -293,7 +332,11 @@ async function main() {
     // Step 6: Clean up temporary files
     cleanup();
 
-    const _duration = ((Date.now() - startTime) / 1000).toFixed(2);
+    const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+
+    console.log('\n✅ Font generation complete!');
+    console.log(`📁 Output directory: ${CONFIG.outputDir}/`);
+    console.log(`⏱️  Total time: ${duration}s`);
   } catch (error) {
     console.error('❌ Font generation failed:', error);
     cleanup(); // Try to clean up even on failure

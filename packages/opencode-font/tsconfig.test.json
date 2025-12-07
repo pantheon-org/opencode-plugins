@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "skipLibCheck": true,
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -8,9 +9,15 @@
     "strict": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "typeRoots": ["./types", "./node_modules", "./node_modules/@types"],
+    "typeRoots": ["./types"],
+
     "baseUrl": "."
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.spec.ts", "src/**/*.test.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

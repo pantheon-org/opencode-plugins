@@ -9,7 +9,7 @@
  * - Variable-width characters (1-5 columns)
  * - 7-row grid system with automatic color assignment
  *
- * @module alphabet
+ * Module: alphabet
  *
  * @example
  * ```typescript

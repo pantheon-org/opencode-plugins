@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
-import fs from 'node:fs';
-import path from 'node:path';
+import fs from 'fs';
+import path from 'path';
+
 import ts from 'typescript';
 
 /**
@@ -8,7 +9,7 @@ import ts from 'typescript';
  */
 function readDirRecursive(dir: string, filelist: string[] = []): string[] {
   const files = fs.readdirSync(dir);
-  files.forEach((file) => {
+  files.forEach((file: string) => {
     const full = path.join(dir, file);
     const stat = fs.statSync(full);
     if (stat.isDirectory()) {
@@ -117,9 +118,12 @@ function main(): void {
   });
 
   if (all.length === 0) {
+    console.log('No missing JSDoc/TSDoc comments detected for exported symbols.');
     process.exit(0);
   }
-  all.forEach((_l) => {});
+
+  console.log('Missing JSDoc/TSDoc for exported symbols:');
+  all.forEach((l) => console.log(' -', l));
   process.exit(2);
 }
 

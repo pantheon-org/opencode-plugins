@@ -6,7 +6,7 @@
  * are included in the `fonts/` directory of this package.
  *
  * **Important**: Consumers must load the OpenCodeLogo font in their application
- * by including the font files and CSS @font-face declaration. See the package
+ * by including the font files and CSS \@font-face declaration. See the package
  * `fonts/` directory and `css/opencode-font.css` for reference.
  *
  * @param text - The text to convert to SVG (supports A-Z and symbols: - | ' " ? !)

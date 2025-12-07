@@ -11,14 +11,22 @@
  * 5. Maintains existing frontmatter and markdown formatting
  */
 
-import { copyFile, mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
-import { basename, dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdir, mkdir, copyFile, readFile, writeFile } from 'fs/promises';
+import { join, dirname, relative, basename } from 'path';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const SOURCE_DIR = join(__dirname, '../../docs');
+// Prefer workspace docs/ at repo root if it exists, otherwise fall back to ../docs
+const ROOT_DOCS = join(__dirname, '..', '..', 'docs');
+const DEFAULT_SOURCE = join(__dirname, '../docs');
+const SOURCE_DIR = (function () {
+  const fs = require('fs');
+  if (fs.existsSync(ROOT_DOCS)) return ROOT_DOCS;
+  if (fs.existsSync(DEFAULT_SOURCE)) return DEFAULT_SOURCE;
+  return null;
+})();
 const TARGET_DIR = join(__dirname, 'src/content/docs');
 
 /**
@@ -39,7 +47,7 @@ function hasFrontmatter(content) {
 /**
  * Add frontmatter to markdown content if missing
  */
-function addFrontmatter(content, _filename) {
+function addFrontmatter(content, filename) {
   if (hasFrontmatter(content)) {
     return content;
   }
@@ -87,12 +95,14 @@ async function copyMarkdownFiles(sourceDir, targetDir, relativePath = '') {
     } else if (entry.isFile() && entry.name.endsWith('.md')) {
       // Process markdown files (add frontmatter if needed)
       await processMarkdownFile(sourcePath, targetPath);
+      console.log(`  ✓ ${currentRelativePath}`);
     } else if (
       entry.isFile() &&
       (entry.name.endsWith('.json') || entry.name.endsWith('.example') || entry.name.endsWith('.schema'))
     ) {
       // Copy non-markdown files as-is
       await copyFile(sourcePath, targetPath);
+      console.log(`  ✓ ${currentRelativePath}`);
     }
   }
 }
@@ -101,12 +111,24 @@ async function copyMarkdownFiles(sourceDir, targetDir, relativePath = '') {
  * Main transformation process
  */
 async function transform() {
+  console.log('🔄 Transforming documentation...\n');
+  console.log(`Source: ${relative(process.cwd(), SOURCE_DIR)}`);
+  console.log(`Target: ${relative(process.cwd(), TARGET_DIR)}\n`);
+
   try {
+    // If no source directory was found, skip transform gracefully
+    if (!SOURCE_DIR) {
+      console.log('⚠️  No docs source found; skipping documentation transformation.');
+      process.exit(0);
+    }
+
     // Ensure target directory exists
     await mkdir(TARGET_DIR, { recursive: true });
 
     // Copy all markdown files
     await copyMarkdownFiles(SOURCE_DIR, TARGET_DIR);
+
+    console.log('\n✅ Documentation transformation complete!');
     process.exit(0);
   } catch (error) {
     console.error('\n❌ Transformation failed:', error.message);

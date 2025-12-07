@@ -48,7 +48,7 @@ import type { Glyph } from '../../types';
  * The use of SECONDARY color in rows 3-5 provides visual depth and separates
  * the lower portion of the letter from the top bar.
  *
- * @type {Glyph}
+ * Type: Glyph
  *
  * @example
  * ```typescript

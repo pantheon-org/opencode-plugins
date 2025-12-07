@@ -2,13 +2,42 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "declaration": true,
     "sourceMap": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "baseUrl": "."
-  }
+    "baseUrl": ".",
+    "types": ["node"],
+    "typeRoots": ["./types", "./node_modules", "./node_modules/@types"],
+    "paths": {
+      "@pantheon-org/opencode-warcraft-notifications-plugin": [
+        "packages/opencode-warcraft-notifications-plugin/src/index.ts"
+      ],
+      "@pantheon-org/opencode-demo-plugin": [
+        "packages/opencode-demo-plugin/src/index.ts"
+      ],
+      "@pantheon-org/opencode-test-deps": [
+        "packages/opencode-test-deps/src/index.ts"
+      ],
+      "@pantheon-org/opencode-test-final": [
+        "packages/opencode-test-final/src/index.ts"
+      ],
+      "@pantheon-org/opencode-warcraft-notifications": [
+        "packages/opencode-warcraft-notifications/src/index.ts"
+      ],
+      "warcraft-notifications": ["warcraft-notifications/src/index.ts"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "files": ["types/bun-test-shim.d.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/test/**"
+  ]
 }
