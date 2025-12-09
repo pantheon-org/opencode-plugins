@@ -12,7 +12,7 @@
     "allowJs": true,
     "moduleDetection": "force",
     "noImplicitAny": false,
-    "types": ["node"]
+    "types": ["node", "bun-types"]
   },
   "include": ["**/*.ts", "**/*.js"],
   "exclude": ["node_modules", "docs", ".astro-build", "pages"]
