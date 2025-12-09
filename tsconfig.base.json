@@ -38,6 +38,9 @@
     "dist",
     "**/*.spec.ts",
     "**/*.test.ts",
-    "**/test/**"
+    "**/test/**",
+    "**/pages/**",
+    "apps/docs-builder/**",
+    "apps/opencode-font/scripts/**"
   ]
 }
