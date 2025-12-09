@@ -24,7 +24,7 @@ export const addFiles = (tree: Tree, options: NormalizedOptions): void => {
     actions: getFlattenedActions(),
   };
 
-  const templatePath = path.join(__dirname, 'files');
+  const templatePath = path.join(__dirname, '..', '..', 'files');
 
   // Check if src/ and docs/ directories already exist
   const srcPath = path.join(options.projectRoot, 'src');
