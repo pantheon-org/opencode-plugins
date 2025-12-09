@@ -1,9 +1,15 @@
-import * as path from 'node:path';
-import { generateFiles, names, offsetFromRoot, type Tree } from '@nx/devkit';
+import * as path from 'path';
 
+import { Tree, names, offsetFromRoot, generateFiles } from '@nx/devkit';
+
+<<<<<<<< HEAD:tools/generators/plugin/add-files.ts
+import { astroDependencies, astroDevDependencies } from './dependencies';
+import { NormalizedOptions } from './normalize-options';
+========
 import { dependencies, devDependencies } from '../dependencies';
 import { getFlattenedActions } from '../github-action-versions/get-flattened-actions';
-import type { NormalizedOptions } from '../normalize-options';
+import { NormalizedOptions } from '../normalize-options';
+>>>>>>>> 20ed61e (refactor(tools): convert executors and generators to ESM and register as Nx projects):tools/generators/plugin/src/add-files/index.ts
 
 import { collectFilesFromTree } from './collect-files-from-tree';
 
@@ -18,12 +24,11 @@ export const addFiles = (tree: Tree, options: NormalizedOptions): void => {
     offsetFromRoot: offsetFromRoot(options.projectRoot),
     template: '',
     npmScope: 'pantheon-org',
-    dependencies: dependencies,
-    devDependencies: devDependencies(),
-    actions: getFlattenedActions(),
+    astroDependencies,
+    astroDevDependencies,
   };
 
-  const templatePath = path.join(__dirname, '..', '..', 'files');
+  const templatePath = path.join(__dirname, 'files');
 
   // Check if src/ and docs/ directories already exist
   const srcPath = path.join(options.projectRoot, 'src');
@@ -38,6 +43,10 @@ export const addFiles = (tree: Tree, options: NormalizedOptions): void => {
     if (srcExists) preserved.push('src/');
     if (docsExists) preserved.push('docs/');
 
+    console.log(
+      `\n⚠️  Existing plugin detected. Preserving ${preserved.join(' and ')} directories...`,
+    );
+
     // Store existing content before generation
     const existingContent: Map<string, Buffer> = new Map();
 
@@ -49,12 +58,6 @@ export const addFiles = (tree: Tree, options: NormalizedOptions): void => {
       collectFilesFromTree(tree, docsPath, existingContent);
     }
 
-    // Clean up .github/ directory before regenerating
-    const githubPath = path.join(options.projectRoot, '.github');
-    if (tree.exists(githubPath)) {
-      tree.delete(githubPath);
-    }
-
     // Generate all files (including src/ and docs/)
     generateFiles(tree, templatePath, options.projectRoot, templateOptions);
 
@@ -62,6 +65,8 @@ export const addFiles = (tree: Tree, options: NormalizedOptions): void => {
     existingContent.forEach((content, filePath) => {
       tree.write(filePath, content);
     });
+
+    console.log(`  ✓ Config files regenerated, ${preserved.join(' and ')} preserved\n`);
   } else {
     // New plugin - generate everything
     generateFiles(tree, templatePath, options.projectRoot, templateOptions);

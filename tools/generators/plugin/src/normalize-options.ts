@@ -1,9 +1,12 @@
 import { names, type Tree } from '@nx/devkit';
 
-import type { PluginGeneratorSchema } from '../schema';
-
-import type { PluginDependencies } from './dependencies';
-import { dependencies, devDependencies } from './dependencies';
+<<<<<<<< HEAD:tools/generators/plugin/normalize-options.ts
+import { dependencies, devDependencies, type PluginDependencies } from './dependencies';
+import type { PluginGeneratorSchema } from './schema';
+========
+import { PluginGeneratorSchema } from './schema';
+import { dependencies, devDependencies, PluginDependencies } from './src/dependencies';
+>>>>>>>> 20ed61e (refactor(tools): convert executors and generators to ESM and register as Nx projects):tools/generators/plugin/src/normalize-options.ts
 
 export interface NormalizedOptions extends PluginGeneratorSchema {
   projectName: string;

@@ -1,0 +1,3 @@
+# Ignore old CommonJS files - these are legacy test infrastructure
+*.js
+*.test.ts

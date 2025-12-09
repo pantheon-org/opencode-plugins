@@ -1,11 +1,14 @@
 import * as fs from 'node:fs';
-import * as path from 'node:path';
 
 export interface PluginDependencies {
   [packageName: string]: string;
 }
 
-const extractNonNxDependencies = (baseProjectPackageJson: Record<string, string>): PluginDependencies => {
+export const devDependencies = (): PluginDependencies => {
+  const packageJson: string = fs.readFileSync('./package.json', 'utf-8');
+
+  const baseProjectPackageJson = JSON.parse(packageJson).devDependencies;
+
   const nxDependencies: string[] = [
     '@eslint/js',
     '@nx/devkit',
@@ -27,26 +30,6 @@ const extractNonNxDependencies = (baseProjectPackageJson: Record<string, string>
     }
     return deps;
   }, {});
-};
-
-export const devDependencies = (): PluginDependencies => {
-  // Find workspace root by walking up from current directory
-  let currentDir = __dirname;
-  while (currentDir !== path.dirname(currentDir)) {
-    const packageJsonPath = path.join(currentDir, 'package.json');
-    if (fs.existsSync(packageJsonPath)) {
-      const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
-      // Check if this is the workspace root (has workspaces or nx config)
-      if (pkg.workspaces || fs.existsSync(path.join(currentDir, 'nx.json'))) {
-        const packageJson: string = fs.readFileSync(packageJsonPath, 'utf-8');
-        const baseProjectPackageJson = JSON.parse(packageJson).devDependencies;
-        return extractNonNxDependencies(baseProjectPackageJson);
-      }
-    }
-    currentDir = path.dirname(currentDir);
-  }
-  // Fallback: return empty object if workspace root not found
-  return {};
 };
 
 export const dependencies: PluginDependencies = {

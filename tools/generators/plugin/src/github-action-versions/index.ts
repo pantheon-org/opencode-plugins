@@ -10,7 +10,7 @@
  * - Test updates in a single plugin before regenerating all plugins
  */
 
-import type { GitHubActionsVersions } from './types';
+import { GitHubActionsVersions } from './types';
 
 /**
  * Centralized GitHub Actions version management
@@ -88,3 +88,54 @@ export const githubActionsVersions = (): GitHubActionsVersions => ({
     },
   },
 });
+<<<<<<<< HEAD:tools/generators/plugin/github-actions-versions.ts
+
+/**
+ * Helper to format action reference for workflow files
+ *
+ * @param action - GitHub action configuration
+ * @returns Formatted action reference (e.g., "actions/checkout\@93cb6efe... # v5.0.1")
+ *
+ * @example
+ * ```typescript
+ * formatActionRef(githubActionsVersions().github.checkout)
+ * // Returns: "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1"
+ * ```
+ */
+export const formatActionRef = (action: GitHubAction): string => {
+  return `${action.name}@${action.sha} # ${action.version}`;
+};
+
+/**
+ * Get all actions as a flat object for easy template access
+ *
+ * @returns Flattened object with all action references
+ *
+ * @example
+ * ```typescript
+ * const actions = getFlattenedActions();
+ * // Use in template: <%= actions.checkout %>
+ * // Outputs: "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1"
+ * ```
+ */
+export const getFlattenedActions = (): Record<string, string> => {
+  const versions = githubActionsVersions();
+
+  return {
+    // GitHub official actions
+    checkout: formatActionRef(versions.github.checkout),
+    setupNode: formatActionRef(versions.github.setupNode),
+    cache: formatActionRef(versions.github.cache),
+    githubScript: formatActionRef(versions.github.githubScript),
+    codeqlUploadSarif: formatActionRef(versions.github.codeqlUploadSarif),
+
+    // Third-party actions
+    setupBun: formatActionRef(versions.thirdParty.setupBun),
+    trivyAction: formatActionRef(versions.thirdParty.trivyAction),
+    ghPages: formatActionRef(versions.thirdParty.ghPages),
+    codecov: formatActionRef(versions.thirdParty.codecov),
+    releasePlease: formatActionRef(versions.thirdParty.releasePlease),
+  };
+};
+========
+>>>>>>>> 20ed61e (refactor(tools): convert executors and generators to ESM and register as Nx projects):tools/generators/plugin/src/github-action-versions/index.ts
