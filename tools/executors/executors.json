@@ -11,21 +11,6 @@
       "schema": "./typecheck/schema.json",
       "description": "Run workspace TypeScript typecheck (tsc --noEmit)",
       "readme": "./typecheck/README.md"
-    },
-    "check-mirror-exists": {
-      "implementation": "./check-mirror-exists/executor",
-      "schema": "./check-mirror-exists/schema.json",
-      "description": "Check if the mirror repository specified in package.json exists on GitHub"
-    },
-    "validate-jsdoc": {
-      "implementation": "./validate-jsdoc/executor",
-      "schema": "./validate-jsdoc/schema.json",
-      "description": "Validates JSDoc presence on exported functions and classes"
-    },
-    "validate-markdown": {
-      "implementation": "./validate-markdown/executor",
-      "schema": "./validate-markdown/schema.json",
-      "description": "Validates markdown files using markdownlint-cli2"
     }
   }
 }

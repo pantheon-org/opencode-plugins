@@ -10,7 +10,7 @@
  * - Test updates in a single plugin before regenerating all plugins
  */
 
-import type { GitHubActionsVersions } from './types';
+import { GitHubActionsVersions } from './types';
 
 /**
  * Centralized GitHub Actions version management

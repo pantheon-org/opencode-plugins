@@ -4,6 +4,18 @@
   "sourceRoot": "tools/executors/dev-proxy",
   "projectType": "library",
   "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx eslint executor.ts"
+          }
+        ],
+        "cwd": "tools/executors/dev-proxy",
+        "parallel": false
+      }
+    },
     "type-check": {
       "executor": "nx:run-commands",
       "options": {

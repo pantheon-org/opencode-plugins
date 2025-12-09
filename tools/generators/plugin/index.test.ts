@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'bun:test';
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
+import { describe, it, expect } from 'bun:test';
 
 import generator from './index';
 

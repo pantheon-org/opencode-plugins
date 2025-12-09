@@ -1,5 +1,6 @@
-import { githubActionsVersions } from '.';
 import { formatActionRef } from './format-action-ref';
+
+import { githubActionsVersions } from '.';
 
 /**
  * Get all actions as a flat object for easy template access

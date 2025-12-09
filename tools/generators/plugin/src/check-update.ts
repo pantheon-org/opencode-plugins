@@ -1,4 +1,4 @@
-import type { Tree } from '@nx/devkit';
+import { Tree } from '@nx/devkit';
 
 import type { PluginGeneratorSchema } from '../schema';
 

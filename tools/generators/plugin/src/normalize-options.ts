@@ -1,4 +1,4 @@
-import { names, type Tree } from '@nx/devkit';
+import { Tree, names } from '@nx/devkit';
 
 import type { PluginGeneratorSchema } from '../schema';
 
@@ -20,7 +20,7 @@ const pascalCase = (str: string): string => {
   return str.replace(/(^\w|-\w)/g, (match) => match.replace('-', '').toUpperCase());
 };
 
-export const normalizeOptions = (_tree: Tree, options: PluginGeneratorSchema): NormalizedOptions => {
+export const normalizeOptions = (tree: Tree, options: PluginGeneratorSchema): NormalizedOptions => {
   const name = names(options.name).fileName;
   const projectDirectory = options.directory || 'packages';
 
