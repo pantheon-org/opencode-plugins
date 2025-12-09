@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Typecheck Executor",
+  "type": "object",
+  "properties": {
+    "tsconfig": {
+      "type": "string",
+      "description": "Path to the tsconfig file to use (workspace relative)",
+      "default": "tsconfig.base.json"
+    },
+    "watch": {
+      "type": "boolean",
+      "description": "Run tsc in watch mode",
+      "default": false
+    },
+    "extraArgs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Additional arguments to pass to tsc"
+    }
+  }
+}

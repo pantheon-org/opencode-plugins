@@ -1,0 +1,44 @@
+{
+  "name": "generator-plugin",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "tools/generators/plugin",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx eslint ."
+          }
+        ],
+        "cwd": "tools/generators/plugin",
+        "parallel": false
+      }
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx tsc --noEmit"
+          }
+        ],
+        "cwd": "tools/generators/plugin",
+        "parallel": false
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bun test"
+          }
+        ],
+        "cwd": "tools/generators/plugin",
+        "parallel": false
+      }
+    }
+  }
+}

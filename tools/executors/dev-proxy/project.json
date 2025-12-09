@@ -1,0 +1,44 @@
+{
+  "name": "executor-dev-proxy",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "tools/executors/dev-proxy",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx eslint executor.ts"
+          }
+        ],
+        "cwd": "tools/executors/dev-proxy",
+        "parallel": false
+      }
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx tsc --noEmit"
+          }
+        ],
+        "cwd": "tools/executors/dev-proxy",
+        "parallel": false
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bun test"
+          }
+        ],
+        "cwd": "tools/executors/dev-proxy",
+        "parallel": false
+      }
+    }
+  }
+}

@@ -10,35 +10,7 @@
  * - Test updates in a single plugin before regenerating all plugins
  */
 
-export interface GitHubAction {
-  /** Action identifier (e.g., "actions/checkout") */
-  name: string;
-  /** Pinned commit SHA */
-  sha: string;
-  /** Semantic version for reference (e.g., "v4.2.2") */
-  version: string;
-  /** Short description of the action */
-  description: string;
-}
-
-export interface GitHubActionsVersions {
-  /** GitHub's official actions */
-  github: {
-    checkout: GitHubAction;
-    setupNode: GitHubAction;
-    cache: GitHubAction;
-    githubScript: GitHubAction;
-    codeqlUploadSarif: GitHubAction;
-  };
-  /** Third-party actions */
-  thirdParty: {
-    setupBun: GitHubAction;
-    trivyAction: GitHubAction;
-    ghPages: GitHubAction;
-    codecov: GitHubAction;
-    releasePlease: GitHubAction;
-  };
-}
+import { GitHubActionsVersions } from './types';
 
 /**
  * Centralized GitHub Actions version management
@@ -116,51 +88,3 @@ export const githubActionsVersions = (): GitHubActionsVersions => ({
     },
   },
 });
-
-/**
- * Helper to format action reference for workflow files
- *
- * @param action - GitHub action configuration
- * @returns Formatted action reference (e.g., "actions/checkout\@93cb6efe... # v5.0.1")
- *
- * @example
- * ```typescript
- * formatActionRef(githubActionsVersions().github.checkout)
- * // Returns: "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1"
- * ```
- */
-export const formatActionRef = (action: GitHubAction): string => {
-  return `${action.name}@${action.sha} # ${action.version}`;
-};
-
-/**
- * Get all actions as a flat object for easy template access
- *
- * @returns Flattened object with all action references
- *
- * @example
- * ```typescript
- * const actions = getFlattenedActions();
- * // Use in template: <%= actions.checkout %>
- * // Outputs: "actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1"
- * ```
- */
-export const getFlattenedActions = (): Record<string, string> => {
-  const versions = githubActionsVersions();
-
-  return {
-    // GitHub official actions
-    checkout: formatActionRef(versions.github.checkout),
-    setupNode: formatActionRef(versions.github.setupNode),
-    cache: formatActionRef(versions.github.cache),
-    githubScript: formatActionRef(versions.github.githubScript),
-    codeqlUploadSarif: formatActionRef(versions.github.codeqlUploadSarif),
-
-    // Third-party actions
-    setupBun: formatActionRef(versions.thirdParty.setupBun),
-    trivyAction: formatActionRef(versions.thirdParty.trivyAction),
-    ghPages: formatActionRef(versions.thirdParty.ghPages),
-    codecov: formatActionRef(versions.thirdParty.codecov),
-    releasePlease: formatActionRef(versions.thirdParty.releasePlease),
-  };
-};

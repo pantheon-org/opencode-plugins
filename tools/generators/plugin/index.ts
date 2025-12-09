@@ -1,10 +1,10 @@
 import { Tree, formatFiles } from '@nx/devkit';
 
-import { addFiles } from './add-files';
-import { checkUpdate } from './check-update';
-import { normalizeOptions } from './normalize-options';
 import type { PluginGeneratorSchema } from './schema';
-import { updateTsconfigPaths } from './update-ts-config-paths';
+import { addFiles } from './src/add-files';
+import { checkUpdate } from './src/check-update';
+import { normalizeOptions } from './src/normalize-options';
+import { updateTsconfigPaths } from './src/update-ts-config-paths';
 
 const pluginGenerator = async (tree: Tree, options: PluginGeneratorSchema): Promise<() => void> => {
   const normalizedOptions = normalizeOptions(tree, options);
