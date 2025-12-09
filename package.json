@@ -23,13 +23,14 @@
     "validate": "bun run format:check && bun run lint:md && bun run lint && bun run type-check && bun run test && bun run build",
     "validate:affected": "bun run format:check && bun run lint:md && bun run lint:affected && bun run type-check:affected && bun run test:affected && bun run build:affected",
     "generate:plugin": "nx g ./tools/generators:plugin",
-    "check:repo-settings": "bun run .github/scripts/check-repo-settings.ts",
+    "check:repo-settings": "bunx nx build workflows && node dist/apps/workflows/scripts/check-repo-settings/index.js",
     "hooks:install": "bunx lefthook install",
     "hooks:uninstall": "bunx lefthook uninstall"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@nx/devkit": "^22.1.3",
+    "@nx/esbuild": "22.1.3",
     "@nx/eslint": "^22.1.3",
     "@nx/eslint-plugin": "^22.1.3",
     "@nx/jest": "22.1.3",
@@ -47,6 +48,7 @@
     "@typescript-eslint/eslint-plugin": "^8.48.1",
     "@typescript-eslint/parser": "^8.48.1",
     "bun-types": "^1.3.3",
+    "esbuild": "^0.19.2",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
