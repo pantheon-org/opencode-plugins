@@ -57,3 +57,5 @@ coverage/
 
 # OpenCode
 .opencode/
+.context/
+.sessions/
