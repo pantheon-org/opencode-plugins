@@ -1,0 +1,32 @@
+{
+  "name": "executor-typecheck",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "tools/executors/typecheck",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx eslint ."
+          }
+        ],
+        "cwd": "tools/executors/typecheck",
+        "parallel": false
+      }
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx tsc --noEmit"
+          }
+        ],
+        "cwd": "tools/executors/typecheck",
+        "parallel": false
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import { Tree } from '@nx/devkit';
 
-import { NormalizedOptions } from './normalize-options';
-import { PluginGeneratorSchema } from './schema';
+import { NormalizedOptions } from '../normalize-options';
+import { PluginGeneratorSchema } from '../schema';
 
 /**
  * Checks if the plugin already exists and validates regenerate flag
