@@ -1,0 +1,16 @@
+{
+  "executors": {
+    "dev-proxy": {
+      "implementation": "./dev-proxy/executor",
+      "schema": "./dev-proxy/schema.json",
+      "description": "Run opencode with local plugin symlinks and watchers",
+      "readme": "./dev-proxy/README.md"
+    },
+    "typecheck": {
+      "implementation": "./typecheck/executor",
+      "schema": "./typecheck/schema.json",
+      "description": "Run workspace TypeScript typecheck (tsc --noEmit)",
+      "readme": "./typecheck/README.md"
+    }
+  }
+}

@@ -94,19 +94,19 @@ packages/opencode-<name>/
 1. Navigate to your new plugin:
 
    ```bash
-   cd packages/opencode-<name>
+   cd packages/opencode-<name>-plugin
    ```
 
 2. Build the plugin:
 
    ```bash
-   nx build opencode-<name>
+   nx build opencode-<name>-plugin
    ```
 
 3. Pack the plugin for distribution:
 
    ```bash
-   nx pack opencode-<name>
+   nx pack opencode-<name>-plugin
    ```
 
 ## Release & Publishing Workflow
@@ -383,6 +383,53 @@ tools/generators/plugin/
     ├── README.md__template__
     └── src/
         └── index.ts__template__
+```
+
+## Template Variables
+
+Below are the most commonly available template variables injected into files in `tools/generators/plugin/files/`. Add
+these to your templates using EJS-style placeholders (e.g., `<%= name %>`).
+
+- `projectName` — final project folder name (e.g. `opencode-my-plugin`)
+- `projectRoot` — path to generated project (e.g. `packages/opencode-my-plugin`)
+- `name` — raw name passed to generator (e.g. `my-plugin`)
+- `className` — PascalCase project name used in templates (e.g. `MyPlugin`)
+- `npmScope` — npm organization scope (e.g. `pantheon-org`)
+- `description` — description option value
+- `addTests` — boolean used by templates to include test config
+- `addLint` — boolean used by templates to include lint config
+- `regenerate` — boolean flag indicating regeneration mode
+- `offsetFromRoot` — relative path string used in project.json template
+
+Tip: Update `tools/generators/plugin/files/` to add inline comments in complex templates explaining how a variable is
+used.
+
+## Tests
+
+Unit tests for the generator should live next to the implementation (e.g., `tools/generators/plugin/__tests__/`). If
+tests are not present, add a minimal dry-run test that verifies files would be created without writing to disk.
+
+Example (Bun test) to add at `tools/generators/plugin/index.test.ts`:
+
+```ts
+import { describe, it, expect } from 'bun:test';
+import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
+import generator from './index';
+
+describe('plugin generator', () => {
+  it('creates files (dry run)', async () => {
+    const tree = createTreeWithEmptyWorkspace();
+    await generator(tree, { name: 'test-plugin', directory: 'packages', addTests: false });
+    expect(tree.exists('packages/opencode-test-plugin/package.json')).toBeTruthy();
+  });
+});
+```
+
+If you already have tests, add a short section here describing how to run them:
+
+```bash
+# Run only generator tests
+bun test tools/generators/plugin
 ```
 
 ## Modifying the Generator

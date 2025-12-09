@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "declaration": false,
+    "sourceMap": false,
+    "strict": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "types": ["node"],
+    "baseUrl": "."
+  },
+  "include": ["**/*.ts", "**/*.spec.ts", "**/*.test.ts"],
+  "files": ["../..//types/bun-test-shim.d.ts"],
+  "exclude": ["node_modules", "dist"]
+}
