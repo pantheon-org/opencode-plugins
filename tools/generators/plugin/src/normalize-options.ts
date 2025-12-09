@@ -1,7 +1,9 @@
 import { Tree, names } from '@nx/devkit';
 
-import { PluginGeneratorSchema } from './schema';
-import { dependencies, devDependencies, PluginDependencies } from './src/dependencies';
+import type { PluginGeneratorSchema } from '../schema';
+
+import type { PluginDependencies } from './dependencies';
+import { dependencies, devDependencies } from './dependencies';
 
 export interface NormalizedOptions extends PluginGeneratorSchema {
   projectName: string;
