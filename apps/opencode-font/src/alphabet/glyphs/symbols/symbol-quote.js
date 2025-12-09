@@ -61,14 +61,14 @@
  * @see textToBlocks in block.ts for rendering usage
  */
 export const symbolQuote = {
-    rows: {
-        0: [1, 1], // Top of quotes (primary)
-        1: [1, 1], // Bottom of quotes (primary)
-        2: [0, 0], // Empty (primary zone)
-        3: [0, 0], // Empty (secondary zone)
-        4: [0, 0], // Empty (secondary zone)
-        5: [0, 0], // Empty (secondary zone)
-        6: [0, 0], // Bottom padding
-    },
+  rows: {
+    0: [1, 1], // Top of quotes (primary)
+    1: [1, 1], // Bottom of quotes (primary)
+    2: [0, 0], // Empty (primary zone)
+    3: [0, 0], // Empty (secondary zone)
+    4: [0, 0], // Empty (secondary zone)
+    5: [0, 0], // Empty (secondary zone)
+    6: [0, 0], // Bottom padding
+  },
 };
 //# sourceMappingURL=symbol-quote.js.map

@@ -75,14 +75,14 @@
  * @see ALPHABET in types.ts for accessing this glyph
  */
 export const letterK = {
-    rows: {
-        0: [1, 0, 0, 0], // Stem top (primary)
-        1: [1, 0, 0, 1], // Stem and upper diagonal (primary)
-        2: [1, 0, 1, 0], // Stem and diagonal meeting (primary)
-        3: [1, 1, 0, 0], // Stem and junction (secondary)
-        4: [1, 0, 1, 0], // Stem and diagonal (secondary)
-        5: [1, 0, 0, 1], // Stem and lower diagonal (secondary)
-        6: [0, 0, 0, 0], // Bottom padding
-    },
+  rows: {
+    0: [1, 0, 0, 0], // Stem top (primary)
+    1: [1, 0, 0, 1], // Stem and upper diagonal (primary)
+    2: [1, 0, 1, 0], // Stem and diagonal meeting (primary)
+    3: [1, 1, 0, 0], // Stem and junction (secondary)
+    4: [1, 0, 1, 0], // Stem and diagonal (secondary)
+    5: [1, 0, 0, 1], // Stem and lower diagonal (secondary)
+    6: [0, 0, 0, 0], // Bottom padding
+  },
 };
 //# sourceMappingURL=letter-k.js.map

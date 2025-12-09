@@ -12,9 +12,9 @@
  *   bun run scripts/check-pages-source.ts pantheon-org/opencode-font
  */
 interface GitHubPagesResponse {
-    status?: string;
-    build_type?: string;
-    [key: string]: unknown;
+  status?: string;
+  build_type?: string;
+  [key: string]: unknown;
 }
 /**
  * Check GitHub Pages configuration for a repository

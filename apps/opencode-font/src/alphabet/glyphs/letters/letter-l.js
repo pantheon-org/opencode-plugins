@@ -74,14 +74,14 @@
  * @see ALPHABET in types.ts for accessing this glyph
  */
 export const letterL = {
-    rows: {
-        0: [1, 0, 0], // Stem top (primary)
-        1: [1, 0, 0], // Stem (primary)
-        2: [1, 0, 0], // Stem (primary)
-        3: [1, 0, 0], // Stem (secondary)
-        4: [1, 0, 0], // Stem (secondary)
-        5: [1, 1, 1], // Bottom bar (secondary)
-        6: [0, 0, 0], // Bottom padding
-    },
+  rows: {
+    0: [1, 0, 0], // Stem top (primary)
+    1: [1, 0, 0], // Stem (primary)
+    2: [1, 0, 0], // Stem (primary)
+    3: [1, 0, 0], // Stem (secondary)
+    4: [1, 0, 0], // Stem (secondary)
+    5: [1, 1, 1], // Bottom bar (secondary)
+    6: [0, 0, 0], // Bottom padding
+  },
 };
 //# sourceMappingURL=letter-l.js.map

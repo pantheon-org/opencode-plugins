@@ -74,14 +74,14 @@
  * @see ALPHABET in types.ts for accessing this glyph
  */
 export const letterV = {
-    rows: {
-        0: [0, 0, 0, 0, 0], // Top padding
-        1: [1, 0, 0, 0, 1], // Top corners (primary)
-        2: [1, 0, 0, 0, 1], // Upper diagonals (primary)
-        3: [1, 0, 0, 0, 1], // Diagonals converging (secondary)
-        4: [0, 1, 0, 1, 0], // Inner diagonals (secondary)
-        5: [0, 0, 1, 0, 0], // Bottom point (secondary)
-        6: [0, 0, 0, 0, 0], // Bottom padding
-    },
+  rows: {
+    0: [0, 0, 0, 0, 0], // Top padding
+    1: [1, 0, 0, 0, 1], // Top corners (primary)
+    2: [1, 0, 0, 0, 1], // Upper diagonals (primary)
+    3: [1, 0, 0, 0, 1], // Diagonals converging (secondary)
+    4: [0, 1, 0, 1, 0], // Inner diagonals (secondary)
+    5: [0, 0, 1, 0, 0], // Bottom point (secondary)
+    6: [0, 0, 0, 0, 0], // Bottom padding
+  },
 };
 //# sourceMappingURL=letter-v.js.map

@@ -77,14 +77,14 @@
  * @see ALPHABET in types.ts for accessing this glyph
  */
 export const letterC = {
-    rows: {
-        0: [0, 0, 0, 0], // Top padding
-        1: [1, 1, 1, 1], // Top bar (primary)
-        2: [1, 0, 0, 0], // Left stem (primary)
-        3: [1, 0, 0, 0], // Left stem (secondary)
-        4: [1, 0, 0, 0], // Left stem (secondary)
-        5: [1, 1, 1, 1], // Bottom bar (secondary)
-        6: [0, 0, 0, 0], // Bottom padding
-    },
+  rows: {
+    0: [0, 0, 0, 0], // Top padding
+    1: [1, 1, 1, 1], // Top bar (primary)
+    2: [1, 0, 0, 0], // Left stem (primary)
+    3: [1, 0, 0, 0], // Left stem (secondary)
+    4: [1, 0, 0, 0], // Left stem (secondary)
+    5: [1, 1, 1, 1], // Bottom bar (secondary)
+    6: [0, 0, 0, 0], // Bottom padding
+  },
 };
 //# sourceMappingURL=letter-c.js.map

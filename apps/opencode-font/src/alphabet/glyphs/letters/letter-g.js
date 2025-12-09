@@ -76,14 +76,14 @@
  * @see ALPHABET in types.ts for accessing this glyph
  */
 export const letterG = {
-    rows: {
-        0: [0, 0, 0, 0], // Top padding
-        1: [1, 1, 1, 1], // Top bar (primary)
-        2: [1, 0, 0, 1], // Sides (primary)
-        3: [1, 1, 1, 1], // Inner bar (secondary)
-        4: [0, 0, 0, 1], // Right side only (secondary)
-        5: [1, 1, 1, 1], // Bottom bar (secondary)
-        6: [0, 0, 0, 0], // Bottom padding
-    },
+  rows: {
+    0: [0, 0, 0, 0], // Top padding
+    1: [1, 1, 1, 1], // Top bar (primary)
+    2: [1, 0, 0, 1], // Sides (primary)
+    3: [1, 1, 1, 1], // Inner bar (secondary)
+    4: [0, 0, 0, 1], // Right side only (secondary)
+    5: [1, 1, 1, 1], // Bottom bar (secondary)
+    6: [0, 0, 0, 0], // Bottom padding
+  },
 };
 //# sourceMappingURL=letter-g.js.map

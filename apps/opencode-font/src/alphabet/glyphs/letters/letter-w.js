@@ -76,14 +76,14 @@
  * @see ALPHABET in types.ts for accessing this glyph
  */
 export const letterW = {
-    rows: {
-        0: [0, 0, 0, 0, 0], // Top padding
-        1: [1, 0, 0, 0, 1], // Outer stems (primary)
-        2: [1, 0, 0, 0, 1], // Outer stems (primary)
-        3: [1, 0, 1, 0, 1], // W pattern begins (secondary)
-        4: [1, 0, 1, 0, 1], // W pattern continues (secondary)
-        5: [1, 1, 1, 1, 1], // Bottom connection (secondary)
-        6: [0, 0, 0, 0, 0], // Bottom padding
-    },
+  rows: {
+    0: [0, 0, 0, 0, 0], // Top padding
+    1: [1, 0, 0, 0, 1], // Outer stems (primary)
+    2: [1, 0, 0, 0, 1], // Outer stems (primary)
+    3: [1, 0, 1, 0, 1], // W pattern begins (secondary)
+    4: [1, 0, 1, 0, 1], // W pattern continues (secondary)
+    5: [1, 1, 1, 1, 1], // Bottom connection (secondary)
+    6: [0, 0, 0, 0, 0], // Bottom padding
+  },
 };
 //# sourceMappingURL=letter-w.js.map

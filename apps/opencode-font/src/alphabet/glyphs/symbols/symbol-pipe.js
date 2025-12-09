@@ -61,14 +61,14 @@
  * @see textToBlocks in block.ts for rendering usage
  */
 export const symbolPipe = {
-    rows: {
-        0: [1], // Top (primary)
-        1: [1], // (primary)
-        2: [1], // (primary)
-        3: [1], // (secondary)
-        4: [1], // (secondary)
-        5: [1], // (secondary)
-        6: [1], // Bottom (primary)
-    },
+  rows: {
+    0: [1], // Top (primary)
+    1: [1], // (primary)
+    2: [1], // (primary)
+    3: [1], // (secondary)
+    4: [1], // (secondary)
+    5: [1], // (secondary)
+    6: [1], // Bottom (primary)
+  },
 };
 //# sourceMappingURL=symbol-pipe.js.map

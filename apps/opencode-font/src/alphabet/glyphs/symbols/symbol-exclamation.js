@@ -65,14 +65,14 @@
  * @see textToBlocks in block.ts for rendering usage
  */
 export const symbolExclamation = {
-    rows: {
-        0: [1], // Top of stem (primary)
-        1: [1], // Upper stem (primary)
-        2: [1], // Middle-upper stem (primary)
-        3: [1], // Middle stem (secondary)
-        4: [1], // Lower stem (secondary)
-        5: [0], // Gap before dot (secondary zone)
-        6: [1], // Bottom dot (primary)
-    },
+  rows: {
+    0: [1], // Top of stem (primary)
+    1: [1], // Upper stem (primary)
+    2: [1], // Middle-upper stem (primary)
+    3: [1], // Middle stem (secondary)
+    4: [1], // Lower stem (secondary)
+    5: [0], // Gap before dot (secondary zone)
+    6: [1], // Bottom dot (primary)
+  },
 };
 //# sourceMappingURL=symbol-exclamation.js.map

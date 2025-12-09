@@ -75,14 +75,14 @@
  * @see textToBlocks in block.ts for rendering usage
  */
 export const letterI = {
-    rows: {
-        0: [1], // Top serif (primary)
-        1: [0], // Gap for spacing
-        2: [1], // Upper stem (primary)
-        3: [1], // Middle stem (secondary)
-        4: [1], // Lower stem (secondary)
-        5: [1], // Bottom stem (secondary)
-        6: [0], // Bottom padding
-    },
+  rows: {
+    0: [1], // Top serif (primary)
+    1: [0], // Gap for spacing
+    2: [1], // Upper stem (primary)
+    3: [1], // Middle stem (secondary)
+    4: [1], // Lower stem (secondary)
+    5: [1], // Bottom stem (secondary)
+    6: [0], // Bottom padding
+  },
 };
 //# sourceMappingURL=letter-i.js.map

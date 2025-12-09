@@ -26,7 +26,14 @@ export { textToBlocks, blockyTextToSVG, calculateWidth, blocksToSVGPaths } from 
 export type { Block, BlockyTextOptions } from './block';
 export { optimizeBlocksToSVGPaths } from './svg-optimizer';
 export type { Glyph, CellType, LetterName, SymbolName, Alphabet, Symbols } from './types';
-export { cellType, ALPHABET, SYMBOLS, getAvailableCharacters, getAvailableSymbols, getAllAvailableCharacters, } from './types';
+export {
+  cellType,
+  ALPHABET,
+  SYMBOLS,
+  getAvailableCharacters,
+  getAvailableSymbols,
+  getAllAvailableCharacters,
+} from './types';
 export type { Theme, ThemeType } from './theme';
 export { themeType, lightTheme, darkTheme, getColorFromLetter } from './theme';
 export * from './glyphs';

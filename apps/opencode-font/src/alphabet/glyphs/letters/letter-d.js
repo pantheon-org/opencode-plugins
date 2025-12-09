@@ -77,14 +77,14 @@
  * @see ALPHABET in types.ts for accessing this glyph
  */
 export const letterD = {
-    rows: {
-        0: [0, 0, 0, 1], // Right top accent (primary)
-        1: [1, 1, 1, 1], // Top bar (primary)
-        2: [1, 0, 0, 1], // Stem and right side (primary)
-        3: [1, 0, 0, 1], // Stem and right side (secondary)
-        4: [1, 0, 0, 1], // Stem and right side (secondary)
-        5: [1, 1, 1, 1], // Bottom bar (secondary)
-        6: [0, 0, 0, 0], // Bottom padding
-    },
+  rows: {
+    0: [0, 0, 0, 1], // Right top accent (primary)
+    1: [1, 1, 1, 1], // Top bar (primary)
+    2: [1, 0, 0, 1], // Stem and right side (primary)
+    3: [1, 0, 0, 1], // Stem and right side (secondary)
+    4: [1, 0, 0, 1], // Stem and right side (secondary)
+    5: [1, 1, 1, 1], // Bottom bar (secondary)
+    6: [0, 0, 0, 0], // Bottom padding
+  },
 };
 //# sourceMappingURL=letter-d.js.map

@@ -33,29 +33,29 @@
  * Build SVG attributes from options
  */
 const buildSVGAttributes = (options) => {
-    const { width, height, includeNamespace = true, role, ariaLabel } = options;
-    const ns = includeNamespace ? 'xmlns="http://www.w3.org/2000/svg"' : '';
-    const wAttr = width ? ` width="${width}"` : '';
-    const hAttr = height ? ` height="${height}"` : '';
-    const roleAttr = role ? ` role="${role}"` : '';
-    const ariaAttr = ariaLabel ? ` aria-label="${ariaLabel}"` : '';
-    return `${ns}${wAttr}${hAttr} viewBox="0 0 100 20"${roleAttr}${ariaAttr}`;
+  const { width, height, includeNamespace = true, role, ariaLabel } = options;
+  const ns = includeNamespace ? 'xmlns="http://www.w3.org/2000/svg"' : '';
+  const wAttr = width ? ` width="${width}"` : '';
+  const hAttr = height ? ` height="${height}"` : '';
+  const roleAttr = role ? ` role="${role}"` : '';
+  const ariaAttr = ariaLabel ? ` aria-label="${ariaLabel}"` : '';
+  return `${ns}${wAttr}${hAttr} viewBox="0 0 100 20"${roleAttr}${ariaAttr}`;
 };
 /**
  * Build text element with font styling
  */
 const buildTextElement = (text, fontSize, fontFamily, color) => {
-    return `<text x="0" y="14" font-family="${fontFamily}" font-size="${fontSize}" fill="${color}">${escapeXml(text)}</text>`;
+  return `<text x="0" y="14" font-family="${fontFamily}" font-size="${fontSize}" fill="${color}">${escapeXml(text)}</text>`;
 };
 /**
  * Convert text to an SVG string
  */
 export const convertTextToSVG = (text, options = {}) => {
-    const { fontSize = 48, color = '#000', fontFamily = 'OpenCodeLogo' } = options;
-    const safeText = text == null ? '' : String(text);
-    const svgAttrs = buildSVGAttributes(options);
-    const textElement = buildTextElement(safeText, fontSize, fontFamily, color);
-    return `<svg ${svgAttrs}>
+  const { fontSize = 48, color = '#000', fontFamily = 'OpenCodeLogo' } = options;
+  const safeText = text == null ? '' : String(text);
+  const svgAttrs = buildSVGAttributes(options);
+  const textElement = buildTextElement(safeText, fontSize, fontFamily, color);
+  return `<svg ${svgAttrs}>
   ${textElement}
 </svg>`;
 };
@@ -63,24 +63,24 @@ export const convertTextToSVG = (text, options = {}) => {
  * Escape XML special characters
  */
 export const escapeXml = (unsafe) => {
-    return unsafe == null
-        ? ''
-        : String(unsafe).replace(/[&<>"']/g, (c) => {
-            switch (c) {
-                case '&':
-                    return '&amp;';
-                case '<':
-                    return '&lt;';
-                case '>':
-                    return '&gt;';
-                case '"':
-                    return '&quot;';
-                case "'":
-                    return '&apos;';
-                default:
-                    return c;
-            }
-        });
+  return unsafe == null
+    ? ''
+    : String(unsafe).replace(/[&<>"']/g, (c) => {
+        switch (c) {
+          case '&':
+            return '&amp;';
+          case '<':
+            return '&lt;';
+          case '>':
+            return '&gt;';
+          case '"':
+            return '&quot;';
+          case "'":
+            return '&apos;';
+          default:
+            return c;
+        }
+      });
 };
 // lefthook test
 //# sourceMappingURL=convertTextToSVG.js.map

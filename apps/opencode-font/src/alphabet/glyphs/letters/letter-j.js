@@ -76,14 +76,14 @@
  * @see ALPHABET in types.ts for accessing this glyph
  */
 export const letterJ = {
-    rows: {
-        0: [0, 0, 1], // Top of stem (primary)
-        1: [0, 0, 0], // Gap
-        2: [0, 0, 1], // Stem (primary)
-        3: [0, 0, 1], // Stem (secondary)
-        4: [1, 0, 1], // Hook begins (secondary)
-        5: [1, 1, 1], // Bottom hook (secondary)
-        6: [0, 0, 0], // Bottom padding
-    },
+  rows: {
+    0: [0, 0, 1], // Top of stem (primary)
+    1: [0, 0, 0], // Gap
+    2: [0, 0, 1], // Stem (primary)
+    3: [0, 0, 1], // Stem (secondary)
+    4: [1, 0, 1], // Hook begins (secondary)
+    5: [1, 1, 1], // Bottom hook (secondary)
+    6: [0, 0, 0], // Bottom padding
+  },
 };
 //# sourceMappingURL=letter-j.js.map

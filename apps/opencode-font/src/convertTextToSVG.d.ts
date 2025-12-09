@@ -32,7 +32,9 @@
 /**
  * Convert text to an SVG string
  */
-export declare const convertTextToSVG: (text: string | null | undefined, options?: {
+export declare const convertTextToSVG: (
+  text: string | null | undefined,
+  options?: {
     fontSize?: number;
     color?: string;
     fontFamily?: string;
@@ -41,7 +43,8 @@ export declare const convertTextToSVG: (text: string | null | undefined, options
     includeNamespace?: boolean;
     role?: string;
     ariaLabel?: string;
-}) => string;
+  },
+) => string;
 /**
  * Escape XML special characters
  */

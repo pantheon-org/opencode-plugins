@@ -15,10 +15,10 @@
  * ```
  */
 export declare const cellType: {
-    readonly BLANK: "blank";
-    readonly PRIMARY: "primary";
-    readonly SECONDARY: "secondary";
-    readonly TERTIARY: "tertiary";
+  readonly BLANK: 'blank';
+  readonly PRIMARY: 'primary';
+  readonly SECONDARY: 'secondary';
+  readonly TERTIARY: 'tertiary';
 };
 /**
  * Type representing a cell type value.
@@ -115,29 +115,29 @@ export type CellType = (typeof cellType)[keyof typeof cellType];
  * @see textToBlocks in block.ts for usage in rendering
  */
 export type Glyph = {
-    /**
-     * Mapping of row indices (0-6) to arrays of cell values.
-     *
-     * Each array contains numbers representing cell states:
-     * - 0: Empty/blank cell (transparent)
-     * - 1: Filled cell (converted to PRIMARY or SECONDARY based on row)
-     *
-     * Array length determines the width of the character (1-5 cells).
-     *
-     * @example
-     * ```typescript
-     * rows: {
-     *   0: [0, 0, 0],    // Row 0: 3 empty cells
-     *   1: [1, 1, 1],    // Row 1: 3 filled cells
-     *   2: [0, 1, 0],    // Row 2: filled center
-     *   3: [1, 1, 1],    // Row 3: 3 filled cells
-     *   4: [1, 0, 1],    // Row 4: filled sides
-     *   5: [1, 0, 1],    // Row 5: filled sides
-     *   6: [0, 0, 0],    // Row 6: 3 empty cells
-     * }
-     * ```
-     */
-    rows: Record<number, number[]>;
+  /**
+   * Mapping of row indices (0-6) to arrays of cell values.
+   *
+   * Each array contains numbers representing cell states:
+   * - 0: Empty/blank cell (transparent)
+   * - 1: Filled cell (converted to PRIMARY or SECONDARY based on row)
+   *
+   * Array length determines the width of the character (1-5 cells).
+   *
+   * @example
+   * ```typescript
+   * rows: {
+   *   0: [0, 0, 0],    // Row 0: 3 empty cells
+   *   1: [1, 1, 1],    // Row 1: 3 filled cells
+   *   2: [0, 1, 0],    // Row 2: filled center
+   *   3: [1, 1, 1],    // Row 3: 3 filled cells
+   *   4: [1, 0, 1],    // Row 4: filled sides
+   *   5: [1, 0, 1],    // Row 5: filled sides
+   *   6: [0, 0, 0],    // Row 6: 3 empty cells
+   * }
+   * ```
+   */
+  rows: Record<number, number[]>;
 };
 /**
  * Union type of all available letter names (A-Z).
@@ -172,7 +172,33 @@ export type Glyph = {
  * @see {@link Glyph} for the structure of each letter definition
  * @see ALPHABET constant for the complete letter-to-glyph mapping
  */
-export type LetterName = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z';
+export type LetterName =
+  | 'A'
+  | 'B'
+  | 'C'
+  | 'D'
+  | 'E'
+  | 'F'
+  | 'G'
+  | 'H'
+  | 'I'
+  | 'J'
+  | 'K'
+  | 'L'
+  | 'M'
+  | 'N'
+  | 'O'
+  | 'P'
+  | 'Q'
+  | 'R'
+  | 'S'
+  | 'T'
+  | 'U'
+  | 'V'
+  | 'W'
+  | 'X'
+  | 'Y'
+  | 'Z';
 /**
  * Union type of all available symbol names.
  *
@@ -194,13 +220,13 @@ export type LetterName = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | '
  */
 export type SymbolName = '-' | '|' | "'" | '"' | '?' | '!';
 export type Alphabet = {
-    [key in LetterName]: Glyph;
+  [key in LetterName]: Glyph;
 };
 /**
  * Type for the symbols collection mapping symbol characters to their glyphs.
  */
 export type Symbols = {
-    [key in SymbolName]: Glyph;
+  [key in SymbolName]: Glyph;
 };
 export declare const ALPHABET: Alphabet;
 /**

@@ -27,7 +27,14 @@
 // ============================================================================
 export { textToBlocks, blockyTextToSVG, calculateWidth, blocksToSVGPaths } from './block';
 export { optimizeBlocksToSVGPaths } from './svg-optimizer';
-export { cellType, ALPHABET, SYMBOLS, getAvailableCharacters, getAvailableSymbols, getAllAvailableCharacters, } from './types';
+export {
+  cellType,
+  ALPHABET,
+  SYMBOLS,
+  getAvailableCharacters,
+  getAvailableSymbols,
+  getAllAvailableCharacters,
+} from './types';
 export { themeType, lightTheme, darkTheme, getColorFromLetter } from './theme';
 // ============================================================================
 // Individual Glyphs (optional direct access)

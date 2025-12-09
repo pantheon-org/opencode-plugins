@@ -88,14 +88,14 @@
  * @see textToBlocks in block.ts for rendering usage
  */
 export const letterO = {
-    rows: {
-        0: [0, 0, 0, 0], // Top padding
-        1: [1, 1, 1, 1], // Top bar (primary)
-        2: [1, 0, 0, 1], // Sides with hollow center (primary)
-        3: [1, 0, 0, 1], // Sides with hollow center (secondary)
-        4: [1, 0, 0, 1], // Sides with hollow center (secondary)
-        5: [1, 1, 1, 1], // Bottom bar (secondary)
-        6: [0, 0, 0, 0], // Bottom padding
-    },
+  rows: {
+    0: [0, 0, 0, 0], // Top padding
+    1: [1, 1, 1, 1], // Top bar (primary)
+    2: [1, 0, 0, 1], // Sides with hollow center (primary)
+    3: [1, 0, 0, 1], // Sides with hollow center (secondary)
+    4: [1, 0, 0, 1], // Sides with hollow center (secondary)
+    5: [1, 1, 1, 1], // Bottom bar (secondary)
+    6: [0, 0, 0, 0], // Bottom padding
+  },
 };
 //# sourceMappingURL=letter-o.js.map

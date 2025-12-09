@@ -66,14 +66,14 @@
  * @see ALPHABET in types.ts for accessing this glyph
  */
 export const letterN = {
-    rows: {
-        0: [0, 0, 0, 0], // Top padding
-        1: [1, 1, 1, 1], // Top connecting bar (primary)
-        2: [1, 0, 0, 1], // Both stems (primary)
-        3: [1, 0, 0, 1], // Both stems (secondary)
-        4: [1, 0, 0, 1], // Both stems (secondary)
-        5: [1, 0, 0, 1], // Both stems (secondary)
-        6: [0, 0, 0, 0], // Bottom padding
-    },
+  rows: {
+    0: [0, 0, 0, 0], // Top padding
+    1: [1, 1, 1, 1], // Top connecting bar (primary)
+    2: [1, 0, 0, 1], // Both stems (primary)
+    3: [1, 0, 0, 1], // Both stems (secondary)
+    4: [1, 0, 0, 1], // Both stems (secondary)
+    5: [1, 0, 0, 1], // Both stems (secondary)
+    6: [0, 0, 0, 0], // Bottom padding
+  },
 };
 //# sourceMappingURL=letter-n.js.map

@@ -75,14 +75,14 @@
  * @see ALPHABET in types.ts for accessing this glyph
  */
 export const letterF = {
-    rows: {
-        0: [0, 1, 1, 1], // Top bar partial (primary)
-        1: [0, 1, 0, 0], // Stem only (primary)
-        2: [1, 1, 1, 1], // Middle bar full (primary)
-        3: [0, 1, 0, 0], // Stem only (secondary)
-        4: [0, 1, 0, 0], // Stem only (secondary)
-        5: [0, 1, 0, 0], // Stem only (secondary)
-        6: [0, 0, 0, 0], // Bottom padding
-    },
+  rows: {
+    0: [0, 1, 1, 1], // Top bar partial (primary)
+    1: [0, 1, 0, 0], // Stem only (primary)
+    2: [1, 1, 1, 1], // Middle bar full (primary)
+    3: [0, 1, 0, 0], // Stem only (secondary)
+    4: [0, 1, 0, 0], // Stem only (secondary)
+    5: [0, 1, 0, 0], // Stem only (secondary)
+    6: [0, 0, 0, 0], // Bottom padding
+  },
 };
 //# sourceMappingURL=letter-f.js.map

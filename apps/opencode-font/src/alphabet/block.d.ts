@@ -1,17 +1,17 @@
 import { type ThemeType } from './theme';
 export interface BlockyTextOptions {
-    theme?: ThemeType;
-    /** Size of each block in pixels */
-    blockSize?: number;
-    /** Spacing between characters */
-    charSpacing?: number;
-    /** Enable SVG path optimization (merges adjacent blocks) */
-    optimize?: boolean;
+  theme?: ThemeType;
+  /** Size of each block in pixels */
+  blockSize?: number;
+  /** Spacing between characters */
+  charSpacing?: number;
+  /** Enable SVG path optimization (merges adjacent blocks) */
+  optimize?: boolean;
 }
 export type Block = {
-    x: number;
-    y: number;
-    color: string;
+  x: number;
+  y: number;
+  color: string;
 };
 export declare const textToBlocks: (text: string, options?: Required<BlockyTextOptions>) => Block[];
 /**

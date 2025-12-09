@@ -73,14 +73,14 @@
  * @see ALPHABET in types.ts for accessing this glyph
  */
 export const letterY = {
-    rows: {
-        0: [0, 0, 0, 0], // Top padding
-        1: [1, 0, 0, 1], // Upper stems (primary)
-        2: [1, 0, 0, 1], // Upper stems (primary)
-        3: [1, 0, 0, 1], // Converging stems (secondary)
-        4: [1, 1, 1, 1], // Junction bar (secondary)
-        5: [0, 0, 0, 1], // Descender stem (secondary)
-        6: [0, 0, 0, 1], // Descender extends (secondary)
-    },
+  rows: {
+    0: [0, 0, 0, 0], // Top padding
+    1: [1, 0, 0, 1], // Upper stems (primary)
+    2: [1, 0, 0, 1], // Upper stems (primary)
+    3: [1, 0, 0, 1], // Converging stems (secondary)
+    4: [1, 1, 1, 1], // Junction bar (secondary)
+    5: [0, 0, 0, 1], // Descender stem (secondary)
+    6: [0, 0, 0, 1], // Descender extends (secondary)
+  },
 };
 //# sourceMappingURL=letter-y.js.map

@@ -3,109 +3,109 @@ import { getColorFromLetter, themeType } from './theme';
 import { cellType } from './types';
 import { ALPHABET, SYMBOLS } from './types';
 const DEFAULT_BLOCKY_TEXT_OPTIONS = {
-    theme: themeType.LIGHT,
-    blockSize: 6, // OpenCode.ai uses 6px blocks
-    charSpacing: 1, // 1 block spacing = 6px with blockSize=6
-    optimize: true, // Enable optimization by default for smaller file sizes
+  theme: themeType.LIGHT,
+  blockSize: 6, // OpenCode.ai uses 6px blocks
+  charSpacing: 1, // 1 block spacing = 6px with blockSize=6
+  optimize: true, // Enable optimization by default for smaller file sizes
 };
 /**
  * Get character data from ALPHABET or SYMBOLS
  */
 const getCharData = (char) => {
-    return ALPHABET[char] || SYMBOLS[char];
+  return ALPHABET[char] || SYMBOLS[char];
 };
 /**
  * Calculate the number of columns for a character
  */
 const getCharColumns = (rowsObj) => {
-    return Math.max(...Object.values(rowsObj).map((r) => (Array.isArray(r) ? r.length : 0)));
+  return Math.max(...Object.values(rowsObj).map((r) => (Array.isArray(r) ? r.length : 0)));
 };
 /**
  * Convert raw cell value to cellType
  */
 const normalizeCellValue = (raw, row) => {
-    if (typeof raw !== 'number') {
-        return raw || cellType.BLANK;
-    }
-    if (raw === 1) {
-        // Auto-assign based on row: rows 3-5 use SECONDARY, others use PRIMARY
-        return row >= 3 && row <= 5 ? cellType.SECONDARY : cellType.PRIMARY;
-    }
-    else if (raw === 2) {
-        return cellType.SECONDARY;
-    }
-    else if (raw === 3) {
-        return cellType.TERTIARY;
-    }
-    return cellType.BLANK;
+  if (typeof raw !== 'number') {
+    return raw || cellType.BLANK;
+  }
+  if (raw === 1) {
+    // Auto-assign based on row: rows 3-5 use SECONDARY, others use PRIMARY
+    return row >= 3 && row <= 5 ? cellType.SECONDARY : cellType.PRIMARY;
+  } else if (raw === 2) {
+    return cellType.SECONDARY;
+  } else if (raw === 3) {
+    return cellType.TERTIARY;
+  }
+  return cellType.BLANK;
 };
 /**
  * Process a single character and add its blocks
  */
 const processCharacter = (char, xOffset, blocks, options) => {
-    const { theme, blockSize, charSpacing } = options;
-    const charData = getCharData(char);
-    if (!charData) {
-        console.warn(`Character "${char}" not found in alphabet data. Skipping.`);
-        return xOffset + blockSize + charSpacing;
+  const { theme, blockSize, charSpacing } = options;
+  const charData = getCharData(char);
+  if (!charData) {
+    console.warn(`Character "${char}" not found in alphabet data. Skipping.`);
+    return xOffset + blockSize + charSpacing;
+  }
+  const rowsObj = charData.rows;
+  const cols = getCharColumns(rowsObj);
+  for (let row = 0; row < 7; row++) {
+    const rowArr = rowsObj[row] || [];
+    for (let col = 0; col < cols; col++) {
+      const raw = rowArr[col];
+      const cellValue = normalizeCellValue(raw, row);
+      // Skip undefined or blank cells
+      if (!cellValue || cellValue === cellType.BLANK) continue;
+      const color = getColorFromLetter(charData, theme, cellValue);
+      blocks.push({
+        x: xOffset + col * blockSize,
+        y: row * blockSize,
+        color,
+      });
     }
-    const rowsObj = charData.rows;
-    const cols = getCharColumns(rowsObj);
-    for (let row = 0; row < 7; row++) {
-        const rowArr = rowsObj[row] || [];
-        for (let col = 0; col < cols; col++) {
-            const raw = rowArr[col];
-            const cellValue = normalizeCellValue(raw, row);
-            // Skip undefined or blank cells
-            if (!cellValue || cellValue === cellType.BLANK)
-                continue;
-            const color = getColorFromLetter(charData, theme, cellValue);
-            blocks.push({
-                x: xOffset + col * blockSize,
-                y: row * blockSize,
-                color,
-            });
-        }
-    }
-    return xOffset + cols * blockSize + charSpacing * blockSize;
+  }
+  return xOffset + cols * blockSize + charSpacing * blockSize;
 };
 export const textToBlocks = (text, options = DEFAULT_BLOCKY_TEXT_OPTIONS) => {
-    const { theme = themeType.LIGHT, blockSize = 20, charSpacing = 5 } = options;
-    const blocks = [];
-    let xOffset = 0;
-    for (const char of text.toUpperCase()) {
-        xOffset = processCharacter(char, xOffset, blocks, { theme, blockSize, charSpacing });
-    }
-    return blocks;
+  const { theme = themeType.LIGHT, blockSize = 20, charSpacing = 5 } = options;
+  const blocks = [];
+  let xOffset = 0;
+  for (const char of text.toUpperCase()) {
+    xOffset = processCharacter(char, xOffset, blocks, { theme, blockSize, charSpacing });
+  }
+  return blocks;
 };
 /**
  * Calculate the width of the rendered text
  */
 export const calculateWidth = (text, options) => {
-    const { blockSize, charSpacing } = options;
-    let totalWidth = 0;
-    for (const char of text.toUpperCase()) {
-        const charData = ALPHABET[char] || SYMBOLS[char];
-        if (!charData) {
-            // For missing characters, assume 4-column width
-            totalWidth += 4 * blockSize + charSpacing * blockSize;
-            continue;
-        }
-        // Calculate actual column width for this character
-        const rowsObj = charData.rows;
-        const cols = Math.max(...Object.values(rowsObj).map((r) => (Array.isArray(r) ? r.length : 0)));
-        totalWidth += cols * blockSize + charSpacing * blockSize;
+  const { blockSize, charSpacing } = options;
+  let totalWidth = 0;
+  for (const char of text.toUpperCase()) {
+    const charData = ALPHABET[char] || SYMBOLS[char];
+    if (!charData) {
+      // For missing characters, assume 4-column width
+      totalWidth += 4 * blockSize + charSpacing * blockSize;
+      continue;
     }
-    // Remove trailing charSpacing
-    return totalWidth - charSpacing * blockSize;
+    // Calculate actual column width for this character
+    const rowsObj = charData.rows;
+    const cols = Math.max(...Object.values(rowsObj).map((r) => (Array.isArray(r) ? r.length : 0)));
+    totalWidth += cols * blockSize + charSpacing * blockSize;
+  }
+  // Remove trailing charSpacing
+  return totalWidth - charSpacing * blockSize;
 };
 /**
  * Generate SVG path elements from blocks
  */
 export const blocksToSVGPaths = (blocks, blockSize) => {
-    return blocks
-        .map((block) => `<path d="M${block.x} ${block.y}H${block.x + blockSize}V${block.y + blockSize}H${block.x}V${block.y}Z" fill="${block.color}"/>`)
-        .join('\n\t\t');
+  return blocks
+    .map(
+      (block) =>
+        `<path d="M${block.x} ${block.y}H${block.x + blockSize}V${block.y + blockSize}H${block.x}V${block.y}Z" fill="${block.color}"/>`,
+    )
+    .join('\n\t\t');
 };
 /**
  * Convert text to blocky pixel-art SVG
@@ -120,15 +120,15 @@ export const blocksToSVGPaths = (blocks, blockSize) => {
  * ```
  */
 export const blockyTextToSVG = (text, options = {}) => {
-    const opts = { ...DEFAULT_BLOCKY_TEXT_OPTIONS, ...options };
-    const blocks = textToBlocks(text, opts);
-    const width = calculateWidth(text, opts);
-    const height = 7 * opts.blockSize; // 7 rows to match OpenCode logo
-    // Use optimized or unoptimized path generation
-    const paths = opts.optimize
-        ? optimizeBlocksToSVGPaths(blocks, opts.blockSize).join('\n')
-        : blocksToSVGPaths(blocks, opts.blockSize);
-    return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg">
+  const opts = { ...DEFAULT_BLOCKY_TEXT_OPTIONS, ...options };
+  const blocks = textToBlocks(text, opts);
+  const width = calculateWidth(text, opts);
+  const height = 7 * opts.blockSize; // 7 rows to match OpenCode logo
+  // Use optimized or unoptimized path generation
+  const paths = opts.optimize
+    ? optimizeBlocksToSVGPaths(blocks, opts.blockSize).join('\n')
+    : blocksToSVGPaths(blocks, opts.blockSize);
+  return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg">
 ${paths}
 </svg>`;
 };

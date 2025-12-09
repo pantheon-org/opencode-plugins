@@ -65,14 +65,14 @@
  * @see ALPHABET in types.ts for accessing this glyph
  */
 export const letterP = {
-    rows: {
-        0: [0, 0, 0, 0], // Top padding
-        1: [1, 1, 1, 1], // Top bar (primary)
-        2: [1, 0, 0, 1], // Upper loop (primary)
-        3: [1, 0, 0, 1], // Upper loop (secondary)
-        4: [1, 0, 0, 1], // Upper loop (secondary)
-        5: [1, 1, 1, 1], // Loop closure (secondary)
-        6: [1, 0, 0, 0], // Descender (secondary)
-    },
+  rows: {
+    0: [0, 0, 0, 0], // Top padding
+    1: [1, 1, 1, 1], // Top bar (primary)
+    2: [1, 0, 0, 1], // Upper loop (primary)
+    3: [1, 0, 0, 1], // Upper loop (secondary)
+    4: [1, 0, 0, 1], // Upper loop (secondary)
+    5: [1, 1, 1, 1], // Loop closure (secondary)
+    6: [1, 0, 0, 0], // Descender (secondary)
+  },
 };
 //# sourceMappingURL=letter-p.js.map

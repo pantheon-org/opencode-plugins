@@ -74,14 +74,14 @@
  * @see ALPHABET in types.ts for accessing this glyph
  */
 export const letterH = {
-    rows: {
-        0: [1, 0, 0, 0], // Left stem top (primary)
-        1: [1, 0, 0, 0], // Left stem (primary)
-        2: [1, 1, 1, 1], // Crossbar (primary)
-        3: [1, 0, 0, 1], // Both stems (secondary)
-        4: [1, 0, 0, 1], // Both stems (secondary)
-        5: [1, 0, 0, 1], // Both stems (secondary)
-        6: [0, 0, 0, 0], // Bottom padding
-    },
+  rows: {
+    0: [1, 0, 0, 0], // Left stem top (primary)
+    1: [1, 0, 0, 0], // Left stem (primary)
+    2: [1, 1, 1, 1], // Crossbar (primary)
+    3: [1, 0, 0, 1], // Both stems (secondary)
+    4: [1, 0, 0, 1], // Both stems (secondary)
+    5: [1, 0, 0, 1], // Both stems (secondary)
+    6: [0, 0, 0, 0], // Bottom padding
+  },
 };
 //# sourceMappingURL=letter-h.js.map

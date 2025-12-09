@@ -78,14 +78,14 @@
  * @see textToBlocks in block.ts for rendering usage
  */
 export const letterM = {
-    rows: {
-        0: [0, 0, 0, 0, 0], // Top padding
-        1: [1, 1, 1, 1, 1], // Top bar (primary)
-        2: [1, 0, 1, 0, 1], // M peaks upper (primary)
-        3: [1, 0, 1, 0, 1], // M peaks middle (secondary)
-        4: [1, 0, 0, 0, 1], // Vertical sides (secondary)
-        5: [1, 0, 0, 0, 1], // Vertical sides bottom (secondary)
-        6: [0, 0, 0, 0, 0], // Bottom padding
-    },
+  rows: {
+    0: [0, 0, 0, 0, 0], // Top padding
+    1: [1, 1, 1, 1, 1], // Top bar (primary)
+    2: [1, 0, 1, 0, 1], // M peaks upper (primary)
+    3: [1, 0, 1, 0, 1], // M peaks middle (secondary)
+    4: [1, 0, 0, 0, 1], // Vertical sides (secondary)
+    5: [1, 0, 0, 0, 1], // Vertical sides bottom (secondary)
+    6: [0, 0, 0, 0, 0], // Bottom padding
+  },
 };
 //# sourceMappingURL=letter-m.js.map

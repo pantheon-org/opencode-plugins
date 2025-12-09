@@ -62,14 +62,14 @@
  * @see textToBlocks in block.ts for rendering usage
  */
 export const symbolQuestion = {
-    rows: {
-        0: [1, 1, 1, 1], // Top curve (primary)
-        1: [1, 0, 0, 1], // Sides of curve (primary)
-        2: [0, 0, 0, 1], // Right descending (primary)
-        3: [0, 0, 1, 0], // Middle descending (secondary)
-        4: [0, 0, 1, 0], // Stem (secondary)
-        5: [0, 0, 0, 0], // Gap before dot (secondary zone)
-        6: [0, 0, 1, 0], // Bottom dot (primary)
-    },
+  rows: {
+    0: [1, 1, 1, 1], // Top curve (primary)
+    1: [1, 0, 0, 1], // Sides of curve (primary)
+    2: [0, 0, 0, 1], // Right descending (primary)
+    3: [0, 0, 1, 0], // Middle descending (secondary)
+    4: [0, 0, 1, 0], // Stem (secondary)
+    5: [0, 0, 0, 0], // Gap before dot (secondary zone)
+    6: [0, 0, 1, 0], // Bottom dot (primary)
+  },
 };
 //# sourceMappingURL=symbol-question.js.map

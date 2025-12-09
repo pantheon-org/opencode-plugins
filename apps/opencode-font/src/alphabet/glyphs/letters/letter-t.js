@@ -73,14 +73,14 @@
  * @see ALPHABET in types.ts for accessing this glyph
  */
 export const letterT = {
-    rows: {
-        0: [0, 1, 0, 0], // Top stem accent (primary)
-        1: [1, 1, 1, 1], // Top bar (primary)
-        2: [0, 1, 0, 0], // Vertical stem (primary)
-        3: [0, 1, 0, 0], // Vertical stem (secondary)
-        4: [0, 1, 0, 0], // Vertical stem (secondary)
-        5: [0, 1, 1, 0], // Stem with bottom accent (secondary)
-        6: [0, 0, 0, 0], // Bottom padding
-    },
+  rows: {
+    0: [0, 1, 0, 0], // Top stem accent (primary)
+    1: [1, 1, 1, 1], // Top bar (primary)
+    2: [0, 1, 0, 0], // Vertical stem (primary)
+    3: [0, 1, 0, 0], // Vertical stem (secondary)
+    4: [0, 1, 0, 0], // Vertical stem (secondary)
+    5: [0, 1, 1, 0], // Stem with bottom accent (secondary)
+    6: [0, 0, 0, 0], // Bottom padding
+  },
 };
 //# sourceMappingURL=letter-t.js.map

@@ -74,14 +74,14 @@
  * @see ALPHABET in types.ts for accessing this glyph
  */
 export const letterQ = {
-    rows: {
-        0: [0, 0, 0, 0], // Top padding
-        1: [1, 1, 1, 1], // Top bar (primary)
-        2: [1, 0, 0, 1], // Upper sides (primary)
-        3: [1, 0, 0, 1], // Middle sides (secondary)
-        4: [1, 0, 0, 1], // Lower sides (secondary)
-        5: [1, 1, 1, 1], // Bottom bar (secondary)
-        6: [0, 0, 0, 1], // Tail (secondary)
-    },
+  rows: {
+    0: [0, 0, 0, 0], // Top padding
+    1: [1, 1, 1, 1], // Top bar (primary)
+    2: [1, 0, 0, 1], // Upper sides (primary)
+    3: [1, 0, 0, 1], // Middle sides (secondary)
+    4: [1, 0, 0, 1], // Lower sides (secondary)
+    5: [1, 1, 1, 1], // Bottom bar (secondary)
+    6: [0, 0, 0, 1], // Tail (secondary)
+  },
 };
 //# sourceMappingURL=letter-q.js.map

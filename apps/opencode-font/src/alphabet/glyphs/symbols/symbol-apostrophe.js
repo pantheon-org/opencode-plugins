@@ -60,14 +60,14 @@
  * @see textToBlocks in block.ts for rendering usage
  */
 export const symbolApostrophe = {
-    rows: {
-        0: [0], // Empty
-        1: [1], // Top of apostrophe (primary)
-        2: [1], // Bottom of apostrophe (primary)
-        3: [0], // Empty (secondary zone)
-        4: [0], // Empty (secondary zone)
-        5: [0], // Empty (secondary zone)
-        6: [0], // Bottom padding
-    },
+  rows: {
+    0: [0], // Empty
+    1: [1], // Top of apostrophe (primary)
+    2: [1], // Bottom of apostrophe (primary)
+    3: [0], // Empty (secondary zone)
+    4: [0], // Empty (secondary zone)
+    5: [0], // Empty (secondary zone)
+    6: [0], // Bottom padding
+  },
 };
 //# sourceMappingURL=symbol-apostrophe.js.map
