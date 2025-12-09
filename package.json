@@ -23,6 +23,7 @@
     "validate": "bun run format:check && bun run lint:md && bun run lint && bun run type-check && bun run test && bun run build",
     "validate:affected": "bun run format:check && bun run lint:md && bun run lint:affected && bun run type-check:affected && bun run test:affected && bun run build:affected",
     "generate:plugin": "nx g ./tools/generators:plugin",
+    "check:repo-settings": "bun run .github/scripts/check-repo-settings.ts",
     "hooks:install": "bunx lefthook install",
     "hooks:uninstall": "bunx lefthook uninstall"
   },
@@ -35,6 +36,7 @@
     "@nx/js": "22.1.3",
     "@nx/node": "^22.1.3",
     "@nx/plugin": "^22.1.3",
+    "@octokit/rest": "^20.0.0",
     "@opencode-ai/plugin": "^1.0.133",
     "@swc-node/register": "^1.11.1",
     "@swc/cli": "~0.6.0",
