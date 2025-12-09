@@ -22,7 +22,7 @@
  *   bun run generate:fonts
  */
 
-import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { Readable } from 'node:stream';
 
@@ -296,7 +296,6 @@ function cleanup(): void {
   console.log('🧹 Cleaning up temporary files...');
 
   if (existsSync(CONFIG.tempDir)) {
-    const { rmSync } = require('node:fs');
     rmSync(CONFIG.tempDir, { recursive: true, force: true });
   }
 

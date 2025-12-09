@@ -80,6 +80,37 @@ This will create a new plugin in `packages/opencode-<name>/` with:
 
 See [Generator Documentation](tools/generators/plugin/README.md) for more details.
 
+## Module System Strategy
+
+This monorepo uses a **mixed module system** approach:
+
+- **Root workspace**: CommonJS (no `"type": "module"` in root `package.json`)
+  - Provides compatibility with Nx executors and Jest
+  - Root scripts remain CommonJS by design
+- **Apps & Packages**: ESM (`"type": "module"` in their `package.json`)
+  - Modern ESM syntax with `import`/`export`
+  - Better tree-shaking and compatibility with modern tools
+- **Nx Executors & Generators**: CommonJS (Nx convention)
+  - Located in `tools/executors/` and `tools/generators/`
+  - Use `require()` for Nx compatibility
+- **Test Files**: Mixed
+  - Jest tests use CommonJS
+  - Bun tests use ESM
+
+### ESM Compliance
+
+A CI check (`bun run check:esm`) enforces that `.js` files in ESM packages (with `"type": "module"`) do not use
+`require()`. This prevents runtime errors from mixing CommonJS and ESM.
+
+**Guidelines:**
+
+- ✅ Use `import`/`export` in all app and package `.js`/`.ts` files
+- ✅ Keep Nx executors/generators as CommonJS
+- ✅ Keep Jest config and root scripts as CommonJS
+- ❌ Don't use `require()` in ESM packages
+
+See [Session Notes](.context/sessions/require-to-esm-session-2025-12-07.md) for the full conversion history.
+
 ## Contributing
 
 All development happens in this monorepo. Mirror repos are read-only distribution channels.

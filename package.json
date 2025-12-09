@@ -22,9 +22,10 @@
     "typecheck:tests": "node ./scripts/typecheck-tests.js",
     "typecheck:tests:all": "node ./scripts/typecheck-tests.js",
     "type-check:affected": "bunx nx affected --target=type-check",
-    "validate": "bun run format:check && bun run lint:md && bun run lint && bun run type-check && bun run test && bun run build",
-    "validate:affected": "bun run format:check && bun run lint:md && bun run lint:affected && bun run type-check:affected && bun run test:affected && bun run build:affected",
+    "validate": "bun run format:check && bun run check:esm && bun run lint:md && bun run lint && bun run type-check && bun run test && bun run build",
+    "validate:affected": "bun run format:check && bun run check:esm && bun run lint:md && bun run lint:affected && bun run type-check:affected && bun run test:affected && bun run build:affected",
     "generate:plugin": "nx g ./tools/generators:plugin",
+    "check:esm": "bun run scripts/check-esm-violations.ts",
     "hooks:install": "bunx lefthook install",
     "hooks:uninstall": "bunx lefthook uninstall"
   },
