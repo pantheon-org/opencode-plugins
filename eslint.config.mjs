@@ -142,6 +142,13 @@ export default [
     },
   },
   {
+    files: ['apps/opencode-font/**/*.ts'],
+    rules: {
+      'tsdoc/syntax': 'warn',
+      'import/max-dependencies': 'off',
+    },
+  },
+  {
     files: ['**/*.js', '**/*.jsx'],
     languageOptions: {
       ecmaVersion: 2022,

@@ -91,7 +91,7 @@ export const convertTextToSVG = (
 export const escapeXml = (unsafe: string | null | undefined): string => {
   return unsafe == null
     ? ''
-    : String(unsafe).replace(/[&<>\"']/g, (c) => {
+    : String(unsafe).replace(/[&<>"']/g, (c) => {
         switch (c) {
           case '&':
             return '&amp;';

@@ -76,24 +76,12 @@ export default defineConfig({
       },
       sidebar: [
         {
-          label: 'Getting Started',
+          label: 'Home',
           link: '/',
         },
         {
-          label: 'User Guide',
-          link: '/user-guide/',
-        },
-        {
-          label: 'API Documentation',
-          link: '/api/',
-        },
-        {
-          label: 'Development',
-          link: '/development/',
-        },
-        {
-          label: 'Troubleshooting',
-          link: '/troubleshooting/',
+          label: 'Guides',
+          autogenerate: { directory: '/' },
         },
       ],
     }),

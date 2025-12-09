@@ -18,7 +18,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const SOURCE_DIR = join(__dirname, '../docs');
+const SOURCE_DIR = join(__dirname, '../../docs');
 const TARGET_DIR = join(__dirname, 'src/content/docs');
 
 /**

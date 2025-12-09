@@ -32,7 +32,6 @@ import {
   symbolQuestion,
   symbolExclamation,
 } from './glyphs';
-import type { Theme, ThemeType } from './theme';
 
 /**
  * Cell type constants for defining the visual appearance of glyph cells.
