@@ -1,12 +1,9 @@
-import { names, type Tree } from '@nx/devkit';
+import { Tree, names } from '@nx/devkit';
 
-<<<<<<<< HEAD:tools/generators/plugin/normalize-options.ts
-import { dependencies, devDependencies, type PluginDependencies } from './dependencies';
-import type { PluginGeneratorSchema } from './schema';
-========
-import { PluginGeneratorSchema } from './schema';
-import { dependencies, devDependencies, PluginDependencies } from './src/dependencies';
->>>>>>>> 20ed61e (refactor(tools): convert executors and generators to ESM and register as Nx projects):tools/generators/plugin/src/normalize-options.ts
+import type { PluginGeneratorSchema } from '../schema';
+
+import type { PluginDependencies } from './dependencies';
+import { dependencies, devDependencies } from './dependencies';
 
 export interface NormalizedOptions extends PluginGeneratorSchema {
   projectName: string;
@@ -23,7 +20,7 @@ const pascalCase = (str: string): string => {
   return str.replace(/(^\w|-\w)/g, (match) => match.replace('-', '').toUpperCase());
 };
 
-export const normalizeOptions = (_tree: Tree, options: PluginGeneratorSchema): NormalizedOptions => {
+export const normalizeOptions = (tree: Tree, options: PluginGeneratorSchema): NormalizedOptions => {
   const name = names(options.name).fileName;
   const projectDirectory = options.directory || 'packages';
 
