@@ -31,9 +31,12 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Build workflows app
+        run: bunx nx build workflows
+
       - name: Run repository settings check
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.event.repository.name }}
-        run: bun run check:repo-settings
+        run: node dist/apps/workflows/apps/workflows/src/scripts/check-repo-settings/index.js

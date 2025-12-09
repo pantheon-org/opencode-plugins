@@ -37,6 +37,16 @@ The shared documentation builder:
 - Is pulled by plugin mirror repos during GitHub Pages deployment
 - Has independent versioning (tagged as `docs-builder@v1.0.0`)
 
+### Workflows App
+
+The workflows app contains automated CI/CD scripts and utilities:
+
+- Lives in `apps/workflows/`
+- Built with Bun + TypeScript (strict mode)
+- Modular architecture with comprehensive test coverage
+- Used by GitHub Actions workflows for repository automation
+- See [Workflows App Documentation](apps/workflows/README.md) for details
+
 ## Quick Start
 
 ```bash
@@ -94,11 +104,16 @@ All development happens in this monorepo. Mirror repos are read-only distributio
 ```
 opencode-plugins/
 ├── apps/
-│   └── docs-builder/                    # Shared Astro documentation builder
-│       ├── src/                         # Astro components, styles
-│       ├── astro.config.mjs             # Astro configuration
-│       ├── package.json                 # Astro dependencies
-│       └── transform-docs.js            # Doc transformation scripts
+│   ├── docs-builder/                    # Shared Astro documentation builder
+│   │   ├── src/                         # Astro components, styles
+│   │   ├── astro.config.mjs             # Astro configuration
+│   │   ├── package.json                 # Astro dependencies
+│   │   └── transform-docs.js            # Doc transformation scripts
+│   └── workflows/                       # CI/CD automation scripts
+│       ├── src/                         # TypeScript source
+│       │   ├── scripts/                 # Workflow scripts
+│       │   └── utils/                   # Shared utilities
+│       └── README.md                    # Workflows documentation
 ├── packages/
 │   ├── opencode-warcraft-notification/  # Example plugin (reference template)
 │   │   ├── docs/                        # Plugin-specific markdown docs
