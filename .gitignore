@@ -58,4 +58,4 @@ coverage/
 # OpenCode
 .opencode/
 .context/
-.sessions/
+.nx/

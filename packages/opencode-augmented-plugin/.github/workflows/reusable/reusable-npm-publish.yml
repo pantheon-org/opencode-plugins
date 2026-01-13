@@ -1,0 +1,171 @@
+name: Reusable NPM Publish Pipeline
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version to publish (e.g., 1.2.3 without v prefix)'
+        required: true
+        type: string
+      npm-scope:
+        description: 'NPM organization scope (e.g., pantheon-org)'
+        required: true
+        type: string
+      project-name:
+        description: 'Project name for display purposes'
+        required: true
+        type: string
+    secrets:
+      NPM_TOKEN:
+        description: 'NPM authentication token'
+        required: true
+    outputs:
+      published:
+        description: 'Whether package was published (true/false)'
+        value: ${{ jobs.publish-npm.outputs.published }}
+      package-url:
+        description: 'URL to published package on npm'
+        value: ${{ jobs.publish-npm.outputs.package-url }}
+
+jobs:
+  publish-npm:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+
+    outputs:
+      published: ${{ steps.publish.outputs.published }}
+      package-url: ${{ steps.publish.outputs.package-url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun with caching
+        uses: ./.github/actions/setup-bun
+
+      - name: Setup Node.js for npm
+        uses: ./.github/actions/setup-node-npm
+
+      - name: Run full validation
+        run: |
+          echo "🔍 Running linter..."
+          bun run lint
+
+          echo "📝 Type checking..."
+          bun run type-check
+
+          echo "🧪 Running tests..."
+          bun run test:coverage
+
+          echo "🏗️ Building project..."
+          bun run build
+
+      - name: Check if already published
+        id: check-npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          VERSION="${{ inputs.version }}"
+
+          echo "🔍 Checking if $PACKAGE_NAME@$VERSION exists on npm..."
+
+          # Try to check if version exists (capture both stdout and stderr)
+          NPM_CHECK=$(npm view "$PACKAGE_NAME@$VERSION" version 2>&1 || true)
+
+          if echo "$NPM_CHECK" | grep -q "E404"; then
+            echo "✅ Version $VERSION not yet published (404 - not found)"
+            echo "published=false" >> $GITHUB_OUTPUT
+          elif echo "$NPM_CHECK" | grep -q "$VERSION"; then
+            echo "⚠️ Version $VERSION already published to npm"
+            echo "published=true" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️ Could not determine publication status, assuming not published"
+            echo "published=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Publish to npm
+        id: publish
+        if: steps.check-npm.outputs.published == 'false'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          VERSION="${{ inputs.version }}"
+
+          echo "🚀 Publishing $PACKAGE_NAME@$VERSION to npm..."
+
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "❌ Error: NPM_TOKEN secret is not set!"
+            echo "Please configure npm authentication:"
+            echo "  Option 1 (Recommended): Set up npm provenance with OIDC"
+            echo "  Option 2: Add NPM_TOKEN secret with granular access token"
+            echo "See: https://docs.npmjs.com/generating-provenance-statements"
+            exit 1
+          fi
+
+          # Attempt to publish with detailed error handling
+          if npm publish --access public --provenance; then
+            echo "✅ Successfully published $PACKAGE_NAME@$VERSION to npm"
+            echo "published=true" >> $GITHUB_OUTPUT
+            echo "package-url=https://www.npmjs.com/package/$PACKAGE_NAME/v/$VERSION" >> $GITHUB_OUTPUT
+          else
+            NPM_EXIT_CODE=$?
+            echo "❌ npm publish failed with exit code: $NPM_EXIT_CODE"
+            echo ""
+            echo "Common causes:"
+            echo "  - Expired or invalid NPM_TOKEN"
+            echo "  - Token lacks publish permissions for @${{ inputs.npm-scope }} organization"
+            echo "  - Package name already published with this version"
+            echo ""
+            echo "To fix: Update NPM_TOKEN with a granular access token that has"
+            echo "        'Read and write' permissions for this package"
+            exit $NPM_EXIT_CODE
+          fi
+
+      - name: Verify npm publication
+        if: steps.check-npm.outputs.published == 'false'
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          VERSION="${{ inputs.version }}"
+
+          echo "🔍 Verifying npm publication..."
+
+          for i in {1..6}; do
+            echo "Attempt $i/6..."
+            if npm view "$PACKAGE_NAME@$VERSION" version >/dev/null 2>&1; then
+              echo "✅ Package verified on npm: $PACKAGE_NAME@$VERSION"
+              exit 0
+            fi
+            
+            if [ $i -lt 6 ]; then
+              echo "Waiting 15 seconds..."
+              sleep 15
+            fi
+          done
+
+          echo "❌ Failed to verify package (may still be propagating)"
+          exit 1
+
+      - name: Summary
+        if: always()
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+
+          if [ "${{ steps.check-npm.outputs.published }}" = "true" ]; then
+            echo "## ℹ️ Already Published" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Version ${{ inputs.version }} was already published to npm" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.publish.outputs.published }}" = "true" ]; then
+            echo "## ✅ Published to NPM" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "- **Package**: $PACKAGE_NAME" >> $GITHUB_STEP_SUMMARY
+            echo "- **Version**: ${{ inputs.version }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **URL**: ${{ steps.publish.outputs.package-url }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ❌ Publication Failed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Check the logs above for details" >> $GITHUB_STEP_SUMMARY
+          fi

@@ -19,5 +19,11 @@
       "type": "local",
       "command": ["npx", "nx-mcp@latest"]
     }
-  }
+  },
+  "plugin": [
+    "@tarquinen/opencode-dcp@latest",
+    "@ramtinj95/opencode-tokenscope@latest",
+    "opencode-todo-reminder@latest",
+    "opencode-command-hooks@latest",
+  ]
 }
