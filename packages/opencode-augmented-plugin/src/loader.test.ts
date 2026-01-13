@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'bun:test';
+
 import { validateAgentSpec, isAgentSpecConstructor } from './loader';
 import type { AgentSpec } from './types';
 
