@@ -14,10 +14,22 @@
       "@pantheon-org/opencode-warcraft-notifications-plugin": [
         "packages/opencode-warcraft-notifications-plugin/src/index.ts"
       ],
-      "@pantheon-org/opencode-agent-loader-plugin": [
-        "packages/opencode-agent-loader-plugin/src/index.ts"
+      "@pantheon-org/opencode-demo-plugin": [
+        "packages/opencode-demo-plugin/src/index.ts"
       ],
-      "@pantheon-org/tools": ["tools/index.ts"]
+      "@pantheon-org/opencode-test-deps": [
+        "packages/opencode-test-deps/src/index.ts"
+      ],
+      "@pantheon-org/opencode-test-final": [
+        "packages/opencode-test-final/src/index.ts"
+      ],
+      "@pantheon-org/opencode-warcraft-notifications": [
+        "packages/opencode-warcraft-notifications/src/index.ts"
+      ],
+      "warcraft-notifications": ["warcraft-notifications/src/index.ts"],
+      "@pantheon-org/opencode-augmented-plugin": [
+        "packages/opencode-augmented-plugin/src/index.ts"
+      ]
     }
   }
 }

@@ -1,0 +1,97 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2.0.2
+        with:
+          bun-version: 'latest'
+
+      - name: Clone docs-builder
+        run: |
+          git clone --depth 1 https://github.com/pantheon-org/opencode-docs-builder.git docs-builder
+          echo "✅ Docs builder cloned"
+
+      - name: Install docs-builder dependencies
+        working-directory: ./docs-builder
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        working-directory: ./docs-builder
+        run: |
+          bunx playwright install --with-deps chromium
+          echo "✅ Playwright browsers installed"
+
+      - name: Copy plugin documentation
+        run: |
+          cp -r ./docs/* ./docs-builder/src/content/docs/ || mkdir -p ./docs-builder/src/content/docs/
+          echo "✅ Plugin docs copied to docs-builder"
+
+      - name: Build documentation with Astro action
+        uses: withastro/action@v3
+        with:
+          path: ./docs-builder
+          package-manager: bun@latest
+
+      - name: Verify internal links
+        working-directory: ./docs-builder
+        run: |
+          bun run verify
+          echo "✅ All internal links verified"
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Summary
+        run: |
+          echo "## 🎉 Documentation Deployment Complete!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Deployment Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL**: ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Build Process" >> $GITHUB_STEP_SUMMARY
+          echo "1. 📥 Clone docs-builder from \`pantheon-org/opencode-docs-builder\`" >> $GITHUB_STEP_SUMMARY
+          echo "2. 📄 Copy plugin docs from \`./docs/\`" >> $GITHUB_STEP_SUMMARY
+          echo "3. 🔄 Transform to Astro content" >> $GITHUB_STEP_SUMMARY
+          echo "4. 🏗️  Build Astro site" >> $GITHUB_STEP_SUMMARY
+          echo "5. 🔗 Fix and verify internal links" >> $GITHUB_STEP_SUMMARY
+          echo "6. 🚀 Deploy to GitHub Pages via Actions" >> $GITHUB_STEP_SUMMARY
