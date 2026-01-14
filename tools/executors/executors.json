@@ -11,6 +11,11 @@
       "schema": "./typecheck/schema.json",
       "description": "Run workspace TypeScript typecheck (tsc --noEmit)",
       "readme": "./typecheck/README.md"
+    },
+    "check-mirror-exists": {
+      "implementation": "./check-mirror-exists/executor",
+      "schema": "./check-mirror-exists/schema.json",
+      "description": "Check if the mirror repository specified in package.json exists on GitHub"
     }
   }
 }

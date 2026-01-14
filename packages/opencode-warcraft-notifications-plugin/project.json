@@ -29,6 +29,9 @@
       },
       "dependsOn": ["build"]
     },
+    "check-mirror-exists": {
+      "executor": "../../tools/executors:check-mirror-exists"
+    },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
@@ -63,6 +66,14 @@
         ],
         "cwd": "packages/opencode-warcraft-notifications-plugin",
         "parallel": false
+      }
+    },
+    "dev-proxy": {
+      "executor": "../../tools/executors:dev-proxy",
+      "options": {
+        "plugins": ["opencode-warcraft-notifications-plugin"],
+        "symlinkRoot": ".opencode/plugin",
+        "apply": true
       }
     },
     "test": {
