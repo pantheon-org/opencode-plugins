@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Check Mirror Exists Executor",
+  "description": "Check if the mirror repository specified in package.json exists on GitHub",
+  "type": "object",
+  "properties": {
+    "packageJsonPath": {
+      "type": "string",
+      "description": "Path to package.json file (workspace relative). If not specified, uses {projectRoot}/package.json"
+    }
+  }
+}

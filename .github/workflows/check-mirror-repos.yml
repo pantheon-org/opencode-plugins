@@ -1,0 +1,136 @@
+name: Check Mirror Repositories
+
+# Run when changes are pushed to main in packages directory
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/**'
+      - 'apps/**'
+
+permissions:
+  contents: read # Read repository content
+  issues: write # Create/update issues for missing mirrors
+
+jobs:
+  check-mirrors:
+    name: Check Mirror Repositories Exist
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Need full history to detect affected packages
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Get affected packages
+        id: affected
+        run: |
+          # Get list of affected projects that have a repository.url in package.json
+          AFFECTED=$(bunx nx show projects --affected --base=origin/main~1 --head=HEAD)
+
+          echo "Affected projects:"
+          echo "$AFFECTED"
+
+          # Filter to only packages/apps with repository.url
+          PACKAGES_TO_CHECK=""
+          for project in $AFFECTED; do
+            # Get project root
+            PROJECT_ROOT=$(bunx nx show project $project --json | bun -e "console.log(JSON.parse(require('fs').readFileSync(0, 'utf-8')).root)")
+            PACKAGE_JSON="$PROJECT_ROOT/package.json"
+            
+            if [ -f "$PACKAGE_JSON" ]; then
+              # Check if repository.url exists
+              HAS_REPO=$(bun -e "
+                try {
+                  const pkg = require('./$PACKAGE_JSON');
+                  const repoUrl = typeof pkg.repository === 'string' ? pkg.repository : pkg.repository?.url;
+                  console.log(repoUrl ? 'true' : 'false');
+                } catch {
+                  console.log('false');
+                }
+              ")
+              
+              if [ "$HAS_REPO" = "true" ]; then
+                PACKAGES_TO_CHECK="$PACKAGES_TO_CHECK $project"
+              fi
+            fi
+          done
+
+          # Trim whitespace
+          PACKAGES_TO_CHECK=$(echo "$PACKAGES_TO_CHECK" | xargs)
+
+          if [ -z "$PACKAGES_TO_CHECK" ]; then
+            echo "No packages with repository.url were affected"
+            echo "packages=" >> $GITHUB_OUTPUT
+            echo "has-packages=false" >> $GITHUB_OUTPUT
+          else
+            echo "Packages to check: $PACKAGES_TO_CHECK"
+            echo "packages=$PACKAGES_TO_CHECK" >> $GITHUB_OUTPUT
+            echo "has-packages=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check mirror repositories
+        if: steps.affected.outputs.has-packages == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          PACKAGES="${{ steps.affected.outputs.packages }}"
+          FAILED_CHECKS=""
+
+          for package in $PACKAGES; do
+            echo ""
+            echo "=========================================="
+            echo "Checking mirror for: $package"
+            echo "=========================================="
+            
+            if bunx nx run $package:check-mirror-exists; then
+              echo "✅ Mirror check passed for $package"
+            else
+              echo "❌ Mirror check failed for $package"
+              FAILED_CHECKS="$FAILED_CHECKS $package"
+            fi
+          done
+
+          # Summary
+          echo ""
+          echo "=========================================="
+          echo "Summary"
+          echo "=========================================="
+
+          if [ -z "$FAILED_CHECKS" ]; then
+            echo "✅ All mirror repositories exist"
+          else
+            echo "❌ Failed checks for: $FAILED_CHECKS"
+            echo ""
+            echo "Check the logs above for details."
+            echo "Issues have been created for missing mirror repositories."
+            exit 1
+          fi
+
+      - name: Job Summary
+        if: always() && steps.affected.outputs.has-packages == 'true'
+        run: |
+          echo "## 🪞 Mirror Repository Check" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Affected Packages:** \`${{ steps.affected.outputs.packages }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "✅ **Status:** All mirror repositories exist" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Status:** One or more mirror repositories do not exist" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Issues have been created for missing repositories. Check the workflow logs for details." >> $GITHUB_STEP_SUMMARY
+          fi

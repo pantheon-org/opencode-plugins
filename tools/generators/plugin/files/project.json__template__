@@ -27,6 +27,9 @@
         "parallel": false
       }
     },
+    "check-mirror-exists": {
+      "executor": "<%= offsetFromRoot %>tools/executors:check-mirror-exists"
+    },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
@@ -64,7 +67,7 @@
       }
     },
     "dev-proxy": {
-      "executor": "@pantheon-org/tools:dev-proxy",
+      "executor": "<%= offsetFromRoot %>tools/executors:dev-proxy",
       "options": {
         "plugins": ["<%= projectName %>"],
         "symlinkRoot": ".opencode/plugin",
