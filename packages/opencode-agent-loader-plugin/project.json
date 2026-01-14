@@ -28,7 +28,7 @@
       }
     },
     "check-mirror-exists": {
-      "executor": "../../tools/executors:check-mirror-exists"
+      "executor": "@pantheon-org/tools:check-mirror-exists"
     },
     "lint": {
       "executor": "nx:run-commands",
