@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'bun:test';
 
 import type { AgentSpec } from '../types';
+
 import { validateAgentSpec } from './validate-agent-spec';
 
 describe('validateAgentSpec', () => {
