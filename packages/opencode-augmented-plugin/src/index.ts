@@ -32,11 +32,13 @@
 
 import type { Plugin } from '@opencode-ai/plugin';
 
-import { loadAllAgentSpecs, loadDefaultAgents } from './loader';
-import type { AugmentedPluginConfig } from './types';
+import { loadAllAgentSpecs, loadDefaultAgents, loadPluginConfig } from './loader';
 
 // Re-export types for consumer convenience
 export type { AgentSpec, AgentSpecConstructor, AgentSpecLoadResult, AugmentedPluginConfig } from './types';
+
+// Re-export config utilities for users
+export { createDefaultPluginConfig } from './loader';
 
 /**
  * OpenCode Augmented Plugin
@@ -44,11 +46,10 @@ export type { AgentSpec, AgentSpecConstructor, AgentSpecLoadResult, AugmentedPlu
  * Dynamically loads and registers custom agent specifications from TypeScript files.
  * Agent specs are discovered in `.opencode/agent/` directory (configurable).
  *
- * Configuration (in opencode.json):
+ * Configuration (in .opencode/plugin.json):
  * ```json
  * {
- *   "plugin": ["@pantheon-org/opencode-augmented-plugin"],
- *   "augmented": {
+ *   "@pantheon-org/opencode-augmented-plugin": {
  *     "agentsDir": ".opencode/agent",
  *     "verbose": true,
  *     "enableDefaultAgents": true,
@@ -60,17 +61,15 @@ export type { AgentSpec, AgentSpecConstructor, AgentSpecLoadResult, AugmentedPlu
 export const OpencodeAugmentedPlugin: Plugin = async (ctx) => {
   const { worktree } = ctx;
 
-  // Get plugin configuration from opencode.json (if available)
-  // This would need to be accessed via the config hook or passed in
-  const pluginConfig: AugmentedPluginConfig = {
-    agentsDir: '.opencode/agent',
-    verbose: process.env.OPENCODE_VERBOSE === 'true' || false,
-    enableDefaultAgents: true,
-    disabledDefaultAgents: [],
-  };
-
   console.log('[opencode-augmented-plugin] Initializing plugin');
   console.log('[opencode-augmented-plugin] Worktree:', worktree);
+
+  // Load plugin configuration from .opencode/plugin.json
+  const pluginConfig = await loadPluginConfig(worktree);
+
+  if (pluginConfig.verbose) {
+    console.log('[opencode-augmented-plugin] Configuration:', pluginConfig);
+  }
 
   // Load default agents that ship with the plugin
   const defaultAgents = loadDefaultAgents(pluginConfig);
