@@ -1,4 +1,5 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
@@ -14,5 +15,5 @@
     "types": ["bun-types"]
   },
   "include": ["**/*.ts", "**/*.js"],
-  "exclude": ["node_modules", "docs", ".astro-build", "examples"]
+  "exclude": ["node_modules", "docs", ".astro-build"]
 }

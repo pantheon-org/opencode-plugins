@@ -1,9 +1,10 @@
-import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 
+import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
+
 import { DEFAULT_CONFIG } from './config';
-import { createDefaultPluginConfig, loadPluginConfig } from './load-plugin-config';
+import { loadPluginConfig, createDefaultPluginConfig } from './load-plugin-config';
 
 describe('load-plugin-config', () => {
   let tempDir: string;

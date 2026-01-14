@@ -21,6 +21,7 @@ export const loadAllAgentSpecs = async (worktree: string, config: AugmentedPlugi
 
   if (files.length === 0) {
     if (verbose) {
+      console.log('[opencode-agent-loader-plugin] No agent spec files found');
     }
     return [];
   }
@@ -37,6 +38,7 @@ export const loadAllAgentSpecs = async (worktree: string, config: AugmentedPlugi
   }
 
   if (verbose) {
+    console.log(`[opencode-agent-loader-plugin] Successfully loaded ${specs.length} agent spec(s)`);
   }
 
   return specs;

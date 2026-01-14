@@ -10,8 +10,8 @@
  * 3. The plugin will automatically discover and register your agent
  */
 
-import type { AgentConfig } from '@opencode-ai/sdk';
 import type { AgentSpec } from '@pantheon-org/opencode-agent-loader-plugin';
+import type { AgentConfig } from '@opencode-ai/sdk';
 
 /**
  * Example: Code Review Agent

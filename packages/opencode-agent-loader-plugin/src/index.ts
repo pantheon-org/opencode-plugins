@@ -34,10 +34,11 @@ import type { Plugin } from '@opencode-ai/plugin';
 
 import { loadAllAgentSpecs, loadDefaultAgents, loadPluginConfig } from './loader';
 
-// Re-export config utilities for users
-export { createDefaultPluginConfig } from './loader';
 // Re-export types for consumer convenience
 export type { AgentSpec, AgentSpecConstructor, AgentSpecLoadResult, AugmentedPluginConfig } from './types';
+
+// Re-export config utilities for users
+export { createDefaultPluginConfig } from './loader';
 
 /**
  * OpenCode Augmented Plugin
@@ -60,10 +61,14 @@ export type { AgentSpec, AgentSpecConstructor, AgentSpecLoadResult, AugmentedPlu
 export const OpencodeAugmentedPlugin: Plugin = async (ctx) => {
   const { worktree } = ctx;
 
+  console.log('[opencode-agent-loader-plugin] Initializing plugin');
+  console.log('[opencode-agent-loader-plugin] Worktree:', worktree);
+
   // Load plugin configuration from .opencode/plugin.json
   const pluginConfig = await loadPluginConfig(worktree);
 
   if (pluginConfig.verbose) {
+    console.log('[opencode-agent-loader-plugin] Configuration:', pluginConfig);
   }
 
   // Load default agents that ship with the plugin
@@ -76,11 +81,21 @@ export const OpencodeAugmentedPlugin: Plugin = async (ctx) => {
   const allAgentSpecs = [...defaultAgents, ...userAgentSpecs];
 
   if (defaultAgents.length > 0) {
+    console.log(
+      `[opencode-agent-loader-plugin] Loaded ${defaultAgents.length} default agent(s): ${defaultAgents.map((s) => s.name).join(', ')}`,
+    );
   }
 
   if (userAgentSpecs.length === 0) {
+    console.log('[opencode-agent-loader-plugin] No user-defined agent specs found');
+    console.log(`[opencode-agent-loader-plugin] Create agent specs in: ${worktree}/${pluginConfig.agentsDir}`);
   } else {
+    console.log(
+      `[opencode-agent-loader-plugin] Loaded ${userAgentSpecs.length} user-defined agent spec(s): ${userAgentSpecs.map((s) => s.name).join(', ')}`,
+    );
   }
+
+  console.log(`[opencode-agent-loader-plugin] Total agents available: ${allAgentSpecs.length}`);
 
   // Return plugin hooks
   return {
@@ -92,6 +107,7 @@ export const OpencodeAugmentedPlugin: Plugin = async (ctx) => {
      */
     config: async (config) => {
       if (pluginConfig.verbose) {
+        console.log('[opencode-agent-loader-plugin] Registering agents with OpenCode config');
       }
 
       // Initialize agent config if not present
@@ -110,10 +126,12 @@ export const OpencodeAugmentedPlugin: Plugin = async (ctx) => {
         config.agent[spec.name] = spec.config;
 
         if (pluginConfig.verbose) {
+          console.log(`[opencode-agent-loader-plugin] Registered agent: ${spec.name}`);
         }
       }
 
       if (pluginConfig.verbose) {
+        console.log('[opencode-agent-loader-plugin] Agent registration complete');
       }
     },
 
@@ -124,6 +142,7 @@ export const OpencodeAugmentedPlugin: Plugin = async (ctx) => {
       if (pluginConfig.verbose) {
         // Log session events that might be relevant to agent usage
         if (event.type === 'session.created' || event.type === 'session.updated') {
+          console.log(`[opencode-agent-loader-plugin] Event: ${event.type}`);
         }
       }
     },
