@@ -6,10 +6,10 @@
  * interface and are automatically registered with OpenCode.
  *
  * @example
- * Place agent spec files in `.opencode/agents/` directory:
+ * Place agent spec files in `.opencode/agent/` directory:
  *
  * ```typescript
- * // .opencode/agents/my-agent.ts
+ * // .opencode/agent/my-agent.ts
  * import type { AgentSpec } from '@pantheon-org/opencode-augmented-plugin';
  * import type { AgentConfig } from '@opencode-ai/sdk';
  *
@@ -42,14 +42,14 @@ export type { AgentSpec, AgentSpecConstructor, AgentSpecLoadResult, AugmentedPlu
  * OpenCode Augmented Plugin
  *
  * Dynamically loads and registers custom agent specifications from TypeScript files.
- * Agent specs are discovered in `.opencode/agents/` directory (configurable).
+ * Agent specs are discovered in `.opencode/agent/` directory (configurable).
  *
  * Configuration (in opencode.json):
  * ```json
  * {
  *   "plugin": ["@pantheon-org/opencode-augmented-plugin"],
  *   "augmented": {
- *     "agentsDir": ".opencode/agents",
+ *     "agentsDir": ".opencode/agent",
  *     "verbose": true
  *   }
  * }
@@ -61,7 +61,7 @@ export const OpencodeAugmentedPlugin: Plugin = async (ctx) => {
   // Get plugin configuration from opencode.json (if available)
   // This would need to be accessed via the config hook or passed in
   const pluginConfig: AugmentedPluginConfig = {
-    agentsDir: '.opencode/agents',
+    agentsDir: '.opencode/agent',
     verbose: process.env.OPENCODE_VERBOSE === 'true' || false,
   };
 

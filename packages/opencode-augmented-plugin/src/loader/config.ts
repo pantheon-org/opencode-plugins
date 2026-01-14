@@ -5,7 +5,7 @@
 import type { AugmentedPluginConfig } from '../types';
 
 export const DEFAULT_CONFIG: Required<AugmentedPluginConfig> = {
-  agentsDir: '.opencode/agents',
+  agentsDir: '.opencode/agent',
   patterns: ['**/*.ts', '**/*.js'],
   verbose: false,
 };

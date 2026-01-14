@@ -18,7 +18,7 @@ describe('discoverAgentSpecs', () => {
   });
 
   it('should discover agent spec files in default directory', async () => {
-    const agentsDir = join(testDir, '.opencode', 'agents');
+    const agentsDir = join(testDir, '.opencode', 'agent');
     await mkdir(agentsDir, { recursive: true });
     await writeFile(join(agentsDir, 'agent1.ts'), 'content');
     await writeFile(join(agentsDir, 'agent2.js'), 'content');
@@ -42,7 +42,7 @@ describe('discoverAgentSpecs', () => {
   });
 
   it('should discover agent specs recursively in subdirectories', async () => {
-    const agentsDir = join(testDir, '.opencode', 'agents');
+    const agentsDir = join(testDir, '.opencode', 'agent');
     await mkdir(join(agentsDir, 'category1'), { recursive: true });
     await mkdir(join(agentsDir, 'category2'), { recursive: true });
 
@@ -62,7 +62,7 @@ describe('discoverAgentSpecs', () => {
   });
 
   it('should return empty array when agents directory is empty', async () => {
-    const agentsDir = join(testDir, '.opencode', 'agents');
+    const agentsDir = join(testDir, '.opencode', 'agent');
     await mkdir(agentsDir, { recursive: true });
 
     const files = await discoverAgentSpecs(testDir);
@@ -71,7 +71,7 @@ describe('discoverAgentSpecs', () => {
   });
 
   it('should only find TypeScript and JavaScript files', async () => {
-    const agentsDir = join(testDir, '.opencode', 'agents');
+    const agentsDir = join(testDir, '.opencode', 'agent');
     await mkdir(agentsDir, { recursive: true });
     await writeFile(join(agentsDir, 'agent.ts'), 'content');
     await writeFile(join(agentsDir, 'agent.js'), 'content');
@@ -87,7 +87,7 @@ describe('discoverAgentSpecs', () => {
   });
 
   it('should return empty array when path is not a directory', async () => {
-    const filePath = join(testDir, '.opencode', 'agents');
+    const filePath = join(testDir, '.opencode', 'agent');
     await mkdir(join(testDir, '.opencode'), { recursive: true });
     await writeFile(filePath, 'this is a file, not a directory');
 
@@ -97,7 +97,7 @@ describe('discoverAgentSpecs', () => {
   });
 
   it('should handle verbose mode without throwing', async () => {
-    const agentsDir = join(testDir, '.opencode', 'agents');
+    const agentsDir = join(testDir, '.opencode', 'agent');
     await mkdir(agentsDir, { recursive: true });
     await writeFile(join(agentsDir, 'agent.ts'), 'content');
 

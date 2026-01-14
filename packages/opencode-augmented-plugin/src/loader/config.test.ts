@@ -4,7 +4,7 @@ import { DEFAULT_CONFIG } from './config';
 
 describe('DEFAULT_CONFIG', () => {
   it('should have correct default agentsDir', () => {
-    expect(DEFAULT_CONFIG.agentsDir).toBe('.opencode/agents');
+    expect(DEFAULT_CONFIG.agentsDir).toBe('.opencode/agent');
   });
 
   it('should have correct default patterns', () => {

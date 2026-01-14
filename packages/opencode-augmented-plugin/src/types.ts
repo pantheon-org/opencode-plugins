@@ -73,8 +73,8 @@ export interface AgentSpecLoadResult {
  */
 export interface AugmentedPluginConfig {
   /**
-   * Directory to scan for agent specs (relative to worktree root)
-   * Defaults to '.opencode/agents'
+   * Directory where agent spec files are located
+   * Defaults to '.opencode/agent'
    */
   agentsDir?: string;
 
