@@ -8,8 +8,8 @@
     "strict": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "typeRoots": ["./types", "./node_modules", "./node_modules/@types"],
-    "files": ["../../types/bun-test-shim.d.ts"],
+    "skipLibCheck": true,
+    "types": ["bun-types"],
     "baseUrl": "."
   },
   "include": [
