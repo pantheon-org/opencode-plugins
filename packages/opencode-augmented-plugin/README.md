@@ -7,11 +7,13 @@ extend OpenCode with specialized AI agents without modifying core configuration.
 
 ## Features
 
-- **Dynamic Agent Loading**: Automatically discover and load agent specs from `.opencode/agent/` directory
+- **Built-in Agents**: Ships with 6 production-ready specialized agents
+- **Dynamic Agent Loading**: Automatically discover and load custom agent specs from `.opencode/agent/` directory
 - **Class-Based Specs**: Define agents as TypeScript classes implementing the `AgentSpec` interface
 - **Type-Safe**: Full TypeScript support with OpenCode's `AgentConfig` type
 - **Validation**: Automatic validation of agent specifications
 - **Zero Configuration**: Works out of the box with sensible defaults
+- **Flexible**: Enable/disable default agents or create your own
 
 ## Installation
 
@@ -29,9 +31,81 @@ Add the plugin to your `opencode.json`:
 }
 ```
 
+## Default Agents
+
+The plugin includes 6 production-ready specialized agents that are enabled by default:
+
+### 1. **Code Reviewer** (`code-reviewer`)
+
+Expert code reviewer specializing in best practices, security, and performance analysis. Read-only agent focused on
+providing thorough, constructive feedback.
+
+### 2. **Security Auditor** (`security-auditor`)
+
+Security expert specializing in vulnerability detection and secure coding practices. Analyzes code for OWASP Top 10
+vulnerabilities, cryptography issues, and security misconfigurations.
+
+### 3. **Test Engineer** (`test-engineer`)
+
+Testing expert specializing in unit tests, integration tests, and quality assurance. Can both analyze and write
+comprehensive test suites with good coverage.
+
+### 4. **Documentation Writer** (`documentation-writer`)
+
+Technical writing expert specializing in clear, comprehensive documentation. Creates README files, API docs, tutorials,
+and inline code comments.
+
+### 5. **Refactoring Expert** (`refactoring-expert`)
+
+Code refactoring specialist focused on improving code quality and reducing technical debt. Applies design patterns and
+SOLID principles systematically.
+
+### 6. **Performance Optimizer** (`performance-optimizer`)
+
+Performance expert specializing in optimization, profiling, and eliminating bottlenecks. Analyzes algorithmic complexity
+and system-level performance.
+
+### Using Default Agents
+
+```bash
+# Use the code reviewer
+opencode --agent code-reviewer "Review this PR for best practices"
+
+# Use the security auditor
+opencode --agent security-auditor "Audit this authentication module"
+
+# Use the test engineer
+opencode --agent test-engineer "Write tests for the UserService class"
+```
+
+### Configuring Default Agents
+
+You can disable default agents or selectively disable specific ones:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["@pantheon-org/opencode-augmented-plugin"],
+  "augmented": {
+    "enableDefaultAgents": true,
+    "disabledDefaultAgents": ["code-reviewer", "security-auditor"]
+  }
+}
+```
+
+Or disable all default agents:
+
+```json
+{
+  "augmented": {
+    "enableDefaultAgents": false
+  }
+}
+```
+
 ## Quick Start
 
-### 1. Create an Agent Spec File
+### 1. Create Your Own Agent Spec File
 
 Create a file in `.opencode/agent/` (e.g., `.opencode/agent/code-reviewer.ts`):
 
@@ -142,7 +216,27 @@ The `config` property follows OpenCode's `AgentConfig` type from `@opencode-ai/s
 
 ## Configuration
 
-The plugin can be configured via environment variables or programmatically:
+The plugin can be configured via your `opencode.json` file:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["@pantheon-org/opencode-augmented-plugin"],
+  "augmented": {
+    "agentsDir": ".opencode/agent",
+    "verbose": true,
+    "enableDefaultAgents": true,
+    "disabledDefaultAgents": ["code-reviewer"]
+  }
+}
+```
+
+### Configuration Options
+
+- **`agentsDir`**: Directory where custom agent specs are located (default: `.opencode/agent`)
+- **`verbose`**: Enable detailed logging during agent loading (default: `false`)
+- **`enableDefaultAgents`**: Enable built-in default agents (default: `true`)
+- **`disabledDefaultAgents`**: Array of default agent names to disable (default: `[]`)
 
 ### Environment Variables
 
@@ -150,10 +244,6 @@ The plugin can be configured via environment variables or programmatically:
 # Enable verbose logging
 export OPENCODE_VERBOSE=true
 ```
-
-### Custom Directory
-
-By default, the plugin scans `.opencode/agent/`. This is currently fixed but configurable in future releases.
 
 ## Examples
 

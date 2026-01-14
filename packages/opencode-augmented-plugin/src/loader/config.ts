@@ -8,4 +8,6 @@ export const DEFAULT_CONFIG: Required<AugmentedPluginConfig> = {
   agentsDir: '.opencode/agent',
   patterns: ['**/*.ts', '**/*.js'],
   verbose: false,
+  enableDefaultAgents: true,
+  disabledDefaultAgents: [],
 };
