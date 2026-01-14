@@ -46,6 +46,7 @@ coverage/
 *.tmp
 *.temp
 .cache/
+tmp/
 
 # Package manager
 .pnpm-store/
