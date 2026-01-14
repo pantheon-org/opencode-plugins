@@ -6,7 +6,6 @@ import { describe, it, expect } from 'bun:test';
 import { installBundledSoundsIfMissing, soundExists } from './bundled-sounds';
 import { createTempDir, removeTempDir, withCwd } from './test-utils';
 
-
 describe('bundled-sounds edge cases', () => {
   it('does not overwrite existing files when installing', async () => {
     const temp = createTempDir('wc-bundled-edge-');
