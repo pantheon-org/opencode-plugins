@@ -2,5 +2,14 @@
   "name": "@pantheon-org/tools",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "tools/executors",
-  "projectType": "library"
+  "projectType": "library",
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun test",
+        "cwd": "tools/executors"
+      }
+    }
+  }
 }

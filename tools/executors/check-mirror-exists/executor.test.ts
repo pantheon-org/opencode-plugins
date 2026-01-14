@@ -1,7 +1,8 @@
-import { afterEach, beforeEach, describe, expect, it, mock } from 'bun:test';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+
 import type { ExecutorContext } from '@nx/devkit';
+import { afterEach, beforeEach, describe, expect, it, mock } from 'bun:test';
 
 // Import the executor
 import runExecutor from './executor';
@@ -333,7 +334,7 @@ describe('check-mirror-exists executor', () => {
     });
 
     it('should fail when GITHUB_TOKEN is not set', async () => {
-      process.env.GITHUB_TOKEN = undefined;
+      delete process.env.GITHUB_TOKEN;
 
       const context = createMockContext('test-package', 'packages/test-package');
       const packageJsonPath = join(context.root, 'packages/test-package/package.json');
