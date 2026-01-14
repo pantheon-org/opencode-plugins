@@ -67,7 +67,7 @@ jobs:
   publish-npm:
     name: Publish to npm
     needs: prepare
-    uses: pantheon-org/opencode-agent-loader-plugin/.github/workflows/reusable/reusable-npm-publish.yml@main
+    uses: ./.github/workflows/reusable-npm-publish.yml
     with:
       version: ${{ needs.prepare.outputs.version }}
       npm-scope: 'pantheon-org'
@@ -80,7 +80,7 @@ jobs:
     name: Deploy Documentation
     needs: publish-npm
     if: success()
-    uses: pantheon-org/opencode-agent-loader-plugin/.github/workflows/reusable/reusable-deploy-docs.yml@main
+    uses: ./.github/workflows/reusable-deploy-docs.yml
     with:
       commit-sha: ${{ github.sha }}
     secrets:
