@@ -43,7 +43,7 @@ const parseGitHubUrl = (repoUrl: string): { owner: string; repo: string } | null
   // - https://github.com/org/repo
   // - github:org/repo
 
-  const patterns = [/github\.com[/:]([\w-]+)\/([\w-]+?)(\.git)?$/, /^github:([\w-]+)\/([\w-]+)$/];
+  const patterns = [/github\.com[/:]([a-zA-Z0-9-]+)\/([\w-]+?)(\.git)?$/, /^github:([a-zA-Z0-9-]+)\/([\w-]+)$/];
 
   for (const pattern of patterns) {
     const match = repoUrl.match(pattern);
