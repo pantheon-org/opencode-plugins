@@ -42,7 +42,7 @@ jobs:
 
           # Strip 'v' prefix (v2.0.0 -> 2.0.0)
           VERSION=${TAG#v}
-          # Also handle Release Please format (opencode-augmented-plugin-v2.0.0 -> 2.0.0)
+          # Also handle Release Please format (opencode-agent-loader-plugin-v2.0.0 -> 2.0.0)
           VERSION=${VERSION##*-v}
 
           echo "tag=$TAG" >> $GITHUB_OUTPUT
@@ -71,7 +71,7 @@ jobs:
     with:
       version: ${{ needs.prepare.outputs.version }}
       npm-scope: 'pantheon-org'
-      project-name: 'opencode-augmented-plugin'
+      project-name: 'opencode-agent-loader-plugin'
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -198,6 +198,6 @@ jobs:
           echo "✅ Release: ${{ needs.create-release.result }}"
           echo ""
           echo "🔗 Links:"
-          echo "  📦 npm: https://www.npmjs.com/package/@pantheon-org/opencode-augmented-plugin/v/${{ needs.prepare.outputs.version }}"
+          echo "  📦 npm: https://www.npmjs.com/package/@pantheon-org/opencode-agent-loader-plugin/v/${{ needs.prepare.outputs.version }}"
           echo "  📚 Docs: https://github.com/${{ github.repository }}/tree/docs"
           echo "  🏷️ Release: https://github.com/${{ github.repository }}/releases/tag/${{ needs.prepare.outputs.tag }}"

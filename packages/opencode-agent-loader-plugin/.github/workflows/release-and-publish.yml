@@ -71,7 +71,7 @@ jobs:
     with:
       version: ${{ needs.release-please.outputs.version }}
       npm-scope: 'pantheon-org'
-      project-name: 'opencode-augmented-plugin'
+      project-name: 'opencode-agent-loader-plugin'
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
