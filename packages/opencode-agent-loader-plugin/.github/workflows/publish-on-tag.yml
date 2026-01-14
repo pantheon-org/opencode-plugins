@@ -78,7 +78,6 @@ jobs:
   # Deploy documentation
   publish-docs:
     name: Deploy Documentation
-    runs-on: ubuntu-latest
     needs: publish-npm
     if: success()
     uses: ./.github/workflows/reusable/reusable-deploy-docs.yml
