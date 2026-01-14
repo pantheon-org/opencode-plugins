@@ -67,7 +67,7 @@
       }
     },
     "dev-proxy": {
-      "executor": "@pantheon-org/tools:dev-proxy",
+      "executor": "../../tools/executors:dev-proxy",
       "options": {
         "plugins": ["opencode-agent-loader-plugin"],
         "symlinkRoot": ".opencode/plugin",
