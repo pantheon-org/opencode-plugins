@@ -10,4 +10,5 @@ export { findFiles } from './find-files';
 export { isAgentSpecConstructor } from './is-agent-spec-constructor';
 export { loadAgentSpec } from './load-agent-spec';
 export { loadAllAgentSpecs } from './load-all-agent-specs';
+export { loadDefaultAgents } from './load-default-agents';
 export { validateAgentSpec } from './validate-agent-spec';

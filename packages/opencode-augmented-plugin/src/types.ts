@@ -89,4 +89,16 @@ export interface AugmentedPluginConfig {
    * Defaults to false
    */
   verbose?: boolean;
+
+  /**
+   * Whether to enable default agents that ship with the plugin
+   * Defaults to true
+   */
+  enableDefaultAgents?: boolean;
+
+  /**
+   * List of default agent names to disable (if enableDefaultAgents is true)
+   * Example: ['code-reviewer', 'security-auditor']
+   */
+  disabledDefaultAgents?: string[];
 }
