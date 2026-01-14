@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'bun:test';
 
 import type { AgentSpec } from '../types';
+
 import { isAgentSpecConstructor } from './is-agent-spec-constructor';
 
 describe('isAgentSpecConstructor', () => {
