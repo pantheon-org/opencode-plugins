@@ -8,10 +8,6 @@ on:
         required: false
         type: string
         default: ''
-    secrets:
-      GITHUB_TOKEN:
-        description: 'GitHub token for deployment'
-        required: true
 
 jobs:
   deploy-docs:

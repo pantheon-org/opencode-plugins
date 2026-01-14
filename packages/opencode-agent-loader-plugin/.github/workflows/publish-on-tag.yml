@@ -83,8 +83,6 @@ jobs:
     uses: ./.github/workflows/reusable-deploy-docs.yml
     with:
       commit-sha: ${{ github.sha }}
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Create GitHub Release
   create-release:
