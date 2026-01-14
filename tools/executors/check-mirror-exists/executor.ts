@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import type { ExecutorContext } from '@nx/devkit';
+import { ExecutorContext } from '@nx/devkit';
 import { Octokit } from '@octokit/rest';
 
 interface ExecutorOptions {
@@ -43,7 +43,7 @@ const parseGitHubUrl = (repoUrl: string): { owner: string; repo: string } | null
   // - https://github.com/org/repo
   // - github:org/repo
 
-  const patterns = [/github\.com[/:]([a-zA-Z0-9-]+)\/([\w-]+?)(\.git)?$/, /^github:([a-zA-Z0-9-]+)\/([\w-]+)$/];
+  const patterns = [/github\.com[/:]([\w-]+)\/([\w-]+?)(\.git)?$/, /^github:([\w-]+)\/([\w-]+)$/];
 
   for (const pattern of patterns) {
     const match = repoUrl.match(pattern);
@@ -187,7 +187,9 @@ const handleMissingMirror = async (
   const currentRepo = getCurrentRepoInfo();
   if (currentRepo) {
     try {
+      console.log(`📝 Creating GitHub issue for missing mirror...`);
       await createMissingMirrorIssue(octokit, currentRepo.owner, currentRepo.repo, packageName, mirrorUrl);
+      console.log(`✅ Issue created for missing mirror repository`);
     } catch (error) {
       const gitHubError = error as GitHubError;
       console.error(`⚠️  Failed to create issue:`, gitHubError.message);
@@ -224,6 +226,8 @@ const checkAndVerifyRepository = async (
   if (!exists) {
     return handleMissingMirror(octokit, packageName, repoInfo.url);
   }
+
+  console.log(`✅ Mirror repository exists: ${repoInfo.url}`);
   return { success: true, mirrorUrl: repoInfo.url };
 };
 
@@ -263,8 +267,12 @@ const runExecutor = async (options: ExecutorOptions, context: ExecutorContext): 
   // Extract repository URL
   const repoUrl = getRepositoryUrl(packageJson);
   if (!repoUrl) {
+    console.log(`ℹ️  No repository URL found in ${packageJson.name} package.json - skipping mirror check`);
     return { success: true };
   }
+
+  console.log(`🔍 Checking mirror repository for ${packageJson.name}...`);
+  console.log(`   Repository URL: ${repoUrl}`);
 
   // Parse GitHub URL
   const parsed = parseGitHubUrl(repoUrl);

@@ -36,7 +36,7 @@ jobs:
         id: affected
         run: |
           # Get list of affected projects that have a repository.url in package.json
-          AFFECTED=$(bunx nx show projects --affected --base=origin/main~1 --head=HEAD)
+          AFFECTED=$(bunx nx show projects --affected --base=origin/main~1 --head=HEAD --type=lib)
 
           echo "Affected projects:"
           echo "$AFFECTED"

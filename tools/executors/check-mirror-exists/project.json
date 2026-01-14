@@ -4,6 +4,18 @@
   "sourceRoot": "tools/executors/check-mirror-exists",
   "projectType": "library",
   "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx eslint ."
+          }
+        ],
+        "cwd": "tools/executors/check-mirror-exists",
+        "parallel": false
+      }
+    },
     "type-check": {
       "executor": "nx:run-commands",
       "options": {
