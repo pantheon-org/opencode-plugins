@@ -38,7 +38,7 @@ export const loadPluginConfig = async (worktree: string): Promise<Required<Augme
 
     // Extract augmented-plugin specific config
     const pluginConfig =
-      configData['@pantheon-org/opencode-augmented-plugin'] || configData['opencode-augmented-plugin'] || {};
+      configData['@pantheon-org/opencode-agent-loader-plugin'] || configData['opencode-agent-loader-plugin'] || {};
 
     // Merge with defaults
     return {
@@ -46,7 +46,7 @@ export const loadPluginConfig = async (worktree: string): Promise<Required<Augme
       ...pluginConfig,
     };
   } catch (error) {
-    console.warn(`[opencode-augmented-plugin] Failed to load plugin config from ${configPath}:`, error);
+    console.warn(`[opencode-agent-loader-plugin] Failed to load plugin config from ${configPath}:`, error);
     return DEFAULT_CONFIG;
   }
 };
@@ -67,7 +67,7 @@ export const createDefaultPluginConfig = async (worktree: string): Promise<boole
   }
 
   const defaultConfig = {
-    '@pantheon-org/opencode-augmented-plugin': {
+    '@pantheon-org/opencode-agent-loader-plugin': {
       agentsDir: '.opencode/agent',
       verbose: false,
       enableDefaultAgents: true,
@@ -79,7 +79,7 @@ export const createDefaultPluginConfig = async (worktree: string): Promise<boole
     await Bun.write(configPath, JSON.stringify(defaultConfig, null, 2));
     return true;
   } catch (error) {
-    console.error(`[opencode-augmented-plugin] Failed to create plugin config:`, error);
+    console.error(`[opencode-agent-loader-plugin] Failed to create plugin config:`, error);
     return false;
   }
 };

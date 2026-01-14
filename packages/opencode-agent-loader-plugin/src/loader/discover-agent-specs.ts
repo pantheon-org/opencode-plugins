@@ -22,7 +22,7 @@ export const discoverAgentSpecs = async (worktree: string, config: AugmentedPlug
   const agentsPath = join(worktree, agentsDir);
 
   if (verbose) {
-    console.log(`[opencode-augmented-plugin] Scanning for agent specs in: ${agentsPath}`);
+    console.log(`[opencode-agent-loader-plugin] Scanning for agent specs in: ${agentsPath}`);
   }
 
   try {
@@ -30,7 +30,7 @@ export const discoverAgentSpecs = async (worktree: string, config: AugmentedPlug
     const dirStat = await stat(agentsPath);
     if (!dirStat.isDirectory()) {
       if (verbose) {
-        console.log(`[opencode-augmented-plugin] Path is not a directory: ${agentsPath}`);
+        console.log(`[opencode-agent-loader-plugin] Path is not a directory: ${agentsPath}`);
       }
       return [];
     }
@@ -39,14 +39,14 @@ export const discoverAgentSpecs = async (worktree: string, config: AugmentedPlug
     const files = await findFiles(agentsPath, ['.ts', '.js']);
 
     if (verbose) {
-      console.log(`[opencode-augmented-plugin] Found ${files.length} agent spec file(s)`);
+      console.log(`[opencode-agent-loader-plugin] Found ${files.length} agent spec file(s)`);
     }
 
     return files;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
       if (verbose) {
-        console.log(`[opencode-augmented-plugin] Agents directory does not exist: ${agentsPath}`);
+        console.log(`[opencode-agent-loader-plugin] Agents directory does not exist: ${agentsPath}`);
       }
       return [];
     }

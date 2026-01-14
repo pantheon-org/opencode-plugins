@@ -1,7 +1,7 @@
 {
-  "name": "opencode-augmented-plugin",
+  "name": "opencode-agent-loader-plugin",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/opencode-augmented-plugin/src",
+  "sourceRoot": "packages/opencode-agent-loader-plugin/src",
   "projectType": "library",
   "targets": {
     "build": {
@@ -12,7 +12,7 @@
             "command": "bunx tsup src/index.ts --format esm,cjs --dts --out-dir dist"
           }
         ],
-        "cwd": "packages/opencode-augmented-plugin",
+        "cwd": "packages/opencode-agent-loader-plugin",
         "parallel": false
       }
     },
@@ -21,7 +21,7 @@
       "options": {
         "commands": [
           {
-            "command": "bunx npm pack --prefix packages/opencode-augmented-plugin"
+            "command": "bunx npm pack --prefix packages/opencode-agent-loader-plugin"
           }
         ],
         "parallel": false
@@ -35,7 +35,7 @@
             "command": "bunx eslint src/"
           }
         ],
-        "cwd": "packages/opencode-augmented-plugin",
+        "cwd": "packages/opencode-agent-loader-plugin",
         "parallel": false
       }
     },
@@ -47,7 +47,7 @@
             "command": "bunx prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\""
           }
         ],
-        "cwd": "packages/opencode-augmented-plugin",
+        "cwd": "packages/opencode-agent-loader-plugin",
         "parallel": false
       }
     },
@@ -59,14 +59,14 @@
             "command": "bunx tsc --noEmit"
           }
         ],
-        "cwd": "packages/opencode-augmented-plugin",
+        "cwd": "packages/opencode-agent-loader-plugin",
         "parallel": false
       }
     },
     "dev-proxy": {
       "executor": "@pantheon-org/tools:dev-proxy",
       "options": {
-        "plugins": ["opencode-augmented-plugin"],
+        "plugins": ["opencode-agent-loader-plugin"],
         "symlinkRoot": ".opencode/plugin",
         "apply": true
       }
@@ -79,7 +79,7 @@
             "command": "bun test"
           }
         ],
-        "cwd": "packages/opencode-augmented-plugin",
+        "cwd": "packages/opencode-agent-loader-plugin",
         "parallel": false
       }
     }

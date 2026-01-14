@@ -8,7 +8,7 @@ This guide covers how to develop and contribute to the Augmented plugin.
 
 # Clone the repository
 
-git clone https://github.com/pantheon-org/opencode-augmented-plugin.git cd opencode-augmented-plugin
+git clone https://github.com/pantheon-org/opencode-agent-loader-plugin.git cd opencode-agent-loader-plugin
 
 # Install dependencies
 
@@ -24,7 +24,7 @@ bun run build \`\`\`
 
 ## Project Structure
 
-\`\`\` opencode-augmented-plugin/ ├── src/ # Plugin source code ├── docs/ # Documentation source ├── pages/ #
+\`\`\` opencode-agent-loader-plugin/ ├── src/ # Plugin source code ├── docs/ # Documentation source ├── pages/ #
 Documentation site builder └── dist/ # Build output \`\`\`
 
 ## Testing
@@ -99,7 +99,7 @@ docs: update installation instructions
 chore: update dependencies style: fix code formatting refactor: simplify notification logic test: add unit tests for
 parser ci: update GitHub Actions workflow \`\`\`
 
-### Release Workflow
+## Release Workflow
 
 1. **Make changes** using conventional commits: \`\`\`bash git add . git commit -m "feat: add support for custom themes"
    git push origin feature-branch \`\`\`
@@ -133,7 +133,7 @@ git tag v1.0.0 git push origin v1.0.0 \`\`\`
 
 The `2-publish.yml` workflow will handle npm publishing and docs deployment.
 
-### GitHub Workflows
+## GitHub Workflows
 
 The plugin includes several automated workflows:
 

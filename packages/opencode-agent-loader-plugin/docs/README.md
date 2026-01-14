@@ -4,13 +4,13 @@ OpenCode plugin for Augmented
 
 ## Installation
 
-\`\`\`bash bun add @pantheon-org/opencode-augmented-plugin \`\`\`
+\`\`\`bash bun add @pantheon-org/opencode-agent-loader-plugin \`\`\`
 
 ## Usage
 
 Add the plugin to your `opencode.json`:
 
-\`\`\`json { "plugin": ["@pantheon-org/opencode-augmented-plugin"] } \`\`\`
+\`\`\`json { "plugin": ["@pantheon-org/opencode-agent-loader-plugin"] } \`\`\`
 
 ## Features
 

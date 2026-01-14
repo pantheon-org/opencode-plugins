@@ -19,7 +19,7 @@ extend OpenCode with specialized AI agents without modifying core configuration.
 
 ```bash
 # In your OpenCode project
-bun install @pantheon-org/opencode-augmented-plugin
+bun install @pantheon-org/opencode-agent-loader-plugin
 ```
 
 Add the plugin to your `opencode.json`:
@@ -27,7 +27,7 @@ Add the plugin to your `opencode.json`:
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["@pantheon-org/opencode-augmented-plugin"]
+  "plugin": ["@pantheon-org/opencode-agent-loader-plugin"]
 }
 ```
 
@@ -84,7 +84,7 @@ Create a `.opencode/plugin.json` file in your project to customize the plugin:
 
 ```json
 {
-  "@pantheon-org/opencode-augmented-plugin": {
+  "@pantheon-org/opencode-agent-loader-plugin": {
     "enableDefaultAgents": true,
     "disabledDefaultAgents": ["code-reviewer", "security-auditor"]
   }
@@ -95,7 +95,7 @@ Or disable all default agents:
 
 ```json
 {
-  "@pantheon-org/opencode-augmented-plugin": {
+  "@pantheon-org/opencode-agent-loader-plugin": {
     "enableDefaultAgents": false
   }
 }
@@ -108,7 +108,7 @@ Or disable all default agents:
 Create a file in `.opencode/agent/` (e.g., `.opencode/agent/code-reviewer.ts`):
 
 ```typescript
-import type { AgentSpec } from '@pantheon-org/opencode-augmented-plugin';
+import type { AgentSpec } from '@pantheon-org/opencode-agent-loader-plugin';
 import type { AgentConfig } from '@opencode-ai/sdk';
 
 export class CodeReviewAgent implements AgentSpec {
@@ -218,7 +218,7 @@ The plugin can be configured via `.opencode/plugin.json` in your project root:
 
 ```json
 {
-  "@pantheon-org/opencode-augmented-plugin": {
+  "@pantheon-org/opencode-agent-loader-plugin": {
     "agentsDir": ".opencode/agent",
     "verbose": true,
     "enableDefaultAgents": true,
@@ -241,7 +241,7 @@ The configuration file is optional - the plugin works out of the box with sensib
 You can programmatically create a default `.opencode/plugin.json` file:
 
 ```typescript
-import { createDefaultPluginConfig } from '@pantheon-org/opencode-augmented-plugin';
+import { createDefaultPluginConfig } from '@pantheon-org/opencode-agent-loader-plugin';
 
 // Creates .opencode/plugin.json with default configuration
 await createDefaultPluginConfig('/path/to/project');
@@ -429,7 +429,7 @@ Guidelines:
 1. Install the SDK: `bun install @opencode-ai/sdk`
 2. Import types:
    ```typescript
-   import type { AgentSpec } from '@pantheon-org/opencode-augmented-plugin';
+   import type { AgentSpec } from '@pantheon-org/opencode-agent-loader-plugin';
    import type { AgentConfig } from '@opencode-ai/sdk';
    ```
 
@@ -466,5 +466,5 @@ MIT License - see [LICENSE](./LICENSE) for details
 
 ## Support
 
-- Report issues: https://github.com/pantheon-org/opencode-augmented-plugin/issues
+- Report issues: https://github.com/pantheon-org/opencode-agent-loader-plugin/issues
 - OpenCode Discord: https://discord.gg/opencode

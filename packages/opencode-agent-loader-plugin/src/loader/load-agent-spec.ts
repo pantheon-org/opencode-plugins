@@ -17,7 +17,7 @@ import { validateAgentSpec } from './validate-agent-spec';
 export const loadAgentSpec = async (filePath: string, verbose = false): Promise<AgentSpecLoadResult> => {
   try {
     if (verbose) {
-      console.log(`[opencode-augmented-plugin] Loading agent spec: ${filePath}`);
+      console.log(`[opencode-agent-loader-plugin] Loading agent spec: ${filePath}`);
     }
 
     // Dynamically import the file
@@ -36,7 +36,7 @@ export const loadAgentSpec = async (filePath: string, verbose = false): Promise<
         validateAgentSpec(spec, filePath);
 
         if (verbose) {
-          console.log(`[opencode-augmented-plugin] Loaded agent: ${spec.name}`);
+          console.log(`[opencode-agent-loader-plugin] Loaded agent: ${spec.name}`);
         }
 
         return {
@@ -49,7 +49,7 @@ export const loadAgentSpec = async (filePath: string, verbose = false): Promise<
     throw new Error(`No valid AgentSpec class found in ${filePath}`);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error(`[opencode-augmented-plugin] Failed to load ${filePath}:`, errorMessage);
+    console.error(`[opencode-agent-loader-plugin] Failed to load ${filePath}:`, errorMessage);
 
     return {
       filePath,

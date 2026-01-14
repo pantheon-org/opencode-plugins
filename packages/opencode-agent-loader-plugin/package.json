@@ -1,5 +1,5 @@
 {
-  "name": "@pantheon-org/opencode-augmented-plugin",
+  "name": "@pantheon-org/opencode-agent-loader-plugin",
   "version": "0.1.0",
   "description": "Dynamic agent specification loader for OpenCode - Load custom AI agents from TypeScript files",
   "keywords": [
@@ -8,15 +8,16 @@
     "typescript",
     "ai",
     "agents",
+    "agent-loader",
     "dynamic-loading"
   ],
-  "homepage": "https://github.com/pantheon-org/opencode-augmented-plugin#readme",
+  "homepage": "https://github.com/pantheon-org/opencode-agent-loader-plugin#readme",
   "bugs": {
-    "url": "https://github.com/pantheon-org/opencode-augmented-plugin/issues"
+    "url": "https://github.com/pantheon-org/opencode-agent-loader-plugin/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pantheon-org/opencode-augmented-plugin.git"
+    "url": "git+https://github.com/pantheon-org/opencode-agent-loader-plugin.git"
   },
   "license": "MIT",
   "type": "module",

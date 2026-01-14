@@ -2,7 +2,7 @@
  * Example Agent Specification
  *
  * This is a sample agent spec that demonstrates how to create custom agents
- * for the opencode-augmented-plugin.
+ * for the opencode-agent-loader-plugin.
  *
  * To use this example:
  * 1. Copy this file to `.opencode/agents/` in your project root
@@ -10,7 +10,7 @@
  * 3. The plugin will automatically discover and register your agent
  */
 
-import type { AgentSpec } from '@pantheon-org/opencode-augmented-plugin';
+import type { AgentSpec } from '@pantheon-org/opencode-agent-loader-plugin';
 import type { AgentConfig } from '@opencode-ai/sdk';
 
 /**

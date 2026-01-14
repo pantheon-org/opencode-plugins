@@ -31,7 +31,7 @@ describe('load-plugin-config', () => {
 
     it('should load config from plugin.json with full package name', async () => {
       const customConfig = {
-        '@pantheon-org/opencode-augmented-plugin': {
+        '@pantheon-org/opencode-agent-loader-plugin': {
           agentsDir: 'custom/agents',
           verbose: true,
           enableDefaultAgents: false,
@@ -51,7 +51,7 @@ describe('load-plugin-config', () => {
 
     it('should load config from plugin.json with short package name', async () => {
       const customConfig = {
-        'opencode-augmented-plugin': {
+        'opencode-agent-loader-plugin': {
           agentsDir: 'custom/agents',
           verbose: true,
         },
@@ -67,7 +67,7 @@ describe('load-plugin-config', () => {
 
     it('should merge partial config with defaults', async () => {
       const customConfig = {
-        '@pantheon-org/opencode-augmented-plugin': {
+        '@pantheon-org/opencode-agent-loader-plugin': {
           verbose: true,
           // Other fields should come from defaults
         },
@@ -107,7 +107,7 @@ describe('load-plugin-config', () => {
 
     it('should handle arrays in config correctly', async () => {
       const customConfig = {
-        '@pantheon-org/opencode-augmented-plugin': {
+        '@pantheon-org/opencode-agent-loader-plugin': {
           patterns: ['**/*.ts'],
           disabledDefaultAgents: ['agent1', 'agent2'],
         },
@@ -132,13 +132,13 @@ describe('load-plugin-config', () => {
       expect(await file.exists()).toBe(true);
 
       const content = await file.json();
-      expect(content['@pantheon-org/opencode-augmented-plugin']).toBeDefined();
-      expect(content['@pantheon-org/opencode-augmented-plugin'].agentsDir).toBe('.opencode/agent');
+      expect(content['@pantheon-org/opencode-agent-loader-plugin']).toBeDefined();
+      expect(content['@pantheon-org/opencode-agent-loader-plugin'].agentsDir).toBe('.opencode/agent');
     });
 
     it('should not overwrite existing plugin.json', async () => {
       const existingConfig = {
-        '@pantheon-org/opencode-augmented-plugin': {
+        '@pantheon-org/opencode-agent-loader-plugin': {
           agentsDir: 'existing/path',
         },
       };
@@ -151,7 +151,7 @@ describe('load-plugin-config', () => {
 
       const file = Bun.file(path.join(opencodeDir, 'plugin.json'));
       const content = await file.json();
-      expect(content['@pantheon-org/opencode-augmented-plugin'].agentsDir).toBe('existing/path');
+      expect(content['@pantheon-org/opencode-agent-loader-plugin'].agentsDir).toBe('existing/path');
     });
 
     it('should create valid JSON', async () => {

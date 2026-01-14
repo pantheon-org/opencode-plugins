@@ -24,7 +24,7 @@ Common issues and their solutions.
 
 If you encounter an issue not listed here:
 
-1. Check the [GitHub Issues](https://github.com/pantheon-org/opencode-augmented-plugin/issues)
+1. Check the [GitHub Issues](https://github.com/pantheon-org/opencode-agent-loader-plugin/issues)
 2. Search for similar issues
 3. Create a new issue if needed
 

@@ -1,13 +1,13 @@
 # Testing Guide - OpenCode Augmented Plugin
 
-This guide explains how to test the `opencode-augmented-plugin` both locally and in a real OpenCode environment.
+This guide explains how to test the `opencode-agent-loader-plugin` both locally and in a real OpenCode environment.
 
 ## Local Testing
 
 ### 1. Build the Plugin
 
 ```bash
-cd packages/opencode-augmented-plugin
+cd packages/opencode-agent-loader-plugin
 bun install
 bun run build
 ```
@@ -26,7 +26,7 @@ bun link
 
 # In your test project
 cd /path/to/test/project
-bun link @pantheon-org/opencode-augmented-plugin
+bun link @pantheon-org/opencode-agent-loader-plugin
 ```
 
 ## Integration Testing
@@ -48,7 +48,7 @@ bun link @pantheon-org/opencode-augmented-plugin
    // opencode.json
    {
      "$schema": "https://opencode.ai/config.json",
-     "plugin": ["@pantheon-org/opencode-augmented-plugin"]
+     "plugin": ["@pantheon-org/opencode-agent-loader-plugin"]
    }
    ```
 
@@ -56,7 +56,7 @@ bun link @pantheon-org/opencode-augmented-plugin
 
    ```typescript
    // .opencode/agents/test-agent.ts
-   import type { AgentSpec } from '@pantheon-org/opencode-augmented-plugin';
+   import type { AgentSpec } from '@pantheon-org/opencode-agent-loader-plugin';
    import type { AgentConfig } from '@opencode-ai/sdk';
 
    export class TestAgent implements AgentSpec {
@@ -77,9 +77,9 @@ bun link @pantheon-org/opencode-augmented-plugin
 When you start OpenCode, you should see:
 
 ```
-[opencode-augmented-plugin] Initializing plugin
-[opencode-augmented-plugin] Worktree: /path/to/test-project
-[opencode-augmented-plugin] Loaded 1 agent spec(s): test-agent
+[opencode-agent-loader-plugin] Initializing plugin
+[opencode-agent-loader-plugin] Worktree: /path/to/test-project
+[opencode-agent-loader-plugin] Loaded 1 agent spec(s): test-agent
 ```
 
 **Verification:**
@@ -118,7 +118,7 @@ export class DevOpsAgent implements AgentSpec {
 **Expected Result:**
 
 ```
-[opencode-augmented-plugin] Loaded 2 agent spec(s): code-reviewer, devops-expert
+[opencode-agent-loader-plugin] Loaded 2 agent spec(s): code-reviewer, devops-expert
 ```
 
 ### Test Case 3: Subdirectories
@@ -158,8 +158,8 @@ export class InvalidAgent implements AgentSpec {
 **Expected Result:**
 
 ```
-[opencode-augmented-plugin] Failed to load .opencode/agents/invalid.ts: Invalid agent name "Invalid-Agent": must be kebab-case
-[opencode-augmented-plugin] Failed to load 1 agent spec(s)
+[opencode-agent-loader-plugin] Failed to load .opencode/agents/invalid.ts: Invalid agent name "Invalid-Agent": must be kebab-case
+[opencode-agent-loader-plugin] Failed to load 1 agent spec(s)
 ```
 
 #### Missing Directory
@@ -169,8 +169,8 @@ If `.opencode/agents/` doesn't exist:
 **Expected Result:**
 
 ```
-[opencode-augmented-plugin] No agent specs found
-[opencode-augmented-plugin] Create agent specs in: /path/to/project/.opencode/agents
+[opencode-agent-loader-plugin] No agent specs found
+[opencode-agent-loader-plugin] Create agent specs in: /path/to/project/.opencode/agents
 ```
 
 ### Test Case 5: Verbose Mode
@@ -183,13 +183,13 @@ opencode
 **Expected Result:**
 
 ```
-[opencode-augmented-plugin] Scanning for agent specs in: /path/to/project/.opencode/agents
-[opencode-augmented-plugin] Found 2 agent spec file(s)
-[opencode-augmented-plugin] Loading agent spec: /path/to/project/.opencode/agents/test.ts
-[opencode-augmented-plugin] Loaded agent: test-agent
-[opencode-augmented-plugin] Registering agents with OpenCode config
-[opencode-augmented-plugin] Registered agent: test-agent
-[opencode-augmented-plugin] Agent registration complete
+[opencode-agent-loader-plugin] Scanning for agent specs in: /path/to/project/.opencode/agents
+[opencode-agent-loader-plugin] Found 2 agent spec file(s)
+[opencode-agent-loader-plugin] Loading agent spec: /path/to/project/.opencode/agents/test.ts
+[opencode-agent-loader-plugin] Loaded agent: test-agent
+[opencode-agent-loader-plugin] Registering agents with OpenCode config
+[opencode-agent-loader-plugin] Registered agent: test-agent
+[opencode-agent-loader-plugin] Agent registration complete
 ```
 
 ## Unit Testing
@@ -260,7 +260,7 @@ opencode --help
 OpenCode should log plugin initialization:
 
 ```bash
-opencode 2>&1 | grep "opencode-augmented-plugin"
+opencode 2>&1 | grep "opencode-agent-loader-plugin"
 ```
 
 ### Common Issues
@@ -313,7 +313,7 @@ cd opencode-test-project
 
 # Initialize
 bun init -y
-bun add @pantheon-org/opencode-augmented-plugin @opencode-ai/sdk
+bun add @pantheon-org/opencode-agent-loader-plugin @opencode-ai/sdk
 
 # Create structure
 mkdir -p .opencode/agents
@@ -322,13 +322,13 @@ mkdir -p .opencode/agents
 cat > opencode.json << 'EOF'
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["@pantheon-org/opencode-augmented-plugin"]
+  "plugin": ["@pantheon-org/opencode-agent-loader-plugin"]
 }
 EOF
 
 # Add test agent
 cat > .opencode/agents/test.ts << 'EOF'
-import type { AgentSpec } from '@pantheon-org/opencode-augmented-plugin';
+import type { AgentSpec } from '@pantheon-org/opencode-agent-loader-plugin';
 import type { AgentConfig } from '@opencode-ai/sdk';
 
 export class TestAgent implements AgentSpec {
