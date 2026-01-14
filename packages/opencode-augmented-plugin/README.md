@@ -80,13 +80,11 @@ opencode --agent test-engineer "Write tests for the UserService class"
 
 ### Configuring Default Agents
 
-You can disable default agents or selectively disable specific ones:
+Create a `.opencode/plugin.json` file in your project to customize the plugin:
 
 ```json
 {
-  "$schema": "https://opencode.ai/config.json",
-  "plugin": ["@pantheon-org/opencode-augmented-plugin"],
-  "augmented": {
+  "@pantheon-org/opencode-augmented-plugin": {
     "enableDefaultAgents": true,
     "disabledDefaultAgents": ["code-reviewer", "security-auditor"]
   }
@@ -97,7 +95,7 @@ Or disable all default agents:
 
 ```json
 {
-  "augmented": {
+  "@pantheon-org/opencode-augmented-plugin": {
     "enableDefaultAgents": false
   }
 }
@@ -216,13 +214,11 @@ The `config` property follows OpenCode's `AgentConfig` type from `@opencode-ai/s
 
 ## Configuration
 
-The plugin can be configured via your `opencode.json` file:
+The plugin can be configured via `.opencode/plugin.json` in your project root:
 
 ```json
 {
-  "$schema": "https://opencode.ai/config.json",
-  "plugin": ["@pantheon-org/opencode-augmented-plugin"],
-  "augmented": {
+  "@pantheon-org/opencode-augmented-plugin": {
     "agentsDir": ".opencode/agent",
     "verbose": true,
     "enableDefaultAgents": true,
@@ -231,6 +227,8 @@ The plugin can be configured via your `opencode.json` file:
 }
 ```
 
+The configuration file is optional - the plugin works out of the box with sensible defaults.
+
 ### Configuration Options
 
 - **`agentsDir`**: Directory where custom agent specs are located (default: `.opencode/agent`)
@@ -238,11 +236,15 @@ The plugin can be configured via your `opencode.json` file:
 - **`enableDefaultAgents`**: Enable built-in default agents (default: `true`)
 - **`disabledDefaultAgents`**: Array of default agent names to disable (default: `[]`)
 
-### Environment Variables
+### Creating Default Configuration
 
-```bash
-# Enable verbose logging
-export OPENCODE_VERBOSE=true
+You can programmatically create a default `.opencode/plugin.json` file:
+
+```typescript
+import { createDefaultPluginConfig } from '@pantheon-org/opencode-augmented-plugin';
+
+// Creates .opencode/plugin.json with default configuration
+await createDefaultPluginConfig('/path/to/project');
 ```
 
 ## Examples
