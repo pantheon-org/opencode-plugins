@@ -28,7 +28,7 @@
       }
     },
     "check-mirror-exists": {
-      "executor": "../../tools/executors:check-mirror-exists"
+      "executor": "@pantheon-org/tools:check-mirror-exists"
     },
     "lint": {
       "executor": "nx:run-commands",
@@ -67,7 +67,7 @@
       }
     },
     "dev-proxy": {
-      "executor": "../../tools/executors:dev-proxy",
+      "executor": "@pantheon-org/tools:dev-proxy",
       "options": {
         "plugins": ["opencode-agent-loader-plugin"],
         "symlinkRoot": ".opencode/plugin",
