@@ -18,7 +18,7 @@ describe('loadAllAgentSpecs', () => {
   });
 
   it('should load multiple valid agent specs', async () => {
-    const agentsDir = join(testDir, '.opencode', 'agents');
+    const agentsDir = join(testDir, '.opencode', 'agent');
     await mkdir(agentsDir, { recursive: true });
 
     const agent1 = `
@@ -51,7 +51,7 @@ describe('loadAllAgentSpecs', () => {
   });
 
   it('should return empty array when agents directory is empty', async () => {
-    const agentsDir = join(testDir, '.opencode', 'agents');
+    const agentsDir = join(testDir, '.opencode', 'agent');
     await mkdir(agentsDir, { recursive: true });
 
     const specs = await loadAllAgentSpecs(testDir);
@@ -60,7 +60,7 @@ describe('loadAllAgentSpecs', () => {
   });
 
   it('should skip invalid agent specs and load valid ones', async () => {
-    const agentsDir = join(testDir, '.opencode', 'agents');
+    const agentsDir = join(testDir, '.opencode', 'agent');
     await mkdir(agentsDir, { recursive: true });
 
     const validAgent = `
@@ -86,7 +86,7 @@ describe('loadAllAgentSpecs', () => {
   });
 
   it('should load agents from nested directories', async () => {
-    const agentsDir = join(testDir, '.opencode', 'agents');
+    const agentsDir = join(testDir, '.opencode', 'agent');
     await mkdir(join(agentsDir, 'category1'), { recursive: true });
     await mkdir(join(agentsDir, 'category2'), { recursive: true });
 
@@ -128,7 +128,7 @@ describe('loadAllAgentSpecs', () => {
   });
 
   it('should handle verbose mode without throwing', async () => {
-    const agentsDir = join(testDir, '.opencode', 'agents');
+    const agentsDir = join(testDir, '.opencode', 'agent');
     await mkdir(agentsDir, { recursive: true });
 
     const agent = `
@@ -145,7 +145,7 @@ describe('loadAllAgentSpecs', () => {
   });
 
   it('should handle mix of valid and invalid files', async () => {
-    const agentsDir = join(testDir, '.opencode', 'agents');
+    const agentsDir = join(testDir, '.opencode', 'agent');
     await mkdir(agentsDir, { recursive: true });
 
     const validAgent = `
@@ -169,7 +169,7 @@ describe('loadAllAgentSpecs', () => {
   });
 
   it('should load both .ts and .js files', async () => {
-    const agentsDir = join(testDir, '.opencode', 'agents');
+    const agentsDir = join(testDir, '.opencode', 'agent');
     await mkdir(agentsDir, { recursive: true });
 
     const tsAgent = `

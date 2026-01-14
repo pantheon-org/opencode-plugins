@@ -7,7 +7,7 @@ extend OpenCode with specialized AI agents without modifying core configuration.
 
 ## Features
 
-- **Dynamic Agent Loading**: Automatically discover and load agent specs from `.opencode/agents/` directory
+- **Dynamic Agent Loading**: Automatically discover and load agent specs from `.opencode/agent/` directory
 - **Class-Based Specs**: Define agents as TypeScript classes implementing the `AgentSpec` interface
 - **Type-Safe**: Full TypeScript support with OpenCode's `AgentConfig` type
 - **Validation**: Automatic validation of agent specifications
@@ -33,7 +33,7 @@ Add the plugin to your `opencode.json`:
 
 ### 1. Create an Agent Spec File
 
-Create a file in `.opencode/agents/` (e.g., `.opencode/agents/code-reviewer.ts`):
+Create a file in `.opencode/agent/` (e.g., `.opencode/agent/code-reviewer.ts`):
 
 ```typescript
 import type { AgentSpec } from '@pantheon-org/opencode-augmented-plugin';
@@ -153,7 +153,7 @@ export OPENCODE_VERBOSE=true
 
 ### Custom Directory
 
-By default, the plugin scans `.opencode/agents/`. This is currently fixed but configurable in future releases.
+By default, the plugin scans `.opencode/agent/`. This is currently fixed but configurable in future releases.
 
 ## Examples
 
@@ -313,7 +313,7 @@ Guidelines:
 
 **Solution**:
 
-1. Check file location: Must be in `.opencode/agents/`
+1. Check file location: Must be in `.opencode/agent/`
 2. Check file extension: Must be `.ts` or `.js`
 3. Check export: Must export a class implementing `AgentSpec`
 4. Enable verbose logging: `export OPENCODE_VERBOSE=true`
