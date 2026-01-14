@@ -1,11 +1,11 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, test, expect } from 'bun:test';
 
 import { allianceSounds, hordeSounds } from './data/index';
 import {
   allianceSoundDescriptions,
-  getSoundDescription,
   hordeSoundDescriptions,
   soundDescriptions,
+  getSoundDescription,
 } from './descriptions';
 
 describe('Sound Descriptions', () => {

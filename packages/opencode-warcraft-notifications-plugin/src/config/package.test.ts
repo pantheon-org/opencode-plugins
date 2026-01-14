@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'bun:test';
-import { join } from 'node:path';
+import { join } from 'path';
+
+import { describe, it, expect } from 'bun:test';
 
 import { createTempDir, removeTempDir, withCwd } from '../test-utils';
 

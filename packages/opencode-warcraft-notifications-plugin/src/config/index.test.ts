@@ -1,13 +1,14 @@
-import { describe, expect, it } from 'bun:test';
-import { mkdir, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { mkdir, writeFile } from 'fs/promises';
+import { join } from 'path';
+
+import { describe, it, expect } from 'bun:test';
 
 import { createTempDir, removeTempDir } from '../test-utils';
 
 import {
-  DEFAULT_DATA_DIR,
   getConfigDir,
   getDefaultSoundsDir,
+  DEFAULT_DATA_DIR,
   loadPluginConfig,
   type WarcraftNotificationConfig,
 } from './index';
@@ -125,9 +126,9 @@ it('getConfigDir handles win32 and XDG overrides', () => {
   } finally {
     // restore
     Object.defineProperty(process, 'platform', { value: origPlatform, configurable: true });
-    if (origXdg === undefined) process.env.XDG_CONFIG_HOME = undefined;
+    if (origXdg === undefined) delete process.env.XDG_CONFIG_HOME;
     else process.env.XDG_CONFIG_HOME = origXdg;
-    if (origAppData === undefined) process.env.APPDATA = undefined;
+    if (origAppData === undefined) delete process.env.APPDATA;
     else process.env.APPDATA = origAppData;
   }
 });
@@ -208,7 +209,7 @@ it('getConfigDir falls back to ~/.config when XDG_CONFIG_HOME is unset', () => {
   const origXdg = process.env.XDG_CONFIG_HOME;
   try {
     Object.defineProperty(process, 'platform', { value: 'linux', configurable: true });
-    process.env.XDG_CONFIG_HOME = undefined;
+    delete process.env.XDG_CONFIG_HOME;
     const dir = getConfigDir();
     expect(typeof dir).toBe('string');
     expect(dir).toContain('.config');
@@ -216,7 +217,7 @@ it('getConfigDir falls back to ~/.config when XDG_CONFIG_HOME is unset', () => {
     if (origPlatformDescriptor) {
       Object.defineProperty(process, 'platform', origPlatformDescriptor);
     }
-    if (origXdg === undefined) process.env.XDG_CONFIG_HOME = undefined;
+    if (origXdg === undefined) delete process.env.XDG_CONFIG_HOME;
     else process.env.XDG_CONFIG_HOME = origXdg;
   }
 });
@@ -226,7 +227,7 @@ it('getConfigDir falls back to AppData\\Roaming when APPDATA is unset on win32',
   const origAppData = process.env.APPDATA;
   try {
     Object.defineProperty(process, 'platform', { value: 'win32', configurable: true });
-    process.env.APPDATA = undefined;
+    delete process.env.APPDATA;
     const dir = getConfigDir();
     expect(typeof dir).toBe('string');
     expect(dir).toContain('AppData');
@@ -234,7 +235,7 @@ it('getConfigDir falls back to AppData\\Roaming when APPDATA is unset on win32',
     if (origPlatformDescriptor) {
       Object.defineProperty(process, 'platform', origPlatformDescriptor);
     }
-    if (origAppData === undefined) process.env.APPDATA = undefined;
+    if (origAppData === undefined) delete process.env.APPDATA;
     else process.env.APPDATA = origAppData;
   }
 });
@@ -267,7 +268,7 @@ it('loadPluginConfig reads from XDG_CONFIG_HOME when present', async () => {
     } finally {
       // restore platform and env
       Object.defineProperty(process, 'platform', { value: origPlatform, configurable: true });
-      if (origXdg === undefined) process.env.XDG_CONFIG_HOME = undefined;
+      if (origXdg === undefined) delete process.env.XDG_CONFIG_HOME;
       else process.env.XDG_CONFIG_HOME = origXdg;
     }
   } finally {

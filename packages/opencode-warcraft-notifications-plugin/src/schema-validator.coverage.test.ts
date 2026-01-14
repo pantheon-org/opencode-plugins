@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, it, expect } from 'bun:test';
 
-import { validateAndSanitizeConfig, validatePluginConfig } from './schema-validator.js';
+import { validatePluginConfig, validateAndSanitizeConfig } from './schema-validator.js';
 
 describe('schema-validator coverage tests', () => {
   describe('formatInvalidValueError edge cases', () => {
@@ -67,7 +67,7 @@ describe('schema-validator coverage tests', () => {
         expect(config).toEqual({});
       } finally {
         if (origDebug === undefined) {
-          process.env.DEBUG_OPENCODE = undefined;
+          delete process.env.DEBUG_OPENCODE;
         } else {
           process.env.DEBUG_OPENCODE = origDebug;
         }
@@ -77,7 +77,7 @@ describe('schema-validator coverage tests', () => {
     it('should not log warnings when DEBUG_OPENCODE is not set', () => {
       const origDebug = process.env.DEBUG_OPENCODE;
       try {
-        process.env.DEBUG_OPENCODE = undefined;
+        delete process.env.DEBUG_OPENCODE;
         const config = validateAndSanitizeConfig(undefined);
         expect(config).toEqual({});
       } finally {
@@ -153,7 +153,7 @@ describe('schema-validator coverage tests', () => {
       });
       expect(result.valid).toBe(false);
       expect(result.errors).toBeDefined();
-      expect(result.errors?.length).toBeGreaterThan(0);
+      expect(result.errors!.length).toBeGreaterThan(0);
     });
   });
 });

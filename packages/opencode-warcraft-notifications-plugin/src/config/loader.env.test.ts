@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, it, expect } from 'bun:test';
 
 import { withEnv } from '../test-utils';
 

@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'bun:test';
-import { mkdir, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { mkdir, writeFile } from 'fs/promises';
+import { join } from 'path';
+
+import { describe, it, expect } from 'bun:test';
 
 import { createTempDir, removeTempDir } from '../test-utils';
 
@@ -75,7 +76,7 @@ describe('Plugin configuration coverage tests', () => {
       }
     } finally {
       if (origDebug === undefined) {
-        process.env.DEBUG_OPENCODE = undefined;
+        delete process.env.DEBUG_OPENCODE;
       } else {
         process.env.DEBUG_OPENCODE = origDebug;
       }

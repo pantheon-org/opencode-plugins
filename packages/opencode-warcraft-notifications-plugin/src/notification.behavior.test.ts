@@ -5,7 +5,7 @@
  * including event handling, sound playback, and toast notifications.
  */
 
-import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
+import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
 
 describe('NotificationPlugin Behavior', () => {
   const originalPlatform = process.platform;

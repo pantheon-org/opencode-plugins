@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, it, expect } from 'bun:test';
 
 import { extractFilename, getIdleSummary } from './notification-utils';
 
@@ -95,7 +95,7 @@ describe('getIdleSummary', () => {
     it('should truncate text longer than 80 chars', () => {
       const text = 'a'.repeat(100);
       const result = getIdleSummary(text);
-      expect(result).toBe(`${'a'.repeat(80)}...`);
+      expect(result).toBe('a'.repeat(80) + '...');
       expect(result?.length).toBe(83);
     });
 
@@ -106,7 +106,7 @@ describe('getIdleSummary', () => {
 
     it('should handle text with 81 chars (boundary)', () => {
       const text = 'a'.repeat(81);
-      expect(getIdleSummary(text)).toBe(`${'a'.repeat(80)}...`);
+      expect(getIdleSummary(text)).toBe('a'.repeat(80) + '...');
     });
 
     it('should preserve newlines in short text', () => {
@@ -115,7 +115,7 @@ describe('getIdleSummary', () => {
     });
 
     it('should truncate at 80 chars even with newlines', () => {
-      const text = `${'a'.repeat(50)}\n${'b'.repeat(50)}`;
+      const text = 'a'.repeat(50) + '\n' + 'b'.repeat(50);
       const result = getIdleSummary(text);
       expect(result?.length).toBe(83);
       expect(result?.endsWith('...')).toBe(true);

@@ -1,21 +1,21 @@
-import { describe, expect, test } from 'bun:test';
+import { test, expect, describe } from 'bun:test';
 
 import {
-  type allianceSounds,
-  getAllianceSoundCategories,
+  sounds,
+  allianceSounds,
+  hordeSounds,
   getAllSounds,
-  getHordeSoundCategories,
   getRandomSound,
   getRandomSoundFromCategory,
-  getRandomSoundFromFaction,
+  soundExists,
+  getSoundPath,
   getRandomSoundPath,
+  getAllianceSoundCategories,
+  getHordeSoundCategories,
+  getSoundsByFaction,
+  getRandomSoundFromFaction,
   getRandomSoundPathFromFaction,
   getSoundFileList,
-  getSoundPath,
-  getSoundsByFaction,
-  type hordeSounds,
-  soundExists,
-  sounds,
 } from './index';
 
 describe('sounds data structure', () => {
@@ -156,7 +156,7 @@ describe('getSoundPath()', () => {
     expect(typeof path).toBe('string');
     expect(path).toContain('opencode');
     expect(path).toContain(faction);
-    expect(path).toMatch(new RegExp(`${testFile}$`));
+    expect(path).toMatch(new RegExp(testFile + '$'));
   });
 
   test('should use correct base directory', () => {

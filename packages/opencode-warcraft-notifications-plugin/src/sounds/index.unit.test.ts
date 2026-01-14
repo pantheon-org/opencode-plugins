@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, it, expect } from 'bun:test';
 
 import { createTempDir, removeTempDir } from '../test-utils';
 

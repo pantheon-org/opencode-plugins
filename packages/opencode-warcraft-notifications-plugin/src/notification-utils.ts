@@ -50,13 +50,13 @@ export const getIdleSummary = (text: string | null): string | undefined => {
   // Matches: [*_]Summary:[*_]? followed by content, optionally ending with [*_]
   // Uses multiline mode to match at end of any line
   const idleMatch = text.match(/[_*]+Summary:[_*]*\s*(.+?)[_*]*$/m);
-  if (idleMatch?.[1]) {
+  if (idleMatch && idleMatch[1]) {
     return idleMatch[1].trim();
   }
 
   // Truncate long text to 80 characters
   if (text.length > 80) {
-    return `${text.slice(0, 80)}...`;
+    return text.slice(0, 80) + '...';
   }
 
   return text;

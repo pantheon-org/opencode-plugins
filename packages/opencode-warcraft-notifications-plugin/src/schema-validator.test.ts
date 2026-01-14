@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, it, expect } from 'bun:test';
 
-import { validateAndSanitizeConfig, validatePluginConfig } from './schema-validator.js';
+import { validatePluginConfig, validateAndSanitizeConfig } from './schema-validator.js';
 
 describe('schema-validator', () => {
   describe('validatePluginConfig', () => {

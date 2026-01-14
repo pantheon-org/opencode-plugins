@@ -34,9 +34,9 @@ class StructuredLogger implements Logger {
     // Output structured JSON to appropriate stream
     const output = JSON.stringify(logEntry);
     if (level === 'error' || level === 'warn') {
-      process.stderr.write(`${output}\n`);
+      process.stderr.write(output + '\n');
     } else {
-      process.stdout.write(`${output}\n`);
+      process.stdout.write(output + '\n');
     }
   }
 
