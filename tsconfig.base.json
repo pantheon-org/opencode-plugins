@@ -26,7 +26,10 @@
       "@pantheon-org/opencode-warcraft-notifications": [
         "packages/opencode-warcraft-notifications/src/index.ts"
       ],
-      "warcraft-notifications": ["warcraft-notifications/src/index.ts"]
+      "warcraft-notifications": ["warcraft-notifications/src/index.ts"],
+      "@pantheon-org/opencode-augmented-plugin": [
+        "packages/opencode-augmented-plugin/src/index.ts"
+      ]
     }
   }
 }

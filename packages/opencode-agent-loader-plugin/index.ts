@@ -1,0 +1,1 @@
+export { OpencodeAugmentedPlugin } from './src';

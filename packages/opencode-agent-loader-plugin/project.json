@@ -1,0 +1,87 @@
+{
+  "name": "opencode-agent-loader-plugin",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/opencode-agent-loader-plugin/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx tsup src/index.ts --format esm,cjs --dts --out-dir dist"
+          }
+        ],
+        "cwd": "packages/opencode-agent-loader-plugin",
+        "parallel": false
+      }
+    },
+    "pack": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx npm pack --prefix packages/opencode-agent-loader-plugin"
+          }
+        ],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx eslint src/"
+          }
+        ],
+        "cwd": "packages/opencode-agent-loader-plugin",
+        "parallel": false
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\""
+          }
+        ],
+        "cwd": "packages/opencode-agent-loader-plugin",
+        "parallel": false
+      }
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx tsc --noEmit"
+          }
+        ],
+        "cwd": "packages/opencode-agent-loader-plugin",
+        "parallel": false
+      }
+    },
+    "dev-proxy": {
+      "executor": "@pantheon-org/tools:dev-proxy",
+      "options": {
+        "plugins": ["opencode-agent-loader-plugin"],
+        "symlinkRoot": ".opencode/plugin",
+        "apply": true
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bun test"
+          }
+        ],
+        "cwd": "packages/opencode-agent-loader-plugin",
+        "parallel": false
+      }
+    }
+  }
+}
