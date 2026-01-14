@@ -1,11 +1,15 @@
 {
   "name": "@pantheon-org/opencode-warcraft-notifications-plugin",
   "version": "0.1.0",
-  "description": "",
+  "description": "OpenCode plugin that plays Warcraft II sound notifications when your AI assistant goes idle",
   "keywords": [
     "opencode",
     "plugin",
-    "typescript"
+    "typescript",
+    "warcraft",
+    "notifications",
+    "sound",
+    "idle"
   ],
   "homepage": "https://github.com/pantheon-org/opencode-warcraft-notifications-plugin#readme",
   "bugs": {
@@ -17,10 +21,18 @@
   },
   "license": "MIT",
   "type": "module",
-  "main": "index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
-    "index.ts",
-    "src/",
+    "dist/",
+    "data/",
     "README.md",
     "LICENSE"
   ],
@@ -36,8 +48,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,mjs,cjs,css}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,mjs,cjs,css}\"",
     "clean": "rm -rf dist/ .bun-cache/ coverage/",
-    "build": "bun tsc",
-    "dev": "bun tsc --watch",
+    "build": "bunx tsup src/index.ts --format esm --dts --out-dir dist --clean",
+    "dev": "bunx tsup src/index.ts --format esm --dts --out-dir dist --watch",
     "verify:package": "npm pack --dry-run",
     "prepublishOnly": "bun run build && bun test && bun run verify:package"
   },

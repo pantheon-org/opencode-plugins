@@ -9,7 +9,7 @@
       "options": {
         "commands": [
           {
-            "command": "bunx tsup src/index.ts --format esm,cjs --dts --out-dir dist"
+            "command": "bunx tsup src/index.ts --format esm --dts --out-dir dist --clean"
           }
         ],
         "cwd": "packages/opencode-warcraft-notifications-plugin",
@@ -21,11 +21,13 @@
       "options": {
         "commands": [
           {
-            "command": "bunx npm pack --prefix packages/opencode-warcraft-notifications-plugin"
+            "command": "npm pack"
           }
         ],
+        "cwd": "packages/opencode-warcraft-notifications-plugin",
         "parallel": false
-      }
+      },
+      "dependsOn": ["build"]
     },
     "lint": {
       "executor": "nx:run-commands",
