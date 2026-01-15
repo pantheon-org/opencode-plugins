@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: Checkout plugin repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2
         with:
           fetch-depth: 0
 
@@ -164,7 +164,7 @@ jobs:
           bun run verify || echo "⚠️ Link verification not available, skipping..."
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v3.0
         with:
           path: docs-builder/dist
 
@@ -179,7 +179,7 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v4.0
 
       - name: Display deployment URL
         run: |
