@@ -130,23 +130,29 @@ jobs:
 
       - name: Add CI/CD workflows to mirror
         run: |
-          echo "📋 Adding CI/CD workflows to mirror branch..."
+          echo "📋 Adding CI/CD workflows and actions to mirror branch..."
           git checkout temp-branch
 
-          # Create .github/workflows directory
+          # Create .github directory structure
           mkdir -p .github/workflows
+          mkdir -p .github/actions/setup-bun
+          mkdir -p .github/actions/setup-node-npm
 
           # Copy workflow templates from monorepo
           cp .github/mirror-templates/publish-npm.yml .github/workflows/
           cp .github/mirror-templates/deploy-docs.yml .github/workflows/
 
-          # Commit the workflows
+          # Copy composite actions
+          cp .github/mirror-templates/actions/setup-bun/action.yml .github/actions/setup-bun/
+          cp .github/mirror-templates/actions/setup-node-npm/action.yml .github/actions/setup-node-npm/
+
+          # Commit the workflows and actions
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
-          git add .github/workflows
-          git commit -m "chore: add CI/CD workflows for npm publishing and docs deployment" || echo "No changes to commit"
+          git add .github
+          git commit -m "chore: add CI/CD workflows and composite actions for automated publishing and docs deployment" || echo "No changes to commit"
 
-          echo "✅ Workflows added to temp-branch"
+          echo "✅ Workflows and actions added to temp-branch"
 
       - name: Push to mirror repo
         env:
