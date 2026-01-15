@@ -4,92 +4,78 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'docs/**'
-      - 'README.md'
     tags:
       - 'v*'
-  workflow_dispatch:
+  workflow_dispatch: # Allow manual trigger
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Allow only one concurrent deployment
 concurrency:
-  group: 'pages-${{ github.ref }}'
+  group: 'pages'
   cancel-in-progress: false
 
 jobs:
   build:
-    name: Build Documentation
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout plugin repository
-        uses: actions/checkout@v4.2
+      - name: Checkout plugin repo
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          path: plugin
 
-      - name: Setup Bun with caching
-        uses: ./.github/actions/setup-bun
+      - name: Checkout docs-builder
+        uses: actions/checkout@v4
+        with:
+          repository: pantheon-org/opencode-docs-builder
+          path: docs-builder
+          ref: main # Use latest docs-builder, or specify a version tag
 
-      - name: Clone docs-builder
-        run: |
-          echo "📥 Cloning opencode-docs-builder..."
-          git clone --depth 1 https://github.com/pantheon-org/opencode-docs-builder.git docs-builder
-          echo "✅ Docs builder cloned"
-
-      - name: Install docs-builder dependencies
-        working-directory: ./docs-builder
-        run: |
-          echo "📦 Installing docs-builder dependencies..."
-          bun install --frozen-lockfile
-          echo "✅ Dependencies installed"
-
-      - name: Install Playwright browsers
-        working-directory: ./docs-builder
-        run: |
-          echo "🎭 Installing Playwright browsers..."
-          bunx playwright install --with-deps chromium
-          echo "✅ Playwright browsers installed"
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       - name: Prepare documentation structure
         run: |
           echo "📚 Preparing documentation structure..."
 
-          # Extract package metadata
-          PACKAGE_NAME=$(node -p "require('./package.json').name")
-          PACKAGE_DESC=$(node -p "require('./package.json').description || 'OpenCode Plugin'")
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          REPO_NAME="${{ github.event.repository.name }}"
-
-          echo "📦 Package: $PACKAGE_NAME"
-          echo "📝 Description: $PACKAGE_DESC"
-          echo "🏷️  Version: $PACKAGE_VERSION"
-          echo "📁 Repository: $REPO_NAME"
-
           # Create content directory
           mkdir -p docs-builder/src/content/docs
 
-          # Copy plugin documentation
-          if [ -d "docs" ]; then
+          # Copy plugin docs
+          if [ -d "plugin/docs" ]; then
             echo "✅ Copying docs/ directory..."
-            cp -r docs/* docs-builder/src/content/docs/
+            cp -r plugin/docs/* docs-builder/src/content/docs/
           else
             echo "⚠️  No docs/ directory found"
           fi
 
           # Copy README as index page
-          if [ -f "README.md" ]; then
+          if [ -f "plugin/README.md" ]; then
             echo "✅ Copying README.md as index..."
-            cp README.md docs-builder/src/content/docs/index.md
+            cp plugin/README.md docs-builder/src/content/docs/index.md
           else
             echo "⚠️  No README.md found"
           fi
 
-          # Generate Astro configuration
-          cat > docs-builder/astro.config.mjs << 'EOF'
+          # Extract package info for site config
+          cd plugin
+          PACKAGE_NAME=$(bun -e "console.log(require('./package.json').name)")
+          PACKAGE_DESC=$(bun -e "console.log(require('./package.json').description || 'OpenCode Plugin')")
+          PACKAGE_VERSION=$(bun -e "console.log(require('./package.json').version)")
+          cd ..
+
+          echo "📦 Package: $PACKAGE_NAME"
+          echo "📝 Description: $PACKAGE_DESC"
+          echo "🏷️  Version: $PACKAGE_VERSION"
+
+          # Create/update Astro config with plugin-specific settings
+          cat > docs-builder/astro.config.mjs << EOF
           import { defineConfig } from 'astro/config';
           import starlight from '@astrojs/starlight';
 
@@ -98,8 +84,8 @@ jobs:
             base: '/${{ github.event.repository.name }}',
             integrations: [
               starlight({
-                title: process.env.PACKAGE_NAME || '${{ github.event.repository.name }}',
-                description: process.env.PACKAGE_DESC || 'OpenCode Plugin Documentation',
+                title: '$PACKAGE_NAME',
+                description: '$PACKAGE_DESC',
                 social: {
                   github: 'https://github.com/${{ github.repository }}',
                 },
@@ -112,119 +98,63 @@ jobs:
                 customCss: [
                   './src/styles/custom.css',
                 ],
-                lastUpdated: true,
-                editLink: {
-                  baseUrl: 'https://github.com/${{ github.repository }}/edit/main/',
-                },
               }),
             ],
           });
           EOF
 
-          echo "✅ Astro config generated"
-
-          # Set environment variables for build
-          echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
-          echo "PACKAGE_DESC=$PACKAGE_DESC" >> $GITHUB_ENV
-          echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
+      - name: Install dependencies
+        working-directory: docs-builder
+        run: bun install
 
       - name: Transform documentation
-        working-directory: ./docs-builder
-        run: |
-          echo "🔄 Transforming documentation..."
-          bun run transform || echo "⚠️ Transform script not available, skipping..."
-          echo "✅ Documentation transformed"
+        working-directory: docs-builder
+        run: bun run transform || true # Continue if transform script doesn't exist
 
       - name: Generate favicon
-        working-directory: ./docs-builder
-        run: |
-          echo "🎨 Generating favicon..."
-          bun run generate-favicon || echo "⚠️ Favicon generation not available, skipping..."
+        working-directory: docs-builder
+        run: bun run generate-favicon || true # Continue if script doesn't exist
 
       - name: Build documentation site
-        working-directory: ./docs-builder
-        env:
-          PACKAGE_NAME: ${{ env.PACKAGE_NAME }}
-          PACKAGE_DESC: ${{ env.PACKAGE_DESC }}
-        run: |
-          echo "🏗️  Building Astro documentation site..."
-          bun run build
-          echo "✅ Documentation site built successfully"
+        working-directory: docs-builder
+        run: bun run build
 
       - name: Fix links
-        working-directory: ./docs-builder
-        run: |
-          echo "🔗 Fixing internal links..."
-          bun run fix-links || echo "⚠️ Link fixing not available, skipping..."
-
-      - name: Verify links
-        working-directory: ./docs-builder
-        run: |
-          echo "✅ Verifying internal links..."
-          bun run verify || echo "⚠️ Link verification not available, skipping..."
+        working-directory: docs-builder
+        run: bun run fix-links || true # Continue if script doesn't exist
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3.0
+        uses: actions/upload-pages-artifact@v3
         with:
           path: docs-builder/dist
 
   deploy:
-    name: Deploy to GitHub Pages
     needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4.0
-
-      - name: Display deployment URL
-        run: |
-          echo "🚀 Documentation deployed successfully!"
-          echo "📖 URL: ${{ steps.deployment.outputs.page_url }}"
+        uses: actions/deploy-pages@v4
 
   summary:
-    name: Deployment Summary
     needs: [build, deploy]
     runs-on: ubuntu-latest
     if: always()
-
     steps:
       - name: Job Summary
         run: |
           echo "## 📖 Documentation Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Repository**: \`${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Branch**: \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Repository:** \`${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           if [ "${{ needs.deploy.result }}" == "success" ]; then
-            echo "### ✅ Deployment Successful" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**URL**: ${{ needs.deploy.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### 📦 Build Process" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "1. 📥 Cloned \`opencode-docs-builder\`" >> $GITHUB_STEP_SUMMARY
-            echo "2. 📄 Copied plugin docs from \`./docs/\`" >> $GITHUB_STEP_SUMMARY
-            echo "3. 📝 Copied \`README.md\` as index page" >> $GITHUB_STEP_SUMMARY
-            echo "4. 🔄 Transformed markdown to Astro content" >> $GITHUB_STEP_SUMMARY
-            echo "5. 🏗️  Built static site with Starlight" >> $GITHUB_STEP_SUMMARY
-            echo "6. 🔗 Fixed and verified internal links" >> $GITHUB_STEP_SUMMARY
-            echo "7. 🚀 Deployed to GitHub Pages" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **Status:** Documentation deployed successfully" >> $GITHUB_STEP_SUMMARY
+            echo "🔗 **URL:** ${{ needs.deploy.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
           else
-            echo "### ❌ Deployment Failed" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "Check the build logs above for error details" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### Common Issues" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "- GitHub Pages not enabled (Settings > Pages > Source: GitHub Actions)" >> $GITHUB_STEP_SUMMARY
-            echo "- Invalid markdown in docs directory" >> $GITHUB_STEP_SUMMARY
-            echo "- Missing or corrupted README.md" >> $GITHUB_STEP_SUMMARY
-            echo "- docs-builder repository unavailable" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **Status:** Deployment failed" >> $GITHUB_STEP_SUMMARY
           fi

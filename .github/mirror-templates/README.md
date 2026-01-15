@@ -1,60 +1,7 @@
 # Mirror Repository CI/CD Templates
 
-This directory contains GitHub Actions workflow templates and composite actions that are automatically added to mirror
-repositories when plugins are released.
-
-## Directory Structure
-
-```
-.github/mirror-templates/
-├── actions/
-│   ├── setup-bun/
-│   │   └── action.yml           # Composite action for Bun setup with caching
-│   └── setup-node-npm/
-│       └── action.yml           # Composite action for Node.js + npm setup
-├── publish-npm.yml              # Workflow for npm publishing
-├── deploy-docs.yml              # Workflow for GitHub Pages deployment
-└── README.md                    # This file
-```
-
-## Composite Actions
-
-### setup-bun
-
-Composite action that sets up Bun with dependency caching for faster workflow runs.
-
-**Inputs:**
-
-- `bun-version` (optional, default: 'latest') - Bun version to install
-- `frozen-lockfile` (optional, default: 'true') - Use frozen lockfile for installation
-
-**Usage in workflows:**
-
-```yaml
-- name: Setup Bun with caching
-  uses: ./.github/actions/setup-bun
-  with:
-    bun-version: 'latest'
-    frozen-lockfile: 'true'
-```
-
-### setup-node-npm
-
-Composite action that configures Node.js and npm authentication for publishing packages.
-
-**Inputs:**
-
-- `node-version` (optional, default: '20') - Node.js version to install
-- `registry-url` (optional, default: 'https://registry.npmjs.org') - npm registry URL
-
-**Usage in workflows:**
-
-```yaml
-- name: Setup Node.js for npm
-  uses: ./.github/actions/setup-node-npm
-  with:
-    node-version: '20'
-```
+This directory contains GitHub Actions workflow templates that are automatically added to mirror repositories when
+plugins are released.
 
 ## Workflows
 
@@ -174,68 +121,6 @@ bun run build
 2. Check that workflows were committed to main branch
 3. Verify repository has Actions enabled (Settings > Actions)
 4. Check workflow run history for error messages
-
-## Action Version Management
-
-Mirror templates use **minor version pinning** for GitHub Actions:
-
-- **Format:** `action@vX.Y` (e.g., `setup-bun@v2.0`, `checkout@v4.2`)
-- **Why:** Allows automatic patch updates while protecting from breaking major changes
-- **Security:** Balances stability and security for frequently-regenerated files
-
-### Current Action Versions
-
-| Action                          | Version | Notes                 |
-| ------------------------------- | ------- | --------------------- |
-| `oven-sh/setup-bun`             | `v2.0`  | Bun setup             |
-| `actions/setup-node`            | `v4.1`  | Node.js setup         |
-| `actions/cache`                 | `v4.1`  | Dependency caching    |
-| `actions/checkout`              | `v4.2`  | Repository checkout   |
-| `actions/upload-pages-artifact` | `v3.0`  | Pages artifact upload |
-| `actions/deploy-pages`          | `v4.0`  | Pages deployment      |
-
-### Updating Action Versions
-
-To update action versions:
-
-1. **Check generator versions** (source of truth):
-
-   ```bash
-   cat tools/generators/plugin/src/github-action-versions/index.ts
-   ```
-
-2. **Update mirror templates** to match minor versions:
-   - `actions/setup-bun/action.yml`
-   - `actions/setup-node-npm/action.yml`
-   - `publish-npm.yml`
-   - `deploy-docs.yml`
-
-3. **Test with a plugin release:**
-
-   ```bash
-   git tag opencode-test-plugin@v0.0.X
-   git push origin opencode-test-plugin@v0.0.X
-   ```
-
-4. **Verify** workflows run successfully in mirror repository
-
-### Version Strategy Comparison
-
-| Approach             | Generator Templates       | Mirror Templates    |
-| -------------------- | ------------------------- | ------------------- |
-| **Pinning Method**   | SHA-pinned                | Minor version       |
-| **Example**          | `@sha123abc`              | `@v4.1`             |
-| **Security**         | Highest                   | Good                |
-| **Maintenance**      | Manual SHA updates        | Automatic patches   |
-| **Update Frequency** | On plugin creation/update | On each mirror push |
-
-**Why different?**
-
-- Generator templates need maximum security for long-term standalone use
-- Mirror templates are regenerated on each release, making manual updates acceptable
-- Minor version pinning provides good balance of stability and maintenance
-
-See `.github/GENERATOR_VS_MIRROR_ANALYSIS.md` for detailed comparison.
 
 ## Customization
 

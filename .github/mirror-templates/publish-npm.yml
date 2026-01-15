@@ -6,166 +6,58 @@ on:
       - main
     tags:
       - 'v*'
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  id-token: write # Required for npm provenance
 
 jobs:
   publish:
-    name: Publish to npm
     runs-on: ubuntu-latest
-
-    outputs:
-      published: ${{ steps.publish.outputs.published }}
-      package-url: ${{ steps.publish.outputs.package-url }}
-
+    permissions:
+      contents: read
+      id-token: write # Required for npm provenance
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.2
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          fetch-depth: 0
+          bun-version: latest
 
-      - name: Setup Bun with caching
-        uses: ./.github/actions/setup-bun
+      - name: Install dependencies
+        run: bun install
 
-      - name: Setup Node.js for npm
-        uses: ./.github/actions/setup-node-npm
+      - name: Run type check
+        run: bun run type-check
+        continue-on-error: true # Some plugins may not have this script
 
-      - name: Run validation pipeline
-        run: |
-          echo "🔍 Running linter..."
-          bun run lint || echo "⚠️ Lint script not found, skipping..."
+      - name: Run tests
+        run: bun test
+        continue-on-error: false
 
-          echo "📝 Type checking..."
-          bun run type-check || echo "⚠️ Type-check script not found, skipping..."
-
-          echo "🧪 Running tests..."
-          bun test || echo "⚠️ Tests not found, skipping..."
-
-          echo "🏗️ Building project..."
-          bun run build
+      - name: Build package
+        run: bun run build
 
       - name: Verify package contents
-        run: |
-          echo "📦 Verifying package contents..."
-          npm pack --dry-run
-          echo "✅ Package verification complete"
+        run: bun run verify:package || npm pack --dry-run
 
-      - name: Check if already published
-        id: check-npm
+      - name: Setup Node.js (for npm publish)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Publish to npm (tag releases)
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          PACKAGE_NAME=$(node -p "require('./package.json').name")
-          VERSION=$(node -p "require('./package.json').version")
 
-          echo "🔍 Checking if $PACKAGE_NAME@$VERSION exists on npm..."
-
-          # Try to check if version exists
-          NPM_CHECK=$(npm view "$PACKAGE_NAME@$VERSION" version 2>&1 || true)
-
-          if echo "$NPM_CHECK" | grep -q "E404"; then
-            echo "✅ Version $VERSION not yet published"
-            echo "published=false" >> $GITHUB_OUTPUT
-            echo "version=$VERSION" >> $GITHUB_OUTPUT
-            echo "package-name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
-          elif echo "$NPM_CHECK" | grep -q "$VERSION"; then
-            echo "⚠️ Version $VERSION already published to npm"
-            echo "published=true" >> $GITHUB_OUTPUT
-            echo "version=$VERSION" >> $GITHUB_OUTPUT
-            echo "package-name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
-          else
-            echo "ℹ️ Could not determine publication status, attempting publish..."
-            echo "published=false" >> $GITHUB_OUTPUT
-            echo "version=$VERSION" >> $GITHUB_OUTPUT
-            echo "package-name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Publish to npm (tag releases only)
-        id: publish
-        if: startsWith(github.ref, 'refs/tags/v') && steps.check-npm.outputs.published == 'false'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          PACKAGE_NAME="${{ steps.check-npm.outputs.package-name }}"
-          VERSION="${{ steps.check-npm.outputs.version }}"
-
-          echo "🚀 Publishing $PACKAGE_NAME@$VERSION to npm..."
-
-          if [ -z "$NODE_AUTH_TOKEN" ]; then
-            echo "❌ Error: NPM_TOKEN secret is not set!"
-            echo "Please configure NPM_TOKEN in repository secrets:"
-            echo "  Settings > Secrets and variables > Actions > New repository secret"
-            echo "  Name: NPM_TOKEN"
-            echo "  Value: Your npm automation token with publish permissions"
-            echo ""
-            echo "Create token at: https://www.npmjs.com/settings/~/tokens"
-            exit 1
-          fi
-
-          # Publish with provenance
-          if npm publish --access public --provenance; then
-            echo "✅ Successfully published $PACKAGE_NAME@$VERSION"
-            echo "published=true" >> $GITHUB_OUTPUT
-            echo "package-url=https://www.npmjs.com/package/$PACKAGE_NAME/v/$VERSION" >> $GITHUB_OUTPUT
-          else
-            NPM_EXIT_CODE=$?
-            echo "❌ npm publish failed with exit code: $NPM_EXIT_CODE"
-            echo ""
-            echo "Common causes:"
-            echo "  1. NPM_TOKEN is expired or invalid"
-            echo "  2. Token lacks publish permissions"
-            echo "  3. Version already published (check npm registry)"
-            echo "  4. Package name requires authentication"
-            echo ""
-            echo "Fix: Update NPM_TOKEN with a valid granular access token"
-            exit $NPM_EXIT_CODE
-          fi
-
-      - name: Verify npm publication
-        if: steps.publish.outputs.published == 'true'
-        run: |
-          PACKAGE_NAME="${{ steps.check-npm.outputs.package-name }}"
-          VERSION="${{ steps.check-npm.outputs.version }}"
-
-          echo "🔍 Verifying npm publication..."
-
-          for i in {1..6}; do
-            echo "Attempt $i/6..."
-            if npm view "$PACKAGE_NAME@$VERSION" version >/dev/null 2>&1; then
-              echo "✅ Package verified on npm: $PACKAGE_NAME@$VERSION"
-              exit 0
-            fi
-            
-            if [ $i -lt 6 ]; then
-              echo "⏳ Waiting 15 seconds for npm propagation..."
-              sleep 15
-            fi
-          done
-
-          echo "⚠️ Could not verify package (may still be propagating)"
-          echo "Check manually: https://www.npmjs.com/package/$PACKAGE_NAME"
-
-      - name: Dry run summary
+      - name: Publish to npm (main branch - dry run)
         if: github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-        run: |
-          echo "## 🔍 Publish Dry Run" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "This was a dry run on the main branch." >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Package**: \`${{ steps.check-npm.outputs.package-name }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Version**: \`${{ steps.check-npm.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "To publish, push a version tag:" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
-          echo "git tag v${{ steps.check-npm.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "git push origin v${{ steps.check-npm.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        run: npm publish --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   summary:
-    name: Publish Summary
     needs: publish
     runs-on: ubuntu-latest
     if: always()
@@ -174,33 +66,16 @@ jobs:
         run: |
           echo "## 📦 npm Publish Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Trigger**: \`${{ github.ref }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger:** \`${{ github.ref }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           if [ "${{ needs.publish.result }}" == "success" ]; then
             if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
-              if [ "${{ needs.publish.outputs.published }}" == "true" ]; then
-                echo "### ✅ Package Published Successfully" >> $GITHUB_STEP_SUMMARY
-                echo "" >> $GITHUB_STEP_SUMMARY
-                echo "**URL**: ${{ needs.publish.outputs.package-url }}" >> $GITHUB_STEP_SUMMARY
-                echo "" >> $GITHUB_STEP_SUMMARY
-                echo "**Install**:" >> $GITHUB_STEP_SUMMARY
-                echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
-                echo "npm install ${{ needs.publish.outputs.package-name }}" >> $GITHUB_STEP_SUMMARY
-                echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-              else
-                echo "### ℹ️ Already Published" >> $GITHUB_STEP_SUMMARY
-                echo "" >> $GITHUB_STEP_SUMMARY
-                echo "This version was already published to npm" >> $GITHUB_STEP_SUMMARY
-              fi
+              echo "✅ **Status:** Package published to npm successfully" >> $GITHUB_STEP_SUMMARY
             else
-              echo "### ✅ Build Successful" >> $GITHUB_STEP_SUMMARY
-              echo "" >> $GITHUB_STEP_SUMMARY
-              echo "Dry-run completed successfully" >> $GITHUB_STEP_SUMMARY
+              echo "✅ **Status:** Build and dry-run successful" >> $GITHUB_STEP_SUMMARY
             fi
           else
-            echo "### ❌ Publish Failed" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "Check the logs above for error details" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **Status:** Publish failed" >> $GITHUB_STEP_SUMMARY
           fi

@@ -57,8 +57,7 @@ Enhanced with:
    ├─> Detects changes since last tag
    ├─> Extracts plugin directory (git subtree split)
    ├─> Adds CI/CD workflows from templates
-   ├─> Pushes to mirror repository
-   └─> Enables GitHub Pages with workflow build type (via API)
+   └─> Pushes to mirror repository
 
 3. Mirror repository receives code + workflows
    ├─> publish-npm.yml triggers on tag push
@@ -97,7 +96,7 @@ Enhanced with:
 
 ## Requirements for First-Time Setup
 
-For existing mirror repositories, you only need to:
+For existing mirror repositories, you need to:
 
 1. **Add npm token secret:**
 
@@ -106,13 +105,18 @@ For existing mirror repositories, you only need to:
    Add secret: NPM_TOKEN (npm automation token with publish access)
    ```
 
-2. **Trigger a new release** to get the workflows and enable GitHub Pages:
+2. **Enable GitHub Pages:**
+
+   ```
+   Go to mirror repo Settings > Pages
+   Set Source to "GitHub Actions"
+   ```
+
+3. **Trigger a new release** to get the workflows:
    ```bash
    git tag opencode-my-plugin@v1.0.1
    git push origin opencode-my-plugin@v1.0.1
    ```
-
-**Note:** GitHub Pages is now automatically enabled via API during the mirror workflow. No manual configuration needed!
 
 ## Testing Plan
 
