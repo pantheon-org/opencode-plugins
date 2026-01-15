@@ -1,0 +1,175 @@
+# Mirror Package Scripts
+
+TypeScript utilities for the `mirror-packages.yml` GitHub Actions workflow.
+
+## Overview
+
+These scripts replace bash inline scripts with maintainable, testable TypeScript code for the mirror package workflow.
+
+## Scripts
+
+### `parse-tag.ts`
+
+Parses a git tag to extract package information.
+
+**Format**: `<package-name>@v<version>`  
+**Example**: `opencode-my-plugin@v1.0.0`
+
+**Usage:**
+
+```bash
+bun run parse-tag.ts <tag>
+# or via environment variable
+GITHUB_REF=refs/tags/opencode-my-plugin@v1.0.0 bun run parse-tag.ts
+```
+
+**Outputs:**
+
+- `package`: Package name (e.g., `opencode-my-plugin`)
+- `dir`: Package directory (e.g., `packages/opencode-my-plugin`)
+- `version`: Version tag (e.g., `v1.0.0`)
+
+### `validate-mirror-url.ts`
+
+Extracts and validates the mirror repository URL from package.json.
+
+**Usage:**
+
+```bash
+bun run validate-mirror-url.ts <path-to-package.json>
+```
+
+**Outputs:**
+
+- `url`: Clean GitHub repository URL (e.g., `https://github.com/org/repo`)
+- `owner`: Repository owner
+- `repo`: Repository name
+
+**Validation:**
+
+- Checks if package.json exists
+- Verifies repository field is present
+- Converts git URLs to HTTPS format
+- Extracts owner and repo from GitHub URL
+
+### `detect-changes.ts`
+
+Detects changes in a package directory since the last version tag.
+
+**Usage:**
+
+```bash
+bun run detect-changes.ts <package-name> <package-dir>
+```
+
+**Outputs:**
+
+- `has-changes`: `true` or `false`
+
+**Logic:**
+
+- Finds previous version tag for the package
+- Compares current HEAD with previous tag
+- Lists changed files (up to 20)
+- Returns `true` for first release (no previous tag)
+
+### `enable-github-pages.ts`
+
+Enables or updates GitHub Pages configuration via the GitHub API using Octokit.
+
+**Usage:**
+
+```bash
+bun run enable-github-pages.ts <owner> <repo> [token]
+# or via environment variable
+MIRROR_REPO_TOKEN=ghp_xxx bun run enable-github-pages.ts <owner> <repo>
+```
+
+**Configuration:**
+
+- `build_type`: `workflow` (GitHub Actions deployment)
+- `source.branch`: `main`
+- `source.path`: `/`
+
+**Implementation:**
+
+- Uses `@octokit/rest` for type-safe GitHub API calls
+- Leverages `withRetry` utility for resilient API calls
+- Creates Pages site with `octokit.rest.repos.createPagesSite()`
+- Updates configuration with `octokit.rest.repos.updateInformationAboutPagesSite()`
+
+**Behavior:**
+
+- Creates Pages site if it doesn't exist (201)
+- Updates configuration if it already exists (409 → 204)
+- Non-blocking: warns on failure but exits with code 0
+
+## Types
+
+All types are defined in `types.ts`:
+
+- `PackageInfo`: Package name, version, directory
+- `MirrorUrl`: Repository URL, owner, repo
+- `ChangeDetection`: Has changes, previous tag, list of changes
+- `EnablePagesResult`: Success status, message, HTTP code
+- `GitHubPagesConfig`: GitHub Pages API configuration
+
+## Testing
+
+Run tests with:
+
+```bash
+bun test src/scripts/mirror-package/
+```
+
+## Workflow Integration
+
+These scripts are used by `.github/workflows/mirror-packages.yml`:
+
+```yaml
+- name: Parse tag to get package name
+  id: parse
+  run: bun run apps/workflows/src/scripts/mirror-package/parse-tag.ts
+
+- name: Validate mirror repository URL
+  id: validate
+  run:
+    bun run apps/workflows/src/scripts/mirror-package/validate-mirror-url.ts "packages/${{ steps.parse.outputs.package
+    }}/package.json"
+
+- name: Detect changes in package
+  id: changes
+  run:
+    bun run apps/workflows/src/scripts/mirror-package/detect-changes.ts "${{ steps.parse.outputs.package }}" "${{
+    steps.parse.outputs.dir }}"
+
+- name: Enable GitHub Pages
+  env:
+    MIRROR_REPO_TOKEN: ${{ secrets.MIRROR_REPO_TOKEN }}
+  run: |
+    OWNER=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/\([^/]*\)/.*|\1|p')
+    REPO=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/[^/]*/\(.*\)|\1|p')
+    bun run apps/workflows/src/scripts/mirror-package/enable-github-pages.ts "$OWNER" "$REPO"
+```
+
+## Benefits
+
+1. **Type Safety**: Full TypeScript type checking
+2. **Testable**: Unit tests for all logic
+3. **Maintainable**: Clear separation of concerns
+4. **Reusable**: Can be used outside GitHub Actions
+5. **Error Handling**: Better error messages and handling
+6. **Documentation**: JSDoc comments and type definitions
+
+## Development
+
+Follow the project's TypeScript standards:
+
+- Use strict mode
+- One function per module principle
+- Export functions for testability
+- Include JSDoc comments
+- Write tests for all logic
+
+See [Bun and TypeScript Development Standards](../../../../../.opencode/knowledge-base/bun-typescript-development.md)
+for details.
