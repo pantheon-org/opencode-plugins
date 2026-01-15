@@ -1,0 +1,160 @@
+name: Deploy Documentation to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch: # Allow manual trigger
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout plugin repo
+        uses: actions/checkout@v4
+        with:
+          path: plugin
+
+      - name: Checkout docs-builder
+        uses: actions/checkout@v4
+        with:
+          repository: pantheon-org/opencode-docs-builder
+          path: docs-builder
+          ref: main # Use latest docs-builder, or specify a version tag
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Prepare documentation structure
+        run: |
+          echo "📚 Preparing documentation structure..."
+
+          # Create content directory
+          mkdir -p docs-builder/src/content/docs
+
+          # Copy plugin docs
+          if [ -d "plugin/docs" ]; then
+            echo "✅ Copying docs/ directory..."
+            cp -r plugin/docs/* docs-builder/src/content/docs/
+          else
+            echo "⚠️  No docs/ directory found"
+          fi
+
+          # Copy README as index page
+          if [ -f "plugin/README.md" ]; then
+            echo "✅ Copying README.md as index..."
+            cp plugin/README.md docs-builder/src/content/docs/index.md
+          else
+            echo "⚠️  No README.md found"
+          fi
+
+          # Extract package info for site config
+          cd plugin
+          PACKAGE_NAME=$(bun -e "console.log(require('./package.json').name)")
+          PACKAGE_DESC=$(bun -e "console.log(require('./package.json').description || 'OpenCode Plugin')")
+          PACKAGE_VERSION=$(bun -e "console.log(require('./package.json').version)")
+          cd ..
+
+          echo "📦 Package: $PACKAGE_NAME"
+          echo "📝 Description: $PACKAGE_DESC"
+          echo "🏷️  Version: $PACKAGE_VERSION"
+
+          # Create/update Astro config with plugin-specific settings
+          cat > docs-builder/astro.config.mjs << EOF
+          import { defineConfig } from 'astro/config';
+          import starlight from '@astrojs/starlight';
+
+          export default defineConfig({
+            site: 'https://pantheon-org.github.io',
+            base: '/${{ github.event.repository.name }}',
+            integrations: [
+              starlight({
+                title: '$PACKAGE_NAME',
+                description: '$PACKAGE_DESC',
+                social: {
+                  github: 'https://github.com/${{ github.repository }}',
+                },
+                sidebar: [
+                  {
+                    label: 'Documentation',
+                    autogenerate: { directory: '.' },
+                  },
+                ],
+                customCss: [
+                  './src/styles/custom.css',
+                ],
+              }),
+            ],
+          });
+          EOF
+
+      - name: Install dependencies
+        working-directory: docs-builder
+        run: bun install
+
+      - name: Transform documentation
+        working-directory: docs-builder
+        run: bun run transform || true # Continue if transform script doesn't exist
+
+      - name: Generate favicon
+        working-directory: docs-builder
+        run: bun run generate-favicon || true # Continue if script doesn't exist
+
+      - name: Build documentation site
+        working-directory: docs-builder
+        run: bun run build
+
+      - name: Fix links
+        working-directory: docs-builder
+        run: bun run fix-links || true # Continue if script doesn't exist
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs-builder/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  summary:
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Job Summary
+        run: |
+          echo "## 📖 Documentation Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Repository:** \`${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.deploy.result }}" == "success" ]; then
+            echo "✅ **Status:** Documentation deployed successfully" >> $GITHUB_STEP_SUMMARY
+            echo "🔗 **URL:** ${{ needs.deploy.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Status:** Deployment failed" >> $GITHUB_STEP_SUMMARY
+          fi

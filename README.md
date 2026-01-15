@@ -143,7 +143,9 @@ git push origin <plugin-name>@v1.0.0
 # 2. Validates package.json has repository URL
 # 3. Checks if package has changes since last tag
 # 4. If changes exist: extracts packages/<plugin>/ and pushes to mirror repo
-# 5. Mirror repo publishes to npm + deploys docs (pulling docs-builder)
+# 5. Adds CI/CD workflows (publish-npm.yml, deploy-docs.yml) to mirror repo
+# 6. Mirror repo automatically publishes to npm on tag push
+# 7. Mirror repo automatically deploys docs to GitHub Pages
 ```
 
 ### Docs Builder Releases
@@ -157,7 +159,7 @@ git push origin docs-builder@v1.0.0
 # 1. Workflow detects docs-builder tag
 # 2. Checks for changes in apps/docs-builder/
 # 3. If changes exist: extracts apps/docs-builder/ and pushes to mirror repo
-# 4. Plugins can pull the new version during their next deployment
+# 4. Plugins automatically pull the latest docs-builder during their deployment
 ```
 
 ### Mirror Workflow Features
@@ -169,11 +171,32 @@ The `mirror-packages.yml` workflow automatically:
 - **Detects changes** by comparing with previous version tag
 - **Skips mirroring** if no changes detected (saves CI time)
 - **Extracts subtree** using `git subtree split`
-- **Pushes to mirror** repository's `main` branch and creates version tag
+- **Adds CI/CD workflows** from `.github/mirror-templates/` to enable npm publishing and docs deployment
+- **Pushes to mirror** repository's `main` branch and creates version tag (uses `--force-with-lease` for safety)
 
-**Requirements for each plugin:**
+### Mirror Repository Automation
 
-1. Package must have `repository.url` in `package.json`:
+Each mirror repository automatically receives two GitHub Actions workflows:
+
+1. **`publish-npm.yml`** - Publishes package to npm when tags are pushed
+   - Runs on `main` branch pushes (dry-run) and `v*` tags (actual publish)
+   - Executes tests and type checking before publishing
+   - Uses npm provenance for supply chain security
+   - Requires `NPM_TOKEN` secret in mirror repo
+
+2. **`deploy-docs.yml`** - Deploys documentation to GitHub Pages
+   - Clones the shared `opencode-docs-builder` repository
+   - Copies plugin docs and README into docs-builder structure
+   - Generates custom Astro config with plugin-specific metadata
+   - Builds and deploys to GitHub Pages
+   - Accessible at: `https://pantheon-org.github.io/<plugin-name>/`
+
+### Requirements for Mirror Repositories
+
+**For each plugin package:**
+
+1. **Repository URL in package.json:**
+
    ```json
    {
      "repository": {
@@ -182,8 +205,36 @@ The `mirror-packages.yml` workflow automatically:
      }
    }
    ```
-2. Mirror repository must exist and `MIRROR_REPO_TOKEN` must have write access
-3. Tag format must be: `<package-name>@v<version>` (e.g., `opencode-foo-plugin@v1.0.0`)
+
+2. **Mirror repository must exist** at the URL specified in `repository.url`
+
+3. **GitHub Secrets configured:**
+   - `MIRROR_REPO_TOKEN` - Personal access token with repo write access (in monorepo)
+   - `NPM_TOKEN` - npm automation token with publish access (in mirror repo)
+
+4. **GitHub Pages enabled:**
+   - Go to mirror repo `Settings > Pages`
+   - Set source to "GitHub Actions"
+
+5. **Tag format:** `<package-name>@v<version>` (e.g., `opencode-foo-plugin@v1.0.0`)
+
+### Mirror Repository Structure
+
+After mirroring, each repository contains:
+
+```
+<plugin-name>/
+├── .github/
+│   └── workflows/
+│       ├── publish-npm.yml      # Auto-added by mirror workflow
+│       └── deploy-docs.yml      # Auto-added by mirror workflow
+├── docs/                        # Plugin documentation
+├── src/                         # Plugin source code
+├── dist/                        # Built output (generated)
+├── package.json                 # Package configuration
+├── tsconfig.json                # TypeScript config
+└── README.md                    # Main documentation
+```
 
 ## Resources
 

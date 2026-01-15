@@ -128,6 +128,26 @@ jobs:
           git subtree split --prefix=${{ needs.detect-package.outputs.package-dir }} -b temp-branch
           echo "✅ Subtree split complete"
 
+      - name: Add CI/CD workflows to mirror
+        run: |
+          echo "📋 Adding CI/CD workflows to mirror branch..."
+          git checkout temp-branch
+
+          # Create .github/workflows directory
+          mkdir -p .github/workflows
+
+          # Copy workflow templates from monorepo
+          cp .github/mirror-templates/publish-npm.yml .github/workflows/
+          cp .github/mirror-templates/deploy-docs.yml .github/workflows/
+
+          # Commit the workflows
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add .github/workflows
+          git commit -m "chore: add CI/CD workflows for npm publishing and docs deployment" || echo "No changes to commit"
+
+          echo "✅ Workflows added to temp-branch"
+
       - name: Push to mirror repo
         env:
           MIRROR_REPO_TOKEN: ${{ secrets.MIRROR_REPO_TOKEN }}
@@ -147,7 +167,7 @@ jobs:
           git remote add mirror "$GIT_URL"
 
           echo "⬆️  Pushing to mirror repository main branch..."
-          git push mirror temp-branch:main --force
+          git push mirror temp-branch:main --force-with-lease || git push mirror temp-branch:main --force
 
           echo "🏷️  Pushing version tag $VERSION..."
           git push mirror temp-branch:refs/tags/${VERSION} --force

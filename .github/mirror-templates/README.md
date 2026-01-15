@@ -1,0 +1,134 @@
+# Mirror Repository CI/CD Templates
+
+This directory contains GitHub Actions workflow templates that are automatically added to mirror repositories when
+plugins are released.
+
+## Workflows
+
+### publish-npm.yml
+
+Automatically publishes the plugin to npm when version tags are pushed.
+
+**Triggers:**
+
+- On push to `main` branch (dry-run only)
+- On push of `v*` tags (actual publish)
+
+**Steps:**
+
+1. Checkout code
+2. Setup Bun and Node.js
+3. Install dependencies
+4. Run type checking (if available)
+5. Run tests
+6. Build package
+7. Verify package contents
+8. Publish to npm (with provenance)
+
+**Required Secrets:**
+
+- `NPM_TOKEN` - npm automation token with publish access
+
+### deploy-docs.yml
+
+Deploys plugin documentation to GitHub Pages using the shared docs-builder.
+
+**Triggers:**
+
+- On push to `main` branch
+- On push of `v*` tags
+- Manual workflow dispatch
+
+**Steps:**
+
+1. Checkout plugin repository
+2. Checkout `opencode-docs-builder` repository
+3. Copy plugin docs and README
+4. Generate Astro config with plugin metadata
+5. Build documentation site
+6. Deploy to GitHub Pages
+
+**Required Settings:**
+
+- GitHub Pages must be enabled (Settings > Pages > Source: GitHub Actions)
+
+## How It Works
+
+When you tag a plugin release in the monorepo:
+
+```bash
+git tag opencode-my-plugin@v1.0.0
+git push origin opencode-my-plugin@v1.0.0
+```
+
+The `mirror-packages.yml` workflow:
+
+1. Extracts the plugin directory using `git subtree split`
+2. Checks out the temporary branch
+3. Copies these workflow files to `.github/workflows/`
+4. Commits the workflows
+5. Pushes to the mirror repository
+
+The mirror repository then automatically:
+
+- Publishes to npm when the tag is pushed
+- Deploys docs to GitHub Pages
+
+## Testing Locally
+
+### Test npm Publishing
+
+```bash
+# In the mirror repository
+npm publish --dry-run
+```
+
+### Test Docs Deployment
+
+```bash
+# Clone the docs-builder
+git clone https://github.com/pantheon-org/opencode-docs-builder.git
+
+# Copy your docs
+cp -r docs/ opencode-docs-builder/src/content/docs/
+cp README.md opencode-docs-builder/src/content/docs/index.md
+
+# Build
+cd opencode-docs-builder
+bun install
+bun run build
+```
+
+## Troubleshooting
+
+### npm Publish Fails
+
+1. Verify `NPM_TOKEN` secret is set in mirror repository
+2. Check that the token has publish access
+3. Verify package name is not already taken
+4. Check that `package.json` has correct `name` and `version`
+
+### Docs Deployment Fails
+
+1. Verify GitHub Pages is enabled (Settings > Pages)
+2. Check that `opencode-docs-builder` repository is accessible
+3. Verify docs/ directory exists in plugin
+4. Check Astro build logs for errors
+
+### Workflows Not Running
+
+1. Verify `.github/workflows/` directory exists in mirror repo
+2. Check that workflows were committed to main branch
+3. Verify repository has Actions enabled (Settings > Actions)
+4. Check workflow run history for error messages
+
+## Customization
+
+If you need to customize these workflows for a specific plugin:
+
+1. Edit the workflows in `.github/mirror-templates/` in the monorepo
+2. Push a new tag to trigger the mirror sync
+3. The updated workflows will be added to all future mirror syncs
+
+**Note:** Existing mirror repositories will not automatically receive updates. You'll need to manually copy the updated
+workflows or trigger a new release.
