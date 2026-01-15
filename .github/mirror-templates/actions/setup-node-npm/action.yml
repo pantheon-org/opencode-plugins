@@ -1,0 +1,29 @@
+name: 'Setup Node.js for npm Publishing'
+description: 'Configures Node.js and npm authentication for publishing packages'
+
+inputs:
+  node-version:
+    description: 'Node.js version to install'
+    required: false
+    default: '20'
+  registry-url:
+    description: 'npm registry URL'
+    required: false
+    default: 'https://registry.npmjs.org'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        registry-url: ${{ inputs.registry-url }}
+        cache: 'npm'
+        cache-dependency-path: package-lock.json
+
+    - name: Configure npm authentication
+      shell: bash
+      run: |
+        echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" > ~/.npmrc
+        echo "✅ npm authentication configured"

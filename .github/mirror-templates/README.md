@@ -1,7 +1,60 @@
 # Mirror Repository CI/CD Templates
 
-This directory contains GitHub Actions workflow templates that are automatically added to mirror repositories when
-plugins are released.
+This directory contains GitHub Actions workflow templates and composite actions that are automatically added to mirror
+repositories when plugins are released.
+
+## Directory Structure
+
+```
+.github/mirror-templates/
+├── actions/
+│   ├── setup-bun/
+│   │   └── action.yml           # Composite action for Bun setup with caching
+│   └── setup-node-npm/
+│       └── action.yml           # Composite action for Node.js + npm setup
+├── publish-npm.yml              # Workflow for npm publishing
+├── deploy-docs.yml              # Workflow for GitHub Pages deployment
+└── README.md                    # This file
+```
+
+## Composite Actions
+
+### setup-bun
+
+Composite action that sets up Bun with dependency caching for faster workflow runs.
+
+**Inputs:**
+
+- `bun-version` (optional, default: 'latest') - Bun version to install
+- `frozen-lockfile` (optional, default: 'true') - Use frozen lockfile for installation
+
+**Usage in workflows:**
+
+```yaml
+- name: Setup Bun with caching
+  uses: ./.github/actions/setup-bun
+  with:
+    bun-version: 'latest'
+    frozen-lockfile: 'true'
+```
+
+### setup-node-npm
+
+Composite action that configures Node.js and npm authentication for publishing packages.
+
+**Inputs:**
+
+- `node-version` (optional, default: '20') - Node.js version to install
+- `registry-url` (optional, default: 'https://registry.npmjs.org') - npm registry URL
+
+**Usage in workflows:**
+
+```yaml
+- name: Setup Node.js for npm
+  uses: ./.github/actions/setup-node-npm
+  with:
+    node-version: '20'
+```
 
 ## Workflows
 
