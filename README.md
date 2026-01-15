@@ -209,12 +209,10 @@ Each mirror repository automatically receives two GitHub Actions workflows:
 2. **Mirror repository must exist** at the URL specified in `repository.url`
 
 3. **GitHub Secrets configured:**
-   - `MIRROR_REPO_TOKEN` - Personal access token with repo write access (in monorepo)
+   - `MIRROR_REPO_TOKEN` - Personal access token with `repo` scope and `Pages: write` permissions (in monorepo)
    - `NPM_TOKEN` - npm automation token with publish access (in mirror repo)
 
-4. **GitHub Pages enabled:**
-   - Go to mirror repo `Settings > Pages`
-   - Set source to "GitHub Actions"
+4. **GitHub Pages:** Automatically enabled by mirror workflow with GitHub Actions as build source
 
 5. **Tag format:** `<package-name>@v<version>` (e.g., `opencode-foo-plugin@v1.0.0`)
 
