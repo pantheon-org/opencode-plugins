@@ -1,13 +1,15 @@
 #!/usr/bin/env bun
 
-import { $ } from 'bun';
 import { writeFile } from 'node:fs/promises';
+
+import { $ } from 'bun';
+
 import type { ChangeDetection } from './types';
 
 /**
  * Detect changes in a package directory since the last version tag
  */
-export async function detectChanges(packageName: string, packageDir: string): Promise<ChangeDetection> {
+export const detectChanges = async (packageName: string, packageDir: string): Promise<ChangeDetection> => {
   // Get the previous tag for this package
   const tagPattern = `${packageName}@v*`;
 
@@ -34,19 +36,19 @@ export async function detectChanges(packageName: string, packageDir: string): Pr
       previousTag,
       changes,
     };
-  } catch (error) {
+  } catch {
     // If git command fails, assume changes exist (safe default)
     return {
       hasChanges: true,
       previousTag: undefined,
     };
   }
-}
+};
 
 /**
  * Set GitHub Actions output
  */
-async function setOutput(name: string, value: string): Promise<void> {
+const setOutput = async (name: string, value: string): Promise<void> => {
   const githubOutput = process.env.GITHUB_OUTPUT;
   if (!githubOutput) {
     console.log(`${name}=${value}`);
@@ -57,12 +59,12 @@ async function setOutput(name: string, value: string): Promise<void> {
     flag: 'a',
     encoding: 'utf-8',
   });
-}
+};
 
 /**
  * Main entry point
  */
-async function main(): Promise<void> {
+const main = async (): Promise<void> => {
   const packageName = process.argv[2];
   const packageDir = process.argv[3];
 
@@ -107,7 +109,7 @@ async function main(): Promise<void> {
     console.error('❌ Failed to detect changes:', message);
     process.exit(1);
   }
-}
+};
 
 // Run if executed directly
 if (require.main === module) {

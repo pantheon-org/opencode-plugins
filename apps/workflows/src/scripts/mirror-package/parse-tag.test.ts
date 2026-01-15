@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'bun:test';
+
 import { parseTag } from './parse-tag';
 
 describe('parseTag', () => {
