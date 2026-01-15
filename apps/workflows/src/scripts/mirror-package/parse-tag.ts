@@ -1,15 +1,16 @@
 #!/usr/bin/env bun
 
-import { writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
+import { writeFile } from 'node:fs/promises';
+
 import type { PackageInfo } from './types';
 
 /**
  * Parse a git tag to extract package information
- * Format: <package-name>@v<version>
- * Example: opencode-my-plugin@v1.0.0
+ * Format: `<package-name>\@v<version>`
+ * Example: `opencode-my-plugin\@v1.0.0`
  */
-export function parseTag(tag: string): PackageInfo {
+export const parseTag = (tag: string): PackageInfo => {
   // Remove refs/tags/ prefix if present
   const cleanTag = tag.replace(/^refs\/tags\//, '');
 
@@ -32,12 +33,12 @@ export function parseTag(tag: string): PackageInfo {
     version,
     directory: `packages/${name}`,
   };
-}
+};
 
 /**
  * Set GitHub Actions output
  */
-export async function setOutput(name: string, value: string): Promise<void> {
+export const setOutput = async (name: string, value: string): Promise<void> => {
   const githubOutput = process.env.GITHUB_OUTPUT;
   if (!githubOutput) {
     console.log(`${name}=${value}`);
@@ -48,12 +49,12 @@ export async function setOutput(name: string, value: string): Promise<void> {
     flag: 'a',
     encoding: 'utf-8',
   });
-}
+};
 
 /**
  * Main entry point
  */
-async function main(): Promise<void> {
+const main = async (): Promise<void> => {
   const tag = process.env.GITHUB_REF || process.argv[2];
 
   if (!tag) {
@@ -89,7 +90,7 @@ async function main(): Promise<void> {
     console.error('❌ Failed to parse tag:', message);
     process.exit(1);
   }
-}
+};
 
 // Run if executed directly
 if (require.main === module) {

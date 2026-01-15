@@ -1,14 +1,15 @@
 #!/usr/bin/env bun
 
-import { readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { writeFile } from 'node:fs/promises';
+
 import type { MirrorUrl } from './types';
 
 /**
  * Extract and validate mirror repository URL from package.json
  */
-export async function validateMirrorUrl(packageJsonPath: string): Promise<MirrorUrl> {
+export const validateMirrorUrl = async (packageJsonPath: string): Promise<MirrorUrl> => {
   if (!existsSync(packageJsonPath)) {
     throw new Error(`package.json not found at ${packageJsonPath}`);
   }
@@ -41,12 +42,12 @@ export async function validateMirrorUrl(packageJsonPath: string): Promise<Mirror
     owner: match[1],
     repo: match[2],
   };
-}
+};
 
 /**
  * Set GitHub Actions output
  */
-async function setOutput(name: string, value: string): Promise<void> {
+const setOutput = async (name: string, value: string): Promise<void> => {
   const githubOutput = process.env.GITHUB_OUTPUT;
   if (!githubOutput) {
     console.log(`${name}=${value}`);
@@ -57,12 +58,12 @@ async function setOutput(name: string, value: string): Promise<void> {
     flag: 'a',
     encoding: 'utf-8',
   });
-}
+};
 
 /**
  * Main entry point
  */
-async function main(): Promise<void> {
+const main = async (): Promise<void> => {
   const packageJsonPath = process.argv[2];
 
   if (!packageJsonPath) {
@@ -87,7 +88,7 @@ async function main(): Promise<void> {
     console.error('❌', message);
     process.exit(1);
   }
-}
+};
 
 // Run if executed directly
 if (require.main === module) {

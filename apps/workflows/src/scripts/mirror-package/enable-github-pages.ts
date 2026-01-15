@@ -1,20 +1,22 @@
 #!/usr/bin/env bun
 
 import { Octokit } from '@octokit/rest';
+
 import { withRetry } from '../../utils/retry';
-import type { EnablePagesResult, GitHubPagesConfig } from './types';
+
+import type { EnablePagesResult } from './types';
 
 /**
  * Create an Octokit instance
  */
-function createOctokit(token: string): Octokit {
+const createOctokit = (token: string): Octokit => {
   return new Octokit({ auth: token });
-}
+};
 
 /**
  * Enable or update GitHub Pages configuration for a repository
  */
-export async function enableGitHubPages(owner: string, repo: string, token: string): Promise<EnablePagesResult> {
+export const enableGitHubPages = async (owner: string, repo: string, token: string): Promise<EnablePagesResult> => {
   const octokit = createOctokit(token);
 
   const pagesConfig = {
@@ -74,12 +76,12 @@ export async function enableGitHubPages(owner: string, repo: string, token: stri
       httpCode: octokitError.status,
     };
   }
-}
+};
 
 /**
  * Main entry point
  */
-async function main(): Promise<void> {
+const main = async (): Promise<void> => {
   const owner = process.argv[2];
   const repo = process.argv[3];
   const token = process.env.MIRROR_REPO_TOKEN || process.argv[4];
@@ -114,7 +116,7 @@ async function main(): Promise<void> {
     // Non-blocking: warn but don't exit with error
     process.exit(0);
   }
-}
+};
 
 // Run if executed directly
 if (require.main === module) {
