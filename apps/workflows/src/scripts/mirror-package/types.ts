@@ -36,3 +36,10 @@ export interface EnablePagesResult {
   message: string;
   httpCode?: number;
 }
+
+export interface BranchProtectionResult {
+  success: boolean;
+  status: 'protected' | 'failed';
+  message: string;
+  httpCode?: number;
+}
