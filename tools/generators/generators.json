@@ -8,7 +8,7 @@
     "library": {
       "factory": "./library/index",
       "schema": "./library/schema.json",
-      "description": "Generate an internal library (not mirrored)"
+      "description": "Generate an library (not mirrored)"
     },
     "package": {
       "factory": "./package/index",

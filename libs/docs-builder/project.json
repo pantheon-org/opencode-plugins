@@ -1,9 +1,9 @@
 {
   "name": "docs-builder",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "internal/docs-builder/src",
+  "sourceRoot": "libs/docs-builder/src",
   "projectType": "library",
-  "tags": ["skip-ci", "type:lib", "scope:internal"],
+  "tags": ["skip-ci", "type:lib", "scope:lib"],
   "targets": {
     "build": {
       "executor": "nx:run-commands",
@@ -14,7 +14,7 @@
             "command": "bun run build"
           }
         ],
-        "cwd": "internal/docs-builder",
+        "cwd": "libs/docs-builder",
         "parallel": false
       }
     },
@@ -26,7 +26,7 @@
             "command": "bun run dev"
           }
         ],
-        "cwd": "internal/docs-builder",
+        "cwd": "libs/docs-builder",
         "parallel": false
       }
     },
@@ -38,7 +38,7 @@
             "command": "bun run preview"
           }
         ],
-        "cwd": "internal/docs-builder",
+        "cwd": "libs/docs-builder",
         "parallel": false
       }
     },
@@ -50,7 +50,7 @@
             "command": "bun run verify"
           }
         ],
-        "cwd": "internal/docs-builder",
+        "cwd": "libs/docs-builder",
         "parallel": false
       }
     }

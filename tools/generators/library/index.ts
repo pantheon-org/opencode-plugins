@@ -3,7 +3,7 @@ import * as path from 'path';
 import { LibraryGeneratorSchema } from './schema';
 
 export default async function (tree: Tree, options: LibraryGeneratorSchema) {
-  const directory = options.directory || 'internal';
+  const directory = options.directory || 'libs';
   const projectRoot = `${directory}/${options.name}`;
   const projectName = options.name;
 
@@ -12,7 +12,7 @@ export default async function (tree: Tree, options: LibraryGeneratorSchema) {
     root: projectRoot,
     projectType: 'library',
     sourceRoot: `${projectRoot}/src`,
-    tags: ['type:lib', 'scope:internal'],
+    tags: ['type:lib', 'scope:lib'],
     targets: {
       build: {
         executor: '@nx/esbuild:esbuild',

@@ -3,7 +3,7 @@
   "cli": "nx",
   "id": "library",
   "title": "Create an Internal Library",
-  "description": "Generate an internal library (not mirrored or published to npm)",
+  "description": "Generate an libs library (not mirrored or published to npm)",
   "type": "object",
   "properties": {
     "name": {
@@ -22,8 +22,8 @@
     "directory": {
       "type": "string",
       "description": "Directory where the library will be created",
-      "default": "internal",
-      "enum": ["internal"]
+      "default": "libs",
+      "enum": ["libs"]
     },
     "addTests": {
       "type": "boolean",

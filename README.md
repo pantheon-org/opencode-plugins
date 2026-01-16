@@ -7,7 +7,7 @@ This repository is the **single source of truth** for all [OpenCode](https://ope
 This is an NX monorepo with Bun + TypeScript that:
 
 - Develops multiple OpenCode plugins under `packages/`
-- Provides internal shared libraries under `internal/`
+- Provides internal shared libraries under `libs/`
 - Mirrors each plugin and distributable package to dedicated read-only GitHub repos
 - Publishes plugins and packages independently to npm under `@pantheon-org/<name>`
 - Deploys plugin documentation to GitHub Pages per plugin
@@ -27,7 +27,7 @@ All packages under `packages/` are:
 - **OpenCode Plugins**: Extend OpenCode functionality (prefixed with `opencode-`)
 - **Distributable Packages**: Standalone npm packages (e.g., `opencode-font`)
 
-### `internal/` - Internal Libraries (Not Mirrored)
+### `libs/` - Internal Libraries (Not Mirrored)
 
 Internal libraries for monorepo support:
 
@@ -54,7 +54,7 @@ Each plugin:
 
 The shared documentation builder:
 
-- Lives in `internal/docs-builder/`
+- Lives in `libs/docs-builder/`
 - Contains Astro + Starlight configuration
 - Is pulled by plugin mirror repos during GitHub Pages deployment
 - Used internally, not distributed
@@ -63,11 +63,11 @@ The shared documentation builder:
 
 The workflows library contains automated CI/CD scripts and utilities:
 
-- Lives in `internal/workflows/`
+- Lives in `libs/workflows/`
 - Built with Bun + TypeScript (strict mode)
 - Modular architecture with comprehensive test coverage
 - Used by GitHub Actions workflows for repository automation
-- See [Workflows Documentation](internal/workflows/README.md) for details
+- See [Workflows Documentation](libs/workflows/README.md) for details
 
 ## Quick Start
 
@@ -135,7 +135,7 @@ opencode-plugins/
 │   │   ├── css/                         # Generated CSS
 │   │   └── fonts/                       # Generated font files
 │   └── <other-plugins>/                 # Future plugins follow same structure
-├── internal/                            # Internal libraries (not mirrored)
+├── libs/                            # Internal libraries (not mirrored)
 │   ├── docs-builder/                    # Shared Astro documentation builder
 │   │   ├── src/                         # Astro components, styles
 │   │   ├── astro.config.mjs             # Astro configuration

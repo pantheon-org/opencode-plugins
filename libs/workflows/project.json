@@ -1,9 +1,9 @@
 {
   "name": "workflows",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "internal/workflows/src",
+  "sourceRoot": "libs/workflows/src",
   "projectType": "library",
-  "tags": ["type:lib", "scope:ci-cd", "scope:internal"],
+  "tags": ["type:lib", "scope:ci-cd", "scope:lib"],
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
@@ -11,12 +11,12 @@
       "defaultConfiguration": "production",
       "options": {
         "platform": "node",
-        "outputPath": "dist/internal/workflows",
+        "outputPath": "dist/libs/workflows",
         "format": ["cjs"],
         "bundle": false,
-        "main": "internal/workflows/src/main.ts",
-        "tsConfig": "internal/workflows/tsconfig.app.json",
-        "assets": ["internal/workflows/src/assets"],
+        "main": "libs/workflows/src/main.ts",
+        "tsConfig": "libs/workflows/tsconfig.app.json",
+        "assets": ["libs/workflows/src/assets"],
         "generatePackageJson": true,
         "esbuildOptions": {
           "sourcemap": true,
@@ -42,8 +42,8 @@
       "cache": true,
       "executor": "@nx/js:prune-lockfile",
       "outputs": [
-        "{workspaceRoot}/dist/internal/workflows/package.json",
-        "{workspaceRoot}/dist/internal/workflows/bun.lock"
+        "{workspaceRoot}/dist/libs/workflows/package.json",
+        "{workspaceRoot}/dist/libs/workflows/bun.lock"
       ],
       "options": {
         "buildTarget": "build"
@@ -52,7 +52,7 @@
     "copy-workspace-modules": {
       "dependsOn": ["build"],
       "cache": true,
-      "outputs": ["{workspaceRoot}/dist/internal/workflows/workspace_modules"],
+      "outputs": ["{workspaceRoot}/dist/libs/workflows/workspace_modules"],
       "executor": "@nx/js:copy-workspace-modules",
       "options": {
         "buildTarget": "build"
@@ -88,7 +88,7 @@
             "command": "bun test"
           }
         ],
-        "cwd": "internal/workflows",
+        "cwd": "libs/workflows",
         "parallel": false
       }
     },
@@ -96,13 +96,13 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["internal/workflows/**/*.ts"]
+        "lintFilePatterns": ["libs/workflows/**/*.ts"]
       }
     },
     "type-check": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "tsc --noEmit -p internal/workflows/tsconfig.app.json"
+        "command": "tsc --noEmit -p libs/workflows/tsconfig.app.json"
       }
     }
   }

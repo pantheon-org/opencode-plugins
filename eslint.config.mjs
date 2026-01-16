@@ -142,7 +142,7 @@ export default [
     },
   },
   {
-    files: ['apps/opencode-font/**/*.ts'],
+    files: ['packages/opencode-font/**/*.ts'],
     rules: {
       'tsdoc/syntax': 'warn',
       'import/max-dependencies': 'off',
