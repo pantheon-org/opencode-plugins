@@ -1,10 +1,19 @@
 {
-  "$schema": "http://json-schema.org/schema",
   "generators": {
     "plugin": {
       "factory": "./plugin/index",
       "schema": "./plugin/schema.json",
-      "description": "Create a new OpenCode plugin package"
+      "description": "Generate an OpenCode plugin"
+    },
+    "library": {
+      "factory": "./library/index",
+      "schema": "./library/schema.json",
+      "description": "Generate an library (not mirrored)"
+    },
+    "package": {
+      "factory": "./package/index",
+      "schema": "./package/schema.json",
+      "description": "Generate a distributable package (mirrored)"
     }
   }
 }

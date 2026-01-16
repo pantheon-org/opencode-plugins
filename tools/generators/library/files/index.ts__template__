@@ -1,0 +1,1 @@
+export { <%= pluginName %> } from './src';
