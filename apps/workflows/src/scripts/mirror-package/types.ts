@@ -43,3 +43,11 @@ export interface BranchProtectionResult {
   message: string;
   httpCode?: number;
 }
+
+export interface DisableFeaturesResult {
+  success: boolean;
+  status: 'disabled' | 'failed';
+  message: string;
+  disabledFeatures: string[];
+  httpCode?: number;
+}
