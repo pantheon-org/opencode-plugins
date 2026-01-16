@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "id": "library",
+  "title": "Create an Internal Library",
+  "description": "Generate an internal library (not mirrored or published to npm)",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Library name (kebab-case)",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "description": {
+      "type": "string",
+      "description": "Library description"
+    },
+    "directory": {
+      "type": "string",
+      "description": "Directory where the library will be created",
+      "default": "internal",
+      "enum": ["internal"]
+    },
+    "addTests": {
+      "type": "boolean",
+      "description": "Add test setup",
+      "default": true
+    },
+    "addLint": {
+      "type": "boolean",
+      "description": "Add linting configuration",
+      "default": true
+    }
+  },
+  "required": ["name"]
+}

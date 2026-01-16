@@ -1,5 +1,9 @@
 name: Mirror Packages to Repositories
 
+# This workflow mirrors packages from the monorepo packages/ directory to individual repositories.
+# Only packages in packages/ directory are mirrored (plugins and distributable packages).
+# Internal libraries in internal/ directory are not mirrored.
+
 on:
   push:
     tags:

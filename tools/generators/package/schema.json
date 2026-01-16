@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "id": "package",
+  "title": "Create a Distributable Package",
+  "description": "Generate a distributable package (mirrored and published to npm, but not an OpenCode plugin)",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Package name (kebab-case)",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "description": {
+      "type": "string",
+      "description": "Package description"
+    },
+    "directory": {
+      "type": "string",
+      "description": "Directory where the package will be created",
+      "default": "packages",
+      "enum": ["packages"]
+    },
+    "addTests": {
+      "type": "boolean",
+      "description": "Add test setup",
+      "default": true
+    },
+    "addLint": {
+      "type": "boolean",
+      "description": "Add linting configuration",
+      "default": true
+    },
+    "mirrorRepo": {
+      "type": "string",
+      "description": "Mirror repository URL (required for packages)",
+      "pattern": "^git\\+https://github\\.com/pantheon-org/[a-z][a-z0-9-]*\\.git$"
+    }
+  },
+  "required": ["name", "mirrorRepo"]
+}
