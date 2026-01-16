@@ -22,25 +22,7 @@ jobs:
 
       - name: Parse tag to get package name
         id: parse
-        run: |
-          TAG="${GITHUB_REF#refs/tags/}"
-          PACKAGE="${TAG%@v*}"
-          VERSION="${TAG#*@}"
-          echo "package=$PACKAGE" >> $GITHUB_OUTPUT
-          echo "dir=packages/$PACKAGE" >> $GITHUB_OUTPUT
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "📦 Package: $PACKAGE"
-          echo "📂 Directory: packages/$PACKAGE"
-          echo "🏷️  Version: $VERSION"
-
-      - name: Check if package directory exists
-        id: check-dir
-        run: |
-          if [ ! -d "packages/${{ steps.parse.outputs.package }}" ]; then
-            echo "❌ Package directory packages/${{ steps.parse.outputs.package }} does not exist"
-            exit 1
-          fi
-          echo "✅ Package directory exists"
+        run: bun run apps/workflows/src/scripts/mirror-package/parse-tag.ts
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -49,67 +31,11 @@ jobs:
 
       - name: Validate mirror repository URL
         id: validate
-        run: |
-          PACKAGE_JSON="packages/${{ steps.parse.outputs.package }}/package.json"
-
-          if [ ! -f "$PACKAGE_JSON" ]; then
-            echo "❌ package.json not found at $PACKAGE_JSON"
-            exit 1
-          fi
-
-          # Extract repository URL from package.json using Bun
-          REPO_URL=$(bun -e "
-            const pkg = require('./$PACKAGE_JSON');
-            const repoUrl = typeof pkg.repository === 'string' ? pkg.repository : pkg.repository?.url || '';
-            console.log(repoUrl);
-          ")
-
-          if [ -z "$REPO_URL" ]; then
-            echo "❌ No repository URL found in $PACKAGE_JSON"
-            echo "   Add a 'repository' field like:"
-            echo '   "repository": {"type": "git", "url": "git+https://github.com/org/repo.git"}'
-            exit 1
-          fi
-
-          # Convert git+https://github.com/org/repo.git to https://github.com/org/repo
-          MIRROR_URL=$(echo "$REPO_URL" | sed 's|git+||' | sed 's|\.git$||')
-
-          echo "url=$MIRROR_URL" >> $GITHUB_OUTPUT
-          echo "✅ Mirror URL: $MIRROR_URL"
+        run: bun run apps/workflows/src/scripts/mirror-package/validate-mirror-url.ts "packages/${{ steps.parse.outputs.package }}/package.json"
 
       - name: Detect changes in package
         id: changes
-        run: |
-          PACKAGE_DIR="${{ steps.parse.outputs.dir }}"
-          PACKAGE_NAME="${{ steps.parse.outputs.package }}"
-
-          # Get the previous tag for this package
-          PREV_TAG=$(git tag -l "${PACKAGE_NAME}@v*" --sort=-version:refname | sed -n '2p')
-
-          if [ -z "$PREV_TAG" ]; then
-            echo "ℹ️  No previous tag found - this is the first release for $PACKAGE_NAME"
-            echo "has-changes=true" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          echo "🔍 Comparing with previous tag: $PREV_TAG"
-
-          # Check if any files changed in package directory since last tag
-          CHANGES=$(git diff --name-only "$PREV_TAG" HEAD -- "$PACKAGE_DIR" 2>/dev/null || true)
-
-          if [ -n "$CHANGES" ]; then
-            echo "✅ Changes detected in $PACKAGE_DIR since $PREV_TAG:"
-            echo "$CHANGES" | head -20
-            CHANGE_COUNT=$(echo "$CHANGES" | wc -l)
-            if [ "$CHANGE_COUNT" -gt 20 ]; then
-              echo "... and $((CHANGE_COUNT - 20)) more files"
-            fi
-            echo "has-changes=true" >> $GITHUB_OUTPUT
-          else
-            echo "⚠️  No changes detected in $PACKAGE_DIR since $PREV_TAG"
-            echo "   Skipping mirror sync to avoid unnecessary deployment"
-            echo "has-changes=false" >> $GITHUB_OUTPUT
-          fi
+        run: bun run apps/workflows/src/scripts/mirror-package/detect-changes.ts "${{ steps.parse.outputs.package }}" "${{ steps.parse.outputs.dir }}"
 
   mirror-to-repo:
     needs: detect-package
@@ -127,6 +53,32 @@ jobs:
           echo "🔧 Extracting ${{ needs.detect-package.outputs.package-dir }} to temporary branch..."
           git subtree split --prefix=${{ needs.detect-package.outputs.package-dir }} -b temp-branch
           echo "✅ Subtree split complete"
+
+      - name: Add CI/CD workflows to mirror
+        run: |
+          echo "📋 Adding CI/CD workflows and actions to mirror branch..."
+          git checkout temp-branch
+
+          # Create .github directory structure
+          mkdir -p .github/workflows
+          mkdir -p .github/actions/setup-bun
+          mkdir -p .github/actions/setup-node-npm
+
+          # Copy workflow templates from monorepo
+          cp .github/mirror-templates/publish-npm.yml .github/workflows/
+          cp .github/mirror-templates/deploy-docs.yml .github/workflows/
+
+          # Copy composite actions
+          cp .github/mirror-templates/actions/setup-bun/action.yml .github/actions/setup-bun/
+          cp .github/mirror-templates/actions/setup-node-npm/action.yml .github/actions/setup-node-npm/
+
+          # Commit the workflows and actions
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add .github
+          git commit -m "chore: add CI/CD workflows and composite actions for automated publishing and docs deployment" || echo "No changes to commit"
+
+          echo "✅ Workflows and actions added to temp-branch"
 
       - name: Push to mirror repo
         env:
@@ -147,7 +99,7 @@ jobs:
           git remote add mirror "$GIT_URL"
 
           echo "⬆️  Pushing to mirror repository main branch..."
-          git push mirror temp-branch:main --force
+          git push mirror temp-branch:main --force-with-lease || git push mirror temp-branch:main --force
 
           echo "🏷️  Pushing version tag $VERSION..."
           git push mirror temp-branch:refs/tags/${VERSION} --force
@@ -156,6 +108,30 @@ jobs:
           echo "   Repository: $MIRROR_URL"
           echo "   Branch: main"
           echo "   Tag: $VERSION"
+
+      - name: Enable GitHub Pages
+        env:
+          MIRROR_REPO_TOKEN: ${{ secrets.MIRROR_REPO_TOKEN }}
+        run: |
+          OWNER=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/\([^/]*\)/.*|\1|p')
+          REPO=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/[^/]*/\(.*\)|\1|p')
+          bun run apps/workflows/src/scripts/mirror-package/enable-github-pages.ts "$OWNER" "$REPO"
+
+      - name: Disable repository features
+        env:
+          MIRROR_REPO_TOKEN: ${{ secrets.MIRROR_REPO_TOKEN }}
+        run: |
+          OWNER=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/\([^/]*\)/.*|\1|p')
+          REPO=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/[^/]*/\(.*\)|\1|p')
+          bun run apps/workflows/src/scripts/mirror-package/disable-repo-features.ts "$OWNER" "$REPO"
+
+      - name: Set branch to read-only
+        env:
+          MIRROR_REPO_TOKEN: ${{ secrets.MIRROR_REPO_TOKEN }}
+        run: |
+          OWNER=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/\([^/]*\)/.*|\1|p')
+          REPO=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/[^/]*/\(.*\)|\1|p')
+          bun run apps/workflows/src/scripts/mirror-package/set-branch-readonly.ts "$OWNER" "$REPO" "main"
 
       - name: Cleanup
         if: always()
