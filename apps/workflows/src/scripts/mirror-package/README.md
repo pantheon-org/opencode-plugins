@@ -104,6 +104,42 @@ MIRROR_REPO_TOKEN=ghp_xxx bun run enable-github-pages.ts <owner> <repo>
 - Updates configuration if it already exists (409 → 204)
 - Non-blocking: warns on failure but exits with code 0
 
+### `disable-repo-features.ts`
+
+Disables repository features (Issues, Projects, Wiki, Downloads) via the GitHub API.
+
+**Usage:**
+
+```bash
+bun run disable-repo-features.ts <owner> <repo> [token]
+# or via environment variable
+MIRROR_REPO_TOKEN=ghp_xxx bun run disable-repo-features.ts <owner> <repo>
+```
+
+**Configuration:**
+
+- `has_issues`: `false` (disables Issues)
+- `has_projects`: `false` (disables Projects)
+- `has_wiki`: `false` (disables Wiki)
+- `has_downloads`: `false` (disables Downloads)
+
+**Implementation:**
+
+- Uses `@octokit/rest` for type-safe GitHub API calls
+- Leverages `withRetry` utility for resilient API calls
+- Updates repository settings with `octokit.rest.repos.update()`
+
+**Behavior:**
+
+- Disables all interactive features in one API call
+- Returns list of disabled features in result
+- Non-blocking: warns on failure but exits with code 0
+
+**Why This Matters:**
+
+Mirror repositories should only serve as distribution channels. Disabling Issues, Projects, and Wiki prevents users from
+creating content in the mirror repo. All development, issue tracking, and project management happens in the monorepo.
+
 ### `set-branch-readonly.ts`
 
 Sets branch protection to make a repository branch read-only via the GitHub API.
@@ -153,6 +189,7 @@ All types are defined in `types.ts`:
 - `ChangeDetection`: Has changes, previous tag, list of changes
 - `EnablePagesResult`: Success status, message, HTTP code for GitHub Pages operations
 - `BranchProtectionResult`: Success status, message, HTTP code for branch protection operations
+- `DisableFeaturesResult`: Success status, message, list of disabled features, HTTP code for feature disabling
 - `GitHubPagesConfig`: GitHub Pages API configuration
 
 ## Testing
@@ -191,6 +228,14 @@ These scripts are used by `.github/workflows/mirror-packages.yml`:
     OWNER=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/\([^/]*\)/.*|\1|p')
     REPO=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/[^/]*/\(.*\)|\1|p')
     bun run apps/workflows/src/scripts/mirror-package/enable-github-pages.ts "$OWNER" "$REPO"
+
+- name: Disable repository features
+  env:
+    MIRROR_REPO_TOKEN: ${{ secrets.MIRROR_REPO_TOKEN }}
+  run: |
+    OWNER=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/\([^/]*\)/.*|\1|p')
+    REPO=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/[^/]*/\(.*\)|\1|p')
+    bun run apps/workflows/src/scripts/mirror-package/disable-repo-features.ts "$OWNER" "$REPO"
 
 - name: Set branch to read-only
   env:

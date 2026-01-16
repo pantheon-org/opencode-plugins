@@ -174,6 +174,7 @@ The `mirror-packages.yml` workflow automatically:
 - **Adds CI/CD workflows** from `.github/mirror-templates/` to enable npm publishing and docs deployment
 - **Pushes to mirror** repository's `main` branch and creates version tag (uses `--force-with-lease` for safety)
 - **Enables GitHub Pages** automatically via API with `workflow` build type
+- **Disables repository features** (Issues, Projects, Wiki) to prevent content creation in mirror repos
 - **Sets branch protection** to make mirror repository read-only (prevents accidental direct commits)
 
 ### Mirror Repository Automation
