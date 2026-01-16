@@ -117,6 +117,14 @@ jobs:
           REPO=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/[^/]*/\(.*\)|\1|p')
           bun run apps/workflows/src/scripts/mirror-package/enable-github-pages.ts "$OWNER" "$REPO"
 
+      - name: Set branch to read-only
+        env:
+          MIRROR_REPO_TOKEN: ${{ secrets.MIRROR_REPO_TOKEN }}
+        run: |
+          OWNER=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/\([^/]*\)/.*|\1|p')
+          REPO=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/[^/]*/\(.*\)|\1|p')
+          bun run apps/workflows/src/scripts/mirror-package/set-branch-readonly.ts "$OWNER" "$REPO" "main"
+
       - name: Cleanup
         if: always()
         run: |

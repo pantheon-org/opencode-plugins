@@ -104,6 +104,46 @@ MIRROR_REPO_TOKEN=ghp_xxx bun run enable-github-pages.ts <owner> <repo>
 - Updates configuration if it already exists (409 → 204)
 - Non-blocking: warns on failure but exits with code 0
 
+### `set-branch-readonly.ts`
+
+Sets branch protection to make a repository branch read-only via the GitHub API.
+
+**Usage:**
+
+```bash
+bun run set-branch-readonly.ts <owner> <repo> [branch] [token]
+# branch defaults to "main"
+# or via environment variable
+MIRROR_REPO_TOKEN=ghp_xxx bun run set-branch-readonly.ts <owner> <repo>
+```
+
+**Configuration:**
+
+- `lock_branch`: `true` (makes branch read-only)
+- `allow_force_pushes`: `true` (allows monorepo workflow to push)
+- `required_status_checks`: `null` (disabled)
+- `enforce_admins`: `false` (disabled)
+- `required_pull_request_reviews`: `null` (disabled)
+- `restrictions`: `null` (disabled)
+
+**Implementation:**
+
+- Uses `@octokit/rest` for type-safe GitHub API calls
+- Leverages `withRetry` utility for resilient API calls
+- Updates branch protection with `octokit.rest.repos.updateBranchProtection()`
+
+**Behavior:**
+
+- Sets minimal branch protection with `lock_branch: true`
+- Prevents direct pushes from users (read-only)
+- Allows force pushes from authorized token (monorepo workflow)
+- Non-blocking: warns on failure but exits with code 0
+
+**Why This Matters:**
+
+Making mirror repositories read-only prevents accidental direct commits. All changes must come from the monorepo via the
+mirror workflow, ensuring single source of truth.
+
 ## Types
 
 All types are defined in `types.ts`:
@@ -111,7 +151,8 @@ All types are defined in `types.ts`:
 - `PackageInfo`: Package name, version, directory
 - `MirrorUrl`: Repository URL, owner, repo
 - `ChangeDetection`: Has changes, previous tag, list of changes
-- `EnablePagesResult`: Success status, message, HTTP code
+- `EnablePagesResult`: Success status, message, HTTP code for GitHub Pages operations
+- `BranchProtectionResult`: Success status, message, HTTP code for branch protection operations
 - `GitHubPagesConfig`: GitHub Pages API configuration
 
 ## Testing
@@ -150,6 +191,14 @@ These scripts are used by `.github/workflows/mirror-packages.yml`:
     OWNER=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/\([^/]*\)/.*|\1|p')
     REPO=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/[^/]*/\(.*\)|\1|p')
     bun run apps/workflows/src/scripts/mirror-package/enable-github-pages.ts "$OWNER" "$REPO"
+
+- name: Set branch to read-only
+  env:
+    MIRROR_REPO_TOKEN: ${{ secrets.MIRROR_REPO_TOKEN }}
+  run: |
+    OWNER=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/\([^/]*\)/.*|\1|p')
+    REPO=$(echo "${{ needs.detect-package.outputs.mirror-url }}" | sed -n 's|https://github.com/[^/]*/\(.*\)|\1|p')
+    bun run apps/workflows/src/scripts/mirror-package/set-branch-readonly.ts "$OWNER" "$REPO" "main"
 ```
 
 ## Benefits
