@@ -4,8 +4,9 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, mock } from 'bun:test';
-import { request } from './request.ts';
+
 import type { JiraClientState } from './initialize-client-state.ts';
+import { request } from './request.ts';
 
 describe('request', () => {
   const mockState: JiraClientState = {

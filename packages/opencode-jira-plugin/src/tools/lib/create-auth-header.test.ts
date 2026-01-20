@@ -4,6 +4,7 @@
  */
 
 import { describe, it, expect } from 'bun:test';
+
 import { createAuthHeader } from './create-auth-header.ts';
 
 describe('createAuthHeader', () => {

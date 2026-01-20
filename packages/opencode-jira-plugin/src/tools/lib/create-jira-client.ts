@@ -3,9 +3,9 @@
  * Creates a JIRA client instance with bound API methods
  */
 
-import type { IssueBean, IssueSearchRequest, JiraClientConfig, PageBean, Project, SearchResults } from './types.ts';
 import { initializeClientState } from './initialize-client-state.ts';
 import { request } from './request.ts';
+import type { IssueBean, IssueSearchRequest, JiraClientConfig, PageBean, Project, SearchResults } from './types.ts';
 
 /**
  * JIRA Client API Interface

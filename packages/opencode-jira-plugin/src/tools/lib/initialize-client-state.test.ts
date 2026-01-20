@@ -4,6 +4,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
+
 import { initializeClientState } from './initialize-client-state.ts';
 
 describe('initializeClientState', () => {

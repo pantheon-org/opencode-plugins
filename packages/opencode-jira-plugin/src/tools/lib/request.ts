@@ -2,9 +2,9 @@
  * HTTP Request Handler for JIRA API
  */
 
-import type { ApiResponse } from './types.ts';
-import type { JiraClientState } from './initialize-client-state.ts';
 import { createAuthHeader } from './create-auth-header.ts';
+import type { JiraClientState } from './initialize-client-state.ts';
+import type { ApiResponse } from './types.ts';
 
 /**
  * Make an HTTP request to the JIRA API

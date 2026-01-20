@@ -4,6 +4,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, mock } from 'bun:test';
+
 import { createJiraClient } from './create-jira-client.ts';
 
 describe('createJiraClient', () => {
