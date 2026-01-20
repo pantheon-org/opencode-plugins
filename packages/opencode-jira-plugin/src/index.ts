@@ -25,6 +25,7 @@ import jiraGetIssue from './tools/jira-get-issue.js';
 import jiraGetProject from './tools/jira-get-project.js';
 import jiraListProjects from './tools/jira-list-projects.js';
 import jiraSearchIssues from './tools/jira-search-issues.js';
+import loadJiraSkill from './tools/load-jira-skill.js';
 
 // Create logger for the plugin
 const log = createLogger({ plugin: 'jira' });
@@ -208,6 +209,8 @@ export const JiraPlugin: Plugin = async (ctx) => {
       ],
     },
     tool: {
+      load_jira_skill: loadJiraSkill,
+
       jira_search_issues: tool({
         description:
           'Search JIRA issues using JQL filters. Supports filtering by project, status, assignee, reporter, issue type, priority, and more. Returns issue summary with key details like status, assignee, and timestamps.',
