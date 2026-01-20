@@ -2,8 +2,9 @@
  * Tests for logDeprecatedAuth
  */
 
-import { logDeprecatedAuth } from './log-deprecated-auth';
 import type { PluginLogger } from '../types/logger-types';
+
+import { logDeprecatedAuth } from './log-deprecated-auth';
 
 describe('logDeprecatedAuth', () => {
   const createMockLogger = (): PluginLogger => ({

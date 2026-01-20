@@ -2,9 +2,9 @@
  * Tests for isFailure type guard
  */
 
+import { failure } from './failure';
 import { isFailure } from './is-failure';
 import { success } from './success';
-import { failure } from './failure';
 
 describe('isFailure', () => {
   it('should return true for failure response', () => {

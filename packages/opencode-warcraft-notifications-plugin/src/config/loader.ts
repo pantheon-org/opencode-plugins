@@ -2,6 +2,7 @@ import { exists } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import { createLogger } from '@pantheon-org/opencode-core';
+
 import { validateAndSanitizeConfig } from '../schema-validator.js';
 
 import { getConfigDir } from './paths.js';

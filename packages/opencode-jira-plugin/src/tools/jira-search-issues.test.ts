@@ -4,8 +4,10 @@
  */
 
 import { describe, it, expect } from 'bun:test';
-import type { SearchIssuesArgs, SearchIssuesData } from './jira-search-issues';
+
 import { isSuccess, isFailure } from '../../shared/lib/response';
+
+import type { SearchIssuesArgs, SearchIssuesData } from './jira-search-issues';
 
 describe('jira-search-issues', () => {
   describe('argument validation', () => {

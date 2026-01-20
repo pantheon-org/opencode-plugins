@@ -42,16 +42,12 @@ export class JiraClient {
   constructor(config: JiraClientConfig = {}) {
     this.baseUrl = config.baseUrl || process.env.JIRA_URL || process.env.JIRA_BASE_URL || '';
     if (!this.baseUrl) {
-      throw new Error(
-        'Base URL is required. Provide it in config.baseUrl or set JIRA_URL environment variable.',
-      );
+      throw new Error('Base URL is required. Provide it in config.baseUrl or set JIRA_URL environment variable.');
     }
 
     const email = config.email || process.env.JIRA_EMAIL || process.env.JIRA_USERNAME || '';
     if (!email) {
-      throw new Error(
-        'Email is required. Provide it in config.email or set JIRA_EMAIL environment variable.',
-      );
+      throw new Error('Email is required. Provide it in config.email or set JIRA_EMAIL environment variable.');
     }
 
     const apiToken = config.apiToken || process.env.JIRA_API_TOKEN || '';
@@ -149,11 +145,7 @@ export class JiraClient {
   /**
    * Get projects paginated
    */
-  async getProjectsPaginated(
-    startAt = 0,
-    maxResults = 50,
-    query?: string,
-  ): Promise<PageBean<Project>> {
+  async getProjectsPaginated(startAt = 0, maxResults = 50, query?: string): Promise<PageBean<Project>> {
     const params = new URLSearchParams({
       startAt: startAt.toString(),
       maxResults: maxResults.toString(),

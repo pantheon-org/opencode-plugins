@@ -8,6 +8,7 @@ import {
   sendErrorToast,
   formatDuration,
 } from '@pantheon-org/opencode-core';
+
 import { JiraClient } from './lib/client.js';
 import type { Project } from './lib/types.js';
 
@@ -41,10 +42,10 @@ export interface ListProjectsData {
 /**
  * List and search JIRA projects
  */
-export default async function listProjects(
+const listProjects = async (
   args: ListProjectsArgs,
   toolCtx?: any,
-): Promise<PluginToolResponse<ListProjectsData>> {
+): Promise<PluginToolResponse<ListProjectsData>> => {
   const ctx = toolCtx as unknown as PluginInput;
 
   try {

@@ -2,8 +2,9 @@
  * Tests for logDeprecationWarning
  */
 
-import { logDeprecationWarning } from './log-deprecation-warning';
 import type { PluginLogger } from '../types/logger-types';
+
+import { logDeprecationWarning } from './log-deprecation-warning';
 
 describe('logDeprecationWarning', () => {
   const createMockLogger = (): PluginLogger => ({

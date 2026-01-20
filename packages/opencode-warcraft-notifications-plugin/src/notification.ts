@@ -1,8 +1,8 @@
 import type { Plugin } from '@opencode-ai/plugin';
+import { createLogger } from '@pantheon-org/opencode-core';
 
 import { installBundledSoundsIfMissing } from './bundled-sounds.js';
 import { loadPluginConfig } from './config/index.js';
-import { createLogger } from '@pantheon-org/opencode-core';
 import { extractFilename, getIdleSummary } from './notification-utils.js';
 import {
   determineSoundFaction,

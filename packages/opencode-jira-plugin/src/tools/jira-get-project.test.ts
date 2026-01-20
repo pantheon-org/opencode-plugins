@@ -4,8 +4,10 @@
  */
 
 import { describe, it, expect } from 'bun:test';
-import type { GetProjectArgs, GetProjectData } from './jira-get-project';
+
 import { isSuccess, isFailure } from '../../shared/lib/response';
+
+import type { GetProjectArgs, GetProjectData } from './jira-get-project';
 
 describe('jira-get-project', () => {
   describe('argument validation', () => {

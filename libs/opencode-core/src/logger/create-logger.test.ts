@@ -2,8 +2,9 @@
  * Tests for createLogger
  */
 
-import { createLogger } from './create-logger';
 import type { LoggerConfig } from '../types/logger-types';
+
+import { createLogger } from './create-logger';
 
 describe('createLogger', () => {
   let stdoutSpy: jest.SpyInstance;

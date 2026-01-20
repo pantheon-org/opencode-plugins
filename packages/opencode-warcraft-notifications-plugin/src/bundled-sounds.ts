@@ -2,8 +2,9 @@ import { mkdir, exists, readdir, copyFile } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-import { DEFAULT_DATA_DIR } from './config/index.js';
 import { createLogger } from '@pantheon-org/opencode-core';
+
+import { DEFAULT_DATA_DIR } from './config/index.js';
 import { getSoundFileList as soundsGetSoundFileList, determineSoundFaction } from './sounds/index.js';
 
 const DEBUG = Boolean(process.env.DEBUG_OPENCODE);

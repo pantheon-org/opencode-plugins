@@ -4,6 +4,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
+
 import { JiraClient } from './client';
 
 describe('JiraClient', () => {

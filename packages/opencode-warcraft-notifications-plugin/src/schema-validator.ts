@@ -1,7 +1,7 @@
+import { createLogger } from '@pantheon-org/opencode-core';
 import { z } from 'zod';
 
 import type { WarcraftNotificationConfig } from './config/index.js';
-import { createLogger } from '@pantheon-org/opencode-core';
 
 const log = createLogger({ plugin: 'warcraft-notifications' });
 

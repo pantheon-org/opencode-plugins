@@ -11,6 +11,7 @@ import {
   formatCount,
   formatDuration,
 } from '@pantheon-org/opencode-core';
+
 import { JiraClient } from './lib/client.js';
 import type { IssueBean, SearchResults } from './lib/types.js';
 
@@ -53,10 +54,7 @@ export interface SearchIssuesData {
 /**
  * Search JIRA issues using JQL filters
  */
-export default async function searchIssues(
-  args: SearchIssuesArgs,
-  toolCtx?: any,
-): Promise<PluginToolResponse<SearchIssuesData>> {
+const searchIssues = async (args: SearchIssuesArgs, toolCtx?: any): Promise<PluginToolResponse<SearchIssuesData>> => {
   log.info('Searching JIRA issues', {
     project: args.project,
     status: args.status,
@@ -196,4 +194,6 @@ export default async function searchIssues(
       },
     });
   }
-}
+};
+
+export default searchIssues;

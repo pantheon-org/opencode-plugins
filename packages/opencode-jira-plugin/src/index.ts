@@ -21,10 +21,10 @@ import { tool } from '@opencode-ai/plugin';
 import { createLogger } from '@pantheon-org/opencode-core';
 
 // Import tool implementations
-import jiraSearchIssues from './tools/jira-search-issues.js';
 import jiraGetIssue from './tools/jira-get-issue.js';
-import jiraListProjects from './tools/jira-list-projects.js';
 import jiraGetProject from './tools/jira-get-project.js';
+import jiraListProjects from './tools/jira-list-projects.js';
+import jiraSearchIssues from './tools/jira-search-issues.js';
 
 // Create logger for the plugin
 const log = createLogger({ plugin: 'jira' });

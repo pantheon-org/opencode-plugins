@@ -2,8 +2,9 @@
  * Tests for logOperationTiming
  */
 
-import { logOperationTiming } from './log-operation-timing';
 import type { PluginLogger } from '../types/logger-types';
+
+import { logOperationTiming } from './log-operation-timing';
 
 describe('logOperationTiming', () => {
   const createMockLogger = (): PluginLogger => ({

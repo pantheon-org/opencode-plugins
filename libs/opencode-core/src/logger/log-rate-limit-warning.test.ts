@@ -2,8 +2,9 @@
  * Tests for logRateLimitWarning
  */
 
-import { logRateLimitWarning } from './log-rate-limit-warning';
 import type { PluginLogger } from '../types/logger-types';
+
+import { logRateLimitWarning } from './log-rate-limit-warning';
 
 describe('logRateLimitWarning', () => {
   const createMockLogger = (): PluginLogger => ({

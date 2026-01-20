@@ -10,6 +10,7 @@ import {
   sendErrorToast,
   formatDuration,
 } from '@pantheon-org/opencode-core';
+
 import { JiraClient } from './lib/client.js';
 import type { IssueBean } from './lib/types.js';
 
@@ -61,7 +62,7 @@ export interface GetIssueData {
 /**
  * Get a single JIRA issue by key or ID
  */
-export default async function getIssue(args: GetIssueArgs, toolCtx?: any): Promise<PluginToolResponse<GetIssueData>> {
+const getIssue = async (args: GetIssueArgs, toolCtx?: any): Promise<PluginToolResponse<GetIssueData>> => {
   const ctx = toolCtx as unknown as PluginInput;
 
   log.info('Fetching JIRA issue', { issueKey: args.issueKey });
@@ -199,3 +200,7 @@ export default async function getIssue(args: GetIssueArgs, toolCtx?: any): Promi
     });
   }
 }
+
+};
+
+export default getIssue;

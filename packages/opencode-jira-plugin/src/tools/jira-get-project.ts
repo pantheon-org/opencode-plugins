@@ -10,6 +10,7 @@ import {
   sendErrorToast,
   formatDuration,
 } from '@pantheon-org/opencode-core';
+
 import { JiraClient } from './lib/client.js';
 import type { Project } from './lib/types.js';
 
@@ -51,10 +52,7 @@ export interface GetProjectData {
 /**
  * Get a single JIRA project by key or ID
  */
-export default async function getProject(
-  args: GetProjectArgs,
-  toolCtx?: any,
-): Promise<PluginToolResponse<GetProjectData>> {
+const getProject = async (args: GetProjectArgs, toolCtx?: any): Promise<PluginToolResponse<GetProjectData>> => {
   const ctx = toolCtx as unknown as PluginInput;
 
   log.info('Fetching JIRA project', { projectKey: args.projectKey });
@@ -137,4 +135,6 @@ export default async function getProject(
       context: { projectKey: args.projectKey },
     });
   }
-}
+};
+
+export default getProject;
