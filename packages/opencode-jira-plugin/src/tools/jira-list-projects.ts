@@ -42,10 +42,7 @@ export interface ListProjectsData {
 /**
  * List and search JIRA projects
  */
-const listProjects = async (
-  args: ListProjectsArgs,
-  toolCtx?: any,
-): Promise<PluginToolResponse<ListProjectsData>> => {
+const listProjects = async (args: ListProjectsArgs, toolCtx?: any): Promise<PluginToolResponse<ListProjectsData>> => {
   const ctx = toolCtx as unknown as PluginInput;
 
   try {
@@ -123,4 +120,6 @@ const listProjects = async (
       },
     });
   }
-}
+};
+
+export default listProjects;
