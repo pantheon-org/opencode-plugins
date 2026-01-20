@@ -1,0 +1,68 @@
+name: Reusable Deploy Documentation
+
+on:
+  workflow_call:
+    inputs:
+      commit-sha:
+        description: 'Git commit SHA for deployment message'
+        required: false
+        type: string
+        default: ''
+    secrets:
+      GITHUB_TOKEN:
+        description: 'GitHub token for deployment'
+        required: true
+
+jobs:
+  deploy-docs:
+    name: Deploy Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun with caching
+        uses: ./.github/actions/setup-bun
+
+      - name: Clone docs-builder
+        run: |
+          git clone --depth 1 https://github.com/pantheon-org/opencode-docs-builder.git docs-builder
+          echo "✅ Docs builder cloned"
+
+      - name: Install docs-builder dependencies
+        run: |
+          cd docs-builder
+          bun install
+
+      - name: Copy plugin documentation
+        run: |
+          cp -r ./docs/* ./docs-builder/src/content/docs/ || mkdir -p ./docs-builder/src/content/docs/
+          echo "✅ Plugin docs copied to docs-builder"
+
+      - name: Build documentation
+        run: |
+          cd docs-builder
+          bun run build
+
+      - name: Deploy to docs branch
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: docs
+          publish_dir: ./docs-builder/dist
+          force_orphan: false
+          enable_jekyll: false
+          commit_message: 'docs: Deploy documentation from ${{ inputs.commit-sha || github.sha }}'
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Summary
+        run: |
+          echo "## ✅ Documentation Deployed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: docs" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ inputs.commit-sha || github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL**: https://github.com/${{ github.repository }}/tree/docs" >> $GITHUB_STEP_SUMMARY
