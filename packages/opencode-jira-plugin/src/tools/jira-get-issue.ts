@@ -11,7 +11,7 @@ import {
   formatDuration,
 } from '@pantheon-org/opencode-core';
 
-import { JiraClient } from './lib/client.js';
+import { createJiraClient } from './lib/client.js';
 import type { IssueBean } from './lib/types.js';
 
 const log = createToolLogger('jira', 'get-issue');
@@ -70,7 +70,7 @@ const getIssue = async (args: GetIssueArgs, toolCtx?: any): Promise<PluginToolRe
   try {
     const [issue, duration] = await measureDuration(async () => {
       // Initialize JIRA client
-      const client = new JiraClient({
+      const client = createJiraClient({
         baseUrl: args.baseUrl,
         email: args.email,
         apiToken: args.apiToken,

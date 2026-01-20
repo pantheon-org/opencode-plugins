@@ -9,7 +9,7 @@ import {
   formatDuration,
 } from '@pantheon-org/opencode-core';
 
-import { JiraClient } from './lib/client.js';
+import { createJiraClient } from './lib/client.js';
 import type { Project } from './lib/types.js';
 
 export interface ListProjectsArgs {
@@ -50,7 +50,7 @@ const listProjects = async (
 
   try {
     // Initialize JIRA client
-    const client = new JiraClient({
+    const client = createJiraClient({
       baseUrl: args.baseUrl,
       email: args.email,
       apiToken: args.apiToken,

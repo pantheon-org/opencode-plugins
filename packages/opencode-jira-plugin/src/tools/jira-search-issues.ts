@@ -12,7 +12,7 @@ import {
   formatDuration,
 } from '@pantheon-org/opencode-core';
 
-import { JiraClient } from './lib/client.js';
+import { createJiraClient } from './lib/client.js';
 import type { IssueBean, SearchResults } from './lib/types.js';
 
 const log = createToolLogger('jira', 'search-issues');
@@ -67,7 +67,7 @@ const searchIssues = async (args: SearchIssuesArgs, toolCtx?: any): Promise<Plug
 
   try {
     // Initialize JIRA client
-    const client = new JiraClient({
+    const client = createJiraClient({
       baseUrl: args.baseUrl,
       email: args.email,
       apiToken: args.apiToken,
