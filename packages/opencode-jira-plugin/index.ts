@@ -1,0 +1,1 @@
+export { OpencodeJiraPlugin } from './src';

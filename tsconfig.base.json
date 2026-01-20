@@ -17,7 +17,14 @@
       "@pantheon-org/opencode-agent-loader-plugin": [
         "packages/opencode-agent-loader-plugin/src/index.ts"
       ],
-      "@pantheon-org/tools": ["tools/index.ts"]
+      "@pantheon-org/tools": ["tools/index.ts"],
+      "@pantheon-org/opencode-snyk-plugin": [
+        "packages/opencode-snyk-plugin/src/index.ts"
+      ],
+      "@pantheon-org/opencode-core": ["libs/opencode-core/src/index.ts"],
+      "@pantheon-org/opencode-jira-plugin": [
+        "packages/opencode-jira-plugin/src/index.ts"
+      ]
     }
   }
 }
