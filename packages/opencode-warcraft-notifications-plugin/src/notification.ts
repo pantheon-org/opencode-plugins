@@ -2,7 +2,7 @@ import type { Plugin } from '@opencode-ai/plugin';
 
 import { installBundledSoundsIfMissing } from './bundled-sounds.js';
 import { loadPluginConfig } from './config/index.js';
-import { createLogger } from './logger.js';
+import { createLogger } from '@pantheon-org/opencode-core';
 import { extractFilename, getIdleSummary } from './notification-utils.js';
 import {
   determineSoundFaction,
@@ -11,7 +11,7 @@ import {
   soundExists,
 } from './sounds/index.js';
 
-const log = createLogger({ module: 'opencode-plugin-warcraft-notifications' });
+const log = createLogger({ plugin: 'warcraft-notifications' });
 
 // Constants for toast durations and cache keys
 const TOAST_DURATION = {

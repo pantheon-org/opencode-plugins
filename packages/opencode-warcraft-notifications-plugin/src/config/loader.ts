@@ -1,13 +1,13 @@
 import { exists } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { createLogger } from '../logger.js';
+import { createLogger } from '@pantheon-org/opencode-core';
 import { validateAndSanitizeConfig } from '../schema-validator.js';
 
 import { getConfigDir } from './paths.js';
 import type { PluginConfig, WarcraftNotificationConfig } from './types.js';
 
-const log = createLogger({ module: 'opencode-plugin-warcraft-notifications' });
+const log = createLogger({ plugin: 'warcraft-notifications' });
 const DEBUG = Boolean(process.env.DEBUG_OPENCODE);
 
 /**
