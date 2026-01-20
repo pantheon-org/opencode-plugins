@@ -2,11 +2,12 @@
  * Send a toast notification
  */
 
-// @ts-expect-error - TypeScript module resolution issue with Node16 and ESM packages
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore - TypeScript 5.3+ requires resolution-mode for ESM type imports in CJS context
 import type { PluginInput } from '@opencode-ai/plugin';
 
-import { createLogger } from '../logger/index.js';
-import type { ToastConfig } from '../types/session-types.js';
+import { createLogger } from '../logger/index';
+import type { ToastConfig } from '../types/session-types';
 
 const log = createLogger({ plugin: 'shared', tool: 'session' });
 
