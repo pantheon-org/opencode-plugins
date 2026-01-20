@@ -9,7 +9,7 @@ import { success, failure, measureDuration, type PluginToolResponse } from '@lib
 import { sendSuccessToast, sendErrorToast, formatDuration } from '@libs/opencode-core/session';
 import type { PluginInput } from '@opencode-ai/plugin';
 
-import { listTodos as listTodosClient } from './lib/client.ts';
+import { listTodos as listTodosClient } from './lib/index.ts';
 import type { GitLabTodo } from './lib/types.ts';
 
 const log = createToolLogger('gitlab', 'list-todos');

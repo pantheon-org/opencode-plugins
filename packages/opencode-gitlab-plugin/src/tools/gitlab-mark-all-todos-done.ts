@@ -9,7 +9,7 @@ import { success, failure, measureDuration, type PluginToolResponse } from '@lib
 import { sendSuccessToast, sendErrorToast, formatDuration } from '@libs/opencode-core/session';
 import type { PluginInput } from '@opencode-ai/plugin';
 
-import { markAllTodosAsDone } from './lib/client.ts';
+import { markAllTodosAsDone } from './lib/index.ts';
 
 const log = createToolLogger('gitlab', 'mark-all-todos-done');
 

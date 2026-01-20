@@ -24,7 +24,7 @@ import { success, failure, measureDuration, type PluginToolResponse } from '@lib
 import { sendSuccessToast, sendErrorToast, formatDuration } from '@libs/opencode-core/session';
 import type { PluginInput } from '@opencode-ai/plugin';
 
-import { listRepositories } from './lib/client.ts';
+import { listRepositories } from './lib/index.ts';
 
 export interface ListReposArgs {
   /** Only return repositories owned by the authenticated user */

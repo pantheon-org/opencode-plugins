@@ -12,7 +12,7 @@ import { success, failure, measureDuration, type PluginToolResponse } from '@lib
 import { sendSuccessToast, sendErrorToast, formatCount, formatDuration } from '@libs/opencode-core/session';
 import type { PluginInput } from '@opencode-ai/plugin';
 
-import { listMergeRequests as listMergeRequestsClient } from './lib/client.ts';
+import { listMergeRequests as listMergeRequestsClient } from './lib/index.ts';
 
 const log = createToolLogger('gitlab', 'list-merge-requests');
 
