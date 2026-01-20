@@ -199,8 +199,6 @@ const getIssue = async (args: GetIssueArgs, toolCtx?: any): Promise<PluginToolRe
       context: { issueKey: args.issueKey },
     });
   }
-}
-
 };
 
 export default getIssue;

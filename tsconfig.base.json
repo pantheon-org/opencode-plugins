@@ -24,6 +24,9 @@
       "@pantheon-org/opencode-core": ["libs/opencode-core/src/index.ts"],
       "@pantheon-org/opencode-jira-plugin": [
         "packages/opencode-jira-plugin/src/index.ts"
+      ],
+      "@pantheon-org/opencode-gitlab-plugin": [
+        "packages/opencode-gitlab-plugin/src/index.ts"
       ]
     }
   }
