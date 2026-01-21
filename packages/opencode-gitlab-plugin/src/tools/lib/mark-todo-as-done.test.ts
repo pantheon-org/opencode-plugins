@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect, mock } from 'bun:test';
+
 import { markTodoAsDone } from './mark-todo-as-done.ts';
 
 describe('markTodoAsDone', () => {
@@ -20,7 +21,7 @@ describe('markTodoAsDone', () => {
 
     const result = await markTodoAsDone(mockConfig, 42);
 
-    expect(result).toEqual(mockTodo);
+    expect(result).toEqual(mockTodo as any);
   });
 
   it('should use POST method', async () => {

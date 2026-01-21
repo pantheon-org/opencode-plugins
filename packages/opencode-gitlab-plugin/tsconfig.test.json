@@ -1,22 +1,15 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "declaration": false,
-    "sourceMap": false,
-    "strict": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "typeRoots": ["./types", "./node_modules", "./node_modules/@types"],
-    "files": ["../../types/bun-test-shim.d.ts"],
-    "baseUrl": "."
+    "noEmit": true,
+    "types": ["bun-types"]
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.spec.ts",
-    "src/**/*.test.ts"
+    "src/**/*.test.ts",
+    "../../types/bun-test.d.ts"
   ],
   "exclude": ["node_modules", "dist"]
 }

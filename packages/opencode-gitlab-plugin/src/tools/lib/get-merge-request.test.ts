@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect, mock } from 'bun:test';
+
 import { getMergeRequest } from './get-merge-request.ts';
 
 describe('getMergeRequest', () => {
@@ -20,7 +21,7 @@ describe('getMergeRequest', () => {
 
     const result = await getMergeRequest(mockConfig, 123, 42);
 
-    expect(result).toEqual(mockMR);
+    expect(result).toEqual(mockMR as any);
   });
 
   it('should construct correct endpoint', async () => {

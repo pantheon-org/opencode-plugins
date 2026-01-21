@@ -2,10 +2,9 @@
  * List repositories (projects)
  */
 
-import type { GitLabClientConfig, GitLabRepository } from '../types.ts';
-
 import { createClientConfig } from './create-client-config.ts';
 import { request } from './request.ts';
+import type { GitLabClientConfig, GitLabRepository } from './types.ts';
 
 export const listRepositories = async (
   config: GitLabClientConfig,

@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect, mock } from 'bun:test';
+
 import { listMergeRequests } from './list-merge-requests.ts';
 
 describe('listMergeRequests', () => {
@@ -18,9 +19,9 @@ describe('listMergeRequests', () => {
       json: async () => mockMRs,
     })) as any;
 
-    const result = await listMergeRequests(mockConfig);
+    const result = await listMergeRequests(mockConfig as any);
 
-    expect(result).toEqual(mockMRs);
+    expect(result).toEqual(mockMRs as any);
   });
 
   it('should build query params with all options', async () => {

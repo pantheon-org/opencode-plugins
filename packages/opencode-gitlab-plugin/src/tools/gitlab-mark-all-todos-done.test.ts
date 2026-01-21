@@ -28,13 +28,10 @@ describe('gitlab-mark-all-todos-done', () => {
   describe('response structure', () => {
     it('should define MarkAllTodosDoneData interface correctly', () => {
       const mockData: MarkAllTodosDoneData = {
-        success: true,
-        count: 15,
-        message: 'Marked 15 todos as done',
+        completed: true,
       };
 
-      expect(mockData.success).toBe(true);
-      expect(mockData.count).toBe(15);
+      expect(mockData.completed).toBe(true);
     });
   });
 
@@ -43,16 +40,14 @@ describe('gitlab-mark-all-todos-done', () => {
       const response = {
         success: true,
         data: {
-          success: true,
-          count: 10,
-          message: 'Marked 10 todos as done',
+          completed: true,
         },
         metadata: { timestamp: Date.now(), duration: 250 },
       };
 
       expect(isSuccess(response)).toBe(true);
       if (isSuccess(response)) {
-        expect(response.data.count).toBe(10);
+        expect(response.data.completed).toBe(true);
       }
     });
 

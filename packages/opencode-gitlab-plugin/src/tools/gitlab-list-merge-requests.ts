@@ -13,17 +13,18 @@ import { sendSuccessToast, sendErrorToast, formatCount, formatDuration } from '@
 import type { PluginInput } from '@opencode-ai/plugin';
 
 import { listMergeRequests as listMergeRequestsClient } from './lib/index.ts';
+import type { GitLabMergeRequest } from './lib/types.ts';
 
 const log = createToolLogger('gitlab', 'list-merge-requests');
 
 export interface ListMergeRequestsArgs {
-  projectId?: string;
+  projectId?: string | number;
   state?: string;
   author?: string;
   assignee?: string;
   targetBranch?: string;
   sourceBranch?: string;
-  labels?: string;
+  labels?: string | string[];
   perPage?: number;
   page?: number;
   baseUrl?: string;
@@ -85,7 +86,11 @@ const listMergeRequests = async (
     }
 
     // Parse labels
-    const labels = args.labels ? args.labels.split(',').map((l) => l.trim()) : undefined;
+    const labels = args.labels
+      ? Array.isArray(args.labels)
+        ? args.labels
+        : args.labels.split(',').map((l: string) => l.trim())
+      : undefined;
 
     const [result, duration] = await measureDuration(() =>
       listMergeRequestsClient(
@@ -107,7 +112,7 @@ const listMergeRequests = async (
       ),
     );
 
-    const transformedMRs = result.map((mr) => ({
+    const transformedMRs = result.map((mr: GitLabMergeRequest) => ({
       id: mr.id,
       iid: mr.iid,
       title: mr.title,
@@ -162,7 +167,11 @@ const listMergeRequests = async (
           assignee: args.assignee,
           targetBranch: args.targetBranch,
           sourceBranch: args.sourceBranch,
-          labels: args.labels?.split(',').map((l) => l.trim()),
+          labels: args.labels
+            ? Array.isArray(args.labels)
+              ? args.labels
+              : args.labels.split(',').map((l: string) => l.trim())
+            : undefined,
         },
         mergeRequests: transformedMRs,
       },

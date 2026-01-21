@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
+
 import { createClientConfig } from './create-client-config.ts';
 
 describe('createClientConfig', () => {

@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect, mock } from 'bun:test';
+
 import { listTodos } from './list-todos.ts';
 
 describe('listTodos', () => {
@@ -18,9 +19,9 @@ describe('listTodos', () => {
       json: async () => mockTodos,
     })) as any;
 
-    const result = await listTodos(mockConfig);
+    const result = await listTodos(mockConfig as any);
 
-    expect(result).toEqual(mockTodos);
+    expect(result).toEqual(mockTodos as any);
   });
 
   it('should build query params with all options', async () => {

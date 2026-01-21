@@ -11,7 +11,7 @@
     "skipLibCheck": true,
     "allowJs": true,
     "moduleDetection": "force",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "types": ["bun-types"]
   },
   "include": ["**/*.ts", "**/*.js"],

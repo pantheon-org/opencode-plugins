@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect, mock } from 'bun:test';
+
 import { listRepositories } from './list-repositories.ts';
 
 describe('listRepositories', () => {
@@ -18,9 +19,9 @@ describe('listRepositories', () => {
       json: async () => mockRepositories,
     })) as any;
 
-    const result = await listRepositories(mockConfig);
+    const result = await listRepositories(mockConfig as any);
 
-    expect(result).toEqual(mockRepositories);
+    expect(result).toEqual(mockRepositories as any);
   });
 
   it('should build query params correctly', async () => {

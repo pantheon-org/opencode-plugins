@@ -31,9 +31,15 @@ describe('gitlab-mark-todo-done', () => {
       const mockData: MarkTodoDoneData = {
         todo: {
           id: 42,
+          body: 'test',
           state: 'done',
-          markedAt: '2024-01-10T10:00:00Z',
-        },
+          created_at: '2024-01-01',
+          action_name: 'marked',
+          target_type: 'Issue',
+          target: { id: 1 },
+          project: { id: 1 },
+          author: { id: 1, name: 'Test', username: 'test' },
+        } as any,
       };
 
       expect(mockData.todo.id).toBe(42);
@@ -47,9 +53,20 @@ describe('gitlab-mark-todo-done', () => {
         success: true,
         data: {
           todo: {
+            id: 1,
+            body: 'test',
+            state: 'done',
+            created_at: '2024-01-01',
+            action_name: 'marked',
+            target_type: 'Issue',
+            target: { id: 1 },
+            project: { id: 1 },
+            author: { id: 1, name: 'Test', username: 'test' },
+          } as any,
+          oldTodo: {
             id: 42,
             state: 'done',
-            markedAt: '2024-01-10T10:00:00Z',
+            // markedAt: '2024-01-10T10:00:00Z',
           },
         },
         metadata: { timestamp: Date.now(), duration: 100 },

@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect, mock } from 'bun:test';
+
 import { getTodo } from './get-todo.ts';
 
 describe('getTodo', () => {
@@ -20,7 +21,7 @@ describe('getTodo', () => {
 
     const result = await getTodo(mockConfig, 42);
 
-    expect(result).toEqual(mockTodo);
+    expect(result).toEqual(mockTodo as any);
   });
 
   it('should construct correct endpoint', async () => {

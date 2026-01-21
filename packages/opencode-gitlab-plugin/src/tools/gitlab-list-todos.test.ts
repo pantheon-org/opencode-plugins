@@ -43,26 +43,29 @@ describe('gitlab-list-todos', () => {
         todos: [
           {
             id: 1,
+            body: 'Review merge request',
             state: 'pending',
-            createdAt: '2024-01-01',
-            actionName: 'assigned',
-            targetType: 'Issue',
-            targetTitle: 'Fix bug',
-            targetUrl: 'https://gitlab.com/project/-/issues/123',
-            body: 'Please review',
-            author: 'John Doe',
-            projectName: 'My Project',
+            created_at: '2024-01-10T10:00:00Z',
+            action_name: 'assigned',
+            target_type: 'MergeRequest',
+            target_url: 'https://gitlab.com/test/project/-/merge_requests/123',
+            target: { id: 1, iid: 123, title: 'Test MR', web_url: 'https://gitlab.com' },
+            project: {
+              id: 1,
+              name: 'Test Project',
+              name_with_namespace: 'Test / Project',
+              path_with_namespace: 'test/project',
+            },
+            author: { id: 1, name: 'John Doe', username: 'john.doe' },
           },
         ],
-        summary: {
-          total: 1,
-          pending: 1,
-          done: 0,
-        },
+        count: 1,
+        summary: { pending: 1, done: 0 },
       };
 
       expect(mockData.todos).toHaveLength(1);
-      expect(mockData.summary.pending).toBe(1);
+      expect(mockData.todos[0].id).toBe(1);
+      expect(mockData.count).toBe(1);
     });
   });
 
@@ -75,17 +78,17 @@ describe('gitlab-list-todos', () => {
             {
               id: 1,
               state: 'pending',
-              createdAt: '2024-01-01',
-              actionName: 'assigned',
+              created_at: '2024-01-01',
+              action_name: 'assigned',
               targetType: 'Issue',
-              targetTitle: 'Test',
+              // targetTitle: 'Test',
               targetUrl: 'https://example.com',
               body: 'Test',
               author: 'User',
               projectName: 'Project',
             },
           ],
-          summary: { total: 1, pending: 1, done: 0 },
+          summary: { pending: 1, done: 0 },
         },
         metadata: { timestamp: Date.now(), duration: 100 },
       };

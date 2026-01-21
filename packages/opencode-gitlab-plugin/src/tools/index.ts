@@ -10,6 +10,7 @@
  * - gitlab-get-todo: Get a specific TODO by ID
  * - gitlab-mark-todo-done: Mark a TODO as done
  * - gitlab-mark-all-todos-done: Mark all TODOs as done
+ * - load-gitlab-skill: Load comprehensive GitLab integration skill
  */
 
 export { default as gitlabListRepos } from './gitlab-list-repos.ts';
@@ -18,6 +19,7 @@ export { default as gitlabListTodos } from './gitlab-list-todos.ts';
 export { default as gitlabGetTodo } from './gitlab-get-todo.ts';
 export { default as gitlabMarkTodoDone } from './gitlab-mark-todo-done.ts';
 export { default as gitlabMarkAllTodosDone } from './gitlab-mark-all-todos-done.ts';
+export { default as loadGitlabSkill } from './load-gitlab-skill.ts';
 
 export type { ListReposArgs, ListReposData } from './gitlab-list-repos.ts';
 export type { ListMergeRequestsArgs, ListMergeRequestsData } from './gitlab-list-merge-requests.ts';

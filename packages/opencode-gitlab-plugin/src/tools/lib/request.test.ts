@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach, mock } from 'bun:test';
+
 import { request } from './request.ts';
 import type { GitLabClientConfig } from './types.ts';
 

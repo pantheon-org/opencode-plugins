@@ -2,7 +2,7 @@
  * Create a GitLab API client configuration
  */
 
-import type { GitLabClientConfig } from '../types.ts';
+import type { GitLabClientConfig } from './types.ts';
 
 export const createClientConfig = (config: GitLabClientConfig = {}): Required<GitLabClientConfig> => {
   const baseUrl = (

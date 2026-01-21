@@ -2,10 +2,9 @@
  * List TODOs for the authenticated user
  */
 
-import type { GitLabClientConfig, GitLabTodo } from '../types.ts';
-
 import { createClientConfig } from './create-client-config.ts';
 import { request } from './request.ts';
+import type { GitLabClientConfig, GitLabTodo } from './types.ts';
 
 export const listTodos = async (
   config: GitLabClientConfig,

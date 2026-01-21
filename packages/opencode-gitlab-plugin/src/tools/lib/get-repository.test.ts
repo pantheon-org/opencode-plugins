@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect, mock } from 'bun:test';
+
 import { getRepository } from './get-repository.ts';
 
 describe('getRepository', () => {
@@ -20,7 +21,7 @@ describe('getRepository', () => {
 
     const result = await getRepository(mockConfig, 123);
 
-    expect(result).toEqual(mockRepo);
+    expect(result).toEqual(mockRepo as any);
   });
 
   it('should construct correct endpoint with string ID', async () => {

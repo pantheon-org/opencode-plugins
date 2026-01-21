@@ -15,6 +15,7 @@
  * - gitlab_get_todo: Get a specific TODO by ID
  * - gitlab_mark_todo_done: Mark a TODO as done
  * - gitlab_mark_all_todos_done: Mark all TODOs as done
+ * - load_gitlab_skill: Load comprehensive GitLab integration skill documentation
  */
 
 import { createLogger } from '@libs/opencode-core/logger';
@@ -28,6 +29,7 @@ import gitlabListRepos from './tools/gitlab-list-repos.ts';
 import gitlabListTodos from './tools/gitlab-list-todos.ts';
 import gitlabMarkAllTodosDone from './tools/gitlab-mark-all-todos-done.ts';
 import gitlabMarkTodoDone from './tools/gitlab-mark-todo-done.ts';
+import loadGitlabSkill from './tools/load-gitlab-skill.ts';
 
 // Create logger for the plugin
 const log = createLogger({ plugin: 'gitlab' });
@@ -123,7 +125,7 @@ export const GitLabPlugin: Plugin = async (ctx) => {
               placeholder: 'https://gitlab.com/api/v4',
             },
           ],
-          async authorize(inputs) {
+          authorize: async (inputs) => {
             const token = inputs?.token;
             const baseUrl = inputs?.baseUrl || 'https://gitlab.com/api/v4';
 
@@ -157,7 +159,7 @@ export const GitLabPlugin: Plugin = async (ctx) => {
           baseUrl: tool.schema.string().optional().describe('GitLab API base URL (overrides GITLAB_API_URL env var)'),
           token: tool.schema.string().optional().describe('GitLab API token (overrides GITLAB_TOKEN env var)'),
         },
-        async execute(args) {
+        execute: async (args) => {
           try {
             const result = await gitlabListRepos(args);
             return JSON.stringify(result, null, 2);
@@ -189,7 +191,7 @@ export const GitLabPlugin: Plugin = async (ctx) => {
           baseUrl: tool.schema.string().optional().describe('GitLab API base URL (overrides GITLAB_API_URL env var)'),
           token: tool.schema.string().optional().describe('GitLab API token (overrides GITLAB_TOKEN env var)'),
         },
-        async execute(args) {
+        execute: async (args) => {
           try {
             const result = await gitlabListMergeRequests(args);
             return JSON.stringify(result, null, 2);
@@ -228,7 +230,7 @@ export const GitLabPlugin: Plugin = async (ctx) => {
           baseUrl: tool.schema.string().optional().describe('GitLab API base URL (overrides GITLAB_API_URL env var)'),
           timeout: tool.schema.number().optional().describe('Request timeout in milliseconds (default: 30000)'),
         },
-        async execute(args) {
+        execute: async (args) => {
           try {
             const result = await gitlabListTodos(args);
             return JSON.stringify(result, null, 2);
@@ -247,7 +249,7 @@ export const GitLabPlugin: Plugin = async (ctx) => {
           baseUrl: tool.schema.string().optional().describe('GitLab API base URL (overrides GITLAB_API_URL env var)'),
           timeout: tool.schema.number().optional().describe('Request timeout in milliseconds (default: 30000)'),
         },
-        async execute(args) {
+        execute: async (args) => {
           try {
             const result = await gitlabGetTodo(args);
             return JSON.stringify(result, null, 2);
@@ -266,7 +268,7 @@ export const GitLabPlugin: Plugin = async (ctx) => {
           baseUrl: tool.schema.string().optional().describe('GitLab API base URL (overrides GITLAB_API_URL env var)'),
           timeout: tool.schema.number().optional().describe('Request timeout in milliseconds (default: 30000)'),
         },
-        async execute(args) {
+        execute: async (args) => {
           try {
             const result = await gitlabMarkTodoDone(args);
             return JSON.stringify(result, null, 2);
@@ -284,7 +286,7 @@ export const GitLabPlugin: Plugin = async (ctx) => {
           baseUrl: tool.schema.string().optional().describe('GitLab API base URL (overrides GITLAB_API_URL env var)'),
           timeout: tool.schema.number().optional().describe('Request timeout in milliseconds (default: 30000)'),
         },
-        async execute(args) {
+        execute: async (args) => {
           try {
             const result = await gitlabMarkAllTodosDone(args);
             return JSON.stringify(result, null, 2);
@@ -293,6 +295,8 @@ export const GitLabPlugin: Plugin = async (ctx) => {
           }
         },
       }),
+
+      load_gitlab_skill: loadGitlabSkill,
     },
   };
 };

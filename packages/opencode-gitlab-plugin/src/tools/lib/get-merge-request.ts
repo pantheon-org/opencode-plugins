@@ -2,10 +2,9 @@
  * Get a single merge request
  */
 
-import type { GitLabClientConfig, GitLabMergeRequest } from '../types.ts';
-
 import { createClientConfig } from './create-client-config.ts';
 import { request } from './request.ts';
+import type { GitLabClientConfig, GitLabMergeRequest } from './types.ts';
 
 export const getMergeRequest = async (
   config: GitLabClientConfig,

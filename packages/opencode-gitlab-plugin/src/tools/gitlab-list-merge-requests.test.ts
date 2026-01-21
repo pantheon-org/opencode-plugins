@@ -62,21 +62,26 @@ describe('gitlab-list-merge-requests', () => {
         mergeRequests: [
           {
             id: 1,
-            iid: 101,
+            iid: 100,
             title: 'Add new feature',
             description: 'Description',
             state: 'opened',
-            author: 'John Doe',
-            assignee: 'Jane Smith',
+            author: { name: 'John Doe', username: 'john.doe' },
+            assignee: { name: 'Jane Smith', username: 'jane.smith' },
             sourceBranch: 'feature/new',
             targetBranch: 'main',
-            labels: ['feature', 'enhancement'],
-            createdAt: '2024-01-01',
-            updatedAt: '2024-01-10',
-            url: 'https://gitlab.com/project/-/merge_requests/101',
-            project: 'my-project',
+            url: "https://gitlab.com/mr/100",
+            labels: [],
+            createdAt: "2024-01-01",
+            updatedAt: "2024-01-02",
+
+            projectId: 123,
+            mergedAt: null,
+            closedAt: null,
           },
         ],
+        total: 1,
+        filters: {},
       };
 
       expect(mockData.mergeRequests).toHaveLength(1);
@@ -104,7 +109,7 @@ describe('gitlab-list-merge-requests', () => {
               createdAt: '2024-01-01',
               updatedAt: '2024-01-01',
               url: 'https://example.com',
-              project: 'test-project',
+              projectId: 'test-project',
             },
           ],
         },

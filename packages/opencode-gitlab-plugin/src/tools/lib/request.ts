@@ -2,7 +2,7 @@
  * Make an HTTP request to the GitLab API
  */
 
-import type { ApiResponse, GitLabClientConfig } from '../types.ts';
+import type { ApiResponse, GitLabClientConfig } from './types.ts';
 
 export const request = async <T>(
   endpoint: string,

@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect, mock } from 'bun:test';
+
 import { markAllTodosAsDone } from './mark-all-todos-as-done.ts';
 
 describe('markAllTodosAsDone', () => {
