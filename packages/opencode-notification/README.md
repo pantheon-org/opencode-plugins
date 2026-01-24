@@ -1,6 +1,6 @@
-# @pantheon-org/opencode-core
+# @pantheon-org/opencode-notification
 
-Core utilities and shared patterns for OpenCode plugins.
+Notification utilities for OpenCode plugins.
 
 ## Features
 
@@ -12,7 +12,7 @@ Core utilities and shared patterns for OpenCode plugins.
 ## Installation
 
 ```bash
-bun add @pantheon-org/opencode-core
+bun add @pantheon-org/opencode-notification
 ```
 
 ## Usage
@@ -20,7 +20,7 @@ bun add @pantheon-org/opencode-core
 ### Basic Notifications
 
 ```typescript
-import { createNotifier } from '@pantheon-org/opencode-core';
+import { createNotifier } from '@pantheon-org/opencode-notification';
 
 export const MyPlugin: Plugin = async (ctx) => {
   const notify = createNotifier(ctx);
@@ -42,7 +42,7 @@ export const MyPlugin: Plugin = async (ctx) => {
 ### Message Notifications (like DCP plugin)
 
 ```typescript
-import { createNotifier } from '@pantheon-org/opencode-core';
+import { createNotifier } from '@pantheon-org/opencode-notification';
 
 export const MyPlugin: Plugin = async (ctx) => {
   const notify = createNotifier(ctx);
@@ -68,7 +68,7 @@ export const MyPlugin: Plugin = async (ctx) => {
 ### Combined Notifications
 
 ```typescript
-import { createNotifier } from '@pantheon-org/opencode-core';
+import { createNotifier } from '@pantheon-org/opencode-notification';
 
 export const MyPlugin: Plugin = async (ctx) => {
   const notify = createNotifier(ctx);
@@ -93,7 +93,7 @@ export const MyPlugin: Plugin = async (ctx) => {
 ### Advanced Configuration
 
 ```typescript
-import { createNotifier, Logger } from '@pantheon-org/opencode-core';
+import { createNotifier, Logger } from '@pantheon-org/opencode-notification';
 
 export const MyPlugin: Plugin = async (ctx) => {
   const notify = createNotifier(ctx, {
@@ -227,7 +227,7 @@ The notification system handles errors gracefully:
 ### Plugin Setup with Loading Messages
 
 ```typescript
-import { Plugin, createNotifier } from '@pantheon-org/opencode-core';
+import { Plugin, createNotifier } from '@pantheon-org/opencode-notification';
 
 export const MyPlugin: Plugin = async (ctx) => {
   const notify = createNotifier(ctx);

@@ -1,6 +1,6 @@
 {
   "version": 2,
   "projects": {
-    "opencode-core": "libs/opencode-core/project.json"
+    "opencode-notification": "packages/opencode-notification/project.json"
   }
 }

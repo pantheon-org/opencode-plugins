@@ -20,7 +20,9 @@
       "@pantheon-org/opencode-core-plugin": [
         "packages/opencode-core-plugin/src/index.ts"
       ],
-      "@pantheon-org/opencode-core": ["libs/opencode-core/src/index.ts"],
+      "@pantheon-org/opencode-notification": [
+        "packages/opencode-notification/src/index.ts"
+      ],
       "@pantheon-org/tools": ["tools/index.ts"]
     }
   }

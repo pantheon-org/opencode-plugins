@@ -4,9 +4,10 @@
  */
 
 import type { Plugin } from '@opencode-ai/plugin';
+import { createNotifier } from '@pantheon-org/opencode-notification';
+
 import type { Logger } from './logger';
 import type { soundDescriptions } from './sounds/descriptions';
-import { createNotifier } from '@pantheon-org/opencode-core/notification';
 
 const TOAST_DURATION = {
   SUCCESS: 3000,
