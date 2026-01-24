@@ -1,4 +1,4 @@
-import { exists } from 'fs/promises';
+import { access } from 'fs/promises';
 import { join } from 'path';
 
 import { createLogger } from '../logger.js';
@@ -34,7 +34,9 @@ const debugInfo = (message: string, context?: Record<string, unknown>): void => 
 const tryLoadFromPath = async (configPath: string, pluginName: string): Promise<WarcraftNotificationConfig | null> => {
   debugLog('Checking configuration path', { configPath });
 
-  if (!(await exists(configPath))) {
+  try {
+    await access(configPath);
+  } catch {
     debugLog('Configuration file not found', { configPath });
     return null;
   }

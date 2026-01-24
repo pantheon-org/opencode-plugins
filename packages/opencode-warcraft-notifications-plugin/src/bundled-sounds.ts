@@ -1,4 +1,5 @@
-import { mkdir, exists, readdir, copyFile } from 'fs/promises';
+import { mkdir, readdir, copyFile } from 'fs/promises';
+import { access } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -26,7 +27,8 @@ const ensureDirExists = async (dir: string): Promise<boolean> => {
 
 const fileExists = async (path: string): Promise<boolean> => {
   try {
-    return await exists(path);
+    await access(path);
+    return true;
   } catch {
     return false;
   }
