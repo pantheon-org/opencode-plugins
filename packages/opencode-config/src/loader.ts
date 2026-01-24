@@ -1,5 +1,7 @@
 import { access } from 'fs/promises';
 
+import type { Logger } from '@pantheon-org/opencode-notification';
+
 import { getConfigPaths } from './paths.js';
 import type { PluginConfig } from './types.js';
 
@@ -17,6 +19,8 @@ export interface LoadConfigOptions<T> {
   defaultConfig?: T;
   /** Enable debug logging */
   debug?: boolean;
+  /** Optional logger for debug messages (uses console if not provided) */
+  logger?: Logger;
 }
 
 /**
@@ -27,40 +31,33 @@ const tryLoadFromPath = async <T>(
   pluginName: string,
   validator?: (config: unknown) => T,
   debug?: boolean,
+  logger?: Logger,
 ): Promise<T | null> => {
-  if (debug) {
-    console.log('[opencode-config] Checking configuration path:', configPath);
-  }
+  const log = logger?.debug || (debug ? console.log : () => {});
+
+  log('[opencode-config] Checking configuration path:', { configPath });
 
   try {
     await access(configPath);
   } catch {
-    if (debug) {
-      console.log('[opencode-config] Configuration file not found:', configPath);
-    }
+    log('[opencode-config] Configuration file not found:', { configPath });
     return null;
   }
 
-  if (debug) {
-    console.log('[opencode-config] Configuration file found:', configPath);
-  }
+  log('[opencode-config] Configuration file found:', { configPath });
 
   const configFile = Bun.file(configPath);
   const configData: PluginConfig = await configFile.json();
 
   if (!configData[pluginName]) {
-    if (debug) {
-      console.log('[opencode-config] Configuration file exists but does not contain plugin configuration:', {
-        configPath,
-        pluginName,
-      });
-    }
+    log('[opencode-config] Configuration file exists but does not contain plugin configuration:', {
+      configPath,
+      pluginName,
+    });
     return null;
   }
 
-  if (debug) {
-    console.log('[opencode-config] Loading plugin configuration:', { configPath, pluginName });
-  }
+  log('[opencode-config] Loading plugin configuration:', { configPath, pluginName });
 
   const rawConfig = configData[pluginName];
 
@@ -68,13 +65,11 @@ const tryLoadFromPath = async <T>(
   if (validator) {
     try {
       const validatedConfig = validator(rawConfig);
-      if (debug) {
-        console.log('[opencode-config] Configuration loaded and validated successfully:', {
-          configPath,
-          pluginName,
-          config: validatedConfig,
-        });
-      }
+      log('[opencode-config] Configuration loaded and validated successfully:', {
+        configPath,
+        pluginName,
+        config: validatedConfig,
+      });
       return validatedConfig;
     } catch (validationError) {
       // Re-throw validation errors with context about the config file location
@@ -86,12 +81,10 @@ const tryLoadFromPath = async <T>(
   }
 
   // Return raw config if no validator
-  if (debug) {
-    console.log('[opencode-config] Configuration loaded successfully (no validation):', {
-      configPath,
-      pluginName,
-    });
-  }
+  log('[opencode-config] Configuration loaded successfully (no validation):', {
+    configPath,
+    pluginName,
+  });
   return rawConfig as T;
 };
 
@@ -141,21 +134,20 @@ const tryLoadFromPath = async <T>(
  * ```
  */
 export const loadPluginConfig = async <T = unknown>(options: LoadConfigOptions<T>): Promise<T> => {
-  const { pluginName, configFileName = 'plugin.json', validator, defaultConfig, debug = false } = options;
+  const { pluginName, configFileName = 'plugin.json', validator, defaultConfig, debug = false, logger } = options;
 
-  if (debug) {
-    console.log('[opencode-config] Starting configuration discovery:', { pluginName, configFileName });
-  }
+  const log = logger?.debug || (debug ? console.log : () => {});
+  const warn = logger?.warn || (debug ? console.warn : () => {});
+
+  log('[opencode-config] Starting configuration discovery:', { pluginName, configFileName });
 
   const configPaths = getConfigPaths(configFileName);
 
-  if (debug) {
-    console.log('[opencode-config] Configuration search paths:', configPaths);
-  }
+  log('[opencode-config] Configuration search paths:', { configPaths });
 
   for (const configPath of configPaths) {
     try {
-      const config = await tryLoadFromPath(configPath, pluginName, validator, debug);
+      const config = await tryLoadFromPath(configPath, pluginName, validator, debug, logger);
       if (config !== null) {
         return config;
       }
@@ -166,15 +158,13 @@ export const loadPluginConfig = async <T = unknown>(options: LoadConfigOptions<T
       }
 
       // Only warn for other errors when explicit debug flag is set
-      if (debug) {
-        console.warn(`[opencode-config] Failed to load plugin config from ${configPath}`, error);
+      if (debug || logger) {
+        warn(`[opencode-config] Failed to load plugin config from ${configPath}`, { error });
       }
     }
   }
 
-  if (debug) {
-    console.log('[opencode-config] No configuration found, using default:', { pluginName, defaultConfig });
-  }
+  log('[opencode-config] No configuration found, using default:', { pluginName, defaultConfig });
 
   // Return default config if provided, otherwise return empty object
   if (defaultConfig !== undefined) {

@@ -2,6 +2,8 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
+import type { Logger } from '@pantheon-org/opencode-notification';
+
 /**
  * Get the directory containing this module
  * @returns Directory path of the current module
@@ -40,12 +42,13 @@ const getPluginRootDir = (): string => {
 /**
  * Try to read package.json from multiple locations
  * @param debug - Enable debug logging
+ * @param logger - Optional logger for debug messages (uses console if not provided)
  * @returns package name or null if not found
  *
  * @example
  * ```typescript
  * const packageName = getPackageName();
- * console.log(packageName); // '@pantheon-org/my-plugin'
+ * console.log(packageName); // '\@pantheon-org/my-plugin'
  * ```
  *
  * @example
@@ -55,7 +58,10 @@ const getPluginRootDir = (): string => {
  * // Logs will show search paths and results
  * ```
  */
-export const getPackageName = (debug: boolean = false): string | null => {
+export const getPackageName = (debug: boolean = false, logger?: Logger): string | null => {
+  const log = logger?.debug || (debug ? console.log : () => {});
+  const warn = logger?.warn || (debug ? console.warn : () => {});
+
   // Strategy:
   // 1. Try plugin root FIRST (for production when running from OpenCode)
   // 2. Fall back to CWD (for tests and development only)
@@ -66,9 +72,7 @@ export const getPackageName = (debug: boolean = false): string | null => {
     join(process.cwd(), 'package.json'), // CWD (tests/development) - FALLBACK
   ];
 
-  if (debug) {
-    console.log('[opencode-config] Looking for package.json in:', locations);
-  }
+  log('[opencode-config] Looking for package.json in:', { locations });
 
   for (const pkgPath of locations) {
     try {
@@ -76,23 +80,17 @@ export const getPackageName = (debug: boolean = false): string | null => {
         name?: string;
       };
       if (pkg && typeof pkg.name === 'string') {
-        if (debug) {
-          console.log('[opencode-config] Found package name:', pkg.name, 'from:', pkgPath);
-        }
+        log('[opencode-config] Found package name:', { name: pkg.name, path: pkgPath });
         return pkg.name;
       }
     } catch (err) {
-      if (debug) {
-        console.log('[opencode-config] Failed to read:', pkgPath, err);
-      }
+      log('[opencode-config] Failed to read:', { path: pkgPath, error: err });
       // Try next location
       continue;
     }
   }
 
-  if (debug) {
-    console.warn('[opencode-config] Could not determine package name from any location');
-  }
+  warn('[opencode-config] Could not determine package name from any location');
 
   return null;
 };
