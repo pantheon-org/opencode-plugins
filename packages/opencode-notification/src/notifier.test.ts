@@ -5,19 +5,19 @@ import { createNotifier } from './index';
 // Mock OpenCode client
 const createMockClient = () => ({
   tui: {
-    showToast: mock(async (options: any) => {}),
+    showToast: mock(async (_options: any) => {}),
   },
   session: {
-    prompt: mock(async (options: any) => {}),
+    prompt: mock(async (_options: any) => {}),
   },
 });
 
 // Mock logger
 const createMockLogger = () => ({
-  info: mock((msg: string, ...args: any[]) => {}),
-  warn: mock((msg: string, ...args: any[]) => {}),
-  error: mock((msg: string, ...args: any[]) => {}),
-  debug: mock((msg: string, ...args: any[]) => {}),
+  info: mock((_msg: string, ..._args: any[]) => {}),
+  warn: mock((_msg: string, ..._args: any[]) => {}),
+  error: mock((_msg: string, ..._args: any[]) => {}),
+  debug: mock((_msg: string, ..._args: any[]) => {}),
 });
 
 describe('createNotifier', () => {

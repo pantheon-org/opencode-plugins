@@ -1,12 +1,12 @@
 /**
- * OpenCode Core Library
+ * OpenCode Notification Library
  *
- * A shared library of utilities and patterns for OpenCode plugins.
- * Provides common functionality like notifications, logging, and more.
+ * A shared library of notification utilities for OpenCode plugins.
+ * Provides common functionality for toast notifications and session messages.
  */
 
 // Export notification utilities
-export * from './notification';
+export * from './notifier';
 
 // Export types
 export type {
@@ -17,7 +17,7 @@ export type {
   PluginContext,
   Logger,
   SoundDescription,
-} from './notification';
+} from './notifier';
 
 // Export the createNotificationUtility function
-export { createNotifier, createNotificationUtility } from './notification';
+export { createNotifier, createNotificationUtility } from './notifier';

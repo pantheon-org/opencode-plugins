@@ -100,8 +100,12 @@ export const TOAST_DURATION = {
 
 /**
  * Create a notification utility that supports both toast and message notifications
+ *
+ * @param ctx - Plugin context containing client
+ * @param logger - Optional logger for debugging
+ * @returns Notification utility with toast and message methods
  */
-export function createNotifier(ctx: PluginContext, logger?: Logger) {
+export const createNotifier = (ctx: PluginContext, logger?: Logger) => {
   const { client } = ctx;
 
   /**
@@ -266,7 +270,7 @@ export function createNotifier(ctx: PluginContext, logger?: Logger) {
     info,
     error,
   };
-}
+};
 
 /**
  * Export types and utilities for easy importing
