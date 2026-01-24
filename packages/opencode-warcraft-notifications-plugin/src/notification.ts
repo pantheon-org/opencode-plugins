@@ -1,4 +1,5 @@
 import type { Plugin } from '@opencode-ai/plugin';
+import { createNotifier } from '@pantheon-org/opencode-notification';
 
 import { installBundledSoundsIfMissing } from './bundled-sounds.js';
 import { loadPluginConfig } from './config/index.js';
@@ -13,13 +14,6 @@ import {
 
 const log = createLogger({ module: 'opencode-plugin-warcraft-notifications' });
 
-// Constants for toast durations and cache keys
-const TOAST_DURATION = {
-  SUCCESS: 3000,
-  WARNING: 5000,
-  INFO: 4000,
-} as const;
-
 const CACHE_KEY_NOTIFIED_MISSING = '_notified_missing';
 
 /**
@@ -33,11 +27,14 @@ const CACHE_KEY_NOTIFIED_MISSING = '_notified_missing';
  * to download wave files from the network.
  */
 export const NotificationPlugin: Plugin = async (ctx) => {
-  const { project: _project, client, $, worktree: _worktree } = ctx;
+  const { project: _project, $, worktree: _worktree } = ctx;
   // Keep a simple cache flag to avoid repeated checks.
   const checkedSoundCache = new Map<string, boolean>();
   void _project;
   void _worktree;
+
+  // Create notifier for showing notifications
+  const notify = createNotifier(ctx, log);
 
   // Load plugin configuration from plugin.json
   const pluginName = '@pantheon-ai/opencode-warcraft-notifications';
@@ -49,14 +46,10 @@ export const NotificationPlugin: Plugin = async (ctx) => {
     // Only notify user if files were actually installed
     if (installedCount > 0) {
       try {
-        await client.tui.showToast({
-          body: {
-            title: 'Warcraft Sounds',
-            message: `Installed ${installedCount} sound file${installedCount > 1 ? 's' : ''} successfully`,
-            variant: 'success',
-            duration: TOAST_DURATION.SUCCESS,
-          },
-        });
+        await notify.success(
+          'Warcraft Sounds',
+          `Installed ${installedCount} sound file${installedCount > 1 ? 's' : ''} successfully`,
+        );
       } catch (toastErr) {
         // Silently ignore toast errors - not critical
         if (process.env.DEBUG_OPENCODE) log.debug('Toast notification failed', { error: toastErr });
@@ -66,14 +59,7 @@ export const NotificationPlugin: Plugin = async (ctx) => {
     if (process.env.DEBUG_OPENCODE) log.warn('installBundledSoundsIfMissing failed', { error: err });
     // Notify user of installation failure
     try {
-      await client.tui.showToast({
-        body: {
-          title: 'Warcraft Sounds',
-          message: 'Failed to install sound files. Using system sounds as fallback.',
-          variant: 'warning',
-          duration: TOAST_DURATION.WARNING,
-        },
-      });
+      await notify.warning('Warcraft Sounds', 'Failed to install sound files. Using system sounds as fallback.');
     } catch (toastErr) {
       // Silently ignore toast errors - not critical
       if (process.env.DEBUG_OPENCODE) log.debug('Toast notification failed', { error: toastErr });
@@ -122,14 +108,7 @@ export const NotificationPlugin: Plugin = async (ctx) => {
 
     checkedSoundCache.set(CACHE_KEY_NOTIFIED_MISSING, true);
     try {
-      await client.tui.showToast({
-        body: {
-          title: 'Warcraft Sounds',
-          message: `Sound file not found: ${filename}. Using system sound as fallback.`,
-          variant: 'info',
-          duration: TOAST_DURATION.INFO,
-        },
-      });
+      await notify.info('Warcraft Sounds', `Sound file not found: ${filename}. Using system sound as fallback.`);
     } catch (toastErr) {
       // Silently ignore toast errors - not critical
       if (process.env.DEBUG_OPENCODE) log.debug('Toast notification failed', { error: toastErr });
@@ -202,14 +181,7 @@ export const NotificationPlugin: Plugin = async (ctx) => {
 
       if (showToast) {
         try {
-          await client.tui.showToast({
-            body: {
-              title: toastTitle,
-              message: toastMessage,
-              variant: 'info',
-              duration: TOAST_DURATION.INFO,
-            },
-          });
+          await notify.info(toastTitle, toastMessage);
         } catch (toastErr) {
           // Only log toast errors in debug mode
           if (process.env.DEBUG_OPENCODE) {
