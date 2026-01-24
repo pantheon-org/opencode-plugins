@@ -1,0 +1,53 @@
+{
+  "name": "@pantheon-org/opencode-core",
+  "version": "0.1.0",
+  "description": "Core utilities for OpenCode plugins",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./notification": {
+      "import": "./dist/notification/index.mjs",
+      "require": "./dist/notification/index.js",
+      "types": "./dist/notification/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bunx tsup src/index.ts --format esm,cjs --dts --out-dir dist",
+    "dev": "bunx tsup src/index.ts --format esm,cjs --dts --out-dir dist --watch",
+    "test": "bun test",
+    "lint": "bunx eslint . --ext .ts,.js",
+    "typecheck": "bunx tsc --noEmit"
+  },
+  "keywords": [
+    "opencode",
+    "plugin",
+    "utilities",
+    "notification",
+    "toast",
+    "message"
+  ],
+  "author": "Pantheon",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pantheon-org/opencode-plugins.git"
+  },
+  "dependencies": {
+    "@opencode-ai/plugin": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "typescript": "latest",
+    "tsup": "latest",
+    "eslint": "latest"
+  }
+}

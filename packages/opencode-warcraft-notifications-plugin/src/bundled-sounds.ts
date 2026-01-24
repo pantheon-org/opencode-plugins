@@ -1,10 +1,11 @@
-import { copyFile, exists, mkdir, readdir } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { mkdir, readdir, copyFile } from 'fs/promises';
+import { access } from 'fs/promises';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 import { DEFAULT_DATA_DIR } from './config/index.js';
 import { createLogger } from './logger.js';
-import { determineSoundFaction, getSoundFileList as soundsGetSoundFileList } from './sounds/index.js';
+import { getSoundFileList as soundsGetSoundFileList, determineSoundFaction } from './sounds/index.js';
 
 const DEBUG = Boolean(process.env.DEBUG_OPENCODE);
 const log = createLogger({ module: 'opencode-plugin-warcraft-notifications' });
@@ -26,7 +27,8 @@ const ensureDirExists = async (dir: string): Promise<boolean> => {
 
 const fileExists = async (path: string): Promise<boolean> => {
   try {
-    return await exists(path);
+    await access(path);
+    return true;
   } catch {
     return false;
   }
@@ -182,7 +184,9 @@ const findBundledDataDir = (): string | null => {
     try {
       // Simple existence check - readdir will be done later
       return dataPath;
-    } catch {}
+    } catch {
+      continue;
+    }
   }
 
   return null;
