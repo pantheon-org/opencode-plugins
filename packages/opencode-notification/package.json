@@ -2,19 +2,15 @@
   "name": "@pantheon-org/opencode-notification",
   "version": "0.1.0",
   "description": "Notification utilities for OpenCode plugins",
+  "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./notification": {
-      "import": "./dist/notification/index.mjs",
-      "require": "./dist/notification/index.js",
-      "types": "./dist/notification/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
   "files": [

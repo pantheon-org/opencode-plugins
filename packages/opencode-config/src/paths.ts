@@ -48,21 +48,21 @@ export const getDataDir = (): string => {
 
 /**
  * Get the OpenCode plugin storage directory for a specific plugin
- * @param pluginName - The name of the plugin (e.g., '@pantheon-org/my-plugin')
+ * @param pluginName - The name of the plugin (e.g., '\@pantheon-org/my-plugin')
  * @param subdirectory - Optional subdirectory within the plugin storage
  * @returns The plugin storage directory path
  *
  * @example
  * ```typescript
- * const storageDir = getPluginStorageDir('@pantheon-org/my-plugin');
- * // macOS/Linux: ~/.local/share/opencode/storage/plugin/@pantheon-org/my-plugin
+ * const storageDir = getPluginStorageDir('\@pantheon-org/my-plugin');
+ * // macOS/Linux: ~/.local/share/opencode/storage/plugin/\@pantheon-org/my-plugin
  * // Windows: %APPDATA%\opencode\storage\plugin\@pantheon-org\my-plugin
  * ```
  *
  * @example
  * ```typescript
- * const soundsDir = getPluginStorageDir('@pantheon-org/my-plugin', 'sounds');
- * // macOS/Linux: ~/.local/share/opencode/storage/plugin/@pantheon-org/my-plugin/sounds
+ * const soundsDir = getPluginStorageDir('\@pantheon-org/my-plugin', 'sounds');
+ * // macOS/Linux: ~/.local/share/opencode/storage/plugin/\@pantheon-org/my-plugin/sounds
  * ```
  */
 export const getPluginStorageDir = (pluginName: string, subdirectory?: string): string => {
