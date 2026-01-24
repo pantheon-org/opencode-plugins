@@ -26,7 +26,8 @@
       "@pantheon-org/opencode-config": [
         "packages/opencode-config/src/index.ts"
       ],
-      "@pantheon-org/tools": ["tools/index.ts"]
+      "@pantheon-org/tools": ["tools/index.ts"],
+      "@pantheon-org/opencode-skills": ["packages/opencode-skills/src/index.ts"]
     }
   }
 }
