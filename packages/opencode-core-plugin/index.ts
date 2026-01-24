@@ -1,0 +1,1 @@
+export { OpencodeCorePlugin } from './src';
