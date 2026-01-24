@@ -17,11 +17,11 @@
       "@pantheon-org/opencode-agent-loader-plugin": [
         "packages/opencode-agent-loader-plugin/src/index.ts"
       ],
-      "@pantheon-org/tools": ["tools/index.ts"],
-      "opencode-core": ["tools/opencode-core/src/index.ts"],
       "@pantheon-org/opencode-core-plugin": [
         "packages/opencode-core-plugin/src/index.ts"
-      ]
+      ],
+      "@pantheon-org/opencode-core": ["libs/opencode-core/src/index.ts"],
+      "@pantheon-org/tools": ["tools/index.ts"]
     }
   }
 }
