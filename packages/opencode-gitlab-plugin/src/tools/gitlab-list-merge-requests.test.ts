@@ -70,10 +70,10 @@ describe('gitlab-list-merge-requests', () => {
             assignee: { name: 'Jane Smith', username: 'jane.smith' },
             sourceBranch: 'feature/new',
             targetBranch: 'main',
-            url: "https://gitlab.com/mr/100",
+            url: 'https://gitlab.com/mr/100',
             labels: [],
-            createdAt: "2024-01-01",
-            updatedAt: "2024-01-02",
+            createdAt: '2024-01-01',
+            updatedAt: '2024-01-02',
 
             projectId: 123,
             mergedAt: null,
