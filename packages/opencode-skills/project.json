@@ -1,0 +1,90 @@
+{
+  "name": "opencode-skills",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/opencode-skills/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx tsup src/index.ts --format esm,cjs --dts --out-dir dist"
+          }
+        ],
+        "cwd": "packages/opencode-skills",
+        "parallel": false
+      }
+    },
+    "pack": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx npm pack --prefix packages/opencode-skills"
+          }
+        ],
+        "parallel": false
+      }
+    },
+    "check-mirror-exists": {
+      "executor": "@pantheon-org/tools:check-mirror-exists"
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx eslint src/"
+          }
+        ],
+        "cwd": "packages/opencode-skills",
+        "parallel": false
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\""
+          }
+        ],
+        "cwd": "packages/opencode-skills",
+        "parallel": false
+      }
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bunx tsc --noEmit"
+          }
+        ],
+        "cwd": "packages/opencode-skills",
+        "parallel": false
+      }
+    },
+    "dev-proxy": {
+      "executor": "@pantheon-org/tools:dev-proxy",
+      "options": {
+        "plugins": ["opencode-skills"],
+        "symlinkRoot": ".opencode/plugin",
+        "apply": true
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "bun test"
+          }
+        ],
+        "cwd": "packages/opencode-skills",
+        "parallel": false
+      }
+    }
+  }
+}
