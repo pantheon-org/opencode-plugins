@@ -38,7 +38,9 @@
   "homepage": "https://github.com/pantheon-org/opencode-config#readme",
   "author": "Pantheon Systems",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "@pantheon-org/opencode-notification": "workspace:*"
+  },
   "devDependencies": {
     "@types/node": "^22.0.0",
     "tsup": "^8.0.0",

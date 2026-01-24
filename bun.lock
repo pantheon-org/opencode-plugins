@@ -123,6 +123,9 @@
     "packages/opencode-config": {
       "name": "@pantheon-org/opencode-config",
       "version": "0.1.0",
+      "dependencies": {
+        "@pantheon-org/opencode-notification": "workspace:*",
+      },
       "devDependencies": {
         "@types/node": "^22.0.0",
         "tsup": "^8.0.0",
