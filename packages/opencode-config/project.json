@@ -1,0 +1,25 @@
+{
+  "name": "opencode-config",
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/master/schemas/project-schema.json",
+  "sourceRoot": "packages/opencode-config/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/opencode-config/dist",
+        "main": "packages/opencode-config/src/index.ts",
+        "tsConfig": "packages/opencode-config/tsconfig.json",
+        "assets": []
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["packages/opencode-config/**/*.ts"]
+      }
+    }
+  },
+  "tags": ["package", "opencode", "config", "utilities"]
+}
