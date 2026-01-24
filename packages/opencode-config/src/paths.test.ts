@@ -1,6 +1,7 @@
-import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
-import { join } from 'path';
 import { homedir } from 'os';
+import { join } from 'path';
+
+import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
 
 import { getConfigDir, getDataDir, getPluginStorageDir, getConfigPaths } from './paths';
 

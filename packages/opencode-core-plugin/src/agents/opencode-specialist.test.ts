@@ -45,7 +45,7 @@ describe('OpencodeSpecialistAgent', () => {
     const agent = new OpencodeSpecialistAgent();
     expect(agent.config.prompt).toBeDefined();
     expect(typeof agent.config.prompt).toBe('string');
-    expect(agent.config.prompt.length).toBeGreaterThan(100);
+    expect(agent.config.prompt?.length).toBeGreaterThan(100);
     expect(agent.config.prompt).toContain('OpenCode');
     expect(agent.config.prompt).toContain('configuration');
   });

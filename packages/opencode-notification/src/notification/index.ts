@@ -45,19 +45,10 @@ export interface NotificationOptions {
  */
 export interface OpenCodeClient {
   tui: {
-    showToast: (options: { body: ToastOptions }) => Promise<void>;
+    showToast: (options: { body: ToastOptions }) => Promise<any>;
   };
   session: {
-    prompt: (options: {
-      path: { id: string };
-      body: {
-        noReply?: boolean;
-        agent?: string;
-        model?: string;
-        variant?: string;
-        parts: Array<{ type: 'text'; text: string; ignored?: boolean }>;
-      };
-    }) => Promise<void>;
+    prompt: (options: any) => Promise<any>;
   };
 }
 
@@ -76,7 +67,7 @@ export interface SoundDescription {
 }
 
 /**
- * Plugin context interface
+ * Plugin context interface - flexible to accept any context with client property
  */
 export interface PluginContext {
   client: OpenCodeClient;
@@ -84,16 +75,17 @@ export interface PluginContext {
   agent?: string;
   model?: string;
   variant?: string;
+  [key: string]: any; // Allow additional properties from actual SDK types
 }
 
 /**
  * Logger interface
  */
 export interface Logger {
-  info?: (message: string, ...args: unknown[]) => void;
-  warn?: (message: string, ...args: unknown[]) => void;
-  error?: (message: string, ...args: unknown[]) => void;
-  debug?: (message: string, ...args: unknown[]) => void;
+  info?: (message: string, context?: Record<string, unknown>) => void;
+  warn?: (message: string, context?: Record<string, unknown>) => void;
+  error?: (message: string, context?: Record<string, unknown>) => void;
+  debug?: (message: string, context?: Record<string, unknown>) => void;
 }
 
 /**

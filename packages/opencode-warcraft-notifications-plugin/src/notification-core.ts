@@ -3,11 +3,10 @@
  * This replaces the manual toast implementation with opencode-core
  */
 
-import type { Plugin } from '@opencode-ai/plugin';
+import type { PluginInput } from '@opencode-ai/plugin';
 import { createNotifier } from '@pantheon-org/opencode-notification';
 
 import type { Logger } from './logger';
-import type { soundDescriptions } from './sounds/descriptions';
 
 const TOAST_DURATION = {
   SUCCESS: 3000,
@@ -19,15 +18,15 @@ const TOAST_DURATION = {
 /**
  * Show toast notification using opencode-core library
  *
- * @param ctx Plugin context
- * @param title Toast title
- * @param message Toast message
- * @param variant Toast variant (success, warning, info, error)
- * @param duration Toast duration in ms (default based on variant)
- * @param logger Optional logger for debugging
+ * @param ctx - Plugin context
+ * @param title - Toast title
+ * @param message - Toast message
+ * @param variant - Toast variant
+ * @param duration - Toast duration
+ * @param logger - Optional logger for debugging
  */
 export const showToast = async (
-  ctx: Plugin,
+  ctx: PluginInput,
   {
     title,
     message,
@@ -56,13 +55,13 @@ export const showToast = async (
 /**
  * Send message notification using opencode-core library
  *
- * @param ctx Plugin context
- * @param text Message text to send
- * @param options Additional message options
- * @param logger Optional logger for debugging
+ * @param ctx - Plugin context
+ * @param text - Message text to send
+ * @param options - Additional message options
+ * @param logger - Optional logger for debugging
  */
 export const sendMessage = async (
-  ctx: Plugin,
+  ctx: PluginInput,
   text: string,
   {
     sessionID,
@@ -90,14 +89,14 @@ export const sendMessage = async (
 /**
  * Show success notification (toast + optional message)
  *
- * @param ctx Plugin context
- * @param title Toast title
- * @param message Toast message
- * @param useToastOnly Whether to only show toast (default: true)
- * @param logger Optional logger for debugging
+ * @param ctx - Plugin context
+ * @param title - Toast title
+ * @param message - Toast message
+ * @param useToastOnly - Whether to only show toast (default: true)
+ * @param logger - Optional logger for debugging
  */
 export const showSuccess = async (
-  ctx: Plugin,
+  ctx: PluginInput,
   title: string,
   message: string,
   useToastOnly: boolean = true,
@@ -110,14 +109,14 @@ export const showSuccess = async (
 /**
  * Show error notification (toast + optional message)
  *
- * @param ctx Plugin context
- * @param title Toast title
- * @param message Toast message
- * @param useToastOnly Whether to only show toast (default: true)
- * @param logger Optional logger for debugging
+ * @param ctx - Plugin context
+ * @param title - Toast title
+ * @param message - Toast message
+ * @param useToastOnly - Whether to only show toast (default: true)
+ * @param logger - Optional logger for debugging
  */
 export const showError = async (
-  ctx: Plugin,
+  ctx: PluginInput,
   title: string,
   message: string,
   useToastOnly: boolean = true,
@@ -130,14 +129,14 @@ export const showError = async (
 /**
  * Show warning notification (toast + optional message)
  *
- * @param ctx Plugin context
- * @param title Toast title
- * @param message Toast message
- * @param useToastOnly Whether to only show toast (default: true)
- * @param logger Optional logger for debugging
+ * @param ctx - Plugin context
+ * @param title - Toast title
+ * @param message - Toast message
+ * @param useToastOnly - Whether to only show toast (default: true)
+ * @param logger - Optional logger for debugging
  */
 export const showWarning = async (
-  ctx: Plugin,
+  ctx: PluginInput,
   title: string,
   message: string,
   useToastOnly: boolean = true,
@@ -150,14 +149,14 @@ export const showWarning = async (
 /**
  * Show info notification (toast + optional message)
  *
- * @param ctx Plugin context
- * @param title Toast title
- * @param message Toast message
- * @param useToastOnly Whether to only show toast (default: true)
- * @param logger Optional logger for debugging
+ * @param ctx - Plugin context
+ * @param title - Toast title
+ * @param message - Toast message
+ * @param useToastOnly - Whether to only show toast (default: true)
+ * @param logger - Optional logger for debugging
  */
 export const showInfo = async (
-  ctx: Plugin,
+  ctx: PluginInput,
   title: string,
   message: string,
   useToastOnly: boolean = true,
