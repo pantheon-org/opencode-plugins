@@ -1,4 +1,5 @@
 import { describe, it, expect, mock, beforeEach } from 'bun:test';
+
 import { createNotifier } from './index';
 
 // Mock OpenCode client
