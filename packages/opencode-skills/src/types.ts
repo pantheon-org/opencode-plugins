@@ -33,6 +33,26 @@ export interface Skill {
 }
 
 /**
+ * BM25 ranking configuration for relevance scoring
+ */
+export interface BM25Config {
+  /** Enable BM25 relevance scoring (default: false) */
+  enabled?: boolean;
+
+  /** Term frequency saturation parameter (default: 1.5, typical range: 1.2-2.0) */
+  k1?: number;
+
+  /** Length normalization parameter (default: 0.75, typical range: 0-1) */
+  b?: number;
+
+  /** Minimum BM25 score threshold for injection (default: 0.0) */
+  threshold?: number;
+
+  /** Maximum number of skills to inject per message (default: 3) */
+  maxSkills?: number;
+}
+
+/**
  * Configuration options for the skills plugin
  */
 export interface SkillsPluginConfig {
@@ -59,6 +79,9 @@ export interface SkillsPluginConfig {
     /** Custom negation keywords (in addition to defaults) */
     customNegationKeywords?: string[];
   };
+
+  /** BM25 relevance scoring configuration */
+  bm25?: BM25Config;
 }
 
 /**
