@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'bun:test';
+
 import { opencodeConfigurationSkill } from './opencode-configuration';
 
 describe('opencodeConfigurationSkill', () => {

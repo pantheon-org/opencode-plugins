@@ -1,5 +1,5 @@
 /**
- * OpenCode Agent Development Skill
+ * OpenCode Agents Skill
  *
  * Comprehensive guide for creating and configuring OpenCode agents.
  */
@@ -8,13 +8,13 @@ import type { Skill } from '@pantheon-org/opencode-skills';
 import { defineSkill } from '@pantheon-org/opencode-skills';
 
 /**
- * OpenCode Agent Development Skill
+ * OpenCode Agents Skill
  *
  * This skill provides guidance on creating and configuring agents for OpenCode,
  * including primary agents, subagents, permissions, and agent options.
  */
-export const opencodeAgentDevelopmentSkill: Skill = defineSkill({
-  name: 'opencode-agent-development',
+export const opencodeAgentsSkill: Skill = defineSkill({
+  name: 'opencode-agents',
   description:
     'Complete guide for creating and configuring OpenCode agents with custom prompts, tools, and permissions',
   keywords: [
@@ -31,7 +31,7 @@ export const opencodeAgentDevelopmentSkill: Skill = defineSkill({
   ],
   category: 'development',
   content: `
-# OpenCode Agent Development
+# OpenCode Agents
 
 Complete guide for creating and configuring specialized agents in OpenCode.
 

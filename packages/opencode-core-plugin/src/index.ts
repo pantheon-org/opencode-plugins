@@ -10,7 +10,7 @@ import { createSkillsPlugin } from '@pantheon-org/opencode-skills';
 
 import { OpencodeSpecialistAgent } from './agents';
 import {
-  opencodeAgentDevelopmentSkill,
+  opencodeAgentsSkill,
   opencodeCommandsSkill,
   opencodeConfigurationSkill,
   opencodeCustomToolsSkill,
@@ -88,7 +88,7 @@ export const OpencodeCorePlugin: Plugin = async (ctx) => {
   // Initialize skills plugin
   const skillsPlugin = createSkillsPlugin(
     {
-      'opencode-agent-development': opencodeAgentDevelopmentSkill,
+      'opencode-agents': opencodeAgentsSkill,
       'opencode-commands': opencodeCommandsSkill,
       'opencode-configuration': opencodeConfigurationSkill,
       'opencode-custom-tools': opencodeCustomToolsSkill,
