@@ -9,7 +9,7 @@ import type { Plugin } from '@opencode-ai/plugin';
 import { createSkillsPlugin } from '@pantheon-org/opencode-skills';
 
 import { OpencodeSpecialistAgent } from './agents';
-import { opencodePluginDevelopmentSkill } from './skills';
+import { opencodeAgentDevelopmentSkill, opencodePluginDevelopmentSkill } from './skills';
 
 // Re-export types for consumer convenience
 export type { AgentSpec } from './types';
@@ -82,6 +82,7 @@ export const OpencodeCorePlugin: Plugin = async (ctx) => {
   // Initialize skills plugin
   const skillsPlugin = createSkillsPlugin(
     {
+      'opencode-agent-development': opencodeAgentDevelopmentSkill,
       'opencode-plugin-development': opencodePluginDevelopmentSkill,
     },
     {
