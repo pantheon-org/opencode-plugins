@@ -228,6 +228,24 @@ interface SkillsPluginConfig {
     // Custom negation keywords (adds to defaults)
     customNegationKeywords?: string[];
   };
+
+  // BM25 relevance scoring configuration
+  bm25?: {
+    // Enable BM25 ranking (default: false)
+    enabled?: boolean;
+
+    // Term frequency saturation (default: 1.5, range: 1.2-2.0)
+    k1?: number;
+
+    // Length normalization (default: 0.75, range: 0-1)
+    b?: number;
+
+    // Minimum score threshold (default: 0.0)
+    threshold?: number;
+
+    // Max skills to inject per message (default: 3)
+    maxSkills?: number;
+  };
 }
 ```
 
@@ -260,6 +278,68 @@ export const MyPlugin = createSkillsPlugin(exampleSkills);
 ```
 
 ## Advanced Usage
+
+### BM25 Relevance Ranking
+
+Enable BM25 (Best Matching 25) probabilistic ranking for more sophisticated skill selection based on relevance scoring:
+
+```typescript
+export const MyPlugin = createSkillsPlugin(skills, {
+  bm25: {
+    enabled: true, // Enable BM25 ranking
+    k1: 1.5, // Term frequency saturation (default: 1.5)
+    b: 0.75, // Length normalization (default: 0.75)
+    threshold: 0.5, // Minimum score for injection (default: 0.0)
+    maxSkills: 3, // Max skills per message (default: 3)
+  },
+});
+```
+
+**How BM25 Works:**
+
+BM25 ranks skills by relevance to the user's message using:
+
+- **Term Frequency (TF)**: How often query terms appear in skill content
+- **Inverse Document Frequency (IDF)**: How unique/rare terms are across skills
+- **Length Normalization**: Adjusts for varying skill content lengths
+
+**BM25 vs Pattern Matching:**
+
+| Feature              | Pattern Matching          | BM25 Ranking           |
+| -------------------- | ------------------------- | ---------------------- |
+| **Detection**        | Exact name + intent words | Relevance scoring      |
+| **Ranking**          | No ranking                | Scores all skills      |
+| **Multiple Skills**  | All matches injected      | Top N by relevance     |
+| **Content Analysis** | Limited                   | Full content analysis  |
+| **False Positives**  | Lower risk                | Configurable threshold |
+| **Best For**         | Explicit mentions         | Semantic relevance     |
+
+**Hybrid Mode:**
+
+When BM25 is enabled, the plugin uses a hybrid approach:
+
+1. BM25 ranks all skills by relevance
+2. Top N candidates are selected (based on `maxSkills`)
+3. Pattern matching filters out negated skills
+4. Remaining skills are injected
+
+**Example:**
+
+```typescript
+// User message: "help me write tests for React components"
+// BM25 will rank:
+// 1. typescript-tdd (high relevance: "tests", "write")
+// 2. react-patterns (high relevance: "react", "components")
+// 3. plain-english (low relevance)
+// Result: Injects typescript-tdd and react-patterns
+```
+
+**Configuration Tips:**
+
+- **k1 (1.2-2.0)**: Higher values = more weight on term frequency
+- **b (0-1)**: Higher values = more length normalization (0 = no normalization)
+- **threshold**: Set higher to reduce false positives
+- **maxSkills**: Balance between context size and relevance
 
 ### Custom Pattern Matching
 
@@ -314,6 +394,44 @@ const matches = findMatchingSkills('use typescript-tdd and plain-english', [
   'react-patterns',
 ]);
 console.log(matches); // ['typescript-tdd', 'plain-english']
+```
+
+### Manual BM25 Ranking
+
+Use BM25 utilities directly for custom ranking logic:
+
+```typescript
+import { buildBM25Index, rankSkillsByBM25, getTopSkillsByBM25 } from '@pantheon-org/opencode-skills';
+
+// Build BM25 index from skills
+const skillsMap = new Map([
+  ['typescript-tdd', 'TypeScript development with TDD...'],
+  ['plain-english', 'Writing for non-technical stakeholders...'],
+  ['react-patterns', 'Modern React patterns...'],
+]);
+
+const index = buildBM25Index(skillsMap);
+
+// Rank all skills by relevance
+const query = 'help me write React tests';
+const ranked = rankSkillsByBM25(query, ['typescript-tdd', 'plain-english', 'react-patterns'], index);
+console.log(ranked);
+// [
+//   ['typescript-tdd', 2.45],
+//   ['react-patterns', 1.87],
+//   ['plain-english', 0.23]
+// ]
+
+// Get top N skills
+const topSkills = getTopSkillsByBM25(query, ['typescript-tdd', 'plain-english', 'react-patterns'], index, 2);
+console.log(topSkills); // ['typescript-tdd', 'react-patterns']
+
+// With custom configuration
+const customRanked = rankSkillsByBM25(query, skillNames, index, {
+  k1: 2.0, // Higher term frequency weight
+  b: 0.5, // Lower length normalization
+  threshold: 1.0, // Only skills scoring above 1.0
+});
 ```
 
 ## Best Practices
