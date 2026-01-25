@@ -1,13 +1,15 @@
 /**
- * opencode-core-plugin - Core OpenCode Agents
+ * opencode-core-plugin - Core OpenCode Agents and Skills
  *
- * This plugin provides core agent specifications for OpenCode,
+ * This plugin provides core agent specifications and skills for OpenCode,
  * including the OpenCode specialist agent for configuration and usage guidance.
  */
 
 import type { Plugin } from '@opencode-ai/plugin';
+import { createSkillsPlugin } from '@pantheon-org/opencode-skills';
 
 import { OpencodeSpecialistAgent } from './agents';
+import { opencodePluginDevelopmentSkill } from './skills';
 
 // Re-export types for consumer convenience
 export type { AgentSpec } from './types';
@@ -77,6 +79,20 @@ export const OpencodeCorePlugin: Plugin = async (ctx) => {
     `Loaded ${coreAgents.length} core agent(s): ${coreAgents.map((s) => s.name).join(', ')}`,
   );
 
+  // Initialize skills plugin
+  const skillsPlugin = createSkillsPlugin(
+    {
+      'opencode-plugin-development': opencodePluginDevelopmentSkill,
+    },
+    {
+      debug: false,
+      autoInject: true,
+    },
+  );
+
+  // Get skills hooks
+  const skillsHooks = await skillsPlugin(ctx);
+
   // Return plugin hooks
   return {
     /**
@@ -105,5 +121,10 @@ export const OpencodeCorePlugin: Plugin = async (ctx) => {
 
       await sendSuccess('Config', 'Core agent registration complete');
     },
+
+    /**
+     * Chat message hook - Auto-inject skills when detected
+     */
+    'chat.message': skillsHooks['chat.message'],
   };
 };
