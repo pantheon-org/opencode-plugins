@@ -33,19 +33,15 @@ The `opencode` agent is a specialized subagent focused on OpenCode configuration
 **Access to Documentation:** The agent has access to the official OpenCode documentation at https://opencode.ai/docs and
 will consult it when answering questions.
 
-### OpenCode Agent Development Skill
+### Auto-Injected Skills
 
-The `opencode-agent-development` skill is automatically injected when you mention agent-related topics. It provides
-comprehensive guidance for creating and configuring OpenCode agents.
+The plugin includes three comprehensive skills that are automatically injected based on conversation context:
 
-**Auto-injected when you mention:**
+#### OpenCode Agent Development Skill
 
-- "agent"
-- "create an agent"
-- "subagent"
-- "primary agent"
-- "agent configuration"
-- "agent permissions"
+Automatically injected when you mention agent-related topics.
+
+**Triggers:** "agent", "create an agent", "subagent", "primary agent", "agent configuration", "agent permissions"
 
 **Includes:**
 
@@ -59,19 +55,31 @@ comprehensive guidance for creating and configuring OpenCode agents.
 
 **See:** [Skill Documentation](docs/skills/opencode-agent-development.md)
 
-### OpenCode Plugin Development Skill
+#### OpenCode Custom Tools Skill
 
-The `opencode-plugin-development` skill is automatically injected when you mention plugin-related topics. It provides
-comprehensive guidance for developing OpenCode plugins.
+Automatically injected when you mention custom tool creation.
 
-**Auto-injected when you mention:**
+**Triggers:** "custom tool", "create a tool", "tool definition", "tool schema", "tool helper"
 
-- "opencode plugin"
-- "create a plugin"
-- "plugin development"
-- "custom tool"
-- "opencode hook"
-- "plugin integration"
+**Includes:**
+
+- Complete guide to creating custom tools in TypeScript/JavaScript
+- Tool structure and argument validation with Zod
+- Tool context and cancellation support
+- Examples for databases, APIs, file systems
+- Tools in other languages (Python, Shell, Go)
+- Advanced patterns (error handling, session state, dependencies)
+- Security considerations and best practices
+- Testing custom tools
+
+**See:** [Skill Documentation](docs/skills/opencode-custom-tools.md)
+
+#### OpenCode Plugin Development Skill
+
+Automatically injected when you mention plugin-related topics.
+
+**Triggers:** "opencode plugin", "create a plugin", "plugin development", "custom tool", "opencode hook", "plugin
+integration"
 
 **Includes:**
 
