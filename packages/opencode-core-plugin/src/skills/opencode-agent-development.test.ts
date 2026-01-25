@@ -1,56 +1,56 @@
 /**
- * Tests for OpenCode Agent Development Skill
+ * Tests for OpenCode Agents Skill
  */
 
 import { describe, expect, it } from 'bun:test';
 
-import { opencodeAgentDevelopmentSkill } from './opencode-agent-development';
+import { opencodeAgentsSkill } from './opencode-agent-development';
 
-describe('opencodeAgentDevelopmentSkill', () => {
+describe('opencodeAgentsSkill', () => {
   it('should have correct name', () => {
-    expect(opencodeAgentDevelopmentSkill.name).toBe('opencode-agent-development');
+    expect(opencodeAgentsSkill.name).toBe('opencode-agents');
   });
 
   it('should have description', () => {
-    expect(opencodeAgentDevelopmentSkill.description).toBeDefined();
-    expect(opencodeAgentDevelopmentSkill.description.length).toBeGreaterThan(0);
+    expect(opencodeAgentsSkill.description).toBeDefined();
+    expect(opencodeAgentsSkill.description.length).toBeGreaterThan(0);
   });
 
   it('should have content', () => {
-    expect(opencodeAgentDevelopmentSkill.content).toBeDefined();
-    expect(opencodeAgentDevelopmentSkill.content.length).toBeGreaterThan(100);
+    expect(opencodeAgentsSkill.content).toBeDefined();
+    expect(opencodeAgentsSkill.content.length).toBeGreaterThan(100);
   });
 
   it('should have keywords for pattern matching', () => {
-    expect(opencodeAgentDevelopmentSkill.keywords).toBeDefined();
-    expect(Array.isArray(opencodeAgentDevelopmentSkill.keywords)).toBe(true);
-    expect(opencodeAgentDevelopmentSkill.keywords!.length).toBeGreaterThan(0);
+    expect(opencodeAgentsSkill.keywords).toBeDefined();
+    expect(Array.isArray(opencodeAgentsSkill.keywords)).toBe(true);
+    expect(opencodeAgentsSkill.keywords!.length).toBeGreaterThan(0);
   });
 
   it('should include key OpenCode agent concepts in keywords', () => {
-    const keywords = opencodeAgentDevelopmentSkill.keywords || [];
+    const keywords = opencodeAgentsSkill.keywords || [];
     expect(keywords).toContain('agent');
     expect(keywords).toContain('subagent');
     expect(keywords).toContain('agent-config');
   });
 
   it('should have development category', () => {
-    expect(opencodeAgentDevelopmentSkill.category).toBe('development');
+    expect(opencodeAgentsSkill.category).toBe('development');
   });
 
   it('should have version', () => {
-    expect(opencodeAgentDevelopmentSkill.version).toBeDefined();
+    expect(opencodeAgentsSkill.version).toBeDefined();
   });
 
   it('should have updatedAt timestamp', () => {
-    expect(opencodeAgentDevelopmentSkill.updatedAt).toBeDefined();
+    expect(opencodeAgentsSkill.updatedAt).toBeDefined();
   });
 
-  it('should contain essential agent development sections', () => {
-    const { content } = opencodeAgentDevelopmentSkill;
+  it('should contain essential agent sections', () => {
+    const { content } = opencodeAgentsSkill;
 
     // Check for key sections
-    expect(content).toContain('# OpenCode Agent Development');
+    expect(content).toContain('# OpenCode Agents');
     expect(content).toContain('## Overview');
     expect(content).toContain('## Agent Types');
     expect(content).toContain('### Primary Agents');
@@ -62,7 +62,7 @@ describe('opencodeAgentDevelopmentSkill', () => {
   });
 
   it('should include code examples', () => {
-    const { content } = opencodeAgentDevelopmentSkill;
+    const { content } = opencodeAgentsSkill;
 
     // Check for code blocks
     expect(content).toContain('```json');
@@ -70,13 +70,13 @@ describe('opencodeAgentDevelopmentSkill', () => {
   });
 
   it('should reference official documentation', () => {
-    const { content } = opencodeAgentDevelopmentSkill;
+    const { content } = opencodeAgentsSkill;
 
     expect(content).toContain('https://opencode.ai/docs');
   });
 
   it('should document built-in agents', () => {
-    const { content } = opencodeAgentDevelopmentSkill;
+    const { content } = opencodeAgentsSkill;
 
     expect(content).toContain('Build');
     expect(content).toContain('Plan');
@@ -85,14 +85,14 @@ describe('opencodeAgentDevelopmentSkill', () => {
   });
 
   it('should document agent modes', () => {
-    const { content } = opencodeAgentDevelopmentSkill;
+    const { content } = opencodeAgentsSkill;
 
     expect(content).toContain('primary');
     expect(content).toContain('subagent');
   });
 
   it('should document permissions', () => {
-    const { content } = opencodeAgentDevelopmentSkill;
+    const { content } = opencodeAgentsSkill;
 
     expect(content).toContain('ask');
     expect(content).toContain('allow');
@@ -100,7 +100,7 @@ describe('opencodeAgentDevelopmentSkill', () => {
   });
 
   it('should include example agents', () => {
-    const { content } = opencodeAgentDevelopmentSkill;
+    const { content } = opencodeAgentsSkill;
 
     expect(content).toContain('## Example Agents');
     expect(content).toContain('Test Runner');
