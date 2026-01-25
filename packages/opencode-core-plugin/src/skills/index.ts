@@ -9,3 +9,4 @@ export { opencodeCommandsSkill } from './opencode-commands';
 export { opencodeConfigurationSkill } from './opencode-configuration';
 export { opencodeCustomToolsSkill } from './opencode-custom-tools';
 export { opencodePluginsSkill } from './opencode-plugins';
+export { opencodeSkillsSkill } from './opencode-skills';
