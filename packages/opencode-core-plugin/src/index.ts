@@ -14,7 +14,7 @@ import {
   opencodeCommandsSkill,
   opencodeConfigurationSkill,
   opencodeCustomToolsSkill,
-  opencodePluginDevelopmentSkill,
+  opencodePluginsSkill,
 } from './skills';
 
 // Re-export types for consumer convenience
@@ -92,7 +92,7 @@ export const OpencodeCorePlugin: Plugin = async (ctx) => {
       'opencode-commands': opencodeCommandsSkill,
       'opencode-configuration': opencodeConfigurationSkill,
       'opencode-custom-tools': opencodeCustomToolsSkill,
-      'opencode-plugin-development': opencodePluginDevelopmentSkill,
+      'opencode-plugins': opencodePluginsSkill,
     },
     {
       debug: false,

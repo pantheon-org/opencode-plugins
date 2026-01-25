@@ -1,5 +1,5 @@
 /**
- * OpenCode Plugin Development Skill
+ * OpenCode Plugins Skill
  *
  * Comprehensive guide for developing OpenCode plugins based on official documentation.
  */
@@ -8,13 +8,13 @@ import type { Skill } from '@pantheon-org/opencode-skills';
 import { defineSkill } from '@pantheon-org/opencode-skills';
 
 /**
- * OpenCode Plugin Development Skill
+ * OpenCode Plugins Skill
  *
  * This skill provides guidance on creating plugins for OpenCode,
  * including hook implementations, tool definitions, and best practices.
  */
-export const opencodePluginDevelopmentSkill: Skill = defineSkill({
-  name: 'opencode-plugin-development',
+export const opencodePluginsSkill: Skill = defineSkill({
+  name: 'opencode-plugins',
   description: 'Complete guide for developing OpenCode plugins with hooks, tools, and integrations',
   keywords: [
     'opencode',
