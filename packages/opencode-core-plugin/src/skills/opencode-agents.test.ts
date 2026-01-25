@@ -4,7 +4,7 @@
 
 import { describe, expect, it } from 'bun:test';
 
-import { opencodeAgentsSkill } from './opencode-agent-development';
+import { opencodeAgentsSkill } from './opencode-agents';
 
 describe('opencodeAgentsSkill', () => {
   it('should have correct name', () => {

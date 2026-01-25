@@ -4,7 +4,7 @@
  * This module exports skill definitions for the OpenCode Core Plugin.
  */
 
-export { opencodeAgentsSkill } from './opencode-agent-development';
+export { opencodeAgentsSkill } from './opencode-agents';
 export { opencodeCommandsSkill } from './opencode-commands';
 export { opencodeConfigurationSkill } from './opencode-configuration';
 export { opencodeCustomToolsSkill } from './opencode-custom-tools';
