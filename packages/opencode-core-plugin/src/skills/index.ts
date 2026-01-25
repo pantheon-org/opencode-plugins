@@ -8,4 +8,4 @@ export { opencodeAgentsSkill } from './opencode-agents';
 export { opencodeCommandsSkill } from './opencode-commands';
 export { opencodeConfigurationSkill } from './opencode-configuration';
 export { opencodeCustomToolsSkill } from './opencode-custom-tools';
-export { opencodePluginDevelopmentSkill } from './opencode-plugin-development';
+export { opencodePluginsSkill } from './opencode-plugins';

@@ -1,34 +1,34 @@
 /**
- * Tests for OpenCode Plugin Development Skill
+ * Tests for OpenCode Plugins Skill
  */
 
 import { describe, expect, it } from 'bun:test';
 
-import { opencodePluginDevelopmentSkill } from './opencode-plugin-development';
+import { opencodePluginsSkill } from './opencode-plugins';
 
-describe('opencodePluginDevelopmentSkill', () => {
+describe('opencodePluginsSkill', () => {
   it('should have correct name', () => {
-    expect(opencodePluginDevelopmentSkill.name).toBe('opencode-plugin-development');
+    expect(opencodePluginsSkill.name).toBe('opencode-plugins');
   });
 
   it('should have description', () => {
-    expect(opencodePluginDevelopmentSkill.description).toBeDefined();
-    expect(opencodePluginDevelopmentSkill.description.length).toBeGreaterThan(0);
+    expect(opencodePluginsSkill.description).toBeDefined();
+    expect(opencodePluginsSkill.description.length).toBeGreaterThan(0);
   });
 
   it('should have content', () => {
-    expect(opencodePluginDevelopmentSkill.content).toBeDefined();
-    expect(opencodePluginDevelopmentSkill.content.length).toBeGreaterThan(100);
+    expect(opencodePluginsSkill.content).toBeDefined();
+    expect(opencodePluginsSkill.content.length).toBeGreaterThan(100);
   });
 
   it('should have keywords for pattern matching', () => {
-    expect(opencodePluginDevelopmentSkill.keywords).toBeDefined();
-    expect(Array.isArray(opencodePluginDevelopmentSkill.keywords)).toBe(true);
-    expect(opencodePluginDevelopmentSkill.keywords!.length).toBeGreaterThan(0);
+    expect(opencodePluginsSkill.keywords).toBeDefined();
+    expect(Array.isArray(opencodePluginsSkill.keywords)).toBe(true);
+    expect(opencodePluginsSkill.keywords!.length).toBeGreaterThan(0);
   });
 
   it('should include key OpenCode plugin concepts in keywords', () => {
-    const keywords = opencodePluginDevelopmentSkill.keywords || [];
+    const keywords = opencodePluginsSkill.keywords || [];
     expect(keywords).toContain('opencode');
     expect(keywords).toContain('plugin');
     expect(keywords).toContain('hook');
@@ -36,19 +36,19 @@ describe('opencodePluginDevelopmentSkill', () => {
   });
 
   it('should have development category', () => {
-    expect(opencodePluginDevelopmentSkill.category).toBe('development');
+    expect(opencodePluginsSkill.category).toBe('development');
   });
 
   it('should have version', () => {
-    expect(opencodePluginDevelopmentSkill.version).toBeDefined();
+    expect(opencodePluginsSkill.version).toBeDefined();
   });
 
   it('should have updatedAt timestamp', () => {
-    expect(opencodePluginDevelopmentSkill.updatedAt).toBeDefined();
+    expect(opencodePluginsSkill.updatedAt).toBeDefined();
   });
 
   it('should contain essential plugin development sections', () => {
-    const { content } = opencodePluginDevelopmentSkill;
+    const { content } = opencodePluginsSkill;
 
     // Check for key sections
     expect(content).toContain('# OpenCode Plugin Development');
@@ -61,7 +61,7 @@ describe('opencodePluginDevelopmentSkill', () => {
   });
 
   it('should include code examples', () => {
-    const { content } = opencodePluginDevelopmentSkill;
+    const { content } = opencodePluginsSkill;
 
     // Check for code blocks
     expect(content).toContain('```typescript');
@@ -69,7 +69,7 @@ describe('opencodePluginDevelopmentSkill', () => {
   });
 
   it('should reference official documentation', () => {
-    const { content } = opencodePluginDevelopmentSkill;
+    const { content } = opencodePluginsSkill;
 
     expect(content).toContain('https://opencode.ai/docs');
   });
