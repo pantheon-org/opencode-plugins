@@ -5,5 +5,6 @@
  */
 
 export { opencodeAgentDevelopmentSkill } from './opencode-agent-development';
+export { opencodeConfigurationSkill } from './opencode-configuration';
 export { opencodeCustomToolsSkill } from './opencode-custom-tools';
 export { opencodePluginDevelopmentSkill } from './opencode-plugin-development';
