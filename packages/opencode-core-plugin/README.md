@@ -1,6 +1,7 @@
 # OpenCode Core Plugin
 
-Core agent specifications for OpenCode, providing specialized agents for configuration and usage guidance.
+Core agent specifications and skills for OpenCode, providing specialized agents and auto-injected knowledge for
+configuration, usage guidance, and plugin development.
 
 > **Note**: This plugin is part of the `pantheon-org/opencode-plugins` monorepo. All development and contributions
 > should be made in the main repository at: **https://github.com/pantheon-org/opencode-plugins**
@@ -31,6 +32,32 @@ The `opencode` agent is a specialized subagent focused on OpenCode configuration
 
 **Access to Documentation:** The agent has access to the official OpenCode documentation at https://opencode.ai/docs and
 will consult it when answering questions.
+
+### OpenCode Plugin Development Skill
+
+The `opencode-plugin-development` skill is automatically injected when you mention plugin-related topics. It provides
+comprehensive guidance for developing OpenCode plugins.
+
+**Auto-injected when you mention:**
+
+- "opencode plugin"
+- "create a plugin"
+- "plugin development"
+- "custom tool"
+- "opencode hook"
+- "plugin integration"
+
+**Includes:**
+
+- Complete plugin architecture overview
+- All available hooks (tools, events, chat, permissions, compaction)
+- Code examples and best practices
+- TypeScript type safety guidance
+- Testing patterns
+- Resource management
+- External dependency integration
+
+**See:** [Skill Documentation](docs/skills/opencode-plugin-development.md)
 
 ## Installation
 
