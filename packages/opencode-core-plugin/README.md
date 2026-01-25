@@ -33,6 +33,32 @@ The `opencode` agent is a specialized subagent focused on OpenCode configuration
 **Access to Documentation:** The agent has access to the official OpenCode documentation at https://opencode.ai/docs and
 will consult it when answering questions.
 
+### OpenCode Agent Development Skill
+
+The `opencode-agent-development` skill is automatically injected when you mention agent-related topics. It provides
+comprehensive guidance for creating and configuring OpenCode agents.
+
+**Auto-injected when you mention:**
+
+- "agent"
+- "create an agent"
+- "subagent"
+- "primary agent"
+- "agent configuration"
+- "agent permissions"
+
+**Includes:**
+
+- Complete guide to primary agents and subagents
+- Agent configuration in JSON and Markdown formats
+- All agent options (mode, temperature, maxSteps, tools, permissions)
+- Built-in agents (Build, Plan, General, Explore)
+- Best practices for agent creation
+- Example agents for common use cases
+- Agent orchestration and multi-agent workflows
+
+**See:** [Skill Documentation](docs/skills/opencode-agent-development.md)
+
 ### OpenCode Plugin Development Skill
 
 The `opencode-plugin-development` skill is automatically injected when you mention plugin-related topics. It provides
