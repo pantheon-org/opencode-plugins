@@ -130,9 +130,10 @@ describe('dev-proxy executor with mocked runExecutor', () => {
       // return a fake child with kill()
       return {
         kill: () => {
-          console.log('[TEST] child.kill() called');
           childKilled = true;
         },
+        // biome-ignore lint/complexity/noBannedTypes: Mock EventEmitter interface
+        // biome-ignore lint/suspicious/noExplicitAny: Mock return type
         on: (_ev: string, _cb: Function) => {},
       } as any;
     };
