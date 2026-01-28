@@ -34,12 +34,10 @@ function makeMockIterator() {
 
 const childProcess = require('node:child_process');
 const _originalSpawn = childProcess.spawn;
-// biome-ignore lint/suspicious/noExplicitAny: Mock function signature
 function _fakeSpawn(_cmd: string, _args: string[], _opts: any) {
   return {
     kill: () => {},
     // biome-ignore lint/complexity/noBannedTypes: Mock EventEmitter interface
-    // biome-ignore lint/suspicious/noExplicitAny: Mock return type
     on: (_ev: string, _cb: Function) => {},
   } as any;
 }
