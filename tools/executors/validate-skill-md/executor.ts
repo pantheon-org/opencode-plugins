@@ -1,5 +1,5 @@
+import { readFile } from 'node:fs/promises';
 import type { ExecutorContext } from '@nx/devkit';
-import { readFile } from 'fs/promises';
 import { glob } from 'glob';
 import { markdownToSkill } from '../../../packages/opencode-skills/src/parsers/markdown-parser';
 import {
@@ -77,7 +77,7 @@ export default async (
 
     // Summary
     if (options.format === 'text') {
-      console.log('\n' + '='.repeat(50));
+      console.log(`\n${'='.repeat(50)}`);
       console.log('📊 Validation Summary');
       console.log('='.repeat(50));
       console.log(`Total files: ${totalFiles}`);

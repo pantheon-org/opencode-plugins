@@ -18,13 +18,13 @@ describe('opencodePluginsSkill', () => {
 
   it('should have instructions', () => {
     expect(opencodePluginsSkill.instructions).toBeDefined();
-    expect(opencodePluginsSkill.instructions!.length).toBeGreaterThan(100);
+    expect(opencodePluginsSkill.instructions?.length).toBeGreaterThan(100);
   });
 
   it('should have keywords for pattern matching', () => {
     expect(opencodePluginsSkill.keywords).toBeDefined();
     expect(Array.isArray(opencodePluginsSkill.keywords)).toBe(true);
-    expect(opencodePluginsSkill.keywords!.length).toBeGreaterThan(0);
+    expect(opencodePluginsSkill.keywords?.length).toBeGreaterThan(0);
   });
 
   it('should include key OpenCode plugin concepts in keywords', () => {

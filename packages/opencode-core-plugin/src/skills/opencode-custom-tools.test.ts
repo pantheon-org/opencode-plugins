@@ -18,13 +18,13 @@ describe('opencodeCustomToolsSkill', () => {
 
   it('should have instructions', () => {
     expect(opencodeCustomToolsSkill.instructions).toBeDefined();
-    expect(opencodeCustomToolsSkill.instructions!.length).toBeGreaterThan(100);
+    expect(opencodeCustomToolsSkill.instructions?.length).toBeGreaterThan(100);
   });
 
   it('should have keywords for pattern matching', () => {
     expect(opencodeCustomToolsSkill.keywords).toBeDefined();
     expect(Array.isArray(opencodeCustomToolsSkill.keywords)).toBe(true);
-    expect(opencodeCustomToolsSkill.keywords!.length).toBeGreaterThan(0);
+    expect(opencodeCustomToolsSkill.keywords?.length).toBeGreaterThan(0);
   });
 
   it('should include key custom tools concepts in keywords', () => {

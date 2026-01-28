@@ -29,7 +29,7 @@ describe('package utilities', () => {
 
     it('returns scoped package name format when available', () => {
       const name = getPackageName();
-      if (name !== null && name.includes('@')) {
+      if (name?.includes('@')) {
         // Should be in @scope/package format
         expect(name).toMatch(/^@[\w-]+\/[\w-]+$/);
       }

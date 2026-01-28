@@ -40,7 +40,7 @@ export default async (
     let withWarnings = 0;
 
     // Validate each skill
-    for (const [exportName, skill] of Object.entries(skills)) {
+    for (const [_exportName, skill] of Object.entries(skills)) {
       if (typeof skill === 'object' && skill.name) {
         totalSkills++;
         const result = validateSkill(skill, options.strict);
@@ -65,7 +65,7 @@ export default async (
 
     // Summary
     if (options.format === 'text') {
-      console.log('\n' + '='.repeat(50));
+      console.log(`\n${'='.repeat(50)}`);
       console.log('📊 Validation Summary');
       console.log('='.repeat(50));
       console.log(`Total skills: ${totalSkills}`);

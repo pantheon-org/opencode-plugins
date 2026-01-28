@@ -11,9 +11,9 @@
  * 5. Maintains existing frontmatter and markdown formatting
  */
 
-import { copyFile, mkdir, readdir, readFile, writeFile } from 'fs/promises';
-import { basename, dirname, join, relative } from 'path';
-import { fileURLToPath } from 'url';
+import { copyFile, mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
+import { basename, dirname, join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -39,7 +39,7 @@ function hasFrontmatter(content) {
 /**
  * Add frontmatter to markdown content if missing
  */
-function addFrontmatter(content, filename) {
+function addFrontmatter(content, _filename) {
   if (hasFrontmatter(content)) {
     return content;
   }

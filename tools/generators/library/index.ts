@@ -1,5 +1,5 @@
+import * as path from 'node:path';
 import { addProjectConfiguration, formatFiles, generateFiles, names, type Tree, updateJson } from '@nx/devkit';
-import * as path from 'path';
 import type { LibraryGeneratorSchema } from './schema';
 
 export default async function (tree: Tree, options: LibraryGeneratorSchema) {

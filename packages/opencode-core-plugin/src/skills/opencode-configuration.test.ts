@@ -35,7 +35,7 @@ describe('opencodeConfigurationSkill', () => {
 
   it('should have instructions', () => {
     expect(opencodeConfigurationSkill.instructions).toBeDefined();
-    expect(opencodeConfigurationSkill.instructions!.length).toBeGreaterThan(0);
+    expect(opencodeConfigurationSkill.instructions?.length).toBeGreaterThan(0);
   });
 
   it('should have instructions starting with heading', () => {

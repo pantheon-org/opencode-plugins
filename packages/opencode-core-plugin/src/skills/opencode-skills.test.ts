@@ -18,13 +18,13 @@ describe('opencodeSkillsSkill', () => {
 
   it('should have instructions', () => {
     expect(opencodeSkillsSkill.instructions).toBeDefined();
-    expect(opencodeSkillsSkill.instructions!.length).toBeGreaterThan(100);
+    expect(opencodeSkillsSkill.instructions?.length).toBeGreaterThan(100);
   });
 
   it('should have keywords for pattern matching', () => {
     expect(opencodeSkillsSkill.keywords).toBeDefined();
     expect(Array.isArray(opencodeSkillsSkill.keywords)).toBe(true);
-    expect(opencodeSkillsSkill.keywords!.length).toBeGreaterThan(0);
+    expect(opencodeSkillsSkill.keywords?.length).toBeGreaterThan(0);
   });
 
   it('should include key skill concepts in keywords', () => {

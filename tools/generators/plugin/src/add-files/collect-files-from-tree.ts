@@ -1,5 +1,5 @@
+import * as path from 'node:path';
 import type { Tree } from '@nx/devkit';
-import * as path from 'path';
 
 /**
  * Recursively collects all file paths in a directory from the Nx Tree.

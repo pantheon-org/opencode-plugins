@@ -29,7 +29,7 @@ describe('test-utils helpers', () => {
     try {
       const gf = globalThis as unknown as { fetch?: FetchFn };
       const res = await gf.fetch?.('http://x');
-      expect(res?.status).toBe(201);
+      expect(res.status).toBe(201);
     } finally {
       restore();
     }
@@ -92,6 +92,7 @@ describe('test-utils helpers', () => {
   it('silenceConsole returns restore function', () => {
     const restore = silenceConsole();
     try {
+      console.log('this should be silent');
       console.error('also silent');
     } finally {
       restore();

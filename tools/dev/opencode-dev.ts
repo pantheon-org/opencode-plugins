@@ -1,8 +1,8 @@
 #!/usr/bin/env bunx tsx
-import { type ChildProcess, spawn } from 'child_process';
-import fs from 'fs';
-import net from 'net';
-import path from 'path';
+import { type ChildProcess, spawn } from 'node:child_process';
+import fs from 'node:fs';
+import net from 'node:net';
+import path from 'node:path';
 
 type Opts = {
   plugins: string[];
@@ -144,16 +144,16 @@ function writeJsonc(file: string, originalRaw: string | null, obj: any) {
 
 async function backupFile(file: string) {
   try {
-    await fs.promises.copyFile(file, file + '.opencode-dev.bak');
+    await fs.promises.copyFile(file, `${file}.opencode-dev.bak`);
     console.log(`Backed up ${file} -> ${file}.opencode-dev.bak`);
-  } catch (err) {}
+  } catch (_err) {}
 }
 
 async function revertOpencodeJson(workspaceRoot: string) {
   const candidates = ['opencode.json', 'opencode.jsonc'];
   for (const c of candidates) {
     const p = path.join(workspaceRoot, c);
-    const bak = p + '.opencode-dev.bak';
+    const bak = `${p}.opencode-dev.bak`;
     if (fs.existsSync(bak)) {
       await fs.promises.copyFile(bak, p);
       console.log(`Restored ${p} from ${bak}`);
@@ -177,7 +177,7 @@ async function updateOpencodeJson(workspaceRoot: string, pluginLinkPaths: string
     target = path.join(workspaceRoot, 'opencode.json');
     console.log('No existing opencode.json found; creating new one at', target);
     const base = { plugin: [] };
-    await fs.promises.writeFile(target, JSON.stringify(base, null, 2) + '\n', 'utf8');
+    await fs.promises.writeFile(target, `${JSON.stringify(base, null, 2)}\n`, 'utf8');
   }
   await backupFile(target);
   const { json: original, raw } = readJsonc(target);
@@ -234,7 +234,7 @@ async function isServerListening(disposeUrl: string, timeoutMs = 500): Promise<b
         resolve(false);
       });
     });
-  } catch (err) {
+  } catch (_err) {
     return false;
   }
 }
@@ -360,7 +360,7 @@ async function main() {
   if (opts.disposeEnabled && opts.disposeUrl) {
     try {
       serverAvailable = await isServerListening(opts.disposeUrl);
-    } catch (err) {
+    } catch (_err) {
       serverAvailable = false;
     }
   }

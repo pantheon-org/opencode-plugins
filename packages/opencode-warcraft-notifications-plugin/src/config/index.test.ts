@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { mkdir, writeFile } from 'fs/promises';
-import { join } from 'path';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 import { createTempDir, removeTempDir } from '../test-utils';
 

@@ -39,7 +39,7 @@ describe('opencodeCommandsSkill', () => {
 
   it('should have instructions', () => {
     expect(opencodeCommandsSkill.instructions).toBeDefined();
-    expect(opencodeCommandsSkill.instructions!.length).toBeGreaterThan(0);
+    expect(opencodeCommandsSkill.instructions?.length).toBeGreaterThan(0);
   });
 
   it('should have instructions starting with heading', () => {

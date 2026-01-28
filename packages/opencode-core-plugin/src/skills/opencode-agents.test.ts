@@ -21,13 +21,13 @@ describe('opencodeAgentsSkill', () => {
     expect(opencodeAgentsSkill.whenToUseMe).toBeDefined();
     expect(opencodeAgentsSkill.instructions).toBeDefined();
     expect(opencodeAgentsSkill.checklist).toBeDefined();
-    expect(opencodeAgentsSkill.instructions!.length).toBeGreaterThan(100);
+    expect(opencodeAgentsSkill.instructions?.length).toBeGreaterThan(100);
   });
 
   it('should have keywords for pattern matching', () => {
     expect(opencodeAgentsSkill.keywords).toBeDefined();
     expect(Array.isArray(opencodeAgentsSkill.keywords)).toBe(true);
-    expect(opencodeAgentsSkill.keywords!.length).toBeGreaterThan(0);
+    expect(opencodeAgentsSkill.keywords?.length).toBeGreaterThan(0);
   });
 
   it('should include key OpenCode agent concepts in keywords', () => {

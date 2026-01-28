@@ -317,7 +317,7 @@ describe('BM25 Implementation', () => {
     });
 
     it('should handle very long documents', () => {
-      const longContent = 'word '.repeat(1000) + 'unique';
+      const longContent = `${'word '.repeat(1000)}unique`;
       const longSkills = new Map<string, string>([
         ['long-skill', longContent],
         ['short-skill', 'short content'],

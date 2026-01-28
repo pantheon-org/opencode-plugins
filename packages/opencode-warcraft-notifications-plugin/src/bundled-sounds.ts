@@ -1,6 +1,6 @@
-import { access, copyFile, mkdir, readdir } from 'fs/promises';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { access, copyFile, mkdir, readdir } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { DEFAULT_DATA_DIR } from './config/index.js';
 import { createLogger } from './logger.js';

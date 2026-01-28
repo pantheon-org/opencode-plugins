@@ -1,5 +1,5 @@
-import { access } from 'fs/promises';
-import { join } from 'path';
+import { access } from 'node:fs/promises';
+import { join } from 'node:path';
 
 import { createLogger } from '../logger.js';
 import { validateAndSanitizeConfig } from '../schema-validator.js';

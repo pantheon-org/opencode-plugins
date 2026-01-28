@@ -25,7 +25,7 @@ export interface ValidationSuggestion {
   severity: 'info';
 }
 
-export const validateSkill = (skill: Skill, strict?: boolean): ValidationResult => {
+export const validateSkill = (skill: Skill, _strict?: boolean): ValidationResult => {
   const errors: ValidationError[] = [];
   const warnings: ValidationWarning[] = [];
   const suggestions: ValidationSuggestion[] = [];

@@ -10,9 +10,9 @@
  * 4. Reports any broken links
  */
 
-import { access, readdir, readFile } from 'fs/promises';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { access, readdir, readFile } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -93,7 +93,7 @@ async function isValidLink(url) {
   try {
     await access(filePath);
     return { valid: true, filePath };
-  } catch (error) {
+  } catch (_error) {
     return { valid: false, filePath };
   }
 }
@@ -125,7 +125,7 @@ async function processDirectory(dirPath) {
       }
     } else if (entry.isFile() && entry.name.endsWith('.html')) {
       const links = await extractLinks(fullPath);
-      const relativePath = fullPath.replace(DIST_DIR + '/', '');
+      const relativePath = fullPath.replace(`${DIST_DIR}/`, '');
 
       for (const link of links) {
         if (!allLinks.has(link)) {

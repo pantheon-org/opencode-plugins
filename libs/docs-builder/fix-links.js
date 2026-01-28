@@ -13,9 +13,9 @@
  * automatically rewritten by Astro's base path handling.
  */
 
-import { readdir, readFile, writeFile } from 'fs/promises';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -88,7 +88,7 @@ async function processDirectory(dirPath, baseDir = DIST_DIR) {
     } else if (entry.isFile() && entry.name.endsWith('.html')) {
       const wasFixed = await fixLinksInFile(fullPath);
       if (wasFixed) {
-        const relativePath = fullPath.replace(baseDir + '/', '');
+        const relativePath = fullPath.replace(`${baseDir}/`, '');
         console.log(`  ✓ Fixed links in ${relativePath}`);
         fixedCount++;
       }

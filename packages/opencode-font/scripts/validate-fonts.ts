@@ -9,9 +9,9 @@
  *   bun run scripts/validate-fonts.ts
  */
 
-import { spawn } from 'child_process';
-import fs from 'fs';
-import path from 'path';
+import { spawn } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
 
 // Configuration
 const FONT_DIR = 'fonts';
@@ -158,7 +158,7 @@ async function main(): Promise<void> {
         console.log('⚠️  Warning: TTF file may not be valid TrueType format');
         console.log(`   File type: ${ttfType}`);
       }
-    } catch (error) {
+    } catch (_error) {
       console.log('⚠️  Could not verify TTF format');
     }
 
@@ -171,7 +171,7 @@ async function main(): Promise<void> {
         console.log('⚠️  Warning: WOFF file may not be recognized');
         console.log(`   File type: ${woffType}`);
       }
-    } catch (error) {
+    } catch (_error) {
       console.log('⚠️  Could not verify WOFF format');
     }
   } else {

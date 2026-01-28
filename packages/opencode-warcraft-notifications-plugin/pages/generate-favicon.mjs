@@ -8,9 +8,9 @@
  * is generated before Astro builds the site.
  */
 
-import { mkdirSync, writeFileSync } from 'fs';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { blockyTextToSVG } from './src/utils/alphabet/index.ts';
 
 // Get the directory of this script

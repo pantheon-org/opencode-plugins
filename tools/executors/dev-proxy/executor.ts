@@ -1,6 +1,6 @@
+import { spawn, spawnSync } from 'node:child_process';
+import path from 'node:path';
 import { type ExecutorContext, runExecutor as nxRunExecutor, type ProjectConfiguration } from '@nx/devkit';
-import { spawn, spawnSync } from 'child_process';
-import path from 'path';
 
 interface DevProxyOptions {
   plugins?: string[];

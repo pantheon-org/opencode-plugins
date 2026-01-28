@@ -1,5 +1,5 @@
+import * as path from 'node:path';
 import { generateFiles, names, offsetFromRoot, type Tree } from '@nx/devkit';
-import * as path from 'path';
 
 import { dependencies, devDependencies } from './dependencies';
 import { getFlattenedActions } from './github-actions-versions';

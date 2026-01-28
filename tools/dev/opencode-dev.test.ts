@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
-import fs from 'fs';
-import { tmpdir } from 'os';
-import path from 'path';
+import fs from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 
 import {
   createSymlink as createSymlinkUtil,
@@ -68,9 +68,9 @@ describe('getLatestMtime detects changes', () => {
   });
 });
 
-import http from 'http';
+import http from 'node:http';
 // Tests for opencode-dev network helpers
-import net from 'net';
+import net from 'node:net';
 
 import { isServerListening as isServerListeningUtil, tryDispose as tryDisposeUtil } from './opencode-dev-test-helpers';
 

@@ -1,6 +1,6 @@
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'fs';
-import os from 'os';
-import { join } from 'path';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
+import { join } from 'node:path';
 
 export type FetchImpl = (input: RequestInfo) => Promise<Response>;
 
