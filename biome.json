@@ -57,7 +57,15 @@
         "noDoubleEquals": "error"
       }
     },
-    "includes": ["**", "!node_modules/", "!dist/", "!build/", "!.nx/", "!coverage/", "!bun.lock"]
+    "includes": [
+      "**",
+      "!node_modules/",
+      "!dist/",
+      "!build/",
+      "!.nx/",
+      "!coverage/",
+      "!bun.lock"
+    ]
   },
   "javascript": {
     "formatter": {
@@ -89,7 +97,16 @@
     {
       "includes": ["**/*.ts", "**/*.tsx"],
       "javascript": {
-        "globals": ["require", "console", "__filename", "module", "process", "Buffer", "__dirname", "exports"]
+        "globals": [
+          "require",
+          "console",
+          "__filename",
+          "module",
+          "process",
+          "Buffer",
+          "__dirname",
+          "exports"
+        ]
       },
       "linter": {
         "rules": {
@@ -170,7 +187,16 @@
     {
       "includes": ["**/*.js", "**/*.jsx"],
       "javascript": {
-        "globals": ["require", "console", "__filename", "module", "process", "Buffer", "__dirname", "exports"]
+        "globals": [
+          "require",
+          "console",
+          "__filename",
+          "module",
+          "process",
+          "Buffer",
+          "__dirname",
+          "exports"
+        ]
       }
     }
   ],

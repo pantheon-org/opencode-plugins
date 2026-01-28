@@ -136,7 +136,6 @@ describe('dev-proxy executor with mocked runExecutor', () => {
           childKilled = true;
         },
         // biome-ignore lint/complexity/noBannedTypes: Mock EventEmitter interface
-        // biome-ignore lint/suspicious/noExplicitAny: Mock return type
         on: (_ev: string, _cb: Function) => {},
       } as any;
     };
