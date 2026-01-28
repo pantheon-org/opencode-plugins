@@ -16,9 +16,9 @@ describe('opencodeCustomToolsSkill', () => {
     expect(opencodeCustomToolsSkill.description.length).toBeGreaterThan(0);
   });
 
-  it('should have content', () => {
-    expect(opencodeCustomToolsSkill.content).toBeDefined();
-    expect(opencodeCustomToolsSkill.content.length).toBeGreaterThan(100);
+  it('should have instructions', () => {
+    expect(opencodeCustomToolsSkill.instructions).toBeDefined();
+    expect(opencodeCustomToolsSkill.instructions!.length).toBeGreaterThan(100);
   });
 
   it('should have keywords for pattern matching', () => {
@@ -35,7 +35,7 @@ describe('opencodeCustomToolsSkill', () => {
   });
 
   it('should have development category', () => {
-    expect(opencodeCustomToolsSkill.category).toBe('development');
+    expect(opencodeCustomToolsSkill.metadata?.category).toBe('development');
   });
 
   it('should have version', () => {
@@ -47,66 +47,66 @@ describe('opencodeCustomToolsSkill', () => {
   });
 
   it('should contain essential custom tools sections', () => {
-    const { content } = opencodeCustomToolsSkill;
+    const { instructions } = opencodeCustomToolsSkill;
 
     // Check for key sections
-    expect(content).toContain('# OpenCode Custom Tools Development');
-    expect(content).toContain('## Overview');
-    expect(content).toContain('## Creating a Tool');
-    expect(content).toContain('### Location');
-    expect(content).toContain('### Basic Structure');
-    expect(content).toContain('## Arguments');
-    expect(content).toContain('## Tool Context');
-    expect(content).toContain('## Examples');
-    expect(content).toContain('## Tools in Other Languages');
-    expect(content).toContain('## Best Practices');
-    expect(content).toContain('## Security Considerations');
+    expect(instructions!).toContain('# OpenCode Custom Tools Development');
+    expect(instructions!).toContain('## Overview');
+    expect(instructions!).toContain('## Creating a Tool');
+    expect(instructions!).toContain('### Location');
+    expect(instructions!).toContain('### Basic Structure');
+    expect(instructions!).toContain('## Arguments');
+    expect(instructions!).toContain('## Tool Context');
+    expect(instructions!).toContain('## Examples');
+    expect(instructions!).toContain('## Tools in Other Languages');
+    expect(instructions!).toContain('## Best Practices');
+    expect(instructions!).toContain('## Security Considerations');
   });
 
   it('should include code examples', () => {
-    const { content } = opencodeCustomToolsSkill;
+    const { instructions } = opencodeCustomToolsSkill;
 
     // Check for code blocks
-    expect(content).toContain('```typescript');
-    expect(content).toContain('```python');
-    expect(content).toContain('```bash');
+    expect(instructions!).toContain('```typescript');
+    expect(instructions!).toContain('```python');
+    expect(instructions!).toContain('```bash');
   });
 
   it('should reference official documentation', () => {
-    const { content } = opencodeCustomToolsSkill;
+    const { instructions } = opencodeCustomToolsSkill;
 
-    expect(content).toContain('https://opencode.ai/docs');
+    expect(instructions!).toContain('https://opencode.ai/docs');
   });
 
   it('should document tool.schema', () => {
-    const { content } = opencodeCustomToolsSkill;
+    const { instructions } = opencodeCustomToolsSkill;
 
-    expect(content).toContain('tool.schema');
-    expect(content).toContain('Zod');
+    expect(instructions!).toContain('tool.schema');
+    expect(instructions!).toContain('Zod');
   });
 
   it('should document tool context properties', () => {
-    const { content } = opencodeCustomToolsSkill;
+    const { instructions } = opencodeCustomToolsSkill;
 
-    expect(content).toContain('agent');
-    expect(content).toContain('sessionID');
-    expect(content).toContain('messageID');
-    expect(content).toContain('abort');
+    expect(instructions!).toContain('agent');
+    expect(instructions!).toContain('sessionID');
+    expect(instructions!).toContain('messageID');
+    expect(instructions!).toContain('abort');
   });
 
   it('should include example tools', () => {
-    const { content } = opencodeCustomToolsSkill;
+    const { instructions } = opencodeCustomToolsSkill;
 
-    expect(content).toContain('Database Query Tool');
-    expect(content).toContain('API Integration Tool');
-    expect(content).toContain('File System Tool');
+    expect(instructions!).toContain('Database Query Tool');
+    expect(instructions!).toContain('API Integration Tool');
+    expect(instructions!).toContain('File System Tool');
   });
 
   it('should document security best practices', () => {
-    const { content } = opencodeCustomToolsSkill;
+    const { instructions } = opencodeCustomToolsSkill;
 
-    expect(content).toContain('Sanitize Inputs');
-    expect(content).toContain('Limit File Access');
-    expect(content).toContain('Protect Sensitive Data');
+    expect(instructions!).toContain('Sanitize Inputs');
+    expect(instructions!).toContain('Limit File Access');
+    expect(instructions!).toContain('Protect Sensitive Data');
   });
 });

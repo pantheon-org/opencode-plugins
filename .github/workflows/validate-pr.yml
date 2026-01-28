@@ -51,6 +51,12 @@ jobs:
       - name: Build affected projects
         run: bunx nx affected --target=build --base=origin/${{ github.base_ref }} --exclude='tag:skip-ci'
 
+      - name: Validate TypeScript skills
+        run: bunx nx affected --target=validate:skills --base=origin/${{ github.base_ref }}
+
+      - name: Validate SKILL.md files
+        run: bunx nx affected --target=validate:skill-md --base=origin/${{ github.base_ref }} --configuration=strict
+
       - name: Summary
         if: always()
         run: |
@@ -63,6 +69,7 @@ jobs:
           echo "- ✅ Type checking (affected)" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Tests (affected)" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Build (affected)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Skill validation (affected)" >> $GITHUB_STEP_SUMMARY
 
   security:
     name: Security Analysis

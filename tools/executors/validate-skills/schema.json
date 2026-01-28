@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "title": "Validate Skills",
+  "description": "Validate TypeScript skill definitions in a package",
+  "type": "object",
+  "properties": {
+    "skillsPath": {
+      "type": "string",
+      "description": "Path to skills directory or index file",
+      "default": "src/skills/index.ts"
+    },
+    "strict": {
+      "type": "boolean",
+      "description": "Enable strict validation (fail on warnings)",
+      "default": false
+    },
+    "format": {
+      "type": "string",
+      "description": "Output format",
+      "enum": ["text", "json"],
+      "default": "text"
+    }
+  }
+}

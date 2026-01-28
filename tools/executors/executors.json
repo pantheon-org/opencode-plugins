@@ -17,15 +17,15 @@
       "schema": "./check-mirror-exists/schema.json",
       "description": "Check if the mirror repository specified in package.json exists on GitHub"
     },
-    "validate-jsdoc": {
-      "implementation": "./validate-jsdoc/executor",
-      "schema": "./validate-jsdoc/schema.json",
-      "description": "Validates JSDoc presence on exported functions and classes"
+    "validate-skills": {
+      "implementation": "./validate-skills/executor",
+      "schema": "./validate-skills/schema.json",
+      "description": "Validate TypeScript skill definitions"
     },
-    "validate-markdown": {
-      "implementation": "./validate-markdown/executor",
-      "schema": "./validate-markdown/schema.json",
-      "description": "Validates markdown files using markdownlint-cli2"
+    "validate-skill-md": {
+      "implementation": "./validate-skill-md/executor",
+      "schema": "./validate-skill-md/schema.json",
+      "description": "Validate markdown SKILL.md files"
     }
   }
 }

@@ -16,9 +16,9 @@ describe('opencodePluginsSkill', () => {
     expect(opencodePluginsSkill.description.length).toBeGreaterThan(0);
   });
 
-  it('should have content', () => {
-    expect(opencodePluginsSkill.content).toBeDefined();
-    expect(opencodePluginsSkill.content.length).toBeGreaterThan(100);
+  it('should have instructions', () => {
+    expect(opencodePluginsSkill.instructions).toBeDefined();
+    expect(opencodePluginsSkill.instructions!.length).toBeGreaterThan(100);
   });
 
   it('should have keywords for pattern matching', () => {
@@ -36,7 +36,7 @@ describe('opencodePluginsSkill', () => {
   });
 
   it('should have development category', () => {
-    expect(opencodePluginsSkill.category).toBe('development');
+    expect(opencodePluginsSkill.metadata?.category).toBe('development');
   });
 
   it('should have version', () => {
@@ -48,29 +48,29 @@ describe('opencodePluginsSkill', () => {
   });
 
   it('should contain essential plugin development sections', () => {
-    const { content } = opencodePluginsSkill;
+    const { instructions } = opencodePluginsSkill;
 
     // Check for key sections
-    expect(content).toContain('# OpenCode Plugin Development');
-    expect(content).toContain('## Overview');
-    expect(content).toContain('## Quick Start');
-    expect(content).toContain('## Plugin Hooks');
-    expect(content).toContain('### Custom Tools');
-    expect(content).toContain('### Event Subscription');
-    expect(content).toContain('## Best Practices');
+    expect(instructions!).toContain('# OpenCode Plugin Development');
+    expect(instructions!).toContain('## Overview');
+    expect(instructions!).toContain('## Quick Start');
+    expect(instructions!).toContain('## Plugin Hooks');
+    expect(instructions!).toContain('### Custom Tools');
+    expect(instructions!).toContain('### Event Subscription');
+    expect(instructions!).toContain('## Best Practices');
   });
 
   it('should include code examples', () => {
-    const { content } = opencodePluginsSkill;
+    const { instructions } = opencodePluginsSkill;
 
     // Check for code blocks
-    expect(content).toContain('```typescript');
-    expect(content).toContain('```json');
+    expect(instructions!).toContain('```typescript');
+    expect(instructions!).toContain('```json');
   });
 
   it('should reference official documentation', () => {
-    const { content } = opencodePluginsSkill;
+    const { instructions } = opencodePluginsSkill;
 
-    expect(content).toContain('https://opencode.ai/docs');
+    expect(instructions!).toContain('https://opencode.ai/docs');
   });
 });

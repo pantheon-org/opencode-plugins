@@ -20,6 +20,7 @@ import type { Plugin } from '@opencode-ai/plugin';
 import { buildBM25Index, getTopSkillsByBM25, type BM25Index } from './bm25';
 import { hasIntentToUse } from './pattern-matching';
 import type { Skill, SkillsPluginConfig } from './types';
+import { validateSkill, formatValidationResult } from './validation/skill-validator';
 
 /**
  * Default configuration for the skills plugin
@@ -95,7 +96,9 @@ export const createSkillsPlugin = (
       const skillsMap = new Map<string, string>();
       for (const [name, skill] of Object.entries(skills)) {
         // Combine all skill content for BM25 indexing
-        skillsMap.set(name, `${skill.description} ${skill.content}`);
+        const content =
+          skill.content || [skill.whatIDo, skill.whenToUseMe, skill.instructions].filter(Boolean).join(' ');
+        skillsMap.set(name, `${skill.description} ${content}`);
       }
       bm25Index = buildBM25Index(skillsMap);
 
@@ -179,6 +182,23 @@ export const createSkillsPlugin = (
           const skill = skills[name];
           if (!skill) continue;
 
+          // Create skill content from structured fields or legacy content
+          const content =
+            skill.content ||
+            [
+              `## What I do`,
+              skill.whatIDo || '',
+              '',
+              `## When to use me`,
+              skill.whenToUseMe || '',
+              '',
+              `## Instructions`,
+              skill.instructions || '',
+              '',
+              `## Checklist`,
+              ...(skill.checklist?.map((item) => `- [ ] ${item}`) || []),
+            ].join('\n');
+
           // Create skill content
           const skillContent = [
             '',
@@ -186,7 +206,7 @@ export const createSkillsPlugin = (
             `<skill name="${skill.name}">`,
             `# ${skill.description}`,
             '',
-            skill.content,
+            content,
             '</skill>',
           ].join('\n');
 
@@ -223,20 +243,68 @@ export const createSkillsPlugin = (
 /**
  * Helper function to create a skill object with validation
  *
- * @param skill - Partial skill object (name and content required)
+ * @param skill - Partial skill object (name and description required)
+ * @param options - Optional validation options
  * @returns Complete Skill object
  */
 export const defineSkill = (
-  skill: Pick<Skill, 'name' | 'description' | 'content'> & Partial<Omit<Skill, 'name' | 'description' | 'content'>>,
+  skill: Pick<Skill, 'name' | 'description'> & Partial<Omit<Skill, 'name' | 'description'>>,
+  options?: { strict?: boolean; validate?: boolean },
 ): Skill => {
-  return {
+  const fullSkill: Skill = {
     version: '1.0.0',
     updatedAt: new Date().toISOString(),
     ...skill,
   };
+
+  // Migrate legacy content to structured format if present
+  if (fullSkill.content && !fullSkill.whatIDo) {
+    console.warn(
+      `[opencode-skills] Skill "${skill.name}" uses deprecated "content" field. Consider migrating to structured content.`,
+    );
+  }
+
+  // Validate if requested (default: true in dev, false in prod)
+  const shouldValidate = options?.validate ?? process.env.NODE_ENV !== 'production';
+
+  if (shouldValidate) {
+    const result = validateSkill(fullSkill, options?.strict);
+
+    // Log formatted results
+    if (
+      result.errors.length > 0 ||
+      result.warnings.length > 0 ||
+      (process.env.DEBUG && result.suggestions.length > 0)
+    ) {
+      console.log(formatValidationResult(result, skill.name));
+    }
+
+    // Throw in strict mode
+    if (options?.strict && !result.valid) {
+      throw new Error(`Skill "${skill.name}" has validation errors. See output above.`);
+    }
+  }
+
+  return fullSkill;
 };
 
 // Re-export types for convenience
-export type { Skill, SkillsPluginConfig, MatchResult, BM25Config } from './types';
+export type { Skill, SkillsPluginConfig, MatchResult, BM25Config, SkillMetadata } from './types';
 export { hasIntentToUse, findMatchingSkills } from './pattern-matching';
 export { buildBM25Index, calculateBM25Score, rankSkillsByBM25, getTopSkillsByBM25, type BM25Index } from './bm25';
+export {
+  validateSkill,
+  formatValidationResult,
+  type ValidationResult,
+  type ValidationError,
+  type ValidationWarning,
+  type ValidationSuggestion,
+} from './validation/skill-validator';
+export {
+  parseSkillMarkdown,
+  markdownToSkill,
+  skillToMarkdown,
+  type ParsedSkill,
+  type SkillFrontmatter,
+  type SkillSections,
+} from './parsers/markdown-parser';

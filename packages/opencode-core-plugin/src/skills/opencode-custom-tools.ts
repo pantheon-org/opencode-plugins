@@ -17,6 +17,11 @@ export const opencodeCustomToolsSkill: Skill = defineSkill({
   name: 'opencode-custom-tools',
   description:
     'Complete guide for creating custom tools in OpenCode using TypeScript, JavaScript, and external scripts',
+  license: 'MIT',
+  compatibility: 'opencode',
+  metadata: {
+    category: 'development',
+  },
   keywords: [
     'custom-tool',
     'custom-tools',
@@ -29,8 +34,32 @@ export const opencodeCustomToolsSkill: Skill = defineSkill({
     'tool-context',
     'execute-tool',
   ],
-  category: 'development',
-  content: `
+
+  whatIDo: `
+I provide comprehensive guidance for creating custom tools in OpenCode:
+
+- Tool definition with the tool() helper and type-safety
+- Argument validation using Zod schemas
+- Tool context (sessionID, agent, abort signal)
+- Integration with external scripts (Python, Shell, Go)
+- File system operations and API integrations
+- Error handling and resource management
+- Security best practices and input validation
+  `.trim(),
+
+  whenToUseMe: `
+Use this skill when you need to:
+
+- Create custom tools for the AI to use
+- Integrate external APIs or services
+- Add database query capabilities
+- Execute scripts in other languages (Python, Go, Shell)
+- Perform file system operations
+- Extend OpenCode with project-specific functionality
+- Understand tool arguments, schemas, and context
+  `.trim(),
+
+  instructions: `
 # OpenCode Custom Tools Development
 
 Complete guide for creating custom tools that extend OpenCode's functionality.
@@ -861,7 +890,16 @@ export default tool({
 - [Bun Shell API](https://bun.sh/docs/runtime/shell)
 - [OpenCode Built-in Tools](https://opencode.ai/docs/tools)
 - [Tool Permissions](https://opencode.ai/docs/permissions)
+  `,
 
-This skill provides comprehensive guidance for creating custom tools in OpenCode following official patterns and best practices.
-`,
+  checklist: [
+    'Created tool file in .opencode/tools/ or ~/.config/opencode/tools/',
+    'Used tool() helper with proper description and args schema',
+    'Added .describe() to all arguments for LLM clarity',
+    'Implemented error handling with try-catch blocks',
+    'Validated and sanitized all user inputs',
+    'Limited resource usage (timeouts, response size)',
+    'Tested tool execution in OpenCode session',
+    'Documented return format and expected behavior',
+  ],
 });

@@ -16,6 +16,11 @@ import { defineSkill } from '@pantheon-org/opencode-skills';
 export const opencodePluginsSkill: Skill = defineSkill({
   name: 'opencode-plugins',
   description: 'Complete guide for developing OpenCode plugins with hooks, tools, and integrations',
+  license: 'MIT',
+  compatibility: 'opencode',
+  metadata: {
+    category: 'development',
+  },
   keywords: [
     'opencode',
     'plugin',
@@ -28,8 +33,33 @@ export const opencodePluginsSkill: Skill = defineSkill({
     'custom-tool',
     'integration',
   ],
-  category: 'development',
-  content: `
+
+  whatIDo: `
+I provide comprehensive guidance for developing OpenCode plugins:
+
+- Basic plugin structure and context API
+- Plugin installation (local files and npm packages)
+- Custom tool definitions with the tool() helper
+- Event subscription and handling
+- Tool execution hooks (before/after)
+- Chat message and parameter modification hooks
+- External dependencies management
+- Best practices for logging, error handling, and type safety
+  `.trim(),
+
+  whenToUseMe: `
+Use this skill when you need to:
+
+- Create a new OpenCode plugin
+- Add custom tools for the AI to use
+- Subscribe to OpenCode events (sessions, files, messages)
+- Intercept and modify tool execution
+- Modify chat behavior or LLM parameters
+- Integrate external services or APIs
+- Understand plugin context and lifecycle
+  `.trim(),
+
+  instructions: `
 # OpenCode Plugin Development
 
 Complete guide for developing plugins that extend OpenCode functionality.
@@ -559,7 +589,16 @@ export const ExamplePlugin: Plugin = async ({ client, $, worktree }) => {
   };
 };
 \`\`\`
+  `,
 
-This skill provides everything you need to develop OpenCode plugins following best practices and official patterns.
-`,
+  checklist: [
+    'Created plugin with proper Plugin type signature',
+    'Implemented required hooks (tool, event, etc.)',
+    'Used structured logging with client.app.log()',
+    'Added error handling for all async operations',
+    'Validated tool arguments with Zod schemas',
+    'Tested plugin loads correctly in OpenCode',
+    'Documented plugin functionality and usage',
+    'Published to npm with opencode- prefix (if distributing)',
+  ],
 });

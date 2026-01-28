@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "main": "../src/index.ts",
-  "executors": "./executors.json"
+  "executors": "./executors.json",
+  "dependencies": {
+    "glob": "^13.0.0"
+  }
 }

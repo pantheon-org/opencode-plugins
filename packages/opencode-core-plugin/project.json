@@ -85,6 +85,28 @@
         "cwd": "packages/opencode-core-plugin",
         "parallel": false
       }
+    },
+    "validate:skills": {
+      "executor": "@pantheon-org/tools:validate-skills",
+      "options": {
+        "skillsPath": "src/skills/index.ts"
+      },
+      "configurations": {
+        "strict": {
+          "strict": true
+        }
+      }
+    },
+    "validate:skill-md": {
+      "executor": "@pantheon-org/tools:validate-skill-md",
+      "options": {
+        "pattern": "docs/skills/*.md"
+      },
+      "configurations": {
+        "strict": {
+          "strict": true
+        }
+      }
     }
   }
 }

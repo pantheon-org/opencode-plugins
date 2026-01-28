@@ -3,6 +3,16 @@
  */
 
 /**
+ * Metadata for a skill
+ */
+export interface SkillMetadata {
+  /** Skill category (workflow, development, documentation, testing, deployment, security) */
+  category: string;
+  /** Additional metadata fields */
+  [key: string]: string;
+}
+
+/**
  * A skill represents a reusable piece of knowledge or guidance
  * that can be automatically injected into chat context when needed.
  */
@@ -13,8 +23,26 @@ export interface Skill {
   /** Brief description of what the skill provides */
   description: string;
 
-  /** The full skill content in markdown format */
-  content: string;
+  /** Core capabilities (What I do section) - required in v2 */
+  whatIDo?: string;
+
+  /** Conditions that should trigger this skill (When to use me section) - required in v2 */
+  whenToUseMe?: string;
+
+  /** Detailed guidance (Instructions section) - required in v2 */
+  instructions?: string;
+
+  /** Verification items (Checklist section) - required in v2 */
+  checklist?: string[];
+
+  /** License identifier (e.g., MIT) - required in v2 */
+  license?: string;
+
+  /** Compatibility identifier (e.g., opencode) - required in v2 */
+  compatibility?: string;
+
+  /** Structured metadata including category - required in v2 */
+  metadata?: SkillMetadata;
 
   /** Optional version string for tracking updates */
   version?: string;
@@ -25,11 +53,14 @@ export interface Skill {
   /** Optional list of skill names this skill depends on */
   dependencies?: string[];
 
-  /** Optional category for organizing skills */
-  category?: string;
-
   /** Optional keywords for enhanced pattern matching */
   keywords?: string[];
+
+  /** @deprecated Use whatIDo, whenToUseMe, instructions, checklist instead */
+  content?: string;
+
+  /** @deprecated Use metadata.category instead */
+  category?: string;
 }
 
 /**

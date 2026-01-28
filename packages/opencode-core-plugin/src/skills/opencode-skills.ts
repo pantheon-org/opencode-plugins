@@ -17,6 +17,11 @@ export const opencodeSkillsSkill: Skill = defineSkill({
   name: 'opencode-skills',
   description:
     'Complete guide for creating and configuring agent skills with SKILL.md files, frontmatter, and permissions',
+  license: 'MIT',
+  compatibility: 'opencode',
+  metadata: {
+    category: 'development',
+  },
   keywords: [
     'skill',
     'skills',
@@ -28,8 +33,32 @@ export const opencodeSkillsSkill: Skill = defineSkill({
     'skill-tool',
     'reusable-behavior',
   ],
-  category: 'development',
-  content: `
+
+  whatIDo: `
+I provide comprehensive guidance for creating agent skills in OpenCode:
+
+- File placement in .opencode/skills/ or .claude/skills/ directories
+- Frontmatter configuration with name, description, license, metadata
+- Name validation rules and best practices
+- Skill discovery and loading mechanism
+- Pattern-based permissions control
+- Per-agent permissions and tool disabling
+- Common skill patterns and use cases
+  `.trim(),
+
+  whenToUseMe: `
+Use this skill when you need to:
+
+- Create reusable agent behaviors via SKILL.md files
+- Understand skill file placement and discovery
+- Configure skill frontmatter (name, description, metadata)
+- Control skill access with pattern-based permissions
+- Set up per-agent skill permissions
+- Troubleshoot skill loading issues
+- Learn best practices for skill organization
+  `.trim(),
+
+  instructions: `
 # OpenCode Agent Skills
 
 Complete guide for creating reusable agent behavior via SKILL.md definitions.
@@ -606,7 +635,16 @@ project/
 - [Permissions Guide](https://opencode.ai/docs/permissions)
 - [Tools Configuration](https://opencode.ai/docs/tools)
 - [Custom Tools](https://opencode.ai/docs/custom-tools)
+  `,
 
-This skill provides comprehensive guidance for creating and configuring OpenCode agent skills following official patterns and best practices.
-`,
+  checklist: [
+    'Created SKILL.md file in .opencode/skills/<name>/ or .claude/skills/<name>/',
+    'Added required frontmatter (name, description)',
+    'Validated name follows lowercase alphanumeric with hyphens pattern',
+    'Directory name matches name in frontmatter',
+    'Added clear "What I do" and "When to use me" sections',
+    'Configured permissions if skill should have restricted access',
+    'Tested skill appears in available_skills list',
+    'Verified skill loads correctly when invoked by agent',
+  ],
 });

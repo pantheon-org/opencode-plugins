@@ -12,6 +12,11 @@ import type { Skill } from '@pantheon-org/opencode-skills';
 export const opencodeConfigurationSkill: Skill = defineSkill({
   name: 'opencode-configuration',
   description: 'Complete guide for configuring OpenCode through opencode.json and config locations',
+  license: 'MIT',
+  compatibility: 'opencode',
+  metadata: {
+    category: 'configuration',
+  },
   keywords: [
     'opencode.json',
     'config',
@@ -23,8 +28,32 @@ export const opencodeConfigurationSkill: Skill = defineSkill({
     'project-config',
     'remote-config',
   ],
-  category: 'configuration',
-  content: `# OpenCode Configuration Guide
+
+  whatIDo: `
+I provide comprehensive guidance for OpenCode configuration:
+
+- Multiple config locations with merge behavior and precedence
+- Schema validation via $schema field
+- Variable substitution for environment variables and files
+- All configuration options (TUI, server, tools, models, themes, agents, etc.)
+- Security best practices for API keys and secrets
+- Organization and maintainability strategies
+- Common configuration patterns and examples
+  `.trim(),
+
+  whenToUseMe: `
+Use this skill when you need to:
+
+- Understand OpenCode configuration file locations and precedence
+- Configure providers, models, agents, tools, or themes
+- Set up project-specific or global settings
+- Use environment variables or file substitution
+- Control permissions, autoupdate, or sharing behavior
+- Troubleshoot configuration loading issues
+- Organize configuration for team projects
+  `.trim(),
+
+  instructions: `# OpenCode Configuration Guide
 
 ## Overview
 
@@ -1101,5 +1130,16 @@ OpenCode configuration is highly flexible with:
 6. Use remote config for organization-wide defaults
 
 **Official Documentation:** https://opencode.ai/docs/config/
-`,
+  `,
+
+  checklist: [
+    'Added $schema reference for validation and autocomplete',
+    'Configured settings in appropriate location (global vs project)',
+    'Used environment variable substitution for sensitive data (API keys)',
+    'Avoided committing secrets to version control',
+    'Tested configuration loads correctly with precedence rules',
+    'Documented project-specific config for team members',
+    'Configured watcher to ignore large directories if needed',
+    'Set appropriate permissions for tools and operations',
+  ],
 });

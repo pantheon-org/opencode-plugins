@@ -16,9 +16,12 @@ describe('opencodeAgentsSkill', () => {
     expect(opencodeAgentsSkill.description.length).toBeGreaterThan(0);
   });
 
-  it('should have content', () => {
-    expect(opencodeAgentsSkill.content).toBeDefined();
-    expect(opencodeAgentsSkill.content.length).toBeGreaterThan(100);
+  it('should have structured content fields', () => {
+    expect(opencodeAgentsSkill.whatIDo).toBeDefined();
+    expect(opencodeAgentsSkill.whenToUseMe).toBeDefined();
+    expect(opencodeAgentsSkill.instructions).toBeDefined();
+    expect(opencodeAgentsSkill.checklist).toBeDefined();
+    expect(opencodeAgentsSkill.instructions!.length).toBeGreaterThan(100);
   });
 
   it('should have keywords for pattern matching', () => {
@@ -35,7 +38,7 @@ describe('opencodeAgentsSkill', () => {
   });
 
   it('should have development category', () => {
-    expect(opencodeAgentsSkill.category).toBe('development');
+    expect(opencodeAgentsSkill.metadata?.category).toBe('development');
   });
 
   it('should have version', () => {
@@ -47,63 +50,63 @@ describe('opencodeAgentsSkill', () => {
   });
 
   it('should contain essential agent sections', () => {
-    const { content } = opencodeAgentsSkill;
+    const { instructions } = opencodeAgentsSkill;
 
     // Check for key sections
-    expect(content).toContain('# OpenCode Agents');
-    expect(content).toContain('## Overview');
-    expect(content).toContain('## Agent Types');
-    expect(content).toContain('### Primary Agents');
-    expect(content).toContain('### Subagents');
-    expect(content).toContain('## Configuration Methods');
-    expect(content).toContain('## Agent Options');
-    expect(content).toContain('## Creating Agents');
-    expect(content).toContain('## Best Practices');
+    expect(instructions).toContain('# OpenCode Agents');
+    expect(instructions).toContain('## Overview');
+    expect(instructions).toContain('## Agent Types');
+    expect(instructions).toContain('### Primary Agents');
+    expect(instructions).toContain('### Subagents');
+    expect(instructions).toContain('## Configuration Methods');
+    expect(instructions).toContain('## Agent Options');
+    expect(instructions).toContain('## Creating Agents');
+    expect(instructions).toContain('## Best Practices');
   });
 
   it('should include code examples', () => {
-    const { content } = opencodeAgentsSkill;
+    const { instructions } = opencodeAgentsSkill;
 
     // Check for code blocks
-    expect(content).toContain('```json');
-    expect(content).toContain('```markdown');
+    expect(instructions).toContain('```json');
+    expect(instructions).toContain('```markdown');
   });
 
   it('should reference official documentation', () => {
-    const { content } = opencodeAgentsSkill;
+    const { instructions } = opencodeAgentsSkill;
 
-    expect(content).toContain('https://opencode.ai/docs');
+    expect(instructions).toContain('https://opencode.ai/docs');
   });
 
   it('should document built-in agents', () => {
-    const { content } = opencodeAgentsSkill;
+    const { instructions } = opencodeAgentsSkill;
 
-    expect(content).toContain('Build');
-    expect(content).toContain('Plan');
-    expect(content).toContain('General');
-    expect(content).toContain('Explore');
+    expect(instructions).toContain('Build');
+    expect(instructions).toContain('Plan');
+    expect(instructions).toContain('General');
+    expect(instructions).toContain('Explore');
   });
 
   it('should document agent modes', () => {
-    const { content } = opencodeAgentsSkill;
+    const { instructions } = opencodeAgentsSkill;
 
-    expect(content).toContain('primary');
-    expect(content).toContain('subagent');
+    expect(instructions).toContain('primary');
+    expect(instructions).toContain('subagent');
   });
 
   it('should document permissions', () => {
-    const { content } = opencodeAgentsSkill;
+    const { instructions } = opencodeAgentsSkill;
 
-    expect(content).toContain('ask');
-    expect(content).toContain('allow');
-    expect(content).toContain('deny');
+    expect(instructions).toContain('ask');
+    expect(instructions).toContain('allow');
+    expect(instructions).toContain('deny');
   });
 
   it('should include example agents', () => {
-    const { content } = opencodeAgentsSkill;
+    const { instructions } = opencodeAgentsSkill;
 
-    expect(content).toContain('## Example Agents');
-    expect(content).toContain('Test Runner');
-    expect(content).toContain('Architecture Advisor');
+    expect(instructions).toContain('## Example Agents');
+    expect(instructions).toContain('Test Runner');
+    expect(instructions).toContain('Architecture Advisor');
   });
 });

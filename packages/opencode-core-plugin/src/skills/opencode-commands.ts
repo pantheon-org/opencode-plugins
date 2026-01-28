@@ -12,6 +12,11 @@ import type { Skill } from '@pantheon-org/opencode-skills';
 export const opencodeCommandsSkill: Skill = defineSkill({
   name: 'opencode-commands',
   description: 'Complete guide for creating custom slash commands in OpenCode with templates and configuration',
+  license: 'MIT',
+  compatibility: 'opencode',
+  metadata: {
+    category: 'configuration',
+  },
   keywords: [
     'command',
     'commands',
@@ -22,8 +27,31 @@ export const opencodeCommandsSkill: Skill = defineSkill({
     'command-config',
     '$ARGUMENTS',
   ],
-  category: 'configuration',
-  content: `# OpenCode Commands Guide
+
+  whatIDo: `
+I provide comprehensive guidance for creating custom slash commands in OpenCode:
+
+- Two configuration methods (JSON and Markdown files)
+- Dynamic template prompts with variable substitution
+- Argument handling with $ARGUMENTS and positional parameters
+- Shell output injection with \`!\`command\`\` syntax
+- File references with @filename syntax
+- Agent and model control per command
+- Built-in command overrides and customization
+  `.trim(),
+
+  whenToUseMe: `
+Use this skill when you need to:
+
+- Create custom slash commands for repetitive tasks
+- Automate common workflows with predefined prompts
+- Inject dynamic content (shell output, files) into prompts
+- Configure command templates with arguments
+- Control which agent or model executes a command
+- Learn about built-in commands and how to override them
+  `.trim(),
+
+  instructions: `# OpenCode Commands Guide
 
 ## Overview
 
@@ -881,5 +909,16 @@ OpenCode commands provide powerful automation for repetitive tasks:
 5. **Test shell commands** - Verify they work before including in templates
 
 **Official Documentation:** https://opencode.ai/docs/commands/
-`,
+  `,
+
+  checklist: [
+    'Created command using either JSON config or Markdown file approach',
+    'Added clear description for the command',
+    'Used variable substitution ($ARGUMENTS, $1, $2) if command accepts parameters',
+    'Tested shell output injection if using `!\\`command\\`\\` syntax',
+    'Verified file references work correctly with @filename syntax',
+    'Specified agent and/or model if command needs specific execution context',
+    'Tested command in OpenCode to ensure it works as expected',
+    'Documented command for team members if project-specific',
+  ],
 });

@@ -30,39 +30,39 @@ describe('opencodeConfigurationSkill', () => {
   });
 
   it('should have category set to configuration', () => {
-    expect(opencodeConfigurationSkill.category).toBe('configuration');
+    expect(opencodeConfigurationSkill.metadata?.category).toBe('configuration');
   });
 
-  it('should have content', () => {
-    expect(opencodeConfigurationSkill.content).toBeDefined();
-    expect(opencodeConfigurationSkill.content.length).toBeGreaterThan(0);
+  it('should have instructions', () => {
+    expect(opencodeConfigurationSkill.instructions).toBeDefined();
+    expect(opencodeConfigurationSkill.instructions!.length).toBeGreaterThan(0);
   });
 
-  it('should have content starting with heading', () => {
-    expect(opencodeConfigurationSkill.content).toMatch(/^#\s+/);
+  it('should have instructions starting with heading', () => {
+    expect(opencodeConfigurationSkill.instructions!).toMatch(/^#\s+/);
   });
 
   it('should include configuration locations section', () => {
-    expect(opencodeConfigurationSkill.content).toContain('Configuration Locations');
+    expect(opencodeConfigurationSkill.instructions!).toContain('Configuration Locations');
   });
 
   it('should include precedence order information', () => {
-    expect(opencodeConfigurationSkill.content).toContain('Precedence Order');
+    expect(opencodeConfigurationSkill.instructions!).toContain('Precedence Order');
   });
 
   it('should include variable substitution section', () => {
-    expect(opencodeConfigurationSkill.content).toContain('Variable Substitution');
+    expect(opencodeConfigurationSkill.instructions!).toContain('Variable Substitution');
   });
 
   it('should include schema documentation', () => {
-    expect(opencodeConfigurationSkill.content).toContain('https://opencode.ai/config.json');
+    expect(opencodeConfigurationSkill.instructions!).toContain('https://opencode.ai/config.json');
   });
 
   it('should include best practices section', () => {
-    expect(opencodeConfigurationSkill.content).toContain('Best Practices');
+    expect(opencodeConfigurationSkill.instructions!).toContain('Best Practices');
   });
 
   it('should include troubleshooting section', () => {
-    expect(opencodeConfigurationSkill.content).toContain('Troubleshooting');
+    expect(opencodeConfigurationSkill.instructions!).toContain('Troubleshooting');
   });
 });

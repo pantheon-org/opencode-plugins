@@ -34,43 +34,43 @@ describe('opencodeCommandsSkill', () => {
   });
 
   it('should have category set to configuration', () => {
-    expect(opencodeCommandsSkill.category).toBe('configuration');
+    expect(opencodeCommandsSkill.metadata?.category).toBe('configuration');
   });
 
-  it('should have content', () => {
-    expect(opencodeCommandsSkill.content).toBeDefined();
-    expect(opencodeCommandsSkill.content.length).toBeGreaterThan(0);
+  it('should have instructions', () => {
+    expect(opencodeCommandsSkill.instructions).toBeDefined();
+    expect(opencodeCommandsSkill.instructions!.length).toBeGreaterThan(0);
   });
 
-  it('should have content starting with heading', () => {
-    expect(opencodeCommandsSkill.content).toMatch(/^#\s+/);
+  it('should have instructions starting with heading', () => {
+    expect(opencodeCommandsSkill.instructions!).toMatch(/^#\s+/);
   });
 
   it('should include JSON configuration section', () => {
-    expect(opencodeCommandsSkill.content).toContain('JSON Configuration');
+    expect(opencodeCommandsSkill.instructions!).toContain('JSON Configuration');
   });
 
   it('should include markdown files section', () => {
-    expect(opencodeCommandsSkill.content).toContain('Markdown Files');
+    expect(opencodeCommandsSkill.instructions!).toContain('Markdown Files');
   });
 
   it('should include prompt templates section', () => {
-    expect(opencodeCommandsSkill.content).toContain('Prompt Templates');
+    expect(opencodeCommandsSkill.instructions!).toContain('Prompt Templates');
   });
 
   it('should include arguments documentation', () => {
-    expect(opencodeCommandsSkill.content).toContain('$ARGUMENTS');
+    expect(opencodeCommandsSkill.instructions!).toContain('$ARGUMENTS');
   });
 
   it('should include shell output documentation', () => {
-    expect(opencodeCommandsSkill.content).toContain('Shell Output');
+    expect(opencodeCommandsSkill.instructions!).toContain('Shell Output');
   });
 
   it('should include file references documentation', () => {
-    expect(opencodeCommandsSkill.content).toContain('File References');
+    expect(opencodeCommandsSkill.instructions!).toContain('File References');
   });
 
   it('should include troubleshooting section', () => {
-    expect(opencodeCommandsSkill.content).toContain('Troubleshooting');
+    expect(opencodeCommandsSkill.instructions!).toContain('Troubleshooting');
   });
 });

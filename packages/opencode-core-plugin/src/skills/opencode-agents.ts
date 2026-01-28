@@ -17,6 +17,11 @@ export const opencodeAgentsSkill: Skill = defineSkill({
   name: 'opencode-agents',
   description:
     'Complete guide for creating and configuring OpenCode agents with custom prompts, tools, and permissions',
+  license: 'MIT',
+  compatibility: 'opencode',
+  metadata: {
+    category: 'development',
+  },
   keywords: [
     'agent',
     'agents',
@@ -29,8 +34,32 @@ export const opencodeAgentsSkill: Skill = defineSkill({
     'agent-tools',
     'agent-permissions',
   ],
-  category: 'development',
-  content: `
+
+  whatIDo: `
+I provide comprehensive guidance for creating and configuring OpenCode agents:
+
+- Complete overview of agent types (primary agents vs subagents)
+- Configuration methods (JSON and Markdown)
+- Agent options (temperature, maxSteps, prompt, model, tools, permissions)
+- Built-in agents and their capabilities
+- Agent orchestration and multi-agent workflows
+- Session navigation between parent and child agents
+- Best practices for agent design and implementation
+  `.trim(),
+
+  whenToUseMe: `
+Use this skill when you need to:
+
+- Understand the difference between primary agents and subagents
+- Create custom agents for specialized tasks
+- Configure agent permissions and tool access
+- Learn about built-in agents (build, plan, general, explore)
+- Set up multi-agent workflows
+- Configure temperature and model selection for agents
+- Understand agent mode options and when to use each
+  `.trim(),
+
+  instructions: `
 # OpenCode Agents
 
 Complete guide for creating and configuring specialized agents in OpenCode.
@@ -810,7 +839,16 @@ Navigate between parent and child agent sessions:
 - [Permissions Guide](https://opencode.ai/docs/permissions)
 - [Tools Configuration](https://opencode.ai/docs/tools)
 - [Custom Commands](https://opencode.ai/docs/commands)
+  `,
 
-This skill provides comprehensive guidance for creating and configuring OpenCode agents following official patterns and best practices.
-`,
+  checklist: [
+    'Determined if agent should be primary or subagent mode',
+    'Added clear description explaining agent purpose',
+    'Configured appropriate tool access for agent role',
+    'Set permissions matching security requirements',
+    'Chose appropriate model for agent task complexity',
+    'Configured temperature for desired creativity level',
+    'Created agent using JSON config or Markdown file',
+    'Tested agent invocation and tool access',
+  ],
 });
