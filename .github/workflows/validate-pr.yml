@@ -33,14 +33,14 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Biome check (format + lint)
-        run: bunx nx affected --target=check --base=origin/${{ github.base_ref }}
+      - name: Run Biome CI
+        run: biome ci --reporter=github .
 
-      - name: JSDoc validation
-        run: bunx nx affected --target=validate:jsdoc --base=origin/${{ github.base_ref }}
+      - name: Run markdown linter
+        run: bunx markdownlint-cli2 "**/*.md" "#node_modules" "#**/node_modules"
 
-      - name: Markdown validation
-        run: bunx nx affected --target=validate:markdown --base=origin/${{ github.base_ref }}
+      - name: Validate TSDoc on affected projects
+        run: bunx nx affected --target=validate:tsdoc --base=origin/${{ github.base_ref }}
 
       - name: Type check affected projects
         run: bunx nx affected --target=type-check --base=origin/${{ github.base_ref }}
@@ -63,9 +63,9 @@ jobs:
           echo "## ✅ Validation Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "All validation checks passed:" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Biome check (format + lint)" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ JSDoc validation" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Markdown validation" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Code formatting" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Markdown linting" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Code linting (affected)" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Type checking (affected)" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Tests (affected)" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Build (affected)" >> $GITHUB_STEP_SUMMARY
@@ -83,17 +83,17 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          scan-type: "fs"
-          scan-ref: "."
-          format: "sarif"
-          output: "trivy-results.sarif"
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
 
       - name: Upload Trivy scan results
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         continue-on-error: true
         with:
-          sarif_file: "trivy-results.sarif"
+          sarif_file: 'trivy-results.sarif'
 
   pr-analysis:
     name: PR Analysis

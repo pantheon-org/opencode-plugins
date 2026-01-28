@@ -5,13 +5,13 @@
 pre-commit:
   parallel: true
   commands:
-    # Format affected packages using Nx
-    format:
-      run: bunx nx affected --target=format --base=HEAD~1 --head=HEAD --parallel=3
+    # Lint and format affected packages with Biome (combines format + lint)
+    biome:
+      run: bunx nx affected --target=lint --base=HEAD~1 --head=HEAD --parallel=3 --batch
 
-    # Lint affected packages using Nx (with auto-fix)
-    lint:
-      run: bunx nx affected --target=lint --base=HEAD~1 --head=HEAD --parallel=3 --fix
+    # Validate TSDoc on affected packages
+    validate-tsdoc:
+      run: bunx nx affected --target=validate:tsdoc --base=HEAD~1 --head=HEAD
 
     # Type-check affected packages using Nx
     type-check:
