@@ -1,7 +1,9 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
   "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
-  "files": { "includes": ["**", "!!**/dist"] },
+  "files": {
+    "includes": ["**", "!!**/dist", "!packages/opencode-font/fonts/test.html"]
+  },
   "formatter": {
     "enabled": true,
     "formatWithErrors": false,
@@ -57,15 +59,7 @@
         "noDoubleEquals": "error"
       }
     },
-    "includes": [
-      "**",
-      "!node_modules/",
-      "!dist/",
-      "!build/",
-      "!.nx/",
-      "!coverage/",
-      "!bun.lock"
-    ]
+    "includes": ["**", "!node_modules/", "!dist/", "!build/", "!.nx/", "!coverage/", "!bun.lock"]
   },
   "javascript": {
     "formatter": {
@@ -97,16 +91,7 @@
     {
       "includes": ["**/*.ts", "**/*.tsx"],
       "javascript": {
-        "globals": [
-          "require",
-          "console",
-          "__filename",
-          "module",
-          "process",
-          "Buffer",
-          "__dirname",
-          "exports"
-        ]
+        "globals": ["require", "console", "__filename", "module", "process", "Buffer", "__dirname", "exports"]
       },
       "linter": {
         "rules": {
@@ -188,16 +173,7 @@
     {
       "includes": ["**/*.js", "**/*.jsx"],
       "javascript": {
-        "globals": [
-          "require",
-          "console",
-          "__filename",
-          "module",
-          "process",
-          "Buffer",
-          "__dirname",
-          "exports"
-        ]
+        "globals": ["require", "console", "__filename", "module", "process", "Buffer", "__dirname", "exports"]
       }
     }
   ],
