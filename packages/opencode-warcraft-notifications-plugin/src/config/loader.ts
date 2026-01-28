@@ -5,7 +5,7 @@ import { createLogger } from '../logger.js';
 import { validateAndSanitizeConfig } from '../schema-validator.js';
 
 import { getConfigDir } from './paths.js';
-import type { WarcraftNotificationConfig, PluginConfig } from './types.js';
+import type { PluginConfig, WarcraftNotificationConfig } from './types.js';
 
 const log = createLogger({ module: 'opencode-plugin-warcraft-notifications' });
 const DEBUG = Boolean(process.env.DEBUG_OPENCODE);

@@ -1,5 +1,5 @@
-import { defineSkill } from '@pantheon-org/opencode-skills';
 import type { Skill } from '@pantheon-org/opencode-skills';
+import { defineSkill } from '@pantheon-org/opencode-skills';
 
 /**
  * OpenCode Commands Skill

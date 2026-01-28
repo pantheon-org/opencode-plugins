@@ -1,8 +1,7 @@
-import { readFileSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-
 import type { Logger } from '@pantheon-org/opencode-notification';
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
 /**
  * Get the directory containing this module
@@ -85,8 +84,6 @@ export const getPackageName = (debug: boolean = false, logger?: Logger): string 
       }
     } catch (err) {
       log('[opencode-config] Failed to read:', { path: pkgPath, error: err });
-      // Try next location
-      continue;
     }
   }
 

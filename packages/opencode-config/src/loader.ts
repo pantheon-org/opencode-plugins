@@ -1,6 +1,5 @@
-import { access } from 'fs/promises';
-
 import type { Logger } from '@pantheon-org/opencode-notification';
+import { access } from 'fs/promises';
 
 import { getConfigPaths } from './paths.js';
 import type { PluginConfig } from './types.js';

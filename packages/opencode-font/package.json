@@ -7,11 +7,7 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist/",
-    "fonts/",
-    "css/"
-  ],
+  "files": ["dist/", "fonts/", "css/"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pantheon-org/opencode-font.git"
@@ -31,12 +27,7 @@
     "generate:fonts": "bun run scripts/generate-fonts.ts",
     "validate:fonts": "bun run scripts/validate-fonts.ts"
   },
-  "keywords": [
-    "font",
-    "svg",
-    "text-to-svg",
-    "opencode"
-  ],
+  "keywords": ["font", "svg", "text-to-svg", "opencode"],
   "author": "Pantheon",
   "license": "MIT",
   "devDependencies": {

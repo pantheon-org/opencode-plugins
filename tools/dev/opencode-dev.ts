@@ -1,8 +1,8 @@
 #!/usr/bin/env bunx tsx
-import { type ChildProcess, spawn } from 'node:child_process';
-import fs from 'node:fs';
-import net from 'node:net';
-import path from 'node:path';
+import { type ChildProcess, spawn } from 'child_process';
+import fs from 'fs';
+import net from 'net';
+import path from 'path';
 
 type Opts = {
   plugins: string[];
@@ -34,6 +34,13 @@ function parseArgs(): Opts {
     } else if (a === '--dispose-url' && argv[i + 1]) {
       disposeUrl = argv[++i];
     } else if (a === '--help' || a === '-h') {
+      console.log(
+        'usage: opencode-dev [--no-apply] [--symlink-root <dir>] [--revert] [--no-dispose] [--dispose-url <url>] <plugin...>',
+      );
+      console.log('  --no-apply   do not modify opencode.json (print entries instead)');
+      console.log('  --revert     restore opencode.json from the last opencode-dev backup and exit');
+      console.log('  --no-dispose disable POST /instance/dispose calls and always restart the local opencode CLI');
+      console.log('  --dispose-url set custom dispose URL (default http://localhost:4096/instance/dispose)');
       process.exit(0);
     } else {
       plugins.push(a);
@@ -85,9 +92,11 @@ async function createSymlink(target: string, linkPath: string) {
       await fs.promises.rm(linkPath, { recursive: true });
     } catch {}
     await fs.promises.symlink(target, linkPath, 'junction');
+    console.log(`Symlink created: ${linkPath} -> ${target}`);
   } catch (err) {
     console.warn('Symlink failed, falling back to copy:', String(err));
     await copyDir(target, linkPath);
+    console.log(`Copied ${target} -> ${linkPath}`);
   }
 }
 
@@ -105,8 +114,9 @@ async function copyDir(src: string, dest: string) {
 function spawnWatchBuild(projectName: string) {
   const cmd = 'bunx';
   const args = ['nx', 'run', `${projectName}:build`, '--watch'];
+  console.log(`Starting build watcher: ${cmd} ${args.join(' ')}`);
   const p = spawn(cmd, args, { stdio: 'inherit' });
-  p.on('exit', (_code) => {});
+  p.on('exit', (code) => console.log(`Build watcher for ${projectName} exited (${code})`));
   return p;
 }
 
@@ -134,17 +144,19 @@ function writeJsonc(file: string, originalRaw: string | null, obj: any) {
 
 async function backupFile(file: string) {
   try {
-    await fs.promises.copyFile(file, `${file}.opencode-dev.bak`);
-  } catch (_err) {}
+    await fs.promises.copyFile(file, file + '.opencode-dev.bak');
+    console.log(`Backed up ${file} -> ${file}.opencode-dev.bak`);
+  } catch (err) {}
 }
 
 async function revertOpencodeJson(workspaceRoot: string) {
   const candidates = ['opencode.json', 'opencode.jsonc'];
   for (const c of candidates) {
     const p = path.join(workspaceRoot, c);
-    const bak = `${p}.opencode-dev.bak`;
+    const bak = p + '.opencode-dev.bak';
     if (fs.existsSync(bak)) {
       await fs.promises.copyFile(bak, p);
+      console.log(`Restored ${p} from ${bak}`);
       return;
     }
   }
@@ -163,8 +175,9 @@ async function updateOpencodeJson(workspaceRoot: string, pluginLinkPaths: string
   }
   if (!target) {
     target = path.join(workspaceRoot, 'opencode.json');
+    console.log('No existing opencode.json found; creating new one at', target);
     const base = { plugin: [] };
-    await fs.promises.writeFile(target, `${JSON.stringify(base, null, 2)}\n`, 'utf8');
+    await fs.promises.writeFile(target, JSON.stringify(base, null, 2) + '\n', 'utf8');
   }
   await backupFile(target);
   const { json: original, raw } = readJsonc(target);
@@ -172,6 +185,7 @@ async function updateOpencodeJson(workspaceRoot: string, pluginLinkPaths: string
   if (!Array.isArray(json.plugin)) json.plugin = [];
   for (const p of pluginLinkPaths) if (!json.plugin.includes(p)) json.plugin.push(p);
   writeJsonc(target, raw, json);
+  console.log('Updated', target);
 }
 
 function getLatestMtime(dir: string): number {
@@ -220,7 +234,7 @@ async function isServerListening(disposeUrl: string, timeoutMs = 500): Promise<b
         resolve(false);
       });
     });
-  } catch (_err) {
+  } catch (err) {
     return false;
   }
 }
@@ -239,6 +253,7 @@ async function tryDispose(url: string, timeoutMs = 2000, retries = 2): Promise<b
       });
       clearTimeout(id);
       if (res.ok) {
+        console.log(`Dispose request to ${url} succeeded (status ${res.status})`);
         return true;
       } else {
         console.warn(`Dispose request to ${url} returned ${res.status}`);
@@ -267,6 +282,7 @@ async function main() {
   let restarting = false;
 
   process.on('SIGINT', async () => {
+    console.log('\nInterrupted. Cleaning up...');
     for (const b of buildProcesses)
       try {
         b.kill();
@@ -292,6 +308,7 @@ async function main() {
     } catch (err) {
       console.warn('Failed to start NX build watcher for', projectName, String(err));
     }
+    console.log(`Waiting for dist at ${distPath}...`);
     const maxWait = 30000;
     const start = Date.now();
     while (!fs.existsSync(distPath)) {
@@ -306,6 +323,7 @@ async function main() {
     if (fs.existsSync(distPath)) await createSymlink(distPath, linkPath);
     else {
       await ensureDir(linkPath);
+      console.log('Created placeholder folder for', linkPath);
     }
     createdLinks.push(linkPath);
     distPaths.push(distPath);
@@ -317,9 +335,8 @@ async function main() {
   });
   if (opts.apply) await updateOpencodeJson(opts.workspaceRoot, fileUris);
   else {
-    for (const f of fileUris) {
-      console.log(f);
-    }
+    console.log('Apply disabled; add the following entries to your opencode.json:');
+    for (const f of fileUris) console.log('  ', f);
   }
 
   function spawnOpencode() {
@@ -329,8 +346,10 @@ async function main() {
       } catch {}
       opProcess = null;
     }
+    console.log('Starting opencode CLI in', opts.workspaceRoot);
     opProcess = spawn('opencode', [], { cwd: opts.workspaceRoot, stdio: 'inherit' });
     opProcess.on('exit', (code) => {
+      console.log('opencode exited', code);
       if (!restarting) process.exit(code || 0);
     });
   }
@@ -341,13 +360,15 @@ async function main() {
   if (opts.disposeEnabled && opts.disposeUrl) {
     try {
       serverAvailable = await isServerListening(opts.disposeUrl);
-    } catch (_err) {
+    } catch (err) {
       serverAvailable = false;
     }
   }
 
   if (serverAvailable) {
+    console.log(`Opencode server detected at ${opts.disposeUrl}; will request reloads via endpoint.`);
   } else {
+    console.log('No Opencode server detected; starting local opencode CLI.');
     spawnOpencode();
   }
 
@@ -360,6 +381,7 @@ async function main() {
           const last = lastMtimes[i] || 0;
           const now = getLatestMtime(dp);
           if (now > last) {
+            console.log(`Change detected in ${dp} (mtime ${now}); handling reload...`);
             lastMtimes[i] = now;
             if (!restarting) {
               restarting = true;
@@ -371,6 +393,9 @@ async function main() {
                   if (listening) {
                     disposed = await tryDispose(opts.disposeUrl);
                   } else {
+                    console.log(
+                      `Dispose server not reachable at ${opts.disposeUrl}; falling back to restarting local opencode CLI.`,
+                    );
                   }
                 } catch (err) {
                   console.warn('Dispose request failed:', String(err));
@@ -378,8 +403,10 @@ async function main() {
               }
 
               if (disposed) {
+                console.log('Server reload requested; leaving opencode process running.');
                 restarting = false;
               } else {
+                console.log('Server reload not available or failed; restarting local opencode process.');
                 if (opProcess)
                   try {
                     opProcess.kill();

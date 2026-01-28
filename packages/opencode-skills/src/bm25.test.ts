@@ -2,9 +2,9 @@
  * Tests for BM25 ranking implementation
  */
 
-import { describe, it, expect } from 'bun:test';
+import { describe, expect, it } from 'bun:test';
 
-import { buildBM25Index, calculateBM25Score, rankSkillsByBM25, getTopSkillsByBM25 } from './bm25';
+import { buildBM25Index, calculateBM25Score, getTopSkillsByBM25, rankSkillsByBM25 } from './bm25';
 
 describe('BM25 Implementation', () => {
   // Sample skills for testing

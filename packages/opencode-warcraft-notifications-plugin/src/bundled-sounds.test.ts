@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
-import { mkdir, unlink, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { mkdir, unlink, writeFile } from 'fs/promises';
+import { join } from 'path';
 
 import { ensureSoundAvailable, getSoundFileList, installBundledSoundsIfMissing, soundExists } from './bundled-sounds';
 import { createTempDir, removeTempDir, silenceConsole } from './test-utils';

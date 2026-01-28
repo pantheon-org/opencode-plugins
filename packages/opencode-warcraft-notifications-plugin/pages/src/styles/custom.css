@@ -131,19 +131,19 @@
    ============================================ */
 
 body {
-  color: var(--color-text);
-  font-size: 14px;
-  font-family: var(--__sl-font);
+  color: var(--color-text) !important;
+  font-size: 14px !important;
+  font-family: var(--__sl-font) !important;
   line-height: var(--sl-line-height);
   text-underline-offset: 0.1875rem;
 }
 
 a {
-  color: var(--color-text-strong);
+  color: var(--color-text-strong) !important;
 }
 
 a:hover {
-  color: var(--color-text-strong);
+  color: var(--color-text-strong) !important;
 }
 
 /* ============================================
@@ -151,34 +151,34 @@ a:hover {
    ============================================ */
 
 h1 {
-  font-size: 26px;
-  text-transform: none;
-  font-weight: 500;
-  color: var(--color-text-strong);
+  font-size: 26px !important;
+  text-transform: none !important;
+  font-weight: 500 !important;
+  color: var(--color-text-strong) !important;
   line-height: var(--sl-line-height-headings);
 }
 
 h2 {
-  font-size: 22px;
-  text-transform: none;
-  font-weight: 500;
-  color: var(--color-text-strong);
+  font-size: 22px !important;
+  text-transform: none !important;
+  font-weight: 500 !important;
+  color: var(--color-text-strong) !important;
   line-height: var(--sl-line-height-headings);
 }
 
 h3 {
-  font-size: 18px;
-  text-transform: none;
-  font-weight: 500;
-  color: var(--color-text-strong);
+  font-size: 18px !important;
+  text-transform: none !important;
+  font-weight: 500 !important;
+  color: var(--color-text-strong) !important;
   line-height: var(--sl-line-height-headings);
 }
 
 h4 {
-  font-size: 16px;
-  text-transform: none;
-  font-weight: 500;
-  color: var(--color-text-strong);
+  font-size: 16px !important;
+  text-transform: none !important;
+  font-weight: 500 !important;
+  color: var(--color-text-strong) !important;
   line-height: var(--sl-line-height-headings);
 }
 
@@ -188,7 +188,7 @@ h3 a,
 h4 a,
 h5 a,
 h6 a {
-  color: var(--color-text-strong);
+  color: var(--color-text-strong) !important;
   text-decoration: none;
   cursor: pointer;
 }
@@ -200,15 +200,15 @@ h4 a:hover,
 h5 a:hover,
 h6 a:hover {
   text-decoration: none;
-  color: var(--color-text-strong);
+  color: var(--color-text-strong) !important;
 }
 
 strong {
-  font-weight: 500;
+  font-weight: 500 !important;
 }
 
 .page-description {
-  color: var(--color-text);
+  color: var(--color-text) !important;
 }
 
 /* Paragraph spacing from OpenCode */
@@ -239,26 +239,26 @@ body > .page > header {
 }
 
 body > .page > header a.site-title img {
-  height: 2.625rem;
-  width: auto;
+  height: 2.625rem !important;
+  width: auto !important;
 }
 
 body > .page > header a.site-title {
-  gap: 0.75rem;
+  gap: 0.75rem !important;
 }
 
 body > .page > header a.site-title span {
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
 }
 
 @media (max-width: 30rem) {
   body > .page > header a.site-title img {
-    height: 2rem;
+    height: 2rem !important;
   }
 
   body > .page > header a.site-title span {
-    font-size: 1rem;
+    font-size: 1rem !important;
   }
 }
 
@@ -305,7 +305,7 @@ body > .page > header button[data-open-modal] > kbd {
 body > .page > header button[data-open-modal] > kbd kbd {
   line-height: 1;
   color: var(--sl-color-text-dimmed);
-  color: var(--color-icon);
+  color: var(--color-icon) !important;
   font-size: 15px;
 }
 
@@ -316,18 +316,18 @@ body > .page > header button[data-open-modal][aria-keyshortcuts="Meta+K"] > kbd 
 
 /* Header right group spacing */
 .right-group {
-  gap: 40px;
+  gap: 40px !important;
   align-items: center;
 }
 
 .social-icons {
-  gap: 24px;
+  gap: 24px !important;
   align-items: center;
 }
 
 .social-icons a svg {
-  height: 18px;
-  width: 18px;
+  height: 18px !important;
+  width: 18px !important;
 }
 
 /* ============================================
@@ -341,11 +341,11 @@ nav.sidebar .sidebar-pane {
 }
 
 .sidebar-pane {
-  border-inline-end: 1px solid var(--color-border-weak);
+  border-inline-end: 1px solid var(--color-border-weak) !important;
 }
 
 .sidebar-content {
-  padding: 24px 0;
+  padding: 24px 0 !important;
   scrollbar-width: thin;
 }
 
@@ -403,7 +403,7 @@ nav.sidebar ul.top-level > li > details > summary .group-label > span {
 
 nav.sidebar summary svg.caret {
   color: var(--sl-color-text-dimmed);
-  color: var(--color-icon);
+  color: var(--color-icon) !important;
 }
 
 nav.sidebar a:hover {
@@ -421,29 +421,29 @@ nav.sidebar a[aria-current="page"]:focus {
 
 a[aria-current="page"] {
   border-left: 2px solid var(--color-background-strong);
-  background: var(--color-background-weak);
-  font-weight: 600;
+  background: var(--color-background-weak) !important;
+  font-weight: 600 !important;
 }
 
 ul.top-level a[aria-current="page"] > span {
-  color: var(--color-text-strong);
+  color: var(--color-text-strong) !important;
 }
 
 /* Sidebar link styling */
 .top-level li a {
   border-radius: 0;
   width: 100%;
-  padding: 4px 24px;
+  padding: 4px 24px !important;
 }
 
 .top-level li a:hover {
-  background: var(--color-background-weak);
+  background: var(--color-background-weak) !important;
 }
 
 /* Sidebar details/summary */
 #starlight__sidebar > div > sl-sidebar-state-persist > ul > li > details > summary {
-  padding: 0 24px;
-  margin-top: 20px;
+  padding: 0 24px !important;
+  margin-top: 20px !important;
 }
 
 #starlight__sidebar > div > sl-sidebar-state-persist > ul > li > details > summary:hover {
@@ -451,8 +451,8 @@ ul.top-level a[aria-current="page"] > span {
 }
 
 #starlight__sidebar > div > sl-sidebar-state-persist > ul > li > details > summary span {
-  color: var(--color-text-strong);
-  font-weight: 600;
+  color: var(--color-text-strong) !important;
+  font-weight: 600 !important;
 }
 
 /* ============================================
@@ -462,12 +462,12 @@ ul.top-level a[aria-current="page"] > span {
 @media (min-width: 72rem) {
   .right-sidebar {
     border-color: var(--sl-color-border);
-    border-inline-start: none;
+    border-inline-start: none !important;
   }
 }
 
 .right-sidebar-panel {
-  padding: 24px 0;
+  padding: 24px 0 !important;
   color: var(--color-text-weaker);
 }
 
@@ -526,8 +526,8 @@ mobile-starlight-toc nav summary .toggle {
   color: var(--color-text);
   border: none;
   text-decoration: underline;
-  opacity: 60%;
-  text-decoration: none;
+  opacity: 60% !important;
+  text-decoration: none !important;
 }
 
 mobile-starlight-toc nav summary .toggle:hover {
@@ -557,7 +557,7 @@ mobile-starlight-toc nav .dropdown a[aria-current="true"]:after {
 }
 
 #starlight__on-this-page--mobile {
-  border-bottom: 1px solid var(--color-border-weak);
+  border-bottom: 1px solid var(--color-border-weak) !important;
 }
 
 /* ============================================
@@ -565,7 +565,7 @@ mobile-starlight-toc nav .dropdown a[aria-current="true"]:after {
    ============================================ */
 
 body > .page > .main-frame .main-pane > main > .content-panel + .content-panel {
-  border-top: none;
+  border-top: none !important;
   border-top: 1px solid var(--sl-color-border);
 }
 
@@ -576,7 +576,7 @@ body > .page > .main-frame .main-pane > main > .content-panel + .content-panel {
 }
 
 .sl-markdown-content hr {
-  border-bottom: 1px solid var(--color-border-weak);
+  border-bottom: 1px solid var(--color-border-weak) !important;
 }
 
 /* ============================================
@@ -793,7 +793,7 @@ body > .page > .main-frame .main-pane > main > .content-panel + .content-panel {
 
 ul,
 ol {
-  list-style: none;
+  list-style: none !important;
 }
 
 /* ============================================
@@ -877,11 +877,11 @@ starlight-theme-select {
    ============================================ */
 
 site-search > button {
-  text-transform: none;
-  gap: 12px;
+  text-transform: none !important;
+  gap: 12px !important;
   background: var(--color-background-weak);
-  border: 1px solid var(--color-border-weak);
-  padding: 6px 12px;
+  border: 1px solid var(--color-border-weak) !important;
+  padding: 6px 12px !important;
   border-radius: 4px;
 }
 
@@ -896,11 +896,11 @@ body > .page > header button[data-open-modal] {
 }
 
 site-search > button span {
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 site-search > button > kbd {
-  font-size: 14px;
+  font-size: 14px !important;
 }
 
 /* ============================================
@@ -925,7 +925,7 @@ site-search > button > kbd {
   }
 
   .lg\:sl-hidden {
-    display: none;
+    display: none !important;
   }
 
   mobile-starlight-toc {
@@ -948,7 +948,7 @@ site-search > button > kbd {
 /* Badge links should be inline-flex */
 .sl-markdown-content p > a:has(> img[src*="shields.io"]) {
   display: inline-flex;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 /* Badge images should maintain their size */

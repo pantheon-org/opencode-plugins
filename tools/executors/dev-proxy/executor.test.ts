@@ -1,5 +1,7 @@
-import type { spawnSync } from 'node:child_process';
 import type { ExecutorContext } from '@nx/devkit';
+import type { spawnSync } from 'child_process';
+import fs from 'fs';
+import path from 'path';
 
 import runExecutor from './executor';
 
@@ -32,12 +34,12 @@ function makeMockIterator() {
 // This ensures CI and local test runs do not actually start watchers or runtime processes.
 // The tests still exercise signal handling and executor shutdown logic via mocks.
 
-const childProcess = require('node:child_process');
+const childProcess = require('child_process');
 const _originalSpawn = childProcess.spawn;
-function _fakeSpawn(_cmd: string, _args: string[], _opts: any) {
+function _fakeSpawn(cmd: string, args: string[], opts: any) {
   return {
     kill: () => {},
-    on: (_ev: string, _cb: Function) => {},
+    on: (ev: string, cb: Function) => {},
   } as any;
 }
 
@@ -52,7 +54,7 @@ beforeEach(() => {
   _originalExit = process.exit;
   _exitCalled = false;
   // @ts-expect-error override for test
-  process.exit = ((_code?: number) => {
+  process.exit = ((code?: number) => {
     _exitCalled = true;
     // do not actually exit during tests
   }) as typeof process.exit;
@@ -71,7 +73,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
     const mockRunExecutor = async () => iterator;
 
     // mock spawnSync to simulate runtime script returning immediately
-    const mockSpawnSync = ((_cmd: string, _args?: readonly string[], _opts?: any) =>
+    const mockSpawnSync = ((cmd: string, args?: readonly string[], opts?: any) =>
       ({ status: 0 }) as any) as typeof spawnSync;
 
     // Minimal executor context
@@ -104,7 +106,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
     expect(iterator._returned()).toBe(true);
 
     const res = await resPromise;
-    expect(res?.success).toBe(true);
+    expect(res && res.success).toBe(true);
 
     // Restore SIGINT listeners to avoid side effects on other tests
     const afterListeners = process.listeners('SIGINT');
@@ -119,24 +121,26 @@ describe('dev-proxy executor with mocked runExecutor', () => {
     };
 
     let childKilled = false;
-    let _childSpawned = false;
+    let childSpawned = false;
     // Monkeypatch child_process.spawn
 
-    const childProcess = require('node:child_process');
+    const childProcess = require('child_process');
     const originalSpawn = childProcess.spawn;
-    childProcess.spawn = (_cmd: string, _args: string[], _opts: any) => {
-      _childSpawned = true;
+    childProcess.spawn = (cmd: string, args: string[], opts: any) => {
+      childSpawned = true;
+      console.log('[TEST] child_process.spawn called with:', cmd, args);
       // return a fake child with kill()
       return {
         kill: () => {
+          console.log('[TEST] child.kill() called');
           childKilled = true;
         },
-        on: (_ev: string, _cb: Function) => {},
+        on: (ev: string, cb: Function) => {},
       } as any;
     };
 
     // Mock spawnSync to block briefly so SIGINT can be processed
-    const mockSpawnSync = ((_cmd: string, _args?: readonly string[], _opts?: any) => {
+    const mockSpawnSync = ((cmd: string, args?: readonly string[], opts?: any) => {
       // Use synchronous sleep to simulate blocking behavior
       const start = Date.now();
       while (Date.now() - start < 200) {
@@ -168,7 +172,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
     expect(childKilled).toBe(true);
 
     const res = await resPromise;
-    expect(res?.success).toBe(true);
+    expect(res && res.success).toBe(true);
 
     // restore spawn and listeners
     childProcess.spawn = originalSpawn;
@@ -187,7 +191,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
       return iterA;
     };
 
-    const mockSpawnSync = ((_cmd: string, _args?: readonly string[], _opts?: any) =>
+    const mockSpawnSync = ((cmd: string, args?: readonly string[], opts?: any) =>
       ({ status: 0 }) as any) as typeof spawnSync;
     const context = { root: process.cwd(), projectName: 'pA' } as unknown as ExecutorContext;
 
@@ -207,7 +211,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
     expect(iterB._returned()).toBe(true);
 
     const res = await resPromise;
-    expect(res?.success).toBe(true);
+    expect(res && res.success).toBe(true);
 
     const afterListeners = process.listeners('SIGINT');
     for (const l of afterListeners) {

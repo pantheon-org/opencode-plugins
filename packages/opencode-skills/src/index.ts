@@ -17,10 +17,10 @@
 
 import type { Plugin } from '@opencode-ai/plugin';
 
-import { buildBM25Index, getTopSkillsByBM25, type BM25Index } from './bm25';
+import { type BM25Index, buildBM25Index, getTopSkillsByBM25 } from './bm25';
 import { hasIntentToUse } from './pattern-matching';
 import type { Skill, SkillsPluginConfig } from './types';
-import { validateSkill, formatValidationResult } from './validation/skill-validator';
+import { formatValidationResult, validateSkill } from './validation/skill-validator';
 
 /**
  * Default configuration for the skills plugin
@@ -288,23 +288,23 @@ export const defineSkill = (
   return fullSkill;
 };
 
-// Re-export types for convenience
-export type { Skill, SkillsPluginConfig, MatchResult, BM25Config, SkillMetadata } from './types';
-export { hasIntentToUse, findMatchingSkills } from './pattern-matching';
-export { buildBM25Index, calculateBM25Score, rankSkillsByBM25, getTopSkillsByBM25, type BM25Index } from './bm25';
+export { type BM25Index, buildBM25Index, calculateBM25Score, getTopSkillsByBM25, rankSkillsByBM25 } from './bm25';
 export {
-  validateSkill,
-  formatValidationResult,
-  type ValidationResult,
-  type ValidationError,
-  type ValidationWarning,
-  type ValidationSuggestion,
-} from './validation/skill-validator';
-export {
-  parseSkillMarkdown,
   markdownToSkill,
-  skillToMarkdown,
   type ParsedSkill,
+  parseSkillMarkdown,
   type SkillFrontmatter,
   type SkillSections,
+  skillToMarkdown,
 } from './parsers/markdown-parser';
+export { findMatchingSkills, hasIntentToUse } from './pattern-matching';
+// Re-export types for convenience
+export type { BM25Config, MatchResult, Skill, SkillMetadata, SkillsPluginConfig } from './types';
+export {
+  formatValidationResult,
+  type ValidationError,
+  type ValidationResult,
+  type ValidationSuggestion,
+  type ValidationWarning,
+  validateSkill,
+} from './validation/skill-validator';

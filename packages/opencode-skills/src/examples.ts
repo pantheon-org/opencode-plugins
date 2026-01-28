@@ -2,9 +2,8 @@
  * Example skills for demonstration and testing
  */
 
-import type { Skill } from './types';
-
 import { defineSkill } from './index';
+import type { Skill } from './types';
 
 /**
  * TypeScript TDD Development Skill

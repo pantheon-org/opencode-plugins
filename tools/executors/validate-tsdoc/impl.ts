@@ -1,7 +1,7 @@
-import type { ExecutorContext } from '@nx/devkit';
-import { TSDocParser, TSDocConfiguration } from '@microsoft/tsdoc';
-import * as ts from 'typescript';
 import * as path from 'node:path';
+import { TSDocConfiguration, TSDocParser } from '@microsoft/tsdoc';
+import type { ExecutorContext } from '@nx/devkit';
+import * as ts from 'typescript';
 import type { ValidateTsdocExecutorOptions } from './schema';
 
 export default async function validateTsdocExecutor(

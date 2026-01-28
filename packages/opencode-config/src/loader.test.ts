@@ -1,8 +1,7 @@
-import { writeFileSync, mkdirSync, rmSync } from 'fs';
+import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
+import { mkdirSync, rmSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
-
-import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
 
 import { loadPluginConfig } from './loader';
 

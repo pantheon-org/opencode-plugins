@@ -37,11 +37,7 @@
         "cwd": "packages/opencode-skills"
       },
       "cache": true,
-      "inputs": [
-        "default",
-        "{workspaceRoot}/biome.json",
-        "{projectRoot}/biome.json"
-      ]
+      "inputs": ["default", "{workspaceRoot}/biome.json", "{projectRoot}/biome.json"]
     },
     "format": {
       "executor": "nx:run-commands",
@@ -50,11 +46,7 @@
         "cwd": "packages/opencode-skills"
       },
       "cache": true,
-      "inputs": [
-        "default",
-        "{workspaceRoot}/biome.json",
-        "{projectRoot}/biome.json"
-      ]
+      "inputs": ["default", "{workspaceRoot}/biome.json", "{projectRoot}/biome.json"]
     },
     "validate:tsdoc": {
       "executor": "@pantheon-org/tools:validate-tsdoc",

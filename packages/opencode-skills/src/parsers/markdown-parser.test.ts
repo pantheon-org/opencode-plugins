@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'bun:test';
+import { describe, expect, it } from 'bun:test';
 
-import { parseSkillMarkdown, markdownToSkill, skillToMarkdown } from './markdown-parser';
+import { markdownToSkill, parseSkillMarkdown, skillToMarkdown } from './markdown-parser';
 
 describe('parseSkillMarkdown', () => {
   it('should parse valid SKILL.md with frontmatter', () => {

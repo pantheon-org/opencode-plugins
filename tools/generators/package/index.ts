@@ -1,5 +1,5 @@
-import * as path from 'node:path';
 import { addProjectConfiguration, formatFiles, generateFiles, names, type Tree, updateJson } from '@nx/devkit';
+import * as path from 'path';
 import type { PackageGeneratorSchema } from './schema';
 
 export default async function (tree: Tree, options: PackageGeneratorSchema) {
@@ -78,5 +78,10 @@ export default async function (tree: Tree, options: PackageGeneratorSchema) {
 
   await formatFiles(tree);
 
-  return () => {};
+  return () => {
+    console.log(`✅ Package '${projectName}' created in ${projectRoot}/`);
+    console.log(`   This package WILL be mirrored to: ${options.mirrorRepo}`);
+    console.log(`   To release: git tag ${projectName}@v1.0.0 && git push origin ${projectName}@v1.0.0`);
+    console.log(`   Run: nx build ${projectName}`);
+  };
 }

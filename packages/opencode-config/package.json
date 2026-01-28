@@ -2,13 +2,7 @@
   "name": "@pantheon-org/opencode-config",
   "version": "0.1.0",
   "description": "Configuration utilities for OpenCode plugins",
-  "keywords": [
-    "opencode",
-    "config",
-    "plugin",
-    "typescript",
-    "utilities"
-  ],
+  "keywords": ["opencode", "config", "plugin", "typescript", "utilities"],
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,11 +12,7 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
+  "files": ["dist", "README.md", "LICENSE"],
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --out-dir dist --clean",
     "dev": "tsup src/index.ts --format esm --dts --out-dir dist --watch",

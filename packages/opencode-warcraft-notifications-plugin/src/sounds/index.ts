@@ -6,9 +6,9 @@ import { DEFAULT_DATA_DIR, type Faction } from '../config/index.js';
 import { allianceSounds, hordeSounds, sounds } from './data/index.js';
 import {
   allianceSoundDescriptions,
+  getSoundDescription,
   hordeSoundDescriptions,
   soundDescriptions,
-  getSoundDescription,
 } from './descriptions.js';
 
 // Re-export sound data for backward compatibility

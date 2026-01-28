@@ -1,11 +1,11 @@
 import type { ExecutorContext } from '@nx/devkit';
-import { glob } from 'glob';
 import { readFile } from 'fs/promises';
+import { glob } from 'glob';
+import { markdownToSkill } from '../../../packages/opencode-skills/src/parsers/markdown-parser';
 import {
   formatValidationResult,
   validateSkill,
 } from '../../../packages/opencode-skills/src/validation/skill-validator';
-import { markdownToSkill } from '../../../packages/opencode-skills/src/parsers/markdown-parser';
 
 export interface ValidateSkillMdExecutorOptions {
   pattern: string;

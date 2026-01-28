@@ -10,9 +10,9 @@
  * 4. Reports any broken links
  */
 
-import { access, readdir, readFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { access, readdir, readFile } from 'fs/promises';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -93,7 +93,7 @@ async function isValidLink(url) {
   try {
     await access(filePath);
     return { valid: true, filePath };
-  } catch (_error) {
+  } catch (error) {
     return { valid: false, filePath };
   }
 }
@@ -125,7 +125,7 @@ async function processDirectory(dirPath) {
       }
     } else if (entry.isFile() && entry.name.endsWith('.html')) {
       const links = await extractLinks(fullPath);
-      const relativePath = fullPath.replace(`${DIST_DIR}/`, '');
+      const relativePath = fullPath.replace(DIST_DIR + '/', '');
 
       for (const link of links) {
         if (!allLinks.has(link)) {
@@ -143,9 +143,15 @@ async function processDirectory(dirPath) {
  * Main test process
  */
 async function main() {
+  console.log('🔍 Testing internal links in HTML files...\n');
+  console.log(`Base path: ${BASE_PATH}`);
+  console.log(`Dist directory: ${DIST_DIR}\n`);
+
   try {
     // Collect all links
     const allLinks = await processDirectory(DIST_DIR);
+
+    console.log(`Found ${allLinks.size} unique internal link(s)\n`);
 
     // Check each link
     const brokenLinks = [];
@@ -195,6 +201,8 @@ async function main() {
       console.error('⚠️  Links are missing base path. Run: bun run fix-links\n');
       process.exit(1);
     }
+
+    console.log('✅ All internal links are valid!');
     process.exit(0);
   } catch (error) {
     console.error('\n❌ Link testing failed:', error.message);

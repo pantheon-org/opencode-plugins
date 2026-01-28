@@ -2,9 +2,9 @@
  * Tests for pattern matching logic
  */
 
-import { describe, it, expect } from 'bun:test';
+import { describe, expect, it } from 'bun:test';
 
-import { hasIntentToUse, findMatchingSkills } from './pattern-matching';
+import { findMatchingSkills, hasIntentToUse } from './pattern-matching';
 
 describe('hasIntentToUse', () => {
   describe('word boundary matching', () => {

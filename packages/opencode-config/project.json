@@ -21,11 +21,7 @@
         "cwd": "packages/opencode-config"
       },
       "cache": true,
-      "inputs": [
-        "default",
-        "{workspaceRoot}/biome.json",
-        "{projectRoot}/biome.json"
-      ]
+      "inputs": ["default", "{workspaceRoot}/biome.json", "{projectRoot}/biome.json"]
     },
     "validate:tsdoc": {
       "executor": "@pantheon-org/tools:validate-tsdoc",

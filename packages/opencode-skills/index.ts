@@ -1,3 +1,2 @@
-export { createSkillsPlugin, defineSkill, hasIntentToUse, findMatchingSkills } from './src';
-
-export type { Skill, SkillsPluginConfig, MatchResult } from './src';
+export type { MatchResult, Skill, SkillsPluginConfig } from './src';
+export { createSkillsPlugin, defineSkill, findMatchingSkills, hasIntentToUse } from './src';

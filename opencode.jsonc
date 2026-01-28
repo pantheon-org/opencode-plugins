@@ -24,7 +24,6 @@
     "@tarquinen/opencode-dcp@latest",
     "@ramtinj95/opencode-tokenscope@latest",
     "opencode-todo-reminder@latest",
-    "opencode-command-hooks@latest",
-    "@plannotator/opencode@latest"
+    "opencode-command-hooks@latest"
   ]
 }

@@ -8,10 +8,10 @@
  * is generated before Astro builds the site.
  */
 
-import { mkdirSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { blockyTextToSVG } from '@pantheon-org/opencode-font';
+import { mkdirSync, writeFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
 // Get the directory of this script
 const __filename = fileURLToPath(import.meta.url);
@@ -33,3 +33,8 @@ const faviconSVG = blockyTextToSVG('W', {
 // Write to public directory
 const outputPath = join(publicDir, 'favicon.svg');
 writeFileSync(outputPath, faviconSVG);
+
+console.log('✓ Generated: public/favicon.svg');
+console.log('  Character: W');
+console.log('  Theme: dark');
+console.log('  Block size: 8px');

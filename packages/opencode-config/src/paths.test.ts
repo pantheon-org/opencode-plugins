@@ -1,9 +1,8 @@
+import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
 import { homedir } from 'os';
 import { join } from 'path';
 
-import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
-
-import { getConfigDir, getDataDir, getPluginStorageDir, getConfigPaths } from './paths';
+import { getConfigDir, getConfigPaths, getDataDir, getPluginStorageDir } from './paths';
 
 describe('paths utilities', () => {
   let originalPlatform: NodeJS.Platform;

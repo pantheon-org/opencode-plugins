@@ -1,6 +1,6 @@
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
 /**
  * Get the directory containing this module
@@ -55,6 +55,7 @@ export const getPackageName = (): string | null => {
   ];
 
   if (DEBUG) {
+    console.log('[opencode-warcraft-notifications] Looking for package.json in:', locations);
   }
 
   for (const pkgPath of locations) {
@@ -64,11 +65,13 @@ export const getPackageName = (): string | null => {
       };
       if (pkg && typeof pkg.name === 'string') {
         if (DEBUG) {
+          console.log('[opencode-warcraft-notifications] Found package name:', pkg.name, 'from:', pkgPath);
         }
         return pkg.name;
       }
-    } catch (_err) {
+    } catch (err) {
       if (DEBUG) {
+        console.log('[opencode-warcraft-notifications] Failed to read:', pkgPath, err);
       }
     }
   }

@@ -5,19 +5,18 @@
  * Provides common functionality for toast notifications and session messages.
  */
 
-// Export notification utilities
-export * from './notifier';
-
 // Export types
 export type {
-  ToastOptions,
+  Logger,
   MessageOptions,
   NotificationOptions,
   OpenCodeClient,
   PluginContext,
-  Logger,
   SoundDescription,
+  ToastOptions,
 } from './notifier';
+// Export notification utilities
+export * from './notifier';
 
 // Export the createNotificationUtility function
-export { createNotifier, createNotificationUtility } from './notifier';
+export { createNotificationUtility, createNotifier } from './notifier';

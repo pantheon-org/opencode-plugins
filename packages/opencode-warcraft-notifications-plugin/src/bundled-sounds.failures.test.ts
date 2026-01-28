@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { mkdirSync as fsMkdirSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { mkdirSync as fsMkdirSync, writeFileSync } from 'fs';
+import { join } from 'path';
 
 import { installBundledSoundsIfMissing, soundExists } from './bundled-sounds';
 import { createTempDir, removeTempDir, withCwd } from './test-utils';
