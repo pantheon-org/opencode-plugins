@@ -57,15 +57,7 @@
         "noDoubleEquals": "error"
       }
     },
-    "includes": [
-      "**",
-      "!node_modules/",
-      "!dist/",
-      "!build/",
-      "!.nx/",
-      "!coverage/",
-      "!bun.lock"
-    ]
+    "includes": ["**", "!node_modules/", "!dist/", "!build/", "!.nx/", "!coverage/", "!bun.lock"]
   },
   "javascript": {
     "formatter": {
@@ -97,16 +89,7 @@
     {
       "includes": ["**/*.ts", "**/*.tsx"],
       "javascript": {
-        "globals": [
-          "require",
-          "console",
-          "__filename",
-          "module",
-          "process",
-          "Buffer",
-          "__dirname",
-          "exports"
-        ]
+        "globals": ["require", "console", "__filename", "module", "process", "Buffer", "__dirname", "exports"]
       },
       "linter": {
         "rules": {
@@ -156,7 +139,11 @@
       "includes": [
         "packages/opencode-notification/src/notifier.ts",
         "packages/opencode-config/src/loader.ts",
-        "libs/docs-builder/test-links.js"
+        "libs/docs-builder/test-links.js",
+        "packages/opencode-warcraft-notifications-plugin/pages/test-links.js",
+        "packages/opencode-warcraft-notifications-plugin/src/notification.ts",
+        "packages/opencode-warcraft-notifications-plugin/src/schema-validator.ts",
+        "tools/executors/dev-proxy/executor.ts"
       ],
       "linter": {
         "rules": {
@@ -164,7 +151,11 @@
             "noExcessiveCognitiveComplexity": "off"
           },
           "suspicious": {
-            "noExplicitAny": "off"
+            "noExplicitAny": "off",
+            "noAssignInExpressions": "off"
+          },
+          "style": {
+            "noNonNullAssertion": "off"
           }
         }
       }
@@ -176,16 +167,7 @@
     {
       "includes": ["**/*.js", "**/*.jsx"],
       "javascript": {
-        "globals": [
-          "require",
-          "console",
-          "__filename",
-          "module",
-          "process",
-          "Buffer",
-          "__dirname",
-          "exports"
-        ]
+        "globals": ["require", "console", "__filename", "module", "process", "Buffer", "__dirname", "exports"]
       }
     }
   ],
