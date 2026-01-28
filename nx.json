@@ -1,4 +1,12 @@
 {
+  "plugins": [
+    {
+      "plugin": "@berenddeboer/nx-biome",
+      "options": {
+        "targetName": "lint"
+      }
+    }
+  ],
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [

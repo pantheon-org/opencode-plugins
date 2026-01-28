@@ -23,10 +23,24 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
+      "executor": "nx:run-commands",
       "options": {
-        "lintFilePatterns": ["packages/opencode-notification/**/*.ts"]
-      }
+        "command": "biome check --write .",
+        "cwd": "packages/opencode-notification"
+      },
+      "cache": true,
+      "inputs": [
+        "default",
+        "{workspaceRoot}/biome.json",
+        "{projectRoot}/biome.json"
+      ]
+    },
+    "validate:tsdoc": {
+      "executor": "@pantheon-org/tools:validate-tsdoc",
+      "options": {
+        "projectRoot": "packages/opencode-notification"
+      },
+      "cache": true
     }
   },
   "tags": ["package", "opencode", "notification", "utilities"]
