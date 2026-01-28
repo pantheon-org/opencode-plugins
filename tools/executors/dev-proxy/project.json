@@ -4,6 +4,15 @@
   "sourceRoot": "tools/executors/dev-proxy",
   "projectType": "library",
   "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check --write .",
+        "cwd": "tools/executors/dev-proxy"
+      },
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/biome.json"]
+    },
     "type-check": {
       "executor": "nx:run-commands",
       "options": {
