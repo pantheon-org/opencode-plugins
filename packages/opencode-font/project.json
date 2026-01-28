@@ -98,13 +98,6 @@
       "cache": true,
       "inputs": ["default", "{workspaceRoot}/biome.json", "{projectRoot}/biome.json"]
     },
-    "validate:tsdoc": {
-      "executor": "@pantheon-org/tools:validate-tsdoc",
-      "options": {
-        "projectRoot": "packages/opencode-font"
-      },
-      "cache": true
-    },
     "type-check": {
       "executor": "nx:run-commands",
       "options": {
