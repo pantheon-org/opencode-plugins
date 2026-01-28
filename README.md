@@ -112,6 +112,61 @@ This will create a new plugin in `packages/opencode-<name>/` with:
 
 See [Generator Documentation](tools/generators/plugin/README.md) for more details.
 
+## Development
+
+### Linting and Formatting
+
+This project uses **Biome** for linting and formatting:
+
+```bash
+# Lint all packages (with auto-fix)
+bun run lint
+
+# Lint only affected packages (fast, uses batch mode)
+bun run lint:affected
+
+# Format all files
+bun run format
+
+# Check formatting without changes
+bun run format:check
+
+# Validate TSDoc comments
+bun run validate:tsdoc
+```
+
+### Code Style
+
+- **One function per module**: Each module should export a single primary function or class
+- **Barrel exports**: Use `index.ts` for public API re-exports
+- **TSDoc required**: All public functions and classes must have valid TSDoc comments
+- **Type safety**: All code must compile with TypeScript's `strict` mode enabled
+
+See [Development Standards](.opencode/knowledge-base/bun-typescript-development.md) for complete guidelines.
+
+### Testing
+
+```bash
+# Run all tests
+bun run test
+
+# Test specific package
+bunx nx test opencode-core-plugin
+
+# Watch mode
+bunx nx test opencode-core-plugin --watch
+```
+
+### Type Checking
+
+```bash
+# Type-check all packages
+bun run type-check
+
+# Type-check affected packages
+bun run type-check:affected
+```
+
 ## Contributing
 
 All development happens in this monorepo. Mirror repos are read-only distribution channels.
