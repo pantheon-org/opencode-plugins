@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'bun:test';
+
 import { defineSkill } from './index';
 
 describe('defineSkill', () => {

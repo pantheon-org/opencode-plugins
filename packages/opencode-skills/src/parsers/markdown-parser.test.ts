@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'bun:test';
+
 import { parseSkillMarkdown, markdownToSkill, skillToMarkdown } from './markdown-parser';
 
 describe('parseSkillMarkdown', () => {

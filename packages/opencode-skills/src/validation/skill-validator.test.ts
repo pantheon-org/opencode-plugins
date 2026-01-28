@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'bun:test';
-import { validateSkill, formatValidationResult } from './skill-validator';
+
 import type { Skill } from '../types';
+
+import { validateSkill, formatValidationResult } from './skill-validator';
 
 describe('validateSkill', () => {
   it('should validate skill with all required fields', () => {
