@@ -57,15 +57,7 @@
         "noDoubleEquals": "error"
       }
     },
-    "includes": [
-      "**",
-      "!node_modules/",
-      "!dist/",
-      "!build/",
-      "!.nx/",
-      "!coverage/",
-      "!bun.lock"
-    ]
+    "includes": ["**", "!node_modules/", "!dist/", "!build/", "!.nx/", "!coverage/", "!bun.lock"]
   },
   "javascript": {
     "formatter": {
@@ -97,16 +89,7 @@
     {
       "includes": ["**/*.ts", "**/*.tsx"],
       "javascript": {
-        "globals": [
-          "require",
-          "console",
-          "__filename",
-          "module",
-          "process",
-          "Buffer",
-          "__dirname",
-          "exports"
-        ]
+        "globals": ["require", "console", "__filename", "module", "process", "Buffer", "__dirname", "exports"]
       },
       "linter": {
         "rules": {
@@ -161,7 +144,8 @@
         "packages/opencode-warcraft-notifications-plugin/src/notification.ts",
         "packages/opencode-warcraft-notifications-plugin/src/schema-validator.ts",
         "packages/opencode-font/scripts/**/*.ts",
-        "tools/executors/**/*.ts"
+        "tools/executors/**/*.ts",
+        "tools/executors/**/*.test.ts"
       ],
       "linter": {
         "rules": {
@@ -173,7 +157,8 @@
             "noAssignInExpressions": "off"
           },
           "style": {
-            "noNonNullAssertion": "off"
+            "noNonNullAssertion": "off",
+            "noCommonJs": "off"
           }
         }
       }
@@ -185,16 +170,7 @@
     {
       "includes": ["**/*.js", "**/*.jsx"],
       "javascript": {
-        "globals": [
-          "require",
-          "console",
-          "__filename",
-          "module",
-          "process",
-          "Buffer",
-          "__dirname",
-          "exports"
-        ]
+        "globals": ["require", "console", "__filename", "module", "process", "Buffer", "__dirname", "exports"]
       }
     }
   ],
