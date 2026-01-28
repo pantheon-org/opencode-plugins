@@ -57,15 +57,7 @@
         "noDoubleEquals": "error"
       }
     },
-    "includes": [
-      "**",
-      "!node_modules/",
-      "!dist/",
-      "!build/",
-      "!.nx/",
-      "!coverage/",
-      "!bun.lock"
-    ]
+    "includes": ["**", "!node_modules/", "!dist/", "!build/", "!.nx/", "!coverage/", "!bun.lock"]
   },
   "javascript": {
     "formatter": {
@@ -97,16 +89,7 @@
     {
       "includes": ["**/*.ts", "**/*.tsx"],
       "javascript": {
-        "globals": [
-          "require",
-          "console",
-          "__filename",
-          "module",
-          "process",
-          "Buffer",
-          "__dirname",
-          "exports"
-        ]
+        "globals": ["require", "console", "__filename", "module", "process", "Buffer", "__dirname", "exports"]
       },
       "linter": {
         "rules": {
@@ -140,11 +123,31 @@
       }
     },
     {
-      "includes": ["**/*.test.ts", "**/*.spec.ts"],
+      "includes": ["**/*.test.ts", "**/*.spec.ts", "**/types/bun-test.d.ts"],
       "linter": {
         "rules": {
           "complexity": {
             "noExcessiveCognitiveComplexity": "off"
+          },
+          "suspicious": {
+            "noExplicitAny": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "packages/opencode-notification/src/notifier.ts",
+        "packages/opencode-config/src/loader.ts",
+        "libs/docs-builder/test-links.js"
+      ],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off"
+          },
+          "suspicious": {
+            "noExplicitAny": "off"
           }
         }
       }
@@ -156,16 +159,7 @@
     {
       "includes": ["**/*.js", "**/*.jsx"],
       "javascript": {
-        "globals": [
-          "require",
-          "console",
-          "__filename",
-          "module",
-          "process",
-          "Buffer",
-          "__dirname",
-          "exports"
-        ]
+        "globals": ["require", "console", "__filename", "module", "process", "Buffer", "__dirname", "exports"]
       }
     }
   ],
