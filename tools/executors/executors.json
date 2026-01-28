@@ -26,6 +26,11 @@
       "implementation": "./validate-skill-md/executor",
       "schema": "./validate-skill-md/schema.json",
       "description": "Validate markdown SKILL.md files"
+    },
+    "validate-tsdoc": {
+      "implementation": "./validate-tsdoc/impl",
+      "schema": "./validate-tsdoc/schema.json",
+      "description": "Validate TSDoc comments in TypeScript files"
     }
   }
 }
