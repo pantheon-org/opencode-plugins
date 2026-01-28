@@ -38,7 +38,7 @@ async function extractLinks(filePath) {
     if (href.startsWith('/') && !href.startsWith('//') && !href.startsWith('http://') && !href.startsWith('https://')) {
       links.add(href);
     }
-    
+
     match = hrefPattern.exec(content);
   }
 
