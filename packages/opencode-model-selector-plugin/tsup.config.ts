@@ -1,0 +1,11 @@
+import { defineConfig } from 'tsup';
+
+export default defineConfig({
+  entry: ['src/index.ts'],
+  format: ['esm'],
+  dts: true,
+  clean: true,
+  external: ['@opencode-ai/plugin', '@opencode-ai/sdk'],
+  splitting: false,
+  minify: false,
+});

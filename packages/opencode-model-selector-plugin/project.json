@@ -1,0 +1,44 @@
+{
+  "name": "opencode-model-selector-plugin",
+  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/opencode-model-selector-plugin/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/opencode-model-selector-plugin",
+        "main": "packages/opencode-model-selector-plugin/src/index.ts",
+        "tsConfig": "packages/opencode-model-selector-plugin/tsconfig.json",
+        "assets": ["packages/opencode-model-selector-plugin/*.md"]
+      },
+      "configurations": {
+        "production": {
+          "sourceMap": false
+        },
+        "development": {
+          "sourceMap": true
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/opencode-model-selector-plugin",
+        "main": "packages/opencode-model-selector-plugin/src/index.ts",
+        "tsConfig": "packages/opencode-model-selector-plugin/tsconfig.json",
+        "assets": ["packages/opencode-model-selector-plugin/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/opencode-model-selector-plugin/**/*.ts"]
+      }
+    }
+  },
+  "tags": ["plugin", "opencode", "model", "selection"]
+}

@@ -1,0 +1,59 @@
+{
+  "name": "@pantheon-org/opencode-model-selector-plugin",
+  "version": "1.0.0",
+  "description": "Automatically selects the most appropriate models for the current provider",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src --ext .ts,.tsx",
+    "test": "bun test"
+  },
+  "keywords": [
+    "opencode",
+    "plugin",
+    "model",
+    "selection",
+    "ai",
+    "llm"
+  ],
+  "author": "Pantheon",
+  "license": "MIT",
+  "dependencies": {
+    "@opencode-ai/plugin": "^1.0.0",
+    "@opencode-ai/sdk": "^1.0.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0",
+    "tsup": "^7.0.0",
+    "typescript": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pantheon-org/opencode-model-selector-plugin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pantheon-org/opencode-model-selector-plugin/issues"
+  },
+  "homepage": "https://github.com/pantheon-org/opencode-model-selector-plugin#readme"
+}
