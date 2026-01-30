@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "Markdown Validator",
+  "description": "Validates markdown files using markdownlint-cli2",
+  "type": "object",
+  "properties": {
+    "patterns": {
+      "type": "array",
+      "description": "Glob patterns for markdown files",
+      "default": ["**/*.md"],
+      "items": { "type": "string" }
+    },
+    "config": {
+      "type": "string",
+      "description": "Path to markdownlint config",
+      "default": ".markdownlint.jsonc"
+    },
+    "fix": {
+      "type": "boolean",
+      "description": "Auto-fix issues",
+      "default": false
+    }
+  }
+}
