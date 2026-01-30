@@ -6,6 +6,7 @@
  */
 
 import type { Plugin } from '@opencode-ai/plugin';
+import { createNotifier } from '@pantheon-org/opencode-notification';
 import { createSkillsPlugin } from '@pantheon-org/opencode-skills';
 
 import { OpencodeSpecialistAgent } from './agents';
@@ -17,7 +18,6 @@ import {
   opencodePluginsSkill,
   opencodeSkillsSkill,
 } from './skills';
-import { sendInfo, sendSuccess, sendWarning } from './utils/toast-notifications';
 
 // Re-export types for consumer convenience
 export type { AgentSpec } from './types';
@@ -29,15 +29,15 @@ export type { AgentSpec } from './types';
  * - opencode: OpenCode configuration and usage specialist
  */
 export const OpencodeCorePlugin: Plugin = async (ctx) => {
-  const { worktree, client } = ctx;
+  const { worktree } = ctx;
+  const notify = createNotifier(ctx);
 
-  await sendInfo(client, 'OpenCode Core Plugin', `Initializing plugin in ${worktree}`);
+  await notify.info('OpenCode Core Plugin', `Initializing plugin in ${worktree}`);
 
   // Load core agents
   const coreAgents = [new OpencodeSpecialistAgent()];
 
-  await sendInfo(
-    client,
+  await notify.info(
     'Core Agents',
     `Loaded ${coreAgents.length} core agent(s): ${coreAgents.map((s) => s.name).join(', ')}`,
   );
@@ -67,7 +67,7 @@ export const OpencodeCorePlugin: Plugin = async (ctx) => {
      * Config hook - Register core agents with OpenCode configuration
      */
     config: async (config) => {
-      await sendInfo(client, 'Config', 'Registering core agents with OpenCode config');
+      await notify.info('Config', 'Registering core agents with OpenCode config');
 
       // Initialize agent config if not present
       if (!config.agent) {
@@ -77,17 +77,17 @@ export const OpencodeCorePlugin: Plugin = async (ctx) => {
       // Register each core agent
       for (const spec of coreAgents) {
         if (config.agent[spec.name]) {
-          await sendWarning(client, 'Config', `Agent "${spec.name}" already exists, skipping registration`);
+          await notify.warning('Config', `Agent "${spec.name}" already exists, skipping registration`);
           continue;
         }
 
         // Register the agent configuration
         config.agent[spec.name] = spec.config;
 
-        await sendInfo(client, 'Config', `Registered agent: ${spec.name}`);
+        await notify.info('Config', `Registered agent: ${spec.name}`);
       }
 
-      await sendSuccess(client, 'Config', 'Core agent registration complete');
+      await notify.success('Config', 'Core agent registration complete');
     },
 
     /**
