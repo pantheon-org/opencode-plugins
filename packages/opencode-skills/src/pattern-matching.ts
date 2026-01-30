@@ -43,7 +43,6 @@ export const hasIntentToUse = (
   skillName: string,
   keywords: string[] = [],
   config?: SkillsPluginConfig['patternMatching'],
-  // biome-ignore lint: Pattern matching requires multiple conditions
 ): MatchResult => {
   // Normalize content for matching
   const normalizedContent = content.toLowerCase();

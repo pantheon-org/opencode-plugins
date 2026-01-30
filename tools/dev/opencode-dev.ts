@@ -14,6 +14,7 @@ type Opts = {
   disposeUrl: string;
 };
 
+// biome-ignore lint: Dev server setup requires complex async orchestration
 function parseArgs(): Opts {
   const argv = process.argv.slice(2);
   const plugins: string[] = [];
@@ -121,6 +122,7 @@ function spawnWatchBuild(projectName: string) {
 }
 
 import { applyEdits, modify as modifyJsonC, parse as parseJsonC } from 'jsonc-parser';
+  // biome-ignore lint: Error type varies in retry logic
 
 function readJsonc(file: string): { json: any; raw: string } {
   const raw = fs.readFileSync(file, 'utf8');

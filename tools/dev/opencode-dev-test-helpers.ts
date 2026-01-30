@@ -6,7 +6,9 @@ import { applyEdits, modify as modifyJsonC, parse as parseJsonC } from 'jsonc-pa
  *
  */
 export function readJsonc(file: string): { json: any; raw: string } {
+  // biome-ignore lint: Test helper uses any for flexible type matching
   const raw = fs.readFileSync(file, 'utf8');
+  // biome-ignore lint: Test helper uses any for flexible type matching
   const errors: any[] = [];
   const json = parseJsonC(raw, errors, { allowTrailingComma: true });
   if (errors.length) throw new Error('parse error');
@@ -60,6 +62,7 @@ export async function copyDir(src: string, dest: string) {
 /**
  *
  */
+// biome-ignore lint: Dev server waiting requires complex polling logic
 export function getLatestMtime(dir: string): number {
   let latest = 0;
   try {

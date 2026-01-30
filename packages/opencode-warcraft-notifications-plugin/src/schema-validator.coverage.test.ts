@@ -48,8 +48,7 @@ describe('schema-validator coverage tests', () => {
   describe('validatePluginConfig unexpected errors', () => {
     it('should handle unexpected validation errors', () => {
       // Pass a circular reference to cause an unexpected error
-      // biome-ignore lint: Intentionally using any for test coverage
-      const circular: any = {};
+      const circular: Record<string, unknown> = {};
       circular.self = circular;
 
       const result = validatePluginConfig(circular);
