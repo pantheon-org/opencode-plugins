@@ -111,6 +111,22 @@
           }
         }
       }
+    },
+    {
+      "includes": ["**/scripts/**/*.{ts,js}", "**/tools/**/*.{ts,js}"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noAssignInExpressions": "warn",
+            "noExplicitAny": "off",
+            "useIterableCallbackReturn": "off"
+          },
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off",
+            "noForEach": "off"
+          }
+        }
+      }
     }
   ]
 }
