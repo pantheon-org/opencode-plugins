@@ -65,12 +65,22 @@
       }
     },
     {
-      "includes": ["packages/opencode-font/**/*.ts"],
+      "includes": ["**/scripts/**/*.{ts,js}", "**/tools/**/*.{ts,js}"],
       "linter": {
         "rules": {
           "suspicious": {
-            "noExplicitAny": "off"
+            "noAssignInExpressions": "off",
+            "noExplicitAny": "off",
+            "noImplicitAnyLet": "off",
+            "useIterableCallbackReturn": "off"
+          },
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off",
+            "noForEach": "off"
           }
+        }
+      }
+    }
         }
       }
     },
