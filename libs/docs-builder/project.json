@@ -5,6 +5,16 @@
   "projectType": "library",
   "tags": ["skip-ci", "type:lib", "scope:lib"],
   "targets": {
+    "check-mirror-exists": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "echo 'docs-builder is internal - skipping mirror check'"
+          }
+        ]
+      }
+    },
     "build": {
       "executor": "nx:run-commands",
       "dependsOn": ["^build"],
