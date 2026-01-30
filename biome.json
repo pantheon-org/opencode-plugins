@@ -75,11 +75,12 @@
       }
     },
     {
-      "includes": ["**/*.test.ts", "**/*.spec.ts"],
+      "includes": ["**/*.test.ts", "**/*.spec.ts", "**/*test-utils*.ts"],
       "linter": {
         "rules": {
           "suspicious": {
-            "noExplicitAny": "off"
+            "noExplicitAny": "off",
+            "noConsole": "off"
           },
           "complexity": {
             "noExcessiveCognitiveComplexity": "off"
