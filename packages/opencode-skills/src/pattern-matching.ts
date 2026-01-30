@@ -43,7 +43,7 @@ export const hasIntentToUse = (
   skillName: string,
   keywords: string[] = [],
   config?: SkillsPluginConfig['patternMatching'],
-  // eslint-disable-next-line complexity
+  // biome-ignore lint: Pattern matching requires multiple conditions
 ): MatchResult => {
   // Normalize content for matching
   const normalizedContent = content.toLowerCase();

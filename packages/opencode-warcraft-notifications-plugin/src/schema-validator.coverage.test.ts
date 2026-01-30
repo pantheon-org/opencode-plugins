@@ -48,7 +48,7 @@ describe('schema-validator coverage tests', () => {
   describe('validatePluginConfig unexpected errors', () => {
     it('should handle unexpected validation errors', () => {
       // Pass a circular reference to cause an unexpected error
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint: Intentionally using any for test coverage
       const circular: any = {};
       circular.self = circular;
 

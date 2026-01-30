@@ -106,7 +106,6 @@ export function createSkillsPlugin(
 
     return {
       // Auto-inject skills via chat message hook
-      // eslint-disable-next-line complexity, max-statements
       // biome-ignore lint: Chat message hook requires multiple conditions for skills injection
       'chat.message': async ({ sessionID }, { parts }) => {
         // Skip if auto-inject is disabled
