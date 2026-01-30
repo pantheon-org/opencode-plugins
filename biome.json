@@ -117,8 +117,9 @@
       "linter": {
         "rules": {
           "suspicious": {
-            "noAssignInExpressions": "warn",
+            "noAssignInExpressions": "off",
             "noExplicitAny": "off",
+            "noImplicitAnyLet": "off",
             "useIterableCallbackReturn": "off"
           },
           "complexity": {
