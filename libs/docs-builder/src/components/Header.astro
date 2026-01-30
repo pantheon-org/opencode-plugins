@@ -2,10 +2,14 @@
 import config from 'virtual:starlight/user-config';
 
 import ASCIISiteTitle from './ASCIISiteTitle.astro';
+// biome-ignore lint/correctness/noUnusedImports: Astro component used in template below
 import Search from 'virtual:starlight/components/Search';
+// biome-ignore lint/correctness/noUnusedImports: Astro component used in template below
 import SocialIcons from 'virtual:starlight/components/SocialIcons';
+// biome-ignore lint/correctness/noUnusedImports: Astro component used in template below
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 
+// biome-ignore lint/correctness/noUnusedVariables: Used in template below
 const _shouldRenderSearch =
   config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
 ---

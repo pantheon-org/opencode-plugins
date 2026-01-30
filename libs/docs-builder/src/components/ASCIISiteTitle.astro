@@ -1,11 +1,12 @@
 ---
 // Simple text-based site title
 // For custom ASCII art, you can use a library like figlet or create your own
+// biome-ignore lint/correctness/noUnusedVariables: Used in template below
 const _siteTitle = 'WarcraftNotifications';
 ---
 
 <a href={`${import.meta.env.BASE_URL}`} class="site-title">
-	<span class="site-title-text">{siteTitle}</span>
+	<span class="site-title-text">{_siteTitle}</span>
 </a>
 
 <style>
