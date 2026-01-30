@@ -18,7 +18,7 @@
     "lint:md": "bunx markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#**/node_modules\"",
     "format": "bunx nx run-many --target=format --all",
     "format:affected": "bunx nx affected --target=format",
-    "format:check": "prettier --check .",
+    "format:check": "biome format .",
     "type-check": "bunx nx run-many --target=type-check --all",
     "type-check:affected": "bunx nx affected --target=type-check",
     "validate": "bun run format:check && bun run lint:md && bun run lint && bun run type-check && bun run test && bun run build",

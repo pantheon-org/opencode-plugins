@@ -317,7 +317,9 @@ async function main() {
   });
   if (opts.apply) await updateOpencodeJson(opts.workspaceRoot, fileUris);
   else {
-    for (const _f of fileUris) 
+    for (const f of fileUris) {
+      console.log(f);
+    }
   }
 
   function spawnOpencode() {
