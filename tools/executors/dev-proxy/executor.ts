@@ -1,7 +1,6 @@
-import { spawn, spawnSync } from 'child_process';
-import path from 'path';
-
-import { ExecutorContext, ProjectConfiguration, runExecutor as nxRunExecutor } from '@nx/devkit';
+import { spawn, spawnSync } from 'node:child_process';
+import path from 'node:path';
+import { type ExecutorContext, runExecutor as nxRunExecutor, type ProjectConfiguration } from '@nx/devkit';
 
 interface DevProxyOptions {
   plugins?: string[];
@@ -49,8 +48,6 @@ const runExecutor = async (options: DevProxyOptions, context: ExecutorContext): 
   const runExecutorImpl = options.__runExecutor ?? nxRunExecutor;
   const spawnSyncImpl = options.__spawnSync ?? spawnSync;
 
-  console.log('dev-proxy: workspaceRoot=', workspaceRoot);
-
   for (const r of resolved) {
     const projName = r.name;
     let started = false;
@@ -80,7 +77,6 @@ const runExecutor = async (options: DevProxyOptions, context: ExecutorContext): 
               // Failed to stop iterator
             }
           });
-          console.log(`Started build target for ${projName} via @nx/devkit.runExecutor`);
           started = true;
         }
       } catch (err) {
@@ -90,7 +86,6 @@ const runExecutor = async (options: DevProxyOptions, context: ExecutorContext): 
 
     if (!started) {
       try {
-        console.log(`Falling back to CLI watcher for ${projName}`);
         const child = spawn('bunx', ['nx', 'run', `${projName}:build`, '--watch'], {
           stdio: 'inherit',
           cwd: workspaceRoot,
@@ -115,14 +110,11 @@ const runExecutor = async (options: DevProxyOptions, context: ExecutorContext): 
   if (options.apply === false) args.push('--no-apply');
   args.push(...requestedPlugins);
 
-  console.log('Running dev proxy runtime:', ['bunx', 'tsx', script, ...args].join(' '));
-
   // Ensure cleanup on SIGINT
   let exiting = false;
   const sigintHandler = async () => {
     if (exiting) return;
     exiting = true;
-    console.log('\nInterrupted. Stopping build watchers and exiting...');
     for (const fn of stopFns) {
       try {
         await fn();

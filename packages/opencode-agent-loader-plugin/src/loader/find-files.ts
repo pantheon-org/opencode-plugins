@@ -2,8 +2,8 @@
  * Recursively find files with specified extensions in a directory
  */
 
-import { readdir } from 'fs/promises';
-import { join } from 'path';
+import { readdir } from 'node:fs/promises';
+import { join } from 'node:path';
 
 /**
  * Recursively find files with specified extensions

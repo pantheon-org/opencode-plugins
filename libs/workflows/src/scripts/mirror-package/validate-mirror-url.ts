@@ -1,8 +1,7 @@
 #!/usr/bin/env bun
 
 import { existsSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
-import { writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 
 import type { MirrorUrl } from './types';
 
@@ -50,7 +49,6 @@ export const validateMirrorUrl = async (packageJsonPath: string): Promise<Mirror
 const setOutput = async (name: string, value: string): Promise<void> => {
   const githubOutput = process.env.GITHUB_OUTPUT;
   if (!githubOutput) {
-    console.log(`${name}=${value}`);
     return;
   }
 
@@ -74,10 +72,6 @@ const main = async (): Promise<void> => {
 
   try {
     const mirrorUrl = await validateMirrorUrl(packageJsonPath);
-
-    console.log(`✅ Mirror URL: ${mirrorUrl.url}`);
-    console.log(`   Owner: ${mirrorUrl.owner}`);
-    console.log(`   Repo: ${mirrorUrl.repo}`);
 
     // Set GitHub Actions outputs
     await setOutput('url', mirrorUrl.url);

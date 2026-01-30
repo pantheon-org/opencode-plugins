@@ -51,7 +51,6 @@ export const detectChanges = async (packageName: string, packageDir: string): Pr
 const setOutput = async (name: string, value: string): Promise<void> => {
   const githubOutput = process.env.GITHUB_OUTPUT;
   if (!githubOutput) {
-    console.log(`${name}=${value}`);
     return;
   }
 
@@ -78,30 +77,21 @@ const main = async (): Promise<void> => {
     const result = await detectChanges(packageName, packageDir);
 
     if (!result.previousTag) {
-      console.log(`ℹ️  No previous tag found - this is the first release for ${packageName}`);
       await setOutput('has-changes', 'true');
       return;
     }
 
-    console.log(`🔍 Comparing with previous tag: ${result.previousTag}`);
-
     if (result.hasChanges && result.changes) {
-      console.log(`✅ Changes detected in ${packageDir} since ${result.previousTag}:`);
-
       // Show first 20 changes
       const displayChanges = result.changes.slice(0, 20);
-      for (const change of displayChanges) {
-        console.log(`   ${change}`);
+      for (const _change of displayChanges) {
       }
 
       if (result.changes.length > 20) {
-        console.log(`   ... and ${result.changes.length - 20} more files`);
       }
 
       await setOutput('has-changes', 'true');
     } else {
-      console.log(`⚠️  No changes detected in ${packageDir} since ${result.previousTag}`);
-      console.log('   Skipping mirror sync to avoid unnecessary deployment');
       await setOutput('has-changes', 'false');
     }
   } catch (error) {

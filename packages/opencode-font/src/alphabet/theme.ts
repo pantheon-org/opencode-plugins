@@ -1,4 +1,4 @@
-import { cellType, type Glyph, type CellType } from './types';
+import { type CellType, cellType, type Glyph } from './types';
 
 export const themeType = {
   LIGHT: 'light',
@@ -36,7 +36,6 @@ export const getColorFromLetter = (_glyph: Glyph, theme: ThemeType, cell: CellTy
       return themeData.secondaryColor;
     case cellType.TERTIARY:
       return themeData.tertiaryColor;
-    case cellType.BLANK:
     default:
       return themeData.backgroundColor;
   }

@@ -11,5 +11,5 @@ export { isAgentSpecConstructor } from './is-agent-spec-constructor';
 export { loadAgentSpec } from './load-agent-spec';
 export { loadAllAgentSpecs } from './load-all-agent-specs';
 export { loadDefaultAgents } from './load-default-agents';
-export { loadPluginConfig, createDefaultPluginConfig } from './load-plugin-config';
+export { createDefaultPluginConfig, loadPluginConfig } from './load-plugin-config';
 export { validateAgentSpec } from './validate-agent-spec';

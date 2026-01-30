@@ -17,8 +17,8 @@
  * - Generates summary report
  */
 
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 // Configuration
 const DOCS_DIR = path.join(import.meta.dir, '../docs');
@@ -237,28 +237,8 @@ function validateFile(filePath: string): void {
  * Generate report
  */
 function generateReport(): void {
-  console.log('\n');
-  console.log('='.repeat(80));
-  console.log(`${colors.cyan}Documentation Link Validation Report${colors.reset}`);
-  console.log('='.repeat(80));
-  console.log('');
-
-  // Summary
-  console.log(`${colors.blue}Summary:${colors.reset}`);
-  console.log(`  Total files scanned:    ${results.totalFiles}`);
-  console.log(`  Total links found:      ${results.totalLinks}`);
-  console.log(`  Valid links:            ${colors.green}${results.validLinks}${colors.reset}`);
-  console.log(
-    `  Broken links:           ${results.brokenLinks.length > 0 ? colors.red : colors.green}${results.brokenLinks.length}${colors.reset}`,
-  );
-  console.log(`  External links:         ${results.externalLinks.length}`);
-  console.log('');
-
   // Broken links details
   if (results.brokenLinks.length > 0) {
-    console.log(`${colors.red}Broken Links:${colors.reset}`);
-    console.log('');
-
     const groupedByFile: Record<string, BrokenLink[]> = {};
     results.brokenLinks.forEach((link) => {
       const relPath = path.relative(DOCS_ROOT, link.filePath);
@@ -268,19 +248,13 @@ function generateReport(): void {
       groupedByFile[relPath].push(link);
     });
 
-    Object.entries(groupedByFile).forEach(([file, links]) => {
-      console.log(`  ${colors.yellow}${file}${colors.reset}`);
+    Object.entries(groupedByFile).forEach(([_file, links]) => {
       links.forEach((link) => {
-        console.log(`    Line ${link.line}: ${colors.red}${link.url}${colors.reset}`);
-        console.log(`      Reason: ${link.reason}`);
         if (link.targetFile) {
-          const relTarget = path.relative(DOCS_ROOT, link.targetFile);
-          console.log(`      Target: ${relTarget}`);
+          const _relTarget = path.relative(DOCS_ROOT, link.targetFile);
         }
         if (link.anchor) {
-          console.log(`      Anchor: #${link.anchor}`);
         }
-        console.log('');
       });
     });
   }
@@ -288,20 +262,13 @@ function generateReport(): void {
   // Missing files
   if (results.missingFiles.length > 0) {
     const uniqueMissingFiles = [...new Set(results.missingFiles)];
-    console.log(`${colors.red}Missing Files (${uniqueMissingFiles.length}):${colors.reset}`);
-    console.log('');
     uniqueMissingFiles.forEach((file) => {
-      const relPath = path.relative(DOCS_ROOT, file);
-      console.log(`  ${colors.red}✗${colors.reset} ${relPath}`);
+      const _relPath = path.relative(DOCS_ROOT, file);
     });
-    console.log('');
   }
 
   // Missing anchors
   if (results.missingAnchors.length > 0) {
-    console.log(`${colors.yellow}Missing Anchors:${colors.reset}`);
-    console.log('');
-
     const groupedByFile: Record<string, string[]> = {};
     results.missingAnchors.forEach(({ file, anchor }) => {
       const relPath = path.relative(DOCS_ROOT, file);
@@ -311,21 +278,14 @@ function generateReport(): void {
       groupedByFile[relPath].push(anchor);
     });
 
-    Object.entries(groupedByFile).forEach(([file, anchors]) => {
-      console.log(`  ${colors.yellow}${file}${colors.reset}`);
+    Object.entries(groupedByFile).forEach(([_file, anchors]) => {
       const uniqueAnchors = [...new Set(anchors)];
-      uniqueAnchors.forEach((anchor) => {
-        console.log(`    #${anchor}`);
-      });
-      console.log('');
+      uniqueAnchors.forEach((_anchor) => {});
     });
   }
 
   // External links summary
   if (results.externalLinks.length > 0) {
-    console.log(`${colors.blue}External Links Summary:${colors.reset}`);
-    console.log(`  Total: ${results.externalLinks.length}`);
-
     // Group by domain
     const domains: Record<string, number> = {};
     results.externalLinks.forEach((link) => {
@@ -333,39 +293,24 @@ function generateReport(): void {
         const url = new URL(link.url);
         const domain = url.hostname;
         domains[domain] = (domains[domain] || 0) + 1;
-      } catch (e) {
+      } catch (_e) {
         // Invalid URL, skip
       }
     });
-
-    console.log('');
-    console.log('  Top domains:');
     Object.entries(domains)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 10)
-      .forEach(([domain, count]) => {
-        console.log(`    ${domain}: ${count}`);
-      });
-    console.log('');
+      .forEach(([_domain, _count]) => {});
   }
-
-  // Final status
-  console.log('='.repeat(80));
   if (results.brokenLinks.length === 0) {
-    console.log(`${colors.green}✓ All links are valid!${colors.reset}`);
   } else {
-    console.log(`${colors.red}✗ Found ${results.brokenLinks.length} broken link(s)${colors.reset}`);
   }
-  console.log('='.repeat(80));
-  console.log('');
 }
 
 /**
  * Main execution
  */
 function main(): void {
-  console.log(`${colors.cyan}Scanning documentation...${colors.reset}`);
-
   if (!fs.existsSync(DOCS_DIR)) {
     console.error(`${colors.red}Error: Documentation directory not found: ${DOCS_DIR}${colors.reset}`);
     process.exit(1);
@@ -378,12 +323,8 @@ function main(): void {
     process.exit(1);
   }
 
-  console.log(`${colors.blue}Found ${files.length} markdown files${colors.reset}`);
-  console.log('');
-
   files.forEach((file) => {
-    const relPath = path.relative(DOCS_ROOT, file);
-    console.log(`  Checking: ${relPath}`);
+    const _relPath = path.relative(DOCS_ROOT, file);
     validateFile(file);
   });
 

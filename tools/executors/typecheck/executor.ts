@@ -1,6 +1,6 @@
 import { spawn, spawnSync } from 'node:child_process';
 
-import { ExecutorContext } from '@nx/devkit';
+import type { ExecutorContext } from '@nx/devkit';
 
 interface ExecutorOptions {
   tsconfig?: string;
@@ -32,8 +32,6 @@ const runExecutor = async (options: ExecutorOptions, context: ExecutorContext): 
   const args = ['tsc', '--noEmit', '-p', tsconfig, ...extraArgs];
 
   if (watch) {
-    // Start a long-running watch process using spawn so it doesn't block the executor
-    console.log(`typecheck executor: starting watch: bunx ${args.join(' ')}`);
     try {
       spawn('bunx', args, { stdio: 'inherit', cwd: workspaceRoot });
       // Return success true to indicate the watcher started. Caller is responsible for lifecycle.
@@ -43,8 +41,6 @@ const runExecutor = async (options: ExecutorOptions, context: ExecutorContext): 
       return { success: false };
     }
   }
-
-  console.log(`typecheck executor: running: bunx ${args.join(' ')}`);
   const res = spawnSyncImpl('bunx', args, { stdio: 'inherit', cwd: workspaceRoot });
 
   if (res?.error) {

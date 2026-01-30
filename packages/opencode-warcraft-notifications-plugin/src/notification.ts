@@ -5,10 +5,10 @@ import { loadPluginConfig } from './config/index.js';
 import { createLogger } from './logger.js';
 import { extractFilename, getIdleSummary } from './notification-utils.js';
 import {
-  getRandomSoundPathFromFaction,
-  soundExists,
   determineSoundFaction,
+  getRandomSoundPathFromFaction,
   getSoundDescription,
+  soundExists,
 } from './sounds/index.js';
 
 const log = createLogger({ module: 'opencode-plugin-warcraft-notifications' });

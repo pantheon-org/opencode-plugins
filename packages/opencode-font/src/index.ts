@@ -8,23 +8,22 @@ export { convertTextToSVG } from './convertTextToSVG';
 // Blocky Pixel-Art Text Rendering
 // ============================================================================
 
-export { blockyTextToSVG, textToBlocks, calculateWidth, blocksToSVGPaths } from './alphabet';
-
 export type { Block, BlockyTextOptions } from './alphabet';
+export { blocksToSVGPaths, blockyTextToSVG, calculateWidth, textToBlocks } from './alphabet';
 
 // ============================================================================
 // Alphabet System - Advanced Usage
 // ============================================================================
 
-export type { Glyph, CellType, LetterName, SymbolName, Alphabet, Symbols } from './alphabet';
+export type { Alphabet, CellType, Glyph, LetterName, SymbolName, Symbols } from './alphabet';
 
 export {
-  cellType,
   ALPHABET,
-  SYMBOLS,
+  cellType,
+  getAllAvailableCharacters,
   getAvailableCharacters,
   getAvailableSymbols,
-  getAllAvailableCharacters,
+  SYMBOLS,
 } from './alphabet';
 
 // ============================================================================
@@ -33,7 +32,7 @@ export {
 
 export type { Theme, ThemeType } from './alphabet';
 
-export { themeType, lightTheme, darkTheme, getColorFromLetter } from './alphabet';
+export { darkTheme, getColorFromLetter, lightTheme, themeType } from './alphabet';
 
 // ============================================================================
 // SVG Optimization

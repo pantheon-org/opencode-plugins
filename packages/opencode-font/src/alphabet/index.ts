@@ -27,9 +27,8 @@
 // Core Rendering Functions
 // ============================================================================
 
-export { textToBlocks, blockyTextToSVG, calculateWidth, blocksToSVGPaths } from './block';
-
 export type { Block, BlockyTextOptions } from './block';
+export { blocksToSVGPaths, blockyTextToSVG, calculateWidth, textToBlocks } from './block';
 
 export { optimizeBlocksToSVGPaths } from './svg-optimizer';
 
@@ -37,15 +36,15 @@ export { optimizeBlocksToSVGPaths } from './svg-optimizer';
 // Type System
 // ============================================================================
 
-export type { Glyph, CellType, LetterName, SymbolName, Alphabet, Symbols } from './types';
+export type { Alphabet, CellType, Glyph, LetterName, SymbolName, Symbols } from './types';
 
 export {
-  cellType,
   ALPHABET,
-  SYMBOLS,
+  cellType,
+  getAllAvailableCharacters,
   getAvailableCharacters,
   getAvailableSymbols,
-  getAllAvailableCharacters,
+  SYMBOLS,
 } from './types';
 
 // ============================================================================
@@ -54,7 +53,7 @@ export {
 
 export type { Theme, ThemeType } from './theme';
 
-export { themeType, lightTheme, darkTheme, getColorFromLetter } from './theme';
+export { darkTheme, getColorFromLetter, lightTheme, themeType } from './theme';
 
 // ============================================================================
 // Individual Glyphs (optional direct access)

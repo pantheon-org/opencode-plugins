@@ -9,20 +9,20 @@ Example:
 */
 
 @font-face {
-  font-family: 'OpenCode';
+  font-family: "OpenCode";
   src:
-    url('../fonts/OpenCode-Regular.woff2') format('woff2'),
-    url('../fonts/OpenCode-Regular.woff') format('woff');
+    url("../fonts/OpenCode-Regular.woff2") format("woff2"),
+    url("../fonts/OpenCode-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'OpenCode';
+  font-family: "OpenCode";
   src:
-    url('../fonts/OpenCode-Bold.woff2') format('woff2'),
-    url('../fonts/OpenCode-Bold.woff') format('woff');
+    url("../fonts/OpenCode-Bold.woff2") format("woff2"),
+    url("../fonts/OpenCode-Bold.woff") format("woff");
   font-weight: 700;
   font-style: bold;
   font-display: swap;
@@ -30,5 +30,5 @@ Example:
 
 /* Utility class you can apply to elements or the demo container */
 .opencode-font {
-  font-family: 'OpenCode', monospace;
+  font-family: "OpenCode", monospace;
 }

@@ -1,4 +1,4 @@
-import { Tree, updateJson } from '@nx/devkit';
+import { type Tree, updateJson } from '@nx/devkit';
 
 export const updateTsconfigPaths = (tree: Tree, packageName: string, projectRoot: string): void => {
   updateJson(tree, 'tsconfig.base.json', (json) => {

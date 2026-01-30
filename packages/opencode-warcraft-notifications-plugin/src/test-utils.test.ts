@@ -1,15 +1,15 @@
-import { describe, it, expect } from 'bun:test';
+import { describe, expect, it } from 'bun:test';
 
 import {
-  makeFetchResponder,
   createTempDir,
+  makeFetchResponder,
   removeTempDir,
   setGlobalFetch,
-  withEnv,
+  silenceConsole,
   withCwd,
+  withEnv,
   withPlatform,
   writeTempFileForFaction,
-  silenceConsole,
 } from './test-utils';
 
 describe('test-utils helpers', () => {
@@ -28,7 +28,7 @@ describe('test-utils helpers', () => {
     const restore = setGlobalFetch(makeFetchResponder(201));
     try {
       const gf = globalThis as unknown as { fetch?: FetchFn };
-      const res = await gf.fetch!('http://x');
+      const res = await gf.fetch?.('http://x');
       expect(res.status).toBe(201);
     } finally {
       restore();
@@ -92,7 +92,6 @@ describe('test-utils helpers', () => {
   it('silenceConsole returns restore function', () => {
     const restore = silenceConsole();
     try {
-      console.log('this should be silent');
       console.error('also silent');
     } finally {
       restore();

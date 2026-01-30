@@ -1,6 +1,6 @@
-import { type ExecutorContext } from '@nx/devkit';
-import { $ } from 'bun';
 import { join } from 'node:path';
+import type { ExecutorContext } from '@nx/devkit';
+import { $ } from 'bun';
 import type { ValidateMarkdownExecutorSchema } from './schema';
 
 /**
@@ -24,13 +24,11 @@ export const validateMarkdownExecutor = async (
   const fixFlag = options.fix ? '--fix' : '';
 
   try {
-    const result = await $`bunx markdownlint-cli2 ${fixFlag} --config ${config} ${patterns.join(' ')}`
+    const _result = await $`bunx markdownlint-cli2 ${fixFlag} --config ${config} ${patterns.join(' ')}`
       .cwd(absoluteProjectRoot)
       .quiet();
-
-    console.log('✅ Markdown validation passed');
     return { success: true };
-  } catch (error) {
+  } catch (_error) {
     console.error('❌ Markdown validation failed');
     return { success: false };
   }

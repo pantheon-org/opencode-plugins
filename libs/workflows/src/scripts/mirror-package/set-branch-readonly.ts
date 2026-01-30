@@ -90,14 +90,9 @@ const main = async (): Promise<void> => {
     process.exit(1);
   }
 
-  console.log(`🔒 Setting branch ${branch} to read-only for ${owner}/${repo}...`);
-
   const result = await setBranchReadonly(owner, repo, branch, token);
 
   if (result.success) {
-    console.log(`✅ ${result.message}`);
-    console.log(`   Users cannot push directly to ${branch}`);
-    console.log(`   Updates will only come from monorepo mirror workflow`);
   } else {
     console.error(`⚠️  Warning: ${result.message}`);
     if (result.httpCode) {

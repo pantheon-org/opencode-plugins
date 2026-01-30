@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import ts from 'typescript';
 
 /**
@@ -117,12 +117,9 @@ function main(): void {
   });
 
   if (all.length === 0) {
-    console.log('No missing JSDoc/TSDoc comments detected for exported symbols.');
     process.exit(0);
   }
-
-  console.log('Missing JSDoc/TSDoc for exported symbols:');
-  all.forEach((l) => console.log(' -', l));
+  all.forEach((_l) => {});
   process.exit(2);
 }
 

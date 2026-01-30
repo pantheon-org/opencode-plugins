@@ -1,8 +1,8 @@
-import { type ExecutorContext } from '@nx/devkit';
-import ts from 'typescript';
-import { glob } from 'glob';
 import { readFile } from 'node:fs/promises';
-import { relative, join } from 'node:path';
+import { join, relative } from 'node:path';
+import type { ExecutorContext } from '@nx/devkit';
+import { glob } from 'glob';
+import ts from 'typescript';
 import type { ValidateJsdocExecutorSchema } from './schema';
 
 interface ValidationError {
@@ -83,8 +83,6 @@ export const validateJsdocExecutor = async (
     console.error(`\n❌ Total errors: ${errors.length}\n`);
     return { success: false, errors };
   }
-
-  console.log('✅ JSDoc validation passed');
   return { success: true };
 };
 

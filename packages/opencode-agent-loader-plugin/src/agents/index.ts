@@ -6,8 +6,8 @@
  */
 
 export { CodeReviewerAgent } from './code-reviewer';
+export { DocumentationWriterAgent } from './documentation-writer';
+export { PerformanceOptimizerAgent } from './performance-optimizer';
+export { RefactoringExpertAgent } from './refactoring-expert';
 export { SecurityAuditorAgent } from './security-auditor';
 export { TestEngineerAgent } from './test-engineer';
-export { DocumentationWriterAgent } from './documentation-writer';
-export { RefactoringExpertAgent } from './refactoring-expert';
-export { PerformanceOptimizerAgent } from './performance-optimizer';

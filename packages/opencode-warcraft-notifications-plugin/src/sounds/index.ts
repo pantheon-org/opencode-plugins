@@ -1,14 +1,14 @@
-import { exists } from 'fs/promises';
-import { join } from 'path';
+import { exists } from 'node:fs/promises';
+import { join } from 'node:path';
 
 import { DEFAULT_DATA_DIR, type Faction } from '../config/index.js';
 
 import { allianceSounds, hordeSounds, sounds } from './data/index.js';
 import {
   allianceSoundDescriptions,
+  getSoundDescription,
   hordeSoundDescriptions,
   soundDescriptions,
-  getSoundDescription,
 } from './descriptions.js';
 
 // Re-export sound data for backward compatibility

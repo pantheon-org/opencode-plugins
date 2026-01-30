@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'bun:test';
+import { describe, expect, it } from 'bun:test';
 
-import { textToBlocks, calculateWidth, blocksToSVGPaths, blockyTextToSVG } from './block';
+import { blocksToSVGPaths, blockyTextToSVG, calculateWidth, textToBlocks } from './block';
 
 describe('textToBlocks', () => {
   it('should convert text to blocks with default options', () => {

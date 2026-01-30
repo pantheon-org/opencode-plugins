@@ -7,11 +7,11 @@
 
 import {
   CodeReviewerAgent,
+  DocumentationWriterAgent,
+  PerformanceOptimizerAgent,
+  RefactoringExpertAgent,
   SecurityAuditorAgent,
   TestEngineerAgent,
-  DocumentationWriterAgent,
-  RefactoringExpertAgent,
-  PerformanceOptimizerAgent,
 } from '../agents';
 import type { AgentSpec, AugmentedPluginConfig } from '../types';
 
@@ -41,7 +41,6 @@ export const loadDefaultAgents = (config: AugmentedPluginConfig): AgentSpec[] =>
   // Check if default agents are disabled
   if (config.enableDefaultAgents === false) {
     if (config.verbose) {
-      console.log('[opencode-agent-loader-plugin] Default agents disabled by configuration');
     }
     return [];
   }
@@ -56,7 +55,6 @@ export const loadDefaultAgents = (config: AugmentedPluginConfig): AgentSpec[] =>
     // Skip if this agent is disabled
     if (disabledAgents.has(agent.name)) {
       if (config.verbose) {
-        console.log(`[opencode-agent-loader-plugin] Skipping disabled default agent: ${agent.name}`);
       }
       continue;
     }
@@ -64,7 +62,6 @@ export const loadDefaultAgents = (config: AugmentedPluginConfig): AgentSpec[] =>
     agents.push(agent);
 
     if (config.verbose) {
-      console.log(`[opencode-agent-loader-plugin] Loaded default agent: ${agent.name}`);
     }
   }
 

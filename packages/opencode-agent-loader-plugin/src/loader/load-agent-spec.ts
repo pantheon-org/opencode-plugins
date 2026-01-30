@@ -17,7 +17,6 @@ import { validateAgentSpec } from './validate-agent-spec';
 export const loadAgentSpec = async (filePath: string, verbose = false): Promise<AgentSpecLoadResult> => {
   try {
     if (verbose) {
-      console.log(`[opencode-agent-loader-plugin] Loading agent spec: ${filePath}`);
     }
 
     // Dynamically import the file
@@ -36,7 +35,6 @@ export const loadAgentSpec = async (filePath: string, verbose = false): Promise<
         validateAgentSpec(spec, filePath);
 
         if (verbose) {
-          console.log(`[opencode-agent-loader-plugin] Loaded agent: ${spec.name}`);
         }
 
         return {

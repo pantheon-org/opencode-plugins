@@ -1,6 +1,6 @@
-import { formatFiles, generateFiles, names, Tree, addProjectConfiguration, updateJson } from '@nx/devkit';
-import * as path from 'path';
-import { LibraryGeneratorSchema } from './schema';
+import * as path from 'node:path';
+import { addProjectConfiguration, formatFiles, generateFiles, names, type Tree, updateJson } from '@nx/devkit';
+import type { LibraryGeneratorSchema } from './schema';
 
 export default async function (tree: Tree, options: LibraryGeneratorSchema) {
   const directory = options.directory || 'libs';
@@ -68,9 +68,5 @@ export default async function (tree: Tree, options: LibraryGeneratorSchema) {
 
   await formatFiles(tree);
 
-  return () => {
-    console.log(`✅ Internal library '${projectName}' created in ${projectRoot}/`);
-    console.log(`   This library is NOT mirrored or published to npm.`);
-    console.log(`   Run: nx build ${projectName}`);
-  };
+  return () => {};
 }

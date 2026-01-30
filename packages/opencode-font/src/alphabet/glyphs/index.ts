@@ -55,9 +55,9 @@ export { letterZ } from './letters/letter-z';
 // Symbol Glyphs
 // ============================================================================
 
+export { symbolApostrophe } from './symbols/symbol-apostrophe';
+export { symbolExclamation } from './symbols/symbol-exclamation';
 export { symbolHyphen } from './symbols/symbol-hyphen';
 export { symbolPipe } from './symbols/symbol-pipe';
-export { symbolApostrophe } from './symbols/symbol-apostrophe';
-export { symbolQuote } from './symbols/symbol-quote';
 export { symbolQuestion } from './symbols/symbol-question';
-export { symbolExclamation } from './symbols/symbol-exclamation';
+export { symbolQuote } from './symbols/symbol-quote';

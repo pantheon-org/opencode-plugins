@@ -1,8 +1,7 @@
-import { describe, it, expect } from 'bun:test';
+import { describe, expect, it } from 'bun:test';
 
-import { getColorFromLetter, themeType, darkTheme } from './theme';
-import { ALPHABET } from './types';
-import { cellType } from './types';
+import { darkTheme, getColorFromLetter, themeType } from './theme';
+import { ALPHABET, cellType } from './types';
 
 describe('ALPHABET structure', () => {
   it('should contain 26 letters A-Z', () => {

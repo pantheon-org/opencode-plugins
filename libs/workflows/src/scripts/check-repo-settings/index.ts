@@ -13,8 +13,8 @@
 
 import { generateSummary, writeSummaryToFile } from '../../utils/github-summary';
 
-import { runAllChecks, allChecksPassed } from './checks';
-import { createOctokit, fetchRepositoryData, checkBranchProtectionEnabled } from './github-api';
+import { allChecksPassed, runAllChecks } from './checks';
+import { checkBranchProtectionEnabled, createOctokit, fetchRepositoryData } from './github-api';
 import { handleIssue } from './issue-manager';
 
 /**
@@ -68,9 +68,6 @@ const checkRepositorySettings = async (): Promise<void> => {
 
     // Write to GITHUB_STEP_SUMMARY if in GitHub Actions
     await writeSummaryToFile(summary);
-
-    // Always log to console for local testing
-    console.log(summary);
 
     // Exit 0 even if checks fail (informational only)
     // Script errors (caught by catch block) will exit 1
