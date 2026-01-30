@@ -5,6 +5,9 @@
   "projectType": "library",
   "tags": ["type:package", "scope:font"],
   "targets": {
+    "check-mirror-exists": {
+      "executor": "@pantheon-org/tools:check-mirror-exists"
+    },
     "build": {
       "executor": "nx:run-commands",
       "options": {
