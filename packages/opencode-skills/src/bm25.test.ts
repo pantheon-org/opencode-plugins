@@ -4,7 +4,7 @@
 
 import { describe, expect, it } from 'bun:test';
 
-import { buildBM25Index, calculateBM25Score, getTopSkillsByBM25, rankSkillsByBM25 } from './bm25';
+import { buildBM25Index, calculateBM25Score, getTopSkillsByBM25, rankSkillsByBM25 } from './bm25/index';
 
 describe('BM25 Implementation', () => {
   // Sample skills for testing

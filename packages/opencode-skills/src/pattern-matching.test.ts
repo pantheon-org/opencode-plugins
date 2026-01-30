@@ -4,7 +4,7 @@
 
 import { describe, expect, it } from 'bun:test';
 
-import { findMatchingSkills, hasIntentToUse } from './pattern-matching';
+import { findMatchingSkills, hasIntentToUse } from './pattern-matching/index';
 
 describe('hasIntentToUse', () => {
   describe('word boundary matching', () => {

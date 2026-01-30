@@ -17,6 +17,7 @@ import {
   opencodePluginsSkill,
   opencodeSkillsSkill,
 } from './skills';
+import { sendInfo, sendSuccess, sendWarning } from './utils/toast-notifications';
 
 // Re-export types for consumer convenience
 export type { AgentSpec } from './types';
@@ -30,58 +31,13 @@ export type { AgentSpec } from './types';
 export const OpencodeCorePlugin: Plugin = async (ctx) => {
   const { worktree, client } = ctx;
 
-  // Helper to send info messages
-  const sendInfo = async (title: string, message: string) => {
-    try {
-      await client.tui.showToast({
-        body: {
-          title,
-          message,
-          variant: 'info' as const,
-          duration: 4000,
-        },
-      });
-    } catch {
-      // Silently fail - toast not critical
-    }
-  };
-
-  const sendSuccess = async (title: string, message: string) => {
-    try {
-      await client.tui.showToast({
-        body: {
-          title,
-          message,
-          variant: 'success' as const,
-          duration: 3000,
-        },
-      });
-    } catch {
-      // Silently fail - toast not critical
-    }
-  };
-
-  const sendWarning = async (title: string, message: string) => {
-    try {
-      await client.tui.showToast({
-        body: {
-          title,
-          message,
-          variant: 'warning' as const,
-          duration: 5000,
-        },
-      });
-    } catch {
-      // Silently fail - toast not critical
-    }
-  };
-
-  await sendInfo('OpenCode Core Plugin', `Initializing plugin in ${worktree}`);
+  await sendInfo(client, 'OpenCode Core Plugin', `Initializing plugin in ${worktree}`);
 
   // Load core agents
   const coreAgents = [new OpencodeSpecialistAgent()];
 
   await sendInfo(
+    client,
     'Core Agents',
     `Loaded ${coreAgents.length} core agent(s): ${coreAgents.map((s) => s.name).join(', ')}`,
   );
@@ -111,7 +67,7 @@ export const OpencodeCorePlugin: Plugin = async (ctx) => {
      * Config hook - Register core agents with OpenCode configuration
      */
     config: async (config) => {
-      await sendInfo('Config', 'Registering core agents with OpenCode config');
+      await sendInfo(client, 'Config', 'Registering core agents with OpenCode config');
 
       // Initialize agent config if not present
       if (!config.agent) {
@@ -121,17 +77,17 @@ export const OpencodeCorePlugin: Plugin = async (ctx) => {
       // Register each core agent
       for (const spec of coreAgents) {
         if (config.agent[spec.name]) {
-          await sendWarning('Config', `Agent "${spec.name}" already exists, skipping registration`);
+          await sendWarning(client, 'Config', `Agent "${spec.name}" already exists, skipping registration`);
           continue;
         }
 
         // Register the agent configuration
         config.agent[spec.name] = spec.config;
 
-        await sendInfo('Config', `Registered agent: ${spec.name}`);
+        await sendInfo(client, 'Config', `Registered agent: ${spec.name}`);
       }
 
-      await sendSuccess('Config', 'Core agent registration complete');
+      await sendSuccess(client, 'Config', 'Core agent registration complete');
     },
 
     /**
