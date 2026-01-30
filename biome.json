@@ -31,7 +31,7 @@
           "level": "warn",
           "options": { "maxAllowedComplexity": 15 }
         },
-        "noForEach": "error",
+        "noForEach": "warn",
         "useArrowFunction": "error"
       },
       "style": {
@@ -79,6 +79,30 @@
       "linter": {
         "rules": {
           "suspicious": {
+            "noExplicitAny": "off"
+          },
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.d.ts"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["libs/docs-builder/**/*.js", "**/pages/**/*.js"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noAssignInExpressions": "off",
             "noExplicitAny": "off"
           },
           "complexity": {

@@ -29,7 +29,7 @@ describe('test-utils helpers', () => {
     try {
       const gf = globalThis as unknown as { fetch?: FetchFn };
       const res = await gf.fetch?.('http://x');
-      expect(res.status).toBe(201);
+      expect(res?.status).toBe(201);
     } finally {
       restore();
     }
