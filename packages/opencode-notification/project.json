@@ -8,7 +8,7 @@
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "packages/opencode-notification/dist",
+        "outputPath": "dist/packages/opencode-notification",
         "main": "packages/opencode-notification/src/index.ts",
         "tsConfig": "packages/opencode-notification/tsconfig.json",
         "assets": []

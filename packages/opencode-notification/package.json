@@ -29,7 +29,7 @@
     "url": "git+https://github.com/pantheon-org/opencode-notification.git"
   },
   "dependencies": {
-    "@opencode-ai/plugin": "latest"
+    "@opencode-ai/plugin": "^1.1.47"
   },
   "devDependencies": {
     "@types/node": "latest",

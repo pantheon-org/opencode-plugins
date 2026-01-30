@@ -8,7 +8,7 @@
     "docs/MIRROR_SETUP.md",
     "docs/PLUGIN_INVENTORY.md",
     "docs/PLUGINS_MIGRATION.md",
-    "docs/QUICK_REFERENCE.md",
+    "docs/QUICK_REFERENCE.md"
   ],
   "mcp": {
     "nx": {
