@@ -48,6 +48,7 @@ export const checkBranchProtectionEnabled = async (
     );
     return true;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint: Error type varies by caller
   } catch (error: any) {
     // 404 means no protection rules exist
     if (error.status === 404) {

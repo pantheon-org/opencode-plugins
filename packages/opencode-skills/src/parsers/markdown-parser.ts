@@ -42,6 +42,7 @@ const extractFrontmatter = (markdown: string): { frontmatter: SkillFrontmatter; 
 /**
  * Parse markdown content and extract sections by heading
  */
+// biome-ignore lint: Section extraction requires multiple heading pattern checks
 const extractSections = (markdown: string): SkillSections => {
   const sections = {
     whatIDo: '',

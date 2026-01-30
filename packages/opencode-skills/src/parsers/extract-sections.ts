@@ -33,6 +33,7 @@ import type { SkillSections } from './types';
  * // => { whatIDo: 'I help...', checklist: ['Write tests', 'Implement feature'], ... }
  * ```
  */
+// biome-ignore lint: Section extraction requires multiple heading pattern checks
 export function extractSections(markdown: string): SkillSections {
   const sections: SkillSections = {
     whatIDo: '',

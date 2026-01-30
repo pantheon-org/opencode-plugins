@@ -25,6 +25,7 @@ export interface ValidationSuggestion {
   severity: 'info';
 }
 
+// biome-ignore lint: Validation logic requires multiple condition checks for comprehensive skill validation
 export const validateSkill = (skill: Skill, _strict?: boolean): ValidationResult => {
   const errors: ValidationError[] = [];
   const warnings: ValidationWarning[] = [];

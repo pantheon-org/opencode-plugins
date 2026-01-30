@@ -31,6 +31,7 @@ import type { ValidationError, ValidationResult, ValidationSuggestion, Validatio
  * // => { valid: true, errors: [], warnings: [...], suggestions: [...] }
  * ```
  */
+// biome-ignore lint: Validation logic requires multiple condition checks for comprehensive skill validation
 export function validateSkill(skill: Skill, _strict?: boolean): ValidationResult {
   const errors: ValidationError[] = [];
   const warnings: ValidationWarning[] = [];

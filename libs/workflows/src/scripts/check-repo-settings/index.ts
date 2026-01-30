@@ -73,6 +73,7 @@ const checkRepositorySettings = async (): Promise<void> => {
     // Script errors (caught by catch block) will exit 1
     process.exit(0);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint: Error type varies by caller
   } catch (error: any) {
     // Handle script errors (API failures, network issues, permission problems)
     console.error('❌ Script error:', error.message);

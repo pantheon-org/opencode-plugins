@@ -69,6 +69,7 @@ export function createSkillsPlugin(
     },
   };
 
+  // biome-ignore lint: Plugin hook requires complex async logic for skills injection
   return async (ctx) => {
     const skillNames = Object.keys(skills);
     const skillKeywords = new Map<string, string[]>();
@@ -106,6 +107,7 @@ export function createSkillsPlugin(
     return {
       // Auto-inject skills via chat message hook
       // eslint-disable-next-line complexity, max-statements
+      // biome-ignore lint: Chat message hook requires multiple conditions for skills injection
       'chat.message': async ({ sessionID }, { parts }) => {
         // Skip if auto-inject is disabled
         if (!config.autoInject) {

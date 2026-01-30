@@ -14,6 +14,7 @@ export const withRetry = async <T>(fn: () => Promise<T>, maxRetries: number = 3)
     try {
       return await fn();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // biome-ignore lint: Error type varies by caller
     } catch (error: any) {
       // Don't retry on 403 Forbidden (permanent permission issue)
       if (i === maxRetries - 1 || error.status === 403) {
