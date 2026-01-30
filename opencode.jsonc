@@ -9,10 +9,6 @@
     "docs/PLUGIN_INVENTORY.md",
     "docs/PLUGINS_MIGRATION.md",
     "docs/QUICK_REFERENCE.md",
-    ".opencode/knowledge-base/bun-typescript-development.md",
-    ".opencode/knowledge-base/extending-nx-plugins.md",
-    ".opencode/knowledge-base/creating-nx-generators.md",
-    ".opencode/knowledge-base/opencode-development-plugin-guide.md"
   ],
   "mcp": {
     "nx": {
