@@ -93,7 +93,8 @@
             "noConsole": "off"
           },
           "complexity": {
-            "noExcessiveCognitiveComplexity": "off"
+            "noExcessiveCognitiveComplexity": "off",
+            "noForEach": "off"
           }
         }
       }
