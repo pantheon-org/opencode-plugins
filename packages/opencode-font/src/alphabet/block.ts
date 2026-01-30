@@ -1,7 +1,6 @@
 import { optimizeBlocksToSVGPaths } from './svg-optimizer';
-import { getColorFromLetter, themeType, type ThemeType } from './theme';
-import { cellType, type CellType } from './types';
-import { ALPHABET, SYMBOLS } from './types';
+import { getColorFromLetter, type ThemeType, themeType } from './theme';
+import { ALPHABET, type CellType, cellType, SYMBOLS } from './types';
 
 export interface BlockyTextOptions {
   theme?: ThemeType;

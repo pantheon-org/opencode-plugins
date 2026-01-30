@@ -1,9 +1,8 @@
-import { unlink, writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
+import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
+import { mkdir, unlink, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
-import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
-
-import { ensureSoundAvailable, getSoundFileList, soundExists, installBundledSoundsIfMissing } from './bundled-sounds';
+import { ensureSoundAvailable, getSoundFileList, installBundledSoundsIfMissing, soundExists } from './bundled-sounds';
 import { createTempDir, removeTempDir, silenceConsole } from './test-utils';
 
 // Integration tests: installer and filesystem behavior

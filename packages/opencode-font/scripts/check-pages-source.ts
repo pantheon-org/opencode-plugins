@@ -28,8 +28,6 @@ async function checkPagesConfig(repo: string): Promise<void> {
     process.exit(1);
   }
 
-  console.log(`Checking GitHub Pages configuration for ${repo}...`);
-
   try {
     // Use GitHub API to check Pages configuration
     const response = await fetch(`https://api.github.com/repos/${repo}/pages`, {
@@ -50,24 +48,17 @@ async function checkPagesConfig(repo: string): Promise<void> {
 
     // Check if Pages is enabled
     if (data.status === 'built') {
-      console.log('✅ Pages is enabled');
     } else {
-      console.log('⚠️  Pages may not be enabled or is not built');
     }
 
     // Check build type (should be "workflow" for GitHub Actions)
     const buildType = data.build_type || 'unknown';
 
     if (buildType === 'workflow') {
-      console.log('✅ Pages is correctly configured to deploy from GitHub Actions');
       process.exit(0);
     } else if (buildType === 'legacy') {
-      console.log('❌ Pages is configured to deploy from a branch (legacy mode)');
-      console.log('   Please change to "GitHub Actions" in repository settings:');
-      console.log('   Settings → Pages → Source → GitHub Actions');
       process.exit(1);
     } else {
-      console.log(`⚠️  Could not determine Pages build type (got: ${buildType})`);
       process.exit(1);
     }
   } catch (error) {

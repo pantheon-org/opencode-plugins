@@ -5,7 +5,7 @@
  * without requiring complex mocking of the OpenCode SDK
  */
 
-import { describe, test, expect } from 'bun:test';
+import { describe, expect, test } from 'bun:test';
 
 import { NotificationPlugin } from './notification';
 import { createTempDir, removeTempDir, writeTempFileForFaction } from './test-utils';

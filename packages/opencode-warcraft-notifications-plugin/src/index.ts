@@ -7,18 +7,16 @@
  * Package: `@pantheon-org/opencode-warcraft-notifications-plugin`
  */
 
-// Export the main plugin
-export { NotificationPlugin as OpencodeWarcraftNotificationsPlugin } from './notification.js';
-
-// Export types for user configuration
-export type { WarcraftNotificationConfig, Faction } from './config/types.js';
-
+export { getSoundFileList, installBundledSoundsIfMissing } from './bundled-sounds.js';
 // Export utility functions for advanced use cases
 export { loadPluginConfig } from './config/index.js';
-export { installBundledSoundsIfMissing, getSoundFileList } from './bundled-sounds.js';
+// Export types for user configuration
+export type { Faction, WarcraftNotificationConfig } from './config/types.js';
+// Export the main plugin
+export { NotificationPlugin as OpencodeWarcraftNotificationsPlugin } from './notification.js';
 export {
-  getRandomSoundPathFromFaction,
-  soundExists,
   determineSoundFaction,
+  getRandomSoundPathFromFaction,
   getSoundDescription,
+  soundExists,
 } from './sounds/index.js';

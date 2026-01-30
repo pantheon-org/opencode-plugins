@@ -3,12 +3,12 @@
  */
 
 import {
-  checkDefaultBranch,
-  checkBranchProtection,
-  checkAutoBranchDeletion,
-  runAllChecks,
   allChecksPassed,
+  checkAutoBranchDeletion,
+  checkBranchProtection,
+  checkDefaultBranch,
   getFailedChecks,
+  runAllChecks,
 } from './checks';
 import type { RepositoryData } from './types';
 

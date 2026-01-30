@@ -25,12 +25,12 @@ import {
   letterX,
   letterY,
   letterZ,
+  symbolApostrophe,
+  symbolExclamation,
   symbolHyphen,
   symbolPipe,
-  symbolApostrophe,
-  symbolQuote,
   symbolQuestion,
-  symbolExclamation,
+  symbolQuote,
 } from './glyphs';
 
 /**

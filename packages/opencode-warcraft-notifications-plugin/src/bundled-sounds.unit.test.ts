@@ -1,10 +1,9 @@
-import { mkdir, writeFile, chmod } from 'fs/promises';
-import { join } from 'path';
+import { describe, expect, it } from 'bun:test';
+import { chmod, mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
-import { describe, it, expect } from 'bun:test';
-
-import { installBundledSoundsIfMissing, soundExists, getSoundFileList, ensureSoundAvailable } from './bundled-sounds';
-import { createTempDir, removeTempDir, writeTempFileForFaction, withEnv } from './test-utils';
+import { ensureSoundAvailable, getSoundFileList, installBundledSoundsIfMissing, soundExists } from './bundled-sounds';
+import { createTempDir, removeTempDir, withEnv, writeTempFileForFaction } from './test-utils';
 
 // These tests exercise bundling behavior that copies files from repo `data/` into a provided dataDir.
 // We'll simulate a small `data/` structure in a temporary cwd for the duration of the test.

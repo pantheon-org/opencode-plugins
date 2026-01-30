@@ -1,5 +1,5 @@
-import { homedir } from 'os';
-import { join } from 'path';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
 
 import { getPackageName } from './package.js';
 
@@ -79,7 +79,6 @@ export const getDefaultSoundsDir = (): string => {
     // OpenCode convention: @scope/package -> @scope/package (keeping the slash)
     pluginName = packageName;
     if (DEBUG) {
-      console.log('[opencode-warcraft-notifications] Using package name:', pluginName);
     }
   } else {
     // Fallback to expected name if we got the wrong package.json
@@ -95,7 +94,6 @@ export const getDefaultSoundsDir = (): string => {
   const soundsPath = join(baseDataDir, 'opencode', 'storage', 'plugin', pluginName, SOUNDS_SUBDIR);
 
   if (DEBUG) {
-    console.log('[opencode-warcraft-notifications] Default sounds directory:', soundsPath);
   }
 
   return soundsPath;

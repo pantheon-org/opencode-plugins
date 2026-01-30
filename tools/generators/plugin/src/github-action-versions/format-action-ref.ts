@@ -1,4 +1,4 @@
-import { GitHubAction } from './types';
+import type { GitHubAction } from './types';
 
 /**
  * Helper to format action reference for workflow files

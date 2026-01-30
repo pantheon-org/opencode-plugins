@@ -83,15 +83,9 @@ const main = async (): Promise<void> => {
     process.exit(1);
   }
 
-  console.log(`🔒 Disabling repository features for ${owner}/${repo}...`);
-
   const result = await disableRepoFeatures(owner, repo, token);
 
   if (result.success) {
-    console.log(`✅ ${result.message}`);
-    console.log(`   Disabled features: ${result.disabledFeatures.join(', ')}`);
-    console.log(`   Users cannot create issues, projects, or edit wiki`);
-    console.log(`   All development happens in the monorepo`);
   } else {
     console.error(`⚠️  Warning: ${result.message}`);
     if (result.httpCode) {

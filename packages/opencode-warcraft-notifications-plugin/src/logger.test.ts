@@ -1,4 +1,4 @@
-import { describe, it, expect, spyOn, beforeEach, afterEach } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, it, spyOn } from 'bun:test';
 
 import { createLogger } from './logger';
 
@@ -107,7 +107,7 @@ describe('Logger', () => {
 
   describe('debug', () => {
     it('should not output when DEBUG_OPENCODE is not set', () => {
-      delete process.env.DEBUG_OPENCODE;
+      process.env.DEBUG_OPENCODE = undefined;
       const logger = createLogger({ module: moduleName });
       logger.debug('Test debug message');
 

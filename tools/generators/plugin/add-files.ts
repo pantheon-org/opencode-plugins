@@ -1,10 +1,9 @@
-import * as path from 'path';
-
-import { Tree, names, offsetFromRoot, generateFiles } from '@nx/devkit';
+import * as path from 'node:path';
+import { generateFiles, names, offsetFromRoot, type Tree } from '@nx/devkit';
 
 import { dependencies, devDependencies } from './dependencies';
 import { getFlattenedActions } from './github-actions-versions';
-import { NormalizedOptions } from './normalize-options';
+import type { NormalizedOptions } from './normalize-options';
 
 /**
  * Recursively collects all file paths in a directory from the Nx Tree.
@@ -67,8 +66,6 @@ export const addFiles = (tree: Tree, options: NormalizedOptions): void => {
     if (srcExists) preserved.push('src/');
     if (docsExists) preserved.push('docs/');
 
-    console.log(`\n⚠️  Existing plugin detected. Preserving ${preserved.join(' and ')} directories...`);
-
     // Store existing content before generation
     const existingContent: Map<string, Buffer> = new Map();
 
@@ -83,7 +80,6 @@ export const addFiles = (tree: Tree, options: NormalizedOptions): void => {
     // Clean up .github/ directory before regenerating
     const githubPath = path.join(options.projectRoot, '.github');
     if (tree.exists(githubPath)) {
-      console.log('  ✓ Cleaning .github/ directory...');
       tree.delete(githubPath);
     }
 
@@ -94,8 +90,6 @@ export const addFiles = (tree: Tree, options: NormalizedOptions): void => {
     existingContent.forEach((content, filePath) => {
       tree.write(filePath, content);
     });
-
-    console.log(`  ✓ Config files regenerated, ${preserved.join(' and ')} preserved\n`);
   } else {
     // New plugin - generate everything
     generateFiles(tree, templatePath, options.projectRoot, templateOptions);

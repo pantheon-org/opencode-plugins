@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "JSDoc Validator",
+  "description": "Validates JSDoc presence on exported functions and classes",
+  "type": "object",
+  "properties": {
+    "include": {
+      "type": "array",
+      "description": "Glob patterns for files to validate",
+      "default": ["**/*.ts"],
+      "items": { "type": "string" }
+    },
+    "exclude": {
+      "type": "array",
+      "description": "Glob patterns to exclude",
+      "default": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts"],
+      "items": { "type": "string" }
+    },
+    "requireParams": {
+      "type": "boolean",
+      "description": "Require @param documentation",
+      "default": false
+    },
+    "requireReturns": {
+      "type": "boolean",
+      "description": "Require @returns documentation",
+      "default": false
+    },
+    "publicOnly": {
+      "type": "boolean",
+      "description": "Only validate exported declarations",
+      "default": true
+    }
+  }
+}

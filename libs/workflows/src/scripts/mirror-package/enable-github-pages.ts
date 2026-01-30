@@ -99,14 +99,10 @@ const main = async (): Promise<void> => {
     process.exit(1);
   }
 
-  console.log(`📄 Enabling GitHub Pages for ${owner}/${repo}...`);
-
   const result = await enableGitHubPages(owner, repo, token);
 
   if (result.success) {
-    console.log(`✅ ${result.message}`);
     if (result.status === 'updated') {
-      console.log(`ℹ️  GitHub Pages already existed, configuration updated`);
     }
   } else {
     console.error(`⚠️  Warning: ${result.message}`);

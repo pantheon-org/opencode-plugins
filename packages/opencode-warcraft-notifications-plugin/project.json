@@ -32,30 +32,6 @@
     "check-mirror-exists": {
       "executor": "@pantheon-org/tools:check-mirror-exists"
     },
-    "lint": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          {
-            "command": "bunx eslint src/"
-          }
-        ],
-        "cwd": "packages/opencode-warcraft-notifications-plugin",
-        "parallel": false
-      }
-    },
-    "format": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          {
-            "command": "bunx prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\""
-          }
-        ],
-        "cwd": "packages/opencode-warcraft-notifications-plugin",
-        "parallel": false
-      }
-    },
     "type-check": {
       "executor": "nx:run-commands",
       "options": {

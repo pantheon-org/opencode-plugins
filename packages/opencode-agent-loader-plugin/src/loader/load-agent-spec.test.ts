@@ -1,8 +1,7 @@
-import { mkdtemp, writeFile, rm } from 'fs/promises';
-import { tmpdir } from 'os';
-import { join } from 'path';
-
-import { afterEach, beforeEach, describe, it, expect } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 import { loadAgentSpec } from './load-agent-spec';
 

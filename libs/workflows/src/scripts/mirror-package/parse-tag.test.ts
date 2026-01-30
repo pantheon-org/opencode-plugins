@@ -1,7 +1,6 @@
+import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
 import { existsSync } from 'node:fs';
 import { unlink } from 'node:fs/promises';
-
-import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
 
 import { parseTag, setOutput } from './parse-tag';
 
@@ -62,7 +61,7 @@ describe('setOutput', () => {
     if (originalGitHubOutput) {
       process.env.GITHUB_OUTPUT = originalGitHubOutput;
     } else {
-      delete process.env.GITHUB_OUTPUT;
+      process.env.GITHUB_OUTPUT = undefined;
     }
 
     // Cleanup test file
@@ -92,7 +91,7 @@ describe('setOutput', () => {
   });
 
   it('should handle output when GITHUB_OUTPUT is not set', async () => {
-    delete process.env.GITHUB_OUTPUT;
+    process.env.GITHUB_OUTPUT = undefined;
 
     // Should not throw - just logs to console
     await expect(setOutput('test-key', 'test-value')).resolves.toBeUndefined();

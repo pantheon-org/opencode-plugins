@@ -68,7 +68,7 @@ describe('generateSummary', () => {
 
 describe('writeSummaryToFile', () => {
   it('should write summary to file when GITHUB_STEP_SUMMARY is set', async () => {
-    const summaryPath = '/tmp/test-summary-' + Date.now() + '.md';
+    const summaryPath = `/tmp/test-summary-${Date.now()}.md`;
     process.env.GITHUB_STEP_SUMMARY = summaryPath;
 
     const summary = 'Test summary';
@@ -77,7 +77,7 @@ describe('writeSummaryToFile', () => {
     await writeSummaryToFile(summary);
 
     // Verify file was written
-    const fsPromises = await import('fs/promises');
+    const fsPromises = await import('node:fs/promises');
     const content = await fsPromises.readFile(summaryPath, 'utf-8');
     expect(content).toBe(summary);
 
@@ -86,7 +86,7 @@ describe('writeSummaryToFile', () => {
   });
 
   it('should not write when GITHUB_STEP_SUMMARY is not set', async () => {
-    delete process.env.GITHUB_STEP_SUMMARY;
+    process.env.GITHUB_STEP_SUMMARY = undefined;
 
     const summary = 'Test summary';
 

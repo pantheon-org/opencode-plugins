@@ -41,7 +41,6 @@ export const parseTag = (tag: string): PackageInfo => {
 export const setOutput = async (name: string, value: string): Promise<void> => {
   const githubOutput = process.env.GITHUB_OUTPUT;
   if (!githubOutput) {
-    console.log(`${name}=${value}`);
     return;
   }
 
@@ -67,11 +66,6 @@ const main = async (): Promise<void> => {
   try {
     const packageInfo = parseTag(tag);
 
-    // Output for humans
-    console.log(`📦 Package: ${packageInfo.name}`);
-    console.log(`📂 Directory: ${packageInfo.directory}`);
-    console.log(`🏷️  Version: ${packageInfo.version}`);
-
     // Set GitHub Actions outputs
     await setOutput('package', packageInfo.name);
     await setOutput('dir', packageInfo.directory);
@@ -83,8 +77,6 @@ const main = async (): Promise<void> => {
       console.error(`❌ Package directory ${packageInfo.directory} does not exist`);
       process.exit(1);
     }
-
-    console.log(`✅ Package directory exists`);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error('❌ Failed to parse tag:', message);

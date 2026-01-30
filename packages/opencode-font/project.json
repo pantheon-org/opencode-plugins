@@ -77,30 +77,6 @@
         "parallel": false
       }
     },
-    "lint": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          {
-            "command": "bun run lint"
-          }
-        ],
-        "cwd": "packages/opencode-font",
-        "parallel": false
-      }
-    },
-    "format": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          {
-            "command": "bun run format"
-          }
-        ],
-        "cwd": "packages/opencode-font",
-        "parallel": false
-      }
-    },
     "type-check": {
       "executor": "nx:run-commands",
       "options": {

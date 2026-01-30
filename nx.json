@@ -1,14 +1,18 @@
 {
   "namedInputs": {
-    "default": ["{projectRoot}/**/*"],
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
+      "default",
       "!{projectRoot}/**/*.spec.ts",
       "!{projectRoot}/**/*.test.ts",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.spec.json",
-      "!{projectRoot}/jest.config.[jt]s",
       "!{projectRoot}/src/test-setup.[jt]s",
       "!{projectRoot}/test-setup.[jt]s"
+    ],
+    "sharedGlobals": [
+      "{workspaceRoot}/biome.json",
+      "{workspaceRoot}/.markdownlint.jsonc"
     ]
   },
   "generators": {
@@ -24,31 +28,89 @@
   },
   "targetDefaults": {
     "build": {
-      "cache": true
-    },
-    "test": {
-      "cache": true
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     },
     "lint": {
-      "cache": true
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome lint --diagnostic-level=warn ."
+      },
+      "cache": true,
+      "inputs": [
+        "default",
+        "{workspaceRoot}/biome.json",
+        "{projectRoot}/biome.json"
+      ]
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome format --write ."
+      },
+      "cache": true,
+      "inputs": [
+        "default",
+        "{workspaceRoot}/biome.json",
+        "{projectRoot}/biome.json"
+      ]
+    },
+    "format:check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome format ."
+      },
+      "cache": true,
+      "inputs": [
+        "default",
+        "{workspaceRoot}/biome.json",
+        "{projectRoot}/biome.json"
+      ]
+    },
+    "check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check --diagnostic-level=warn --write ."
+      },
+      "cache": true,
+      "inputs": [
+        "default",
+        "{workspaceRoot}/biome.json",
+        "{projectRoot}/biome.json"
+      ]
+    },
+    "validate:jsdoc": {
+      "executor": "@pantheon-org/tools:validate-jsdoc",
+      "options": {},
+      "cache": true,
+      "inputs": ["default"]
+    },
+    "validate:markdown": {
+      "executor": "@pantheon-org/tools:validate-markdown",
+      "options": {},
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/.markdownlint.jsonc"]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun test"
+      },
+      "cache": true,
+      "inputs": ["default", "^production"],
+      "outputs": ["{options.outputFile}"]
+    },
+    "type-check": {
+      "executor": "@pantheon-org/tools:typecheck",
+      "options": {},
+      "cache": true,
+      "inputs": ["default", "^production"]
     },
     "@nx/js:tsc": {
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
-    },
-    "@nx/jest:jest": {
-      "cache": true,
-      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
-      "options": {
-        "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
-      }
     },
     "@nx/esbuild:esbuild": {
       "cache": true,

@@ -2,7 +2,7 @@
  * GitHub issue manager for repository settings issues
  */
 
-import { Octokit } from '@octokit/rest';
+import type { Octokit } from '@octokit/rest';
 
 import { withRetry } from '../../utils/retry';
 

@@ -41,7 +41,7 @@ export const generateSummary = (results: CheckResult[], allPassed: boolean, issu
  */
 export const writeSummaryToFile = async (summary: string): Promise<void> => {
   if (process.env.GITHUB_STEP_SUMMARY) {
-    const fs = await import('fs/promises');
+    const fs = await import('node:fs/promises');
     await fs.writeFile(process.env.GITHUB_STEP_SUMMARY, summary, 'utf-8');
   }
 };

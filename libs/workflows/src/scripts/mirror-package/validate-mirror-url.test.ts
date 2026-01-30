@@ -1,7 +1,6 @@
+import { afterEach, describe, expect, it } from 'bun:test';
 import { existsSync } from 'node:fs';
-import { writeFile, unlink } from 'node:fs/promises';
-
-import { describe, it, expect, afterEach } from 'bun:test';
+import { unlink, writeFile } from 'node:fs/promises';
 
 import { validateMirrorUrl } from './validate-mirror-url';
 

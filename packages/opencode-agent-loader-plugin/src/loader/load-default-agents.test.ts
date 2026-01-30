@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'bun:test';
+import { describe, expect, it } from 'bun:test';
 
 import type { AugmentedPluginConfig } from '../types';
 
-import { loadDefaultAgents, getDefaultAgentConstructors } from './load-default-agents';
+import { getDefaultAgentConstructors, loadDefaultAgents } from './load-default-agents';
 
 describe('load-default-agents', () => {
   describe('getDefaultAgentConstructors', () => {

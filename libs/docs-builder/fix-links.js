@@ -13,10 +13,9 @@
  * automatically rewritten by Astro's base path handling.
  */
 
-import { readdir, readFile, writeFile } from 'fs/promises';
-import { join } from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -89,8 +88,7 @@ async function processDirectory(dirPath, baseDir = DIST_DIR) {
     } else if (entry.isFile() && entry.name.endsWith('.html')) {
       const wasFixed = await fixLinksInFile(fullPath);
       if (wasFixed) {
-        const relativePath = fullPath.replace(baseDir + '/', '');
-        console.log(`  ✓ Fixed links in ${relativePath}`);
+        const _relativePath = fullPath.replace(`${baseDir}/`, '');
         fixedCount++;
       }
     }
@@ -103,17 +101,11 @@ async function processDirectory(dirPath, baseDir = DIST_DIR) {
  * Main process
  */
 async function main() {
-  console.log('🔗 Fixing internal links in HTML files...\n');
-  console.log(`Base path: ${BASE_PATH}`);
-  console.log(`Dist directory: ${DIST_DIR}\n`);
-
   try {
     const fixedCount = await processDirectory(DIST_DIR);
 
     if (fixedCount > 0) {
-      console.log(`\n✅ Fixed links in ${fixedCount} HTML file(s)!`);
     } else {
-      console.log('\n✨ No links needed fixing!');
     }
     process.exit(0);
   } catch (error) {
