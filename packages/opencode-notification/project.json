@@ -15,11 +15,10 @@
       }
     },
     "test": {
-      "executor": "@nx/js:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "nx:run-commands",
       "options": {
-        "jestConfig": "packages/opencode-notification/jest.config.js",
-        "passWithNoTests": true
+        "command": "bun test",
+        "cwd": "packages/opencode-notification"
       }
     },
     "lint": {
