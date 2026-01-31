@@ -5,12 +5,12 @@ import { createSymlink } from './create-symlink';
 import { ensureDir } from './ensure-dir';
 import { removeExistingLink } from './remove-existing-link';
 
-export async function createPluginLink(
+export const createPluginLink = async (
   distPath: string,
   projectName: string,
   symlinkRoot: string,
   workspaceRoot: string,
-): Promise<string> {
+): Promise<string> => {
   const linkRoot = path.resolve(workspaceRoot, symlinkRoot);
   await ensureDir(linkRoot);
   const linkPath = path.join(linkRoot, projectName);
@@ -30,4 +30,4 @@ export async function createPluginLink(
     console.log('Created placeholder folder for', linkPath);
   }
   return linkPath;
-}
+};

@@ -6,7 +6,7 @@ interface ParseFlagResult {
   updated: boolean;
 }
 
-export function parseFlag(argv: string[], index: number, opts: Partial<Opts>): ParseFlagResult {
+export const parseFlag = (argv: string[], index: number, opts: Partial<Opts>): ParseFlagResult => {
   const a = argv[index];
 
   if (a === '--no-apply') {
@@ -34,4 +34,4 @@ export function parseFlag(argv: string[], index: number, opts: Partial<Opts>): P
   }
 
   return { newIndex: index + 1, updated: false };
-}
+};

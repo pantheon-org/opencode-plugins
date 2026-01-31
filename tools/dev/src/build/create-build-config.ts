@@ -2,7 +2,7 @@ import path from 'node:path';
 import { resolvePluginDir } from '../fs/resolve-plugin-dir';
 import type { BuildConfig } from '../types';
 
-export function createBuildConfig(workspaceRoot: string, spec: string): BuildConfig {
+export const createBuildConfig = (workspaceRoot: string, spec: string): BuildConfig => {
   const dir = resolvePluginDir(workspaceRoot, spec);
   if (!dir) {
     console.error('Could not resolve plugin:', spec);
@@ -13,4 +13,4 @@ export function createBuildConfig(workspaceRoot: string, spec: string): BuildCon
     distPath: path.join(dir, 'dist'),
     projectName: path.basename(dir),
   };
-}
+};

@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import { copyDir } from './copy-dir';
 import { removeExistingLink } from './remove-existing-link';
 
-export async function createSymlink(target: string, linkPath: string): Promise<void> {
+export const createSymlink = async (target: string, linkPath: string): Promise<void> => {
   await removeExistingLink(linkPath);
   try {
     await fs.symlink(target, linkPath, 'junction');
@@ -12,4 +12,4 @@ export async function createSymlink(target: string, linkPath: string): Promise<v
     await copyDir(target, linkPath);
     console.log(`Copied ${target} -> ${linkPath}`);
   }
-}
+};

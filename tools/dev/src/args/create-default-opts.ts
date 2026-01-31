@@ -1,6 +1,6 @@
 import type { Opts } from '../types';
 
-export function createDefaultOpts(): Opts {
+export const createDefaultOpts = (): Opts => {
   return {
     plugins: [],
     symlinkRoot: '.opencode/plugin',
@@ -10,4 +10,4 @@ export function createDefaultOpts(): Opts {
     disposeEnabled: true,
     disposeUrl: 'http://localhost:4096/instance/dispose',
   };
-}
+};

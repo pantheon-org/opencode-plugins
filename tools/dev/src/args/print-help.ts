@@ -1,4 +1,4 @@
-export function printHelp(): never {
+export const printHelp = (): never => {
   console.log(
     'usage: opencode-dev [--no-apply] [--symlink-root <dir>] [--revert] [--no-dispose] [--dispose-url <url>] <plugin...>',
   );
@@ -7,4 +7,4 @@ export function printHelp(): never {
   console.log('  --no-dispose disable POST /instance/dispose calls');
   console.log('  --dispose-url set custom dispose URL');
   process.exit(0);
-}
+};

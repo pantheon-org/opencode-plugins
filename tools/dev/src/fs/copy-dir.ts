@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { ensureDir } from './ensure-dir';
 
-export async function copyDir(src: string, dest: string): Promise<void> {
+export const copyDir = async (src: string, dest: string): Promise<void> => {
   await ensureDir(dest);
   const entries = await fs.readdir(src, { withFileTypes: true });
   for (const e of entries) {
@@ -11,4 +11,4 @@ export async function copyDir(src: string, dest: string): Promise<void> {
     if (e.isDirectory()) await copyDir(srcPath, destPath);
     else await fs.copyFile(srcPath, destPath);
   }
-}
+};

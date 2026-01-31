@@ -1,6 +1,6 @@
 import net from 'node:net';
 
-export async function isServerListening(disposeUrl: string, timeoutMs = 500): Promise<boolean> {
+export const isServerListening = async (disposeUrl: string, timeoutMs = 500): Promise<boolean> => {
   try {
     const u = new URL(disposeUrl);
     const port = u.port ? Number(u.port) : u.protocol === 'https:' ? 443 : 80;
@@ -26,4 +26,4 @@ export async function isServerListening(disposeUrl: string, timeoutMs = 500): Pr
   } catch {
     return false;
   }
-}
+};

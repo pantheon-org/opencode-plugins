@@ -2,11 +2,11 @@ import type { CleanupState, ReloadResult } from '../types';
 import { isServerListening } from './is-server-listening';
 import { tryDispose } from './try-dispose';
 
-export async function handleReload(
+export const handleReload = async (
   disposeUrl: string,
   disposeEnabled: boolean,
   state: CleanupState,
-): Promise<ReloadResult> {
+): Promise<ReloadResult> => {
   if (!disposeEnabled || !disposeUrl) {
     return { shouldRestart: true, message: 'Dispose not enabled' };
   }
@@ -22,4 +22,4 @@ export async function handleReload(
   }
 
   return { shouldRestart: true, message: 'Dispose request failed' };
-}
+};

@@ -6,7 +6,7 @@ import { backupFile } from './backup-file';
 import { readJsonc } from './read-jsonc';
 import { writeJsonc } from './write-jsonc';
 
-export async function updateOpencodeJson(workspaceRoot: string, pluginLinkPaths: string[]): Promise<void> {
+export const updateOpencodeJson = async (workspaceRoot: string, pluginLinkPaths: string[]): Promise<void> => {
   const candidates = ['opencode.json', 'opencode.jsonc'];
   let target: string | null = null;
   for (const c of candidates) {
@@ -31,4 +31,4 @@ export async function updateOpencodeJson(workspaceRoot: string, pluginLinkPaths:
   }
   writeJsonc(target, raw, config);
   console.log('Updated', target);
-}
+};

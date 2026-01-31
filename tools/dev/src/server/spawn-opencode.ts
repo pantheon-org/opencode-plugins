@@ -1,6 +1,6 @@
 import { type ChildProcess, spawn } from 'node:child_process';
 
-export function spawnOpencode(workspaceRoot: string): ChildProcess {
+export const spawnOpencode = (workspaceRoot: string): ChildProcess => {
   console.log('Starting opencode CLI in', workspaceRoot);
   const opProcess = spawn('opencode', [], { cwd: workspaceRoot, stdio: 'inherit' });
   opProcess.on('exit', (code) => {
@@ -8,4 +8,4 @@ export function spawnOpencode(workspaceRoot: string): ChildProcess {
     process.exit(code ?? 0);
   });
   return opProcess;
-}
+};

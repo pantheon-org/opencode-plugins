@@ -5,7 +5,7 @@ export interface CleanupState {
   opProcess: ChildProcess | null;
 }
 
-export function setupCleanupHandlers(state: CleanupState): void {
+export const setupCleanupHandlers = (state: CleanupState): void => {
   process.on('SIGINT', async () => {
     console.log('\nInterrupted. Cleaning up...');
     for (const b of state.buildProcesses) {
@@ -20,4 +20,4 @@ export function setupCleanupHandlers(state: CleanupState): void {
     }
     process.exit(0);
   });
-}
+};

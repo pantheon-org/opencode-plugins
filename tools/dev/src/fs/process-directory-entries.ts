@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { MtimeState } from '../types';
 
-export function processDirectoryEntries(dir: string, state: MtimeState): void {
+export const processDirectoryEntries = (dir: string, state: MtimeState): void => {
   try {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
     for (const e of entries) {
@@ -17,4 +17,4 @@ export function processDirectoryEntries(dir: string, state: MtimeState): void {
       }
     }
   } catch {}
-}
+};

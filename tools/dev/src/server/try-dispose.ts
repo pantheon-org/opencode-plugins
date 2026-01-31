@@ -1,6 +1,6 @@
 import { attemptDisposeRequest } from './attempt-dispose-request';
 
-export async function tryDispose(url: string, timeoutMs = 2000, retries = 2): Promise<boolean> {
+export const tryDispose = async (url: string, timeoutMs = 2000, retries = 2): Promise<boolean> => {
   if (!url) return false;
   for (let attempt = 0; attempt <= retries; attempt++) {
     const success = await attemptDisposeRequest(url, timeoutMs);
@@ -8,4 +8,4 @@ export async function tryDispose(url: string, timeoutMs = 2000, retries = 2): Pr
     await new Promise((r) => setTimeout(r, 200 * (attempt + 1)));
   }
   return false;
-}
+};

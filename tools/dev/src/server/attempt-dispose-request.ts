@@ -1,6 +1,6 @@
 import type { FetchError } from '../types';
 
-export async function attemptDisposeRequest(url: string, timeoutMs: number): Promise<boolean> {
+export const attemptDisposeRequest = async (url: string, timeoutMs: number): Promise<boolean> => {
   try {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeoutMs);
@@ -26,4 +26,4 @@ export async function attemptDisposeRequest(url: string, timeoutMs: number): Pro
     }
     return false;
   }
-}
+};

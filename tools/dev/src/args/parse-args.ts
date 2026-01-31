@@ -3,7 +3,7 @@ import { createDefaultOpts } from './create-default-opts';
 import { parseFlag } from './parse-flag';
 import { validatePlugins } from './validate-plugins';
 
-export function parseArgs(): Opts {
+export const parseArgs = (): Opts => {
   const argv = process.argv.slice(2);
   const opts = createDefaultOpts();
 
@@ -29,4 +29,4 @@ export function parseArgs(): Opts {
 
   validatePlugins(opts);
   return opts;
-}
+};

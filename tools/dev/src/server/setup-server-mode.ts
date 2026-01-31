@@ -7,11 +7,11 @@ interface ServerModeResult {
   opProcess: ChildProcess | null;
 }
 
-export async function setupServerMode(
+export const setupServerMode = async (
   disposeUrl: string,
   disposeEnabled: boolean,
   workspaceRoot: string,
-): Promise<ServerModeResult> {
+): Promise<ServerModeResult> => {
   const serverAvailable = await detectServerAvailability(disposeUrl, disposeEnabled);
 
   if (serverAvailable) {
@@ -22,4 +22,4 @@ export async function setupServerMode(
   console.log('No server detected; starting local opencode CLI.');
   const opProcess = spawnOpencode(workspaceRoot);
   return { isServerMode: false, opProcess };
-}
+};
