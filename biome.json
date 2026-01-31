@@ -194,11 +194,6 @@
       }
     },
     {
-      "includes": ["packages/opencode-font/**/*"],
-      "linter": { "enabled": false },
-      "formatter": { "enabled": false }
-    },
-    {
       "includes": ["**/*.js", "**/*.jsx"],
       "javascript": {
         "globals": [
