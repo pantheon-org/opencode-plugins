@@ -1,146 +1,69 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { applyEdits, modify as modifyJsonC, parse as parseJsonC } from 'jsonc-parser';
+import type { Context, Logger, Session } from '@opencodeai/types';
 
-/**
- *
- */
-export function readJsonc(file: string): { json: any; raw: string } {
-  // biome-ignore lint: Test helper uses any for flexible type matching
-  const raw = fs.readFileSync(file, 'utf8');
-  // biome-ignore lint: Test helper uses any for flexible type matching
-  const errors: any[] = [];
-  const json = parseJsonC(raw, errors, { allowTrailingComma: true });
-  if (errors.length) throw new Error('parse error');
-  return { json, raw };
+export interface DevServerContext {
+  logger: Logger;
+  sessions: Map<string, Session>;
 }
 
-/**
- *
- */
-export function writeJsonc(file: string, originalRaw: string | null, obj: any) {
-  const base = originalRaw || '';
-  const edits = modifyJsonC(base, ['plugin'], obj.plugin || [], {
-    formattingOptions: { insertSpaces: true, tabSize: 2 },
-  } as any);
-  const newText = applyEdits(base, edits);
-  fs.writeFileSync(file, newText, 'utf8');
+export function createDevServerContext(logger: Logger): DevServerContext {
+  return {
+    logger,
+    sessions: new Map(),
+  };
 }
 
-/**
- *
- */
-export async function createSymlink(target: string, linkPath: string, forceFail = false) {
-  try {
-    // Simulate symlink failure when forceFail is true
-    if (forceFail) throw new Error('simulated symlink failure');
-    try {
-      await fs.promises.lstat(linkPath);
-      await fs.promises.rm(linkPath, { recursive: true });
-    } catch {}
-    await fs.promises.symlink(target, linkPath, 'junction');
-  } catch (_err) {
-    // fallback to copy
-    await copyDir(target, linkPath);
-  }
-}
-
-/**
- *
- */
-export async function copyDir(src: string, dest: string) {
-  await fs.promises.mkdir(dest, { recursive: true });
-  const entries = await fs.promises.readdir(src, { withFileTypes: true });
-  for (const e of entries) {
-    const srcPath = path.join(src, e.name);
-    const destPath = path.join(dest, e.name);
-    if (e.isDirectory()) await copyDir(srcPath, destPath);
-    else await fs.promises.copyFile(srcPath, destPath);
-  }
-}
-
-/**
- *
- */
 // biome-ignore lint: Dev server waiting requires complex polling logic
-export function getLatestMtime(dir: string): number {
-  let latest = 0;
-  try {
-    const stack = [dir];
-    while (stack.length) {
-      const cur = stack.pop() as string;
-      const entries = fs.readdirSync(cur, { withFileTypes: true });
-      for (const e of entries) {
-        const p = path.join(cur, e.name);
-        if (e.isDirectory()) stack.push(p);
-        else {
-          try {
-            const s = fs.statSync(p);
-            const m = s.mtimeMs;
-            if (m > latest) latest = m;
-          } catch {}
-        }
-      }
-    }
-  } catch {}
-  return latest;
-}
-
-// network helpers for tests (mirror production logic)
-import net from 'node:net';
-
-/**
- *
- */
-export async function isServerListening(disposeUrl: string, timeoutMs = 500): Promise<boolean> {
-  try {
-    const u = new URL(disposeUrl);
-    const port = u.port ? Number(u.port) : u.protocol === 'https:' ? 443 : 80;
-    const host = u.hostname;
-    return await new Promise((resolve) => {
-      const socket = net.connect({ host, port }, () => {
-        socket.destroy();
-        resolve(true);
-      });
-      socket.on('error', () => {
-        try {
-          socket.destroy();
-        } catch {}
-        resolve(false);
-      });
-      socket.setTimeout(timeoutMs, () => {
-        try {
-          socket.destroy();
-        } catch {}
-        resolve(false);
-      });
-    });
-  } catch (_err) {
-    return false;
-  }
-}
-
-/**
- *
- */
-export async function tryDispose(url: string, timeoutMs = 2000, retries = 2): Promise<boolean> {
-  if (!url) return false;
-  for (let attempt = 0; attempt <= retries; attempt++) {
+export async function waitForDevServer(port: number, timeout = 30000): Promise<void> {
+  const startTime = Date.now();
+  // biome-ignore lint: Dev server waiting requires complex polling logic
+  while (Date.now() - startTime < timeout) {
     try {
-      const controller = new AbortController();
-      const id = setTimeout(() => controller.abort(), timeoutMs);
-      const res = await fetch(url, {
-        method: 'POST',
-        signal: controller.signal,
-        headers: { 'content-type': 'application/json' },
-        body: '{}',
-      });
-      clearTimeout(id);
-      if (res.ok) return true;
-    } catch (_err) {
-      // swallow
+      const response = await fetch(`http://localhost:${port}/health`);
+      if (response.ok) {
+        return;
+      }
+    } catch {
+      // Server not ready yet, wait and retry
     }
-    await new Promise((r) => setTimeout(r, 200 * (attempt + 1)));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
-  return false;
+  throw new Error(`Dev server failed to start within ${timeout}ms`);
+}
+
+export async function createTestSession(
+  ctx: DevServerContext,
+  // biome-ignore lint: Test helper uses any for flexible type matching
+  overrides?: any,
+): Promise<Session> {
+  // biome-ignore lint: Test helper uses any for flexible type matching
+  const session: any = {
+    id: `test-${Date.now()}`,
+    ...overrides,
+  };
+  ctx.sessions.set(session.id, session);
+  return session as Session;
+}
+
+export async function cleanupTestSession(ctx: DevServerContext, sessionId: string): Promise<void> {
+  ctx.sessions.delete(sessionId);
+}
+
+export function getTestLogger(): Logger {
+  return {
+    debug: () => {},
+    info: () => {},
+    warn: () => {},
+    error: () => {},
+  } as Logger;
+}
+
+export async function waitForStableState(ctx: Context, predicate: () => boolean, timeout = 5000): Promise<void> {
+  const startTime = Date.now();
+  while (Date.now() - startTime < timeout) {
+    if (predicate()) {
+      return;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  throw new Error('Timeout waiting for stable state');
 }
