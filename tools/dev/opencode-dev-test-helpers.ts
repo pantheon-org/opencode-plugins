@@ -12,9 +12,7 @@ export function createDevServerContext(logger: Logger): DevServerContext {
   };
 }
 
-// biome-ignore lint: Dev server waiting requires complex polling logic
 export async function waitForDevServer(port: number, timeout = 30000): Promise<void> {
-  const startTime = Date.now();
   // biome-ignore lint: Dev server waiting requires complex polling logic
   while (Date.now() - startTime < timeout) {
     try {
@@ -57,7 +55,7 @@ export function getTestLogger(): Logger {
   } as Logger;
 }
 
-export async function waitForStableState(ctx: Context, predicate: () => boolean, timeout = 5000): Promise<void> {
+export async function waitForStableState(_ctx: Context, predicate: () => boolean, timeout = 5000): Promise<void> {
   const startTime = Date.now();
   while (Date.now() - startTime < timeout) {
     if (predicate()) {

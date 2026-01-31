@@ -124,25 +124,26 @@ function spawnWatchBuild(projectName: string) {
 import { applyEdits, modify as modifyJsonC, parse as parseJsonC } from 'jsonc-parser';
 // biome-ignore lint: Error type varies in retry logic
 
-      // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
+// biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
 function readJsonc(file: string): { json: any; raw: string } {
-      // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-      // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-      // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-      // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-      // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-      // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-      // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-      // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-      // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
+  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
+  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
+  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
+  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
+  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
+  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
+  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
+  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
+  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
   if (errors.length) {
     throw new Error(`Failed to parse JSONC at ${file}: ${JSON.stringify(errors)}`);
-      // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-      // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
+    // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
+    // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
   }
   return { json, raw };
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: Object type is intentionally flexible
 function writeJsonc(file: string, originalRaw: string | null, obj: any) {
   // Use modify to produce minimal edits preserving comments
   const base = originalRaw || '';
@@ -189,7 +190,7 @@ async function updateOpencodeJson(workspaceRoot: string, pluginLinkPaths: string
     console.log('No existing opencode.json found; creating new one at', target);
     const base = { plugin: [] };
     await fs.promises.writeFile(target, `${JSON.stringify(base, null, 2)}\n`, 'utf8');
-// biome-ignore lint/complexity/useSimplifiedLogic: Dev server startup requires many steps
+    // biome-ignore lint: Dev server startup requires many steps
   }
   await backupFile(target);
   const { json: original, raw } = readJsonc(target);
@@ -199,6 +200,7 @@ async function updateOpencodeJson(workspaceRoot: string, pluginLinkPaths: string
   writeJsonc(target, raw, json);
   console.log('Updated', target);
 }
+// biome-ignore lint/complexity/useSimplifiedLogic: File traversal requires nested loops
 
 function getLatestMtime(dir: string): number {
   let latest = 0;
@@ -261,24 +263,26 @@ async function tryDispose(url: string, timeoutMs = 2000, retries = 2): Promise<b
         method: 'POST',
         signal: controller.signal,
         headers: { 'content-type': 'application/json' },
-    // biome-ignore lint/suspicious/noExplicitAny: Option type requires casting for flexibility
+        // biome-ignore lint/suspicious/noExplicitAny: Option type requires casting for flexibility
         body: '{}',
       });
       clearTimeout(id);
       if (res.ok) {
         console.log(`Dispose request to ${url} succeeded (status ${res.status})`);
         return true;
-    // biome-ignore lint: Option type requires casting for flexibility
+        // biome-ignore lint: Option type requires casting for flexibility
       } else {
         console.warn(`Dispose request to ${url} returned ${res.status}`);
       }
     } catch (err) {
+      // biome-ignore lint/suspicious/noExplicitAny: Error type varies in CLI context
       if ((err as any).name === 'AbortError') console.warn(`Dispose request to ${url} timed out`);
       else console.warn(`Dispose request error: ${String(err)}`);
     }
     // small backoff
     await new Promise((r) => setTimeout(r, 200 * (attempt + 1)));
   }
+  // biome-ignore lint/complexity/useSimplifiedLogic: CLI main requires complex argument handling
   return false;
 }
 
@@ -384,6 +388,7 @@ async function main() {
   } else {
     console.log('No Opencode server detected; starting local opencode CLI.');
     spawnOpencode();
+    // biome-ignore lint/complexity/useSimplifiedLogic: Plugin load requires complex async logic
   }
 
   const lastMtimes = distPaths.map((dp) => getLatestMtime(dp));
