@@ -8,6 +8,7 @@ interface DevProxyOptions {
   apply?: boolean;
   __runExecutor?: typeof nxRunExecutor;
   __spawnSync?: typeof spawnSync;
+  __noExit?: boolean;
 }
 
 interface ExecutorResult {
@@ -24,10 +25,10 @@ interface ResolvedProject {
  * Nx executor for running dev proxy with build watchers
  * @param options - Executor options including plugin names and symlink configuration
  * @param context - Nx executor context
- * @returns Executor result indicating success or failure
+ * @yields Executor results during execution
  */
 // eslint-disable-next-line max-statements, complexity
-const runExecutor = async (options: DevProxyOptions, context: ExecutorContext): Promise<ExecutorResult> => {
+async function* runExecutor(options: DevProxyOptions, context: ExecutorContext): AsyncGenerator<ExecutorResult> {
   const workspaceRoot = context.root;
 
   const requestedPlugins =
@@ -35,7 +36,8 @@ const runExecutor = async (options: DevProxyOptions, context: ExecutorContext): 
 
   if (requestedPlugins.length === 0) {
     console.error('No project specified for dev-proxy (provide --plugins or run from a project context)');
-    return { success: false };
+    yield { success: false };
+    return;
   }
 
   // Resolve projects - simplified to just use the names
@@ -47,6 +49,8 @@ const runExecutor = async (options: DevProxyOptions, context: ExecutorContext): 
   // Choose runExecutor implementation: allow injection for tests
   const runExecutorImpl = options.__runExecutor ?? nxRunExecutor;
   const spawnSyncImpl = options.__spawnSync ?? spawnSync;
+
+  console.log('dev-proxy: workspaceRoot=', workspaceRoot);
 
   for (const r of resolved) {
     const projName = r.name;
@@ -60,23 +64,27 @@ const runExecutor = async (options: DevProxyOptions, context: ExecutorContext): 
           context,
         );
 
-        if (iterator && Symbol.asyncIterator in iterator) {
-          (async () => {
-            try {
-              for await (const out of iterator) {
-                if (!out || !out.success) console.error(`Build for ${projName} reported failure`);
+        if (iterator) {
+          const it = iterator as AsyncIterable<{ success: boolean }> & { return?: () => Promise<void> };
+          if (Symbol.asyncIterator in it) {
+            (async () => {
+              try {
+                for await (const out of it) {
+                  if (!out || !out.success) console.error(`Build for ${projName} reported failure`);
+                }
+              } catch (err) {
+                console.error(`runExecutor iterator error for ${projName}:`, err);
               }
-            } catch (err) {
-              console.error(`runExecutor iterator error for ${projName}:`, err);
-            }
-          })();
+            })();
+          }
           stopFns.push(async () => {
             try {
-              if (typeof iterator.return === 'function') await iterator.return();
+              if (typeof it.return === 'function') await it.return();
             } catch {
               // Failed to stop iterator
             }
           });
+          console.log(`Started build target for ${projName} via @nx/devkit.runExecutor`);
           started = true;
         }
       } catch (err) {
@@ -86,6 +94,7 @@ const runExecutor = async (options: DevProxyOptions, context: ExecutorContext): 
 
     if (!started) {
       try {
+        console.log(`Falling back to CLI watcher for ${projName}`);
         const child = spawn('bunx', ['nx', 'run', `${projName}:build`, '--watch'], {
           stdio: 'inherit',
           cwd: workspaceRoot,
@@ -110,11 +119,14 @@ const runExecutor = async (options: DevProxyOptions, context: ExecutorContext): 
   if (options.apply === false) args.push('--no-apply');
   args.push(...requestedPlugins);
 
+  console.log('Running dev proxy runtime:', ['bunx', 'tsx', script, ...args].join(' '));
+
   // Ensure cleanup on SIGINT
   let exiting = false;
   const sigintHandler = async () => {
     if (exiting) return;
     exiting = true;
+    console.log('\nInterrupted. Stopping build watchers and exiting...');
     for (const fn of stopFns) {
       try {
         await fn();
@@ -122,7 +134,9 @@ const runExecutor = async (options: DevProxyOptions, context: ExecutorContext): 
         // Failed to stop watcher
       }
     }
-    process.exit(0);
+    if (!options.__noExit) {
+      process.exit(0);
+    }
   };
   process.on('SIGINT', sigintHandler);
 
@@ -140,9 +154,10 @@ const runExecutor = async (options: DevProxyOptions, context: ExecutorContext): 
 
   if (res?.error) {
     console.error('Failed to run dev proxy runtime', res.error);
-    return { success: false };
+    yield { success: false };
+    return;
   }
-  return { success: res?.status === 0 };
-};
+  yield { success: res?.status === 0 };
+}
 
 export default runExecutor;

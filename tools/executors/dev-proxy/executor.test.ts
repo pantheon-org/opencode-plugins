@@ -1,3 +1,4 @@
+import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
 import type { spawnSync } from 'node:child_process';
 import type { ExecutorContext } from '@nx/devkit';
 
@@ -37,7 +38,7 @@ const _originalSpawn = childProcess.spawn;
 function _fakeSpawn(_cmd: string, _args: string[], _opts: any) {
   return {
     kill: () => {},
-    on: (_ev: string, _cb: Function) => {},
+    on: (_ev: string, _cb: (...args: unknown[]) => void) => {},
   } as any;
 }
 
@@ -51,7 +52,6 @@ beforeEach(() => {
   // stub process.exit so tests can simulate SIGINT without killing the test runner
   _originalExit = process.exit;
   _exitCalled = false;
-  // @ts-expect-error override for test
   process.exit = ((_code?: number) => {
     _exitCalled = true;
     // do not actually exit during tests
@@ -83,17 +83,21 @@ describe('dev-proxy executor with mocked runExecutor', () => {
     // Snapshot existing SIGINT listeners
     const beforeListeners = process.listeners('SIGINT').slice();
 
-    const resPromise = runExecutor(
+    const gen = runExecutor(
       {
         plugins: ['opencode-warcraft-notifications-plugin'],
         __runExecutor: mockRunExecutor,
         __spawnSync: mockSpawnSync,
+        __noExit: true,
       },
       context,
     );
 
+    // Start the generator to execute the executor body
+    const resPromise = gen.next();
+
     // Wait briefly to let executor start and attach iterator
-    await new Promise((r) => setTimeout(r, 50));
+    await new Promise((r) => setTimeout(r, 100));
 
     // Simulate SIGINT by sending the signal to the process
     process.emit('SIGINT' as any);
@@ -104,9 +108,8 @@ describe('dev-proxy executor with mocked runExecutor', () => {
     expect(iterator._returned()).toBe(true);
 
     const res = await resPromise;
-    expect(res?.success).toBe(true);
+    expect(res?.value?.success).toBe(true);
 
-    // Restore SIGINT listeners to avoid side effects on other tests
     const afterListeners = process.listeners('SIGINT');
     for (const l of afterListeners) {
       if (!beforeListeners.includes(l)) process.removeListener('SIGINT', l);
@@ -124,13 +127,15 @@ describe('dev-proxy executor with mocked runExecutor', () => {
 
     const childProcess = require('node:child_process');
     const originalSpawn = childProcess.spawn;
-    childProcess.spawn = (_cmd: string, _args: string[], _opts: any) => {
+    childProcess.spawn = (cmd: string, args: string[], _opts: any) => {
       _childSpawned = true;
+      console.log('[TEST] child_process.spawn called with:', cmd, args);
       // return a fake child with kill()
       return {
         kill: () => {
           childKilled = true;
         },
+        // biome-ignore lint/complexity/noBannedTypes: Mock EventEmitter interface
         on: (_ev: string, _cb: Function) => {},
       } as any;
     };
@@ -156,6 +161,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
         plugins: ['opencode-warcraft-notifications-plugin'],
         __runExecutor: mockRunExecutor,
         __spawnSync: mockSpawnSync,
+        __noExit: true,
       },
       context,
     );
@@ -167,8 +173,8 @@ describe('dev-proxy executor with mocked runExecutor', () => {
 
     expect(childKilled).toBe(true);
 
-    const res = await resPromise;
-    expect(res?.success).toBe(true);
+    const res = await resPromise.next();
+    expect(res?.value?.success).toBe(true);
 
     // restore spawn and listeners
     childProcess.spawn = originalSpawn;
@@ -193,12 +199,15 @@ describe('dev-proxy executor with mocked runExecutor', () => {
 
     const beforeListeners = process.listeners('SIGINT').slice();
 
-    const resPromise = runExecutor(
-      { plugins: ['pA', 'pB'], __runExecutor: mockRunExecutor, __spawnSync: mockSpawnSync },
+    const gen = runExecutor(
+      { plugins: ['pA', 'pB'], __runExecutor: mockRunExecutor, __spawnSync: mockSpawnSync, __noExit: true },
       context,
     );
 
-    await new Promise((r) => setTimeout(r, 50));
+    // Start the generator to execute the executor body
+    const resPromise = gen.next();
+
+    await new Promise((r) => setTimeout(r, 100));
 
     process.emit('SIGINT' as any);
     await new Promise((r) => setTimeout(r, 50));
@@ -207,7 +216,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
     expect(iterB._returned()).toBe(true);
 
     const res = await resPromise;
-    expect(res?.success).toBe(true);
+    expect(res?.value?.success).toBe(true);
 
     const afterListeners = process.listeners('SIGINT');
     for (const l of afterListeners) {
