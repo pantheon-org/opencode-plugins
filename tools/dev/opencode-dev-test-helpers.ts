@@ -1,4 +1,4 @@
-import type { Context, Logger, Session } from '@opencodeai/types';
+import type { Context, Logger, Session } from '@opencode-ai/types';
 
 export interface DevServerContext {
   logger: Logger;
