@@ -13,7 +13,7 @@ export function createDevServerContext(logger: Logger): DevServerContext {
 }
 
 export async function waitForDevServer(port: number, timeout = 30000): Promise<void> {
-  // biome-ignore lint: Dev server waiting requires complex polling logic
+  const startTime = Date.now();
   while (Date.now() - startTime < timeout) {
     try {
       const response = await fetch(`http://localhost:${port}/health`);
@@ -28,18 +28,18 @@ export async function waitForDevServer(port: number, timeout = 30000): Promise<v
   throw new Error(`Dev server failed to start within ${timeout}ms`);
 }
 
-export async function createTestSession(
-  ctx: DevServerContext,
-  // biome-ignore lint: Test helper uses any for flexible type matching
-  overrides?: any,
-): Promise<Session> {
-  // biome-ignore lint: Test helper uses any for flexible type matching
-  const session: any = {
-    id: `test-${Date.now()}`,
+export interface TestSessionOverrides {
+  id?: string;
+  [key: string]: unknown;
+}
+
+export async function createTestSession(ctx: DevServerContext, overrides?: TestSessionOverrides): Promise<Session> {
+  const session = {
+    id: overrides?.id ?? `test-${Date.now()}`,
     ...overrides,
-  };
+  } as unknown as Session;
   ctx.sessions.set(session.id, session);
-  return session as Session;
+  return session;
 }
 
 export async function cleanupTestSession(ctx: DevServerContext, sessionId: string): Promise<void> {
@@ -55,7 +55,7 @@ export function getTestLogger(): Logger {
   } as Logger;
 }
 
-export async function waitForStableState(_ctx: Context, predicate: () => boolean, timeout = 5000): Promise<void> {
+export async function waitForStableState(_context: Context, predicate: () => boolean, timeout = 5000): Promise<void> {
   const startTime = Date.now();
   while (Date.now() - startTime < timeout) {
     if (predicate()) {

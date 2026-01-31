@@ -3,6 +3,7 @@ import { type ChildProcess, spawn } from 'node:child_process';
 import fs from 'node:fs';
 import net from 'node:net';
 import path from 'node:path';
+import { applyEdits, modify as modifyJsonC, parse as parseJsonC } from 'jsonc-parser';
 
 type Opts = {
   plugins: string[];
@@ -14,7 +15,6 @@ type Opts = {
   disposeUrl: string;
 };
 
-// biome-ignore lint: Dev server setup requires complex async orchestration
 function parseArgs(): Opts {
   const argv = process.argv.slice(2);
   const plugins: string[] = [];
@@ -23,10 +23,12 @@ function parseArgs(): Opts {
   let revert = false;
   let disposeEnabled = true;
   let disposeUrl = 'http://localhost:4096/instance/dispose';
+
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
-    if (a === '--no-apply') apply = false;
-    else if (a === '--symlink-root' && argv[i + 1]) {
+    if (a === '--no-apply') {
+      apply = false;
+    } else if (a === '--symlink-root' && argv[i + 1]) {
       symlinkRoot = argv[++i];
     } else if (a === '--revert') {
       revert = true;
@@ -35,19 +37,13 @@ function parseArgs(): Opts {
     } else if (a === '--dispose-url' && argv[i + 1]) {
       disposeUrl = argv[++i];
     } else if (a === '--help' || a === '-h') {
-      console.log(
-        'usage: opencode-dev [--no-apply] [--symlink-root <dir>] [--revert] [--no-dispose] [--dispose-url <url>] <plugin...>',
-      );
-      console.log('  --no-apply   do not modify opencode.json (print entries instead)');
-      console.log('  --revert     restore opencode.json from the last opencode-dev backup and exit');
-      console.log('  --no-dispose disable POST /instance/dispose calls and always restart the local opencode CLI');
-      console.log('  --dispose-url set custom dispose URL (default http://localhost:4096/instance/dispose)');
-      process.exit(0);
+      printHelp();
     } else {
       plugins.push(a);
     }
   }
-  if (revert)
+
+  if (revert) {
     return {
       plugins: [],
       symlinkRoot,
@@ -57,11 +53,33 @@ function parseArgs(): Opts {
       disposeEnabled,
       disposeUrl,
     };
+  }
+
   if (plugins.length === 0) {
     console.error('Error: at least one plugin (package folder or name) must be provided');
     process.exit(1);
   }
-  return { plugins, symlinkRoot, apply, revert, workspaceRoot: process.cwd(), disposeEnabled, disposeUrl };
+
+  return {
+    plugins,
+    symlinkRoot,
+    apply,
+    revert,
+    workspaceRoot: process.cwd(),
+    disposeEnabled,
+    disposeUrl,
+  };
+}
+
+function printHelp(): never {
+  console.log(
+    'usage: opencode-dev [--no-apply] [--symlink-root <dir>] [--revert] [--no-dispose] [--dispose-url <url>] <plugin...>',
+  );
+  console.log('  --no-apply   do not modify opencode.json (print entries instead)');
+  console.log('  --revert     restore opencode.json from the last opencode-dev backup and exit');
+  console.log('  --no-dispose disable POST /instance/dispose calls and always restart the local opencode CLI');
+  console.log('  --dispose-url set custom dispose URL (default http://localhost:4096/instance/dispose)');
+  process.exit(0);
 }
 
 function isDir(p: string) {
@@ -121,33 +139,24 @@ function spawnWatchBuild(projectName: string) {
   return p;
 }
 
-import { applyEdits, modify as modifyJsonC, parse as parseJsonC } from 'jsonc-parser';
-// biome-ignore lint: Error type varies in retry logic
+interface JsoncResult {
+  json: unknown;
+  raw: string;
+}
 
-// biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-function readJsonc(file: string): { json: any; raw: string } {
-  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-  // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
+function readJsonc(file: string): JsoncResult {
+  const raw = fs.readFileSync(file, 'utf8');
+  const errors: { message: string }[] = [];
+  const json = parseJsonC(raw, errors);
   if (errors.length) {
     throw new Error(`Failed to parse JSONC at ${file}: ${JSON.stringify(errors)}`);
-    // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
-    // biome-ignore lint/suspicious/noExplicitAny: Error type varies by caller
   }
   return { json, raw };
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: Object type is intentionally flexible
-function writeJsonc(file: string, originalRaw: string | null, obj: any) {
-  // Use modify to produce minimal edits preserving comments
-  const base = originalRaw || '';
-  const edits = modifyJsonC(base, ['plugin'], obj.plugin || [], {
+function writeJsonc(file: string, originalRaw: string | null, obj: { plugin?: unknown[] }) {
+  const base = originalRaw ?? '';
+  const edits = modifyJsonC(base, ['plugin'], obj.plugin ?? [], {
     formattingOptions: { insertSpaces: true, tabSize: 2 },
   });
   const newText = applyEdits(base, edits);
@@ -158,7 +167,7 @@ async function backupFile(file: string) {
   try {
     await fs.promises.copyFile(file, `${file}.opencode-dev.bak`);
     console.log(`Backed up ${file} -> ${file}.opencode-dev.bak`);
-  } catch (_err) {}
+  } catch {}
 }
 
 async function revertOpencodeJson(workspaceRoot: string) {
@@ -173,6 +182,10 @@ async function revertOpencodeJson(workspaceRoot: string) {
     }
   }
   console.error('No opencode-dev backup found to revert');
+}
+
+interface OpencodeConfig {
+  plugin?: unknown[];
 }
 
 async function updateOpencodeJson(workspaceRoot: string, pluginLinkPaths: string[]) {
@@ -190,29 +203,31 @@ async function updateOpencodeJson(workspaceRoot: string, pluginLinkPaths: string
     console.log('No existing opencode.json found; creating new one at', target);
     const base = { plugin: [] };
     await fs.promises.writeFile(target, `${JSON.stringify(base, null, 2)}\n`, 'utf8');
-    // biome-ignore lint: Dev server startup requires many steps
   }
   await backupFile(target);
-  const { json: original, raw } = readJsonc(target);
-  if (!Array.isArray(json.plugin)) json.plugin = [];
-  for (const p of pluginLinkPaths) if (!json.plugin.includes(p)) json.plugin.push(p);
-  // biome-ignore lint: Dev server startup requires many steps
-  writeJsonc(target, raw, json);
+  const { json, raw } = readJsonc(target);
+  const config = json as OpencodeConfig;
+  if (!Array.isArray(config.plugin)) config.plugin = [];
+  for (const p of pluginLinkPaths) {
+    if (!config.plugin.includes(p)) config.plugin.push(p);
+  }
+  writeJsonc(target, raw, config);
   console.log('Updated', target);
 }
-// biome-ignore lint/complexity/useSimplifiedLogic: File traversal requires nested loops
 
 function getLatestMtime(dir: string): number {
   let latest = 0;
   try {
     const stack = [dir];
     while (stack.length) {
-      const cur = stack.pop() as string;
+      const cur = stack.pop();
+      if (!cur) continue;
       const entries = fs.readdirSync(cur, { withFileTypes: true });
       for (const e of entries) {
         const p = path.join(cur, e.name);
-        if (e.isDirectory()) stack.push(p);
-        else {
+        if (e.isDirectory()) {
+          stack.push(p);
+        } else {
           try {
             const s = fs.statSync(p);
             const m = s.mtimeMs;
@@ -248,9 +263,14 @@ async function isServerListening(disposeUrl: string, timeoutMs = 500): Promise<b
         resolve(false);
       });
     });
-  } catch (_err) {
+  } catch {
     return false;
   }
+}
+
+interface FetchError {
+  name: string;
+  message: string;
 }
 
 async function tryDispose(url: string, timeoutMs = 2000, retries = 2): Promise<boolean> {
@@ -263,26 +283,26 @@ async function tryDispose(url: string, timeoutMs = 2000, retries = 2): Promise<b
         method: 'POST',
         signal: controller.signal,
         headers: { 'content-type': 'application/json' },
-        // biome-ignore lint/suspicious/noExplicitAny: Option type requires casting for flexibility
         body: '{}',
       });
       clearTimeout(id);
       if (res.ok) {
         console.log(`Dispose request to ${url} succeeded (status ${res.status})`);
         return true;
-        // biome-ignore lint: Option type requires casting for flexibility
       } else {
         console.warn(`Dispose request to ${url} returned ${res.status}`);
       }
     } catch (err) {
-      // biome-ignore lint/suspicious/noExplicitAny: Error type varies in CLI context
-      if ((err as any).name === 'AbortError') console.warn(`Dispose request to ${url} timed out`);
-      else console.warn(`Dispose request error: ${String(err)}`);
+      const fetchErr = err as FetchError;
+      if (fetchErr.name === 'AbortError') {
+        console.warn(`Dispose request to ${url} timed out`);
+      } else {
+        console.warn(`Dispose request error: ${String(err)}`);
+      }
     }
     // small backoff
     await new Promise((r) => setTimeout(r, 200 * (attempt + 1)));
   }
-  // biome-ignore lint/complexity/useSimplifiedLogic: CLI main requires complex argument handling
   return false;
 }
 
@@ -301,14 +321,16 @@ async function main() {
 
   process.on('SIGINT', async () => {
     console.log('\nInterrupted. Cleaning up...');
-    for (const b of buildProcesses)
+    for (const b of buildProcesses) {
       try {
         b.kill();
       } catch {}
-    if (opProcess)
+    }
+    if (opProcess) {
       try {
         opProcess.kill();
       } catch {}
+    }
     process.exit(0);
   });
 
@@ -333,13 +355,15 @@ async function main() {
       if (Date.now() - start > maxWait) break;
       await new Promise((r) => setTimeout(r, 300));
     }
-    if (!fs.existsSync(distPath))
+    if (!fs.existsSync(distPath)) {
       console.warn('dist not found for', projectName, '- continuing and will create link if/when it appears');
+    }
     const linkRoot = path.resolve(opts.workspaceRoot, opts.symlinkRoot);
     await ensureDir(linkRoot);
     const linkPath = path.join(linkRoot, projectName);
-    if (fs.existsSync(distPath)) await createSymlink(distPath, linkPath);
-    else {
+    if (fs.existsSync(distPath)) {
+      await createSymlink(distPath, linkPath);
+    } else {
       await ensureDir(linkPath);
       console.log('Created placeholder folder for', linkPath);
     }
@@ -351,8 +375,9 @@ async function main() {
     const indexJs = path.join(lp, 'index.js');
     return fs.existsSync(indexJs) ? `file://${indexJs}` : `file://${lp}`;
   });
-  if (opts.apply) await updateOpencodeJson(opts.workspaceRoot, fileUris);
-  else {
+  if (opts.apply) {
+    await updateOpencodeJson(opts.workspaceRoot, fileUris);
+  } else {
     console.log('Apply disabled; add the following entries to your opencode.json:');
     for (const f of fileUris) console.log('  ', f);
   }
@@ -368,7 +393,7 @@ async function main() {
     opProcess = spawn('opencode', [], { cwd: opts.workspaceRoot, stdio: 'inherit' });
     opProcess.on('exit', (code) => {
       console.log('opencode exited', code);
-      if (!restarting) process.exit(code || 0);
+      if (!restarting) process.exit(code ?? 0);
     });
   }
 
@@ -378,7 +403,7 @@ async function main() {
   if (opts.disposeEnabled && opts.disposeUrl) {
     try {
       serverAvailable = await isServerListening(opts.disposeUrl);
-    } catch (_err) {
+    } catch {
       serverAvailable = false;
     }
   }
@@ -388,7 +413,6 @@ async function main() {
   } else {
     console.log('No Opencode server detected; starting local opencode CLI.');
     spawnOpencode();
-    // biome-ignore lint/complexity/useSimplifiedLogic: Plugin load requires complex async logic
   }
 
   const lastMtimes = distPaths.map((dp) => getLatestMtime(dp));
@@ -397,7 +421,7 @@ async function main() {
       try {
         for (let i = 0; i < distPaths.length; i++) {
           const dp = distPaths[i];
-          const last = lastMtimes[i] || 0;
+          const last = lastMtimes[i] ?? 0;
           const now = getLatestMtime(dp);
           if (now > last) {
             console.log(`Change detected in ${dp} (mtime ${now}); handling reload...`);
@@ -426,10 +450,11 @@ async function main() {
                 restarting = false;
               } else {
                 console.log('Server reload not available or failed; restarting local opencode process.');
-                if (opProcess)
+                if (opProcess) {
                   try {
                     opProcess.kill();
                   } catch {}
+                }
                 setTimeout(() => {
                   restarting = false;
                   spawnOpencode();
