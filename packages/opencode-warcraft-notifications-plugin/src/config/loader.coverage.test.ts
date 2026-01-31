@@ -75,7 +75,7 @@ describe('Plugin configuration coverage tests', () => {
       }
     } finally {
       if (origDebug === undefined) {
-        process.env.DEBUG_OPENCODE = undefined;
+        delete process.env.DEBUG_OPENCODE;
       } else {
         process.env.DEBUG_OPENCODE = origDebug;
       }

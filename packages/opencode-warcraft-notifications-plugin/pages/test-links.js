@@ -143,9 +143,15 @@ async function processDirectory(dirPath) {
  * Main test process
  */
 async function main() {
+  console.log('🔍 Testing internal links in HTML files...\n');
+  console.log(`Base path: ${BASE_PATH}`);
+  console.log(`Dist directory: ${DIST_DIR}\n`);
+
   try {
     // Collect all links
     const allLinks = await processDirectory(DIST_DIR);
+
+    console.log(`Found ${allLinks.size} unique internal link(s)\n`);
 
     // Check each link
     const brokenLinks = [];
@@ -195,6 +201,8 @@ async function main() {
       console.error('⚠️  Links are missing base path. Run: bun run fix-links\n');
       process.exit(1);
     }
+
+    console.log('✅ All internal links are valid!');
     process.exit(0);
   } catch (error) {
     console.error('\n❌ Link testing failed:', error.message);
