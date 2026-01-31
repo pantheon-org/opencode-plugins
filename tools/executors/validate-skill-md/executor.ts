@@ -88,7 +88,17 @@ export default async (
 
     const shouldFail = withErrors > 0 || (options.strict && withWarnings > 0);
 
-    return { success: !shouldFail };
+    if (shouldFail) {
+      const errors = withErrors > 0 ? `${withErrors} file(s) with errors` : '';
+      const warnings = withWarnings > 0 && options.strict ? `${withWarnings} file(s) with warnings (strict mode)` : '';
+      const reason = [errors, warnings].filter(Boolean).join(', ');
+      return {
+        success: false,
+        error: `SKILL.md validation failed: ${reason}. Run with --verbose for details.`,
+      };
+    }
+
+    return { success: true };
   } catch (error) {
     return {
       success: false,

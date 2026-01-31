@@ -15,74 +15,95 @@ type Opts = {
   disposeUrl: string;
 };
 
-function parseArgs(): Opts {
-  const argv = process.argv.slice(2);
-  const plugins: string[] = [];
-  let symlinkRoot = '.opencode/plugin';
-  let apply = true;
-  let revert = false;
-  let disposeEnabled = true;
-  let disposeUrl = 'http://localhost:4096/instance/dispose';
-
-  for (let i = 0; i < argv.length; i++) {
-    const a = argv[i];
-    if (a === '--no-apply') {
-      apply = false;
-    } else if (a === '--symlink-root' && argv[i + 1]) {
-      symlinkRoot = argv[++i];
-    } else if (a === '--revert') {
-      revert = true;
-    } else if (a === '--no-dispose') {
-      disposeEnabled = false;
-    } else if (a === '--dispose-url' && argv[i + 1]) {
-      disposeUrl = argv[++i];
-    } else if (a === '--help' || a === '-h') {
-      printHelp();
-    } else {
-      plugins.push(a);
-    }
-  }
-
-  if (revert) {
-    return {
-      plugins: [],
-      symlinkRoot,
-      apply: false,
-      revert: true,
-      workspaceRoot: process.cwd(),
-      disposeEnabled,
-      disposeUrl,
-    };
-  }
-
-  if (plugins.length === 0) {
-    console.error('Error: at least one plugin (package folder or name) must be provided');
-    process.exit(1);
-  }
-
-  return {
-    plugins,
-    symlinkRoot,
-    apply,
-    revert,
-    workspaceRoot: process.cwd(),
-    disposeEnabled,
-    disposeUrl,
-  };
-}
-
 function printHelp(): never {
   console.log(
     'usage: opencode-dev [--no-apply] [--symlink-root <dir>] [--revert] [--no-dispose] [--dispose-url <url>] <plugin...>',
   );
   console.log('  --no-apply   do not modify opencode.json (print entries instead)');
   console.log('  --revert     restore opencode.json from the last opencode-dev backup and exit');
-  console.log('  --no-dispose disable POST /instance/dispose calls and always restart the local opencode CLI');
-  console.log('  --dispose-url set custom dispose URL (default http://localhost:4096/instance/dispose)');
+  console.log('  --no-dispose disable POST /instance/dispose calls');
+  console.log('  --dispose-url set custom dispose URL');
   process.exit(0);
 }
 
-function isDir(p: string) {
+function parseFlag(argv: string[], index: number, opts: Partial<Opts>): { newIndex: number; updated: boolean } {
+  const a = argv[index];
+
+  if (a === '--no-apply') {
+    opts.apply = false;
+    return { newIndex: index + 1, updated: true };
+  }
+  if (a === '--symlink-root' && argv[index + 1]) {
+    opts.symlinkRoot = argv[++index];
+    return { newIndex: index + 1, updated: true };
+  }
+  if (a === '--revert') {
+    opts.revert = true;
+    return { newIndex: index + 1, updated: true };
+  }
+  if (a === '--no-dispose') {
+    opts.disposeEnabled = false;
+    return { newIndex: index + 1, updated: true };
+  }
+  if (a === '--dispose-url' && argv[index + 1]) {
+    opts.disposeUrl = argv[++index];
+    return { newIndex: index + 1, updated: true };
+  }
+  if (a === '--help' || a === '-h') {
+    printHelp();
+  }
+
+  return { newIndex: index + 1, updated: false };
+}
+
+function createDefaultOpts(): Opts {
+  return {
+    plugins: [],
+    symlinkRoot: '.opencode/plugin',
+    apply: true,
+    revert: false,
+    workspaceRoot: process.cwd(),
+    disposeEnabled: true,
+    disposeUrl: 'http://localhost:4096/instance/dispose',
+  };
+}
+
+function validatePlugins(opts: Opts): void {
+  if (opts.plugins.length === 0) {
+    console.error('Error: at least one plugin must be provided');
+    process.exit(1);
+  }
+}
+
+function parseArgs(): Opts {
+  const argv = process.argv.slice(2);
+  const opts = createDefaultOpts();
+
+  for (let i = 0; i < argv.length; ) {
+    const { newIndex, updated } = parseFlag(argv, i, opts);
+    i = newIndex;
+    if (!updated) {
+      opts.plugins.push(argv[i - 1]);
+    }
+  }
+
+  if (opts.revert) {
+    return {
+      plugins: [],
+      symlinkRoot: opts.symlinkRoot,
+      apply: false,
+      revert: true,
+      workspaceRoot: opts.workspaceRoot,
+      disposeEnabled: opts.disposeEnabled,
+      disposeUrl: opts.disposeUrl,
+    };
+  }
+
+  validatePlugins(opts);
+  return opts;
+}
+
+function isDir(p: string): boolean {
   try {
     return fs.statSync(p).isDirectory();
   } catch {
@@ -100,26 +121,18 @@ function resolvePluginDir(workspaceRoot: string, spec: string): string | null {
   return null;
 }
 
-async function ensureDir(dir: string) {
+async function ensureDir(dir: string): Promise<void> {
   await fs.promises.mkdir(dir, { recursive: true });
 }
 
-async function createSymlink(target: string, linkPath: string) {
+async function removeExistingLink(linkPath: string): Promise<void> {
   try {
-    try {
-      await fs.promises.lstat(linkPath);
-      await fs.promises.rm(linkPath, { recursive: true });
-    } catch {}
-    await fs.promises.symlink(target, linkPath, 'junction');
-    console.log(`Symlink created: ${linkPath} -> ${target}`);
-  } catch (err) {
-    console.warn('Symlink failed, falling back to copy:', String(err));
-    await copyDir(target, linkPath);
-    console.log(`Copied ${target} -> ${linkPath}`);
-  }
+    await fs.promises.lstat(linkPath);
+    await fs.promises.rm(linkPath, { recursive: true });
+  } catch {}
 }
 
-async function copyDir(src: string, dest: string) {
+async function copyDir(src: string, dest: string): Promise<void> {
   await ensureDir(dest);
   const entries = await fs.promises.readdir(src, { withFileTypes: true });
   for (const e of entries) {
@@ -130,7 +143,19 @@ async function copyDir(src: string, dest: string) {
   }
 }
 
-function spawnWatchBuild(projectName: string) {
+async function createSymlink(target: string, linkPath: string): Promise<void> {
+  await removeExistingLink(linkPath);
+  try {
+    await fs.promises.symlink(target, linkPath, 'junction');
+    console.log(`Symlink created: ${linkPath} -> ${target}`);
+  } catch (err) {
+    console.warn('Symlink failed, falling back to copy:', String(err));
+    await copyDir(target, linkPath);
+    console.log(`Copied ${target} -> ${linkPath}`);
+  }
+}
+
+function spawnWatchBuild(projectName: string): ChildProcess {
   const cmd = 'bunx';
   const args = ['nx', 'run', `${projectName}:build`, '--watch'];
   console.log(`Starting build watcher: ${cmd} ${args.join(' ')}`);
@@ -154,7 +179,7 @@ function readJsonc(file: string): JsoncResult {
   return { json, raw };
 }
 
-function writeJsonc(file: string, originalRaw: string | null, obj: { plugin?: unknown[] }) {
+function writeJsonc(file: string, originalRaw: string | null, obj: { plugin?: unknown[] }): void {
   const base = originalRaw ?? '';
   const edits = modifyJsonC(base, ['plugin'], obj.plugin ?? [], {
     formattingOptions: { insertSpaces: true, tabSize: 2 },
@@ -163,14 +188,14 @@ function writeJsonc(file: string, originalRaw: string | null, obj: { plugin?: un
   fs.writeFileSync(file, newText, 'utf8');
 }
 
-async function backupFile(file: string) {
+async function backupFile(file: string): Promise<void> {
   try {
     await fs.promises.copyFile(file, `${file}.opencode-dev.bak`);
     console.log(`Backed up ${file} -> ${file}.opencode-dev.bak`);
   } catch {}
 }
 
-async function revertOpencodeJson(workspaceRoot: string) {
+async function revertOpencodeJson(workspaceRoot: string): Promise<void> {
   const candidates = ['opencode.json', 'opencode.jsonc'];
   for (const c of candidates) {
     const p = path.join(workspaceRoot, c);
@@ -188,7 +213,7 @@ interface OpencodeConfig {
   plugin?: unknown[];
 }
 
-async function updateOpencodeJson(workspaceRoot: string, pluginLinkPaths: string[]) {
+async function updateOpencodeJson(workspaceRoot: string, pluginLinkPaths: string[]): Promise<void> {
   const candidates = ['opencode.json', 'opencode.jsonc'];
   let target: string | null = null;
   for (const c of candidates) {
@@ -215,29 +240,36 @@ async function updateOpencodeJson(workspaceRoot: string, pluginLinkPaths: string
   console.log('Updated', target);
 }
 
-function getLatestMtime(dir: string): number {
-  let latest = 0;
+interface MtimeState {
+  latest: number;
+  stack: string[];
+}
+
+function processDirectoryEntries(dir: string, state: MtimeState): void {
   try {
-    const stack = [dir];
-    while (stack.length) {
-      const cur = stack.pop();
-      if (!cur) continue;
-      const entries = fs.readdirSync(cur, { withFileTypes: true });
-      for (const e of entries) {
-        const p = path.join(cur, e.name);
-        if (e.isDirectory()) {
-          stack.push(p);
-        } else {
-          try {
-            const s = fs.statSync(p);
-            const m = s.mtimeMs;
-            if (m > latest) latest = m;
-          } catch {}
-        }
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const e of entries) {
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) {
+        state.stack.push(p);
+      } else {
+        try {
+          const s = fs.statSync(p);
+          if (s.mtimeMs > state.latest) state.latest = s.mtimeMs;
+        } catch {}
       }
     }
   } catch {}
-  return latest;
+}
+
+function getLatestMtime(dir: string): number {
+  const state: MtimeState = { latest: 0, stack: [dir] };
+  while (state.stack.length) {
+    const cur = state.stack.pop();
+    if (!cur) continue;
+    processDirectoryEntries(cur, state);
+  }
+  return state.latest;
 }
 
 async function isServerListening(disposeUrl: string, timeoutMs = 500): Promise<boolean> {
@@ -273,200 +305,262 @@ interface FetchError {
   message: string;
 }
 
+async function attemptDisposeRequest(url: string, timeoutMs: number): Promise<boolean> {
+  try {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeoutMs);
+    const res = await fetch(url, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: { 'content-type': 'application/json' },
+      body: '{}',
+    });
+    clearTimeout(id);
+    if (res.ok) {
+      console.log(`Dispose request succeeded (status ${res.status})`);
+      return true;
+    }
+    console.warn(`Dispose request returned ${res.status}`);
+    return false;
+  } catch (err) {
+    const fetchErr = err as FetchError;
+    if (fetchErr.name === 'AbortError') {
+      console.warn(`Dispose request timed out`);
+    } else {
+      console.warn(`Dispose request error: ${String(err)}`);
+    }
+    return false;
+  }
+}
+
 async function tryDispose(url: string, timeoutMs = 2000, retries = 2): Promise<boolean> {
   if (!url) return false;
   for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      const controller = new AbortController();
-      const id = setTimeout(() => controller.abort(), timeoutMs);
-      const res = await fetch(url, {
-        method: 'POST',
-        signal: controller.signal,
-        headers: { 'content-type': 'application/json' },
-        body: '{}',
-      });
-      clearTimeout(id);
-      if (res.ok) {
-        console.log(`Dispose request to ${url} succeeded (status ${res.status})`);
-        return true;
-      } else {
-        console.warn(`Dispose request to ${url} returned ${res.status}`);
-      }
-    } catch (err) {
-      const fetchErr = err as FetchError;
-      if (fetchErr.name === 'AbortError') {
-        console.warn(`Dispose request to ${url} timed out`);
-      } else {
-        console.warn(`Dispose request error: ${String(err)}`);
-      }
-    }
-    // small backoff
+    const success = await attemptDisposeRequest(url, timeoutMs);
+    if (success) return true;
     await new Promise((r) => setTimeout(r, 200 * (attempt + 1)));
   }
   return false;
 }
 
-async function main() {
+interface BuildConfig {
+  dir: string;
+  distPath: string;
+  projectName: string;
+}
+
+function createBuildConfig(workspaceRoot: string, spec: string): BuildConfig {
+  const dir = resolvePluginDir(workspaceRoot, spec);
+  if (!dir) {
+    console.error('Could not resolve plugin:', spec);
+    process.exit(1);
+  }
+  return {
+    dir,
+    distPath: path.join(dir, 'dist'),
+    projectName: path.basename(dir),
+  };
+}
+
+async function startBuildWatcher(config: BuildConfig): Promise<ChildProcess | null> {
+  try {
+    return spawnWatchBuild(config.projectName);
+  } catch (err) {
+    console.warn('Failed to start build watcher for', config.projectName, String(err));
+    return null;
+  }
+}
+
+async function waitForDist(distPath: string, maxWait = 30000): Promise<boolean> {
+  const start = Date.now();
+  while (!fs.existsSync(distPath)) {
+    if (Date.now() - start > maxWait) return false;
+    await new Promise((r) => setTimeout(r, 300));
+  }
+  return true;
+}
+
+async function createPluginLink(config: BuildConfig, symlinkRoot: string, workspaceRoot: string): Promise<string> {
+  const linkRoot = path.resolve(workspaceRoot, symlinkRoot);
+  await ensureDir(linkRoot);
+  const linkPath = path.join(linkRoot, config.projectName);
+
+  if (fs.existsSync(config.distPath)) {
+    await createSymlink(config.distPath, linkPath);
+  } else {
+    await ensureDir(linkPath);
+    console.log('Created placeholder folder for', linkPath);
+  }
+  return linkPath;
+}
+
+interface CleanupState {
+  buildProcesses: ChildProcess[];
+  opProcess: ChildProcess | null;
+}
+
+function setupCleanupHandlers(state: CleanupState): void {
+  process.on('SIGINT', async () => {
+    console.log('\nInterrupted. Cleaning up...');
+    for (const b of state.buildProcesses) {
+      try {
+        b.kill();
+      } catch {}
+    }
+    if (state.opProcess) {
+      try {
+        state.opProcess.kill();
+      } catch {}
+    }
+    process.exit(0);
+  });
+}
+
+function spawnOpencode(workspaceRoot: string): ChildProcess {
+  console.log('Starting opencode CLI in', workspaceRoot);
+  const opProcess = spawn('opencode', [], { cwd: workspaceRoot, stdio: 'inherit' });
+  opProcess.on('exit', (code) => {
+    console.log('opencode exited', code);
+    process.exit(code ?? 0);
+  });
+  return opProcess;
+}
+
+async function detectServerAvailability(disposeUrl: string, disposeEnabled: boolean): Promise<boolean> {
+  if (!disposeEnabled || !disposeUrl) return false;
+  try {
+    return await isServerListening(disposeUrl);
+  } catch {
+    return false;
+  }
+}
+
+interface ReloadResult {
+  shouldRestart: boolean;
+  message: string;
+}
+
+async function handleReload(disposeUrl: string, disposeEnabled: boolean, state: CleanupState): Promise<ReloadResult> {
+  if (!disposeEnabled || !disposeUrl) {
+    return { shouldRestart: true, message: 'Dispose not enabled' };
+  }
+
+  const listening = await isServerListening(disposeUrl);
+  if (!listening) {
+    return { shouldRestart: true, message: 'Server not reachable' };
+  }
+
+  const disposed = await tryDispose(disposeUrl);
+  if (disposed) {
+    return { shouldRestart: false, message: 'Server reload requested' };
+  }
+
+  return { shouldRestart: true, message: 'Dispose request failed' };
+}
+
+async function initializePlugins(opts: Opts, state: CleanupState): Promise<{ links: string[]; distPaths: string[] }> {
+  const links: string[] = [];
+  const distPaths: string[] = [];
+
+  for (const spec of opts.plugins) {
+    const config = createBuildConfig(opts.workspaceRoot, spec);
+    const watcher = await startBuildWatcher(config);
+    if (watcher) state.buildProcesses.push(watcher);
+
+    console.log(`Waiting for dist at ${config.distPath}...`);
+    const hasDist = await waitForDist(config.distPath);
+    if (!hasDist) {
+      console.warn('dist not found for', config.projectName, '- will create link when available');
+    }
+
+    const linkPath = await createPluginLink(config, opts.symlinkRoot, opts.workspaceRoot);
+    links.push(linkPath);
+    distPaths.push(config.distPath);
+  }
+
+  return { links, distPaths };
+}
+
+function createFileUris(links: string[]): string[] {
+  return links.map((lp) => {
+    const indexJs = path.join(lp, 'index.js');
+    return fs.existsSync(indexJs) ? `file://${indexJs}` : `file://${lp}`;
+  });
+}
+
+async function setupServerMode(
+  opts: Opts,
+  state: CleanupState,
+): Promise<{ isServerMode: boolean; initialStart: boolean }> {
+  const serverAvailable = await detectServerAvailability(opts.disposeUrl, opts.disposeEnabled);
+
+  if (serverAvailable) {
+    console.log(`Server detected at ${opts.disposeUrl}; reload via HTTP.`);
+    return { isServerMode: true, initialStart: false };
+  }
+
+  console.log('No server detected; starting local opencode CLI.');
+  state.opProcess = spawnOpencode(opts.workspaceRoot);
+  return { isServerMode: false, initialStart: true };
+}
+
+async function main(): Promise<void> {
   const opts = parseArgs();
   if (opts.revert) {
     await revertOpencodeJson(opts.workspaceRoot);
     process.exit(0);
   }
 
-  const createdLinks: string[] = [];
-  const buildProcesses: ChildProcess[] = [];
-  const distPaths: string[] = [];
-  let opProcess: ChildProcess | null = null;
-  let restarting = false;
+  const state: CleanupState = { buildProcesses: [], opProcess: null };
+  setupCleanupHandlers(state);
 
-  process.on('SIGINT', async () => {
-    console.log('\nInterrupted. Cleaning up...');
-    for (const b of buildProcesses) {
-      try {
-        b.kill();
-      } catch {}
-    }
-    if (opProcess) {
-      try {
-        opProcess.kill();
-      } catch {}
-    }
-    process.exit(0);
-  });
+  const { links, distPaths } = await initializePlugins(opts, state);
+  const fileUris = createFileUris(links);
 
-  for (const spec of opts.plugins) {
-    const dir = resolvePluginDir(opts.workspaceRoot, spec);
-    if (!dir) {
-      console.error('Could not resolve plugin:', spec);
-      process.exit(1);
-    }
-    const distPath = path.join(dir, 'dist');
-    const projectName = path.basename(dir);
-    try {
-      const p = spawnWatchBuild(projectName);
-      buildProcesses.push(p);
-    } catch (err) {
-      console.warn('Failed to start NX build watcher for', projectName, String(err));
-    }
-    console.log(`Waiting for dist at ${distPath}...`);
-    const maxWait = 30000;
-    const start = Date.now();
-    while (!fs.existsSync(distPath)) {
-      if (Date.now() - start > maxWait) break;
-      await new Promise((r) => setTimeout(r, 300));
-    }
-    if (!fs.existsSync(distPath)) {
-      console.warn('dist not found for', projectName, '- continuing and will create link if/when it appears');
-    }
-    const linkRoot = path.resolve(opts.workspaceRoot, opts.symlinkRoot);
-    await ensureDir(linkRoot);
-    const linkPath = path.join(linkRoot, projectName);
-    if (fs.existsSync(distPath)) {
-      await createSymlink(distPath, linkPath);
-    } else {
-      await ensureDir(linkPath);
-      console.log('Created placeholder folder for', linkPath);
-    }
-    createdLinks.push(linkPath);
-    distPaths.push(distPath);
-  }
-
-  const fileUris = createdLinks.map((lp) => {
-    const indexJs = path.join(lp, 'index.js');
-    return fs.existsSync(indexJs) ? `file://${indexJs}` : `file://${lp}`;
-  });
   if (opts.apply) {
     await updateOpencodeJson(opts.workspaceRoot, fileUris);
   } else {
-    console.log('Apply disabled; add the following entries to your opencode.json:');
+    console.log('Apply disabled; add to opencode.json:');
     for (const f of fileUris) console.log('  ', f);
   }
 
-  function spawnOpencode() {
-    if (opProcess) {
-      try {
-        opProcess.kill();
-      } catch {}
-      opProcess = null;
-    }
-    console.log('Starting opencode CLI in', opts.workspaceRoot);
-    opProcess = spawn('opencode', [], { cwd: opts.workspaceRoot, stdio: 'inherit' });
-    opProcess.on('exit', (code) => {
-      console.log('opencode exited', code);
-      if (!restarting) process.exit(code ?? 0);
-    });
-  }
-
-  // Detect if a running Opencode server is available at the configured dispose URL.
-  // If so, we will prefer to request a reload via the HTTP endpoint and NOT spawn a local `opencode` CLI.
-  let serverAvailable = false;
-  if (opts.disposeEnabled && opts.disposeUrl) {
-    try {
-      serverAvailable = await isServerListening(opts.disposeUrl);
-    } catch {
-      serverAvailable = false;
-    }
-  }
-
-  if (serverAvailable) {
-    console.log(`Opencode server detected at ${opts.disposeUrl}; will request reloads via endpoint.`);
-  } else {
-    console.log('No Opencode server detected; starting local opencode CLI.');
-    spawnOpencode();
-  }
-
+  const { isServerMode } = await setupServerMode(opts, state);
   const lastMtimes = distPaths.map((dp) => getLatestMtime(dp));
+  let restarting = false;
+
   setInterval(() => {
-    (async () => {
+    void (async () => {
       try {
         for (let i = 0; i < distPaths.length; i++) {
           const dp = distPaths[i];
           const last = lastMtimes[i] ?? 0;
           const now = getLatestMtime(dp);
-          if (now > last) {
-            console.log(`Change detected in ${dp} (mtime ${now}); handling reload...`);
-            lastMtimes[i] = now;
-            if (!restarting) {
-              restarting = true;
-              // First try to call the Opencode dispose endpoint to reload config
-              let disposed = false;
-              if (opts.disposeEnabled && opts.disposeUrl) {
-                try {
-                  const listening = await isServerListening(opts.disposeUrl);
-                  if (listening) {
-                    disposed = await tryDispose(opts.disposeUrl);
-                  } else {
-                    console.log(
-                      `Dispose server not reachable at ${opts.disposeUrl}; falling back to restarting local opencode CLI.`,
-                    );
-                  }
-                } catch (err) {
-                  console.warn('Dispose request failed:', String(err));
-                }
-              }
 
-              if (disposed) {
-                console.log('Server reload requested; leaving opencode process running.');
+          if (now > last && !restarting) {
+            console.log(`Change detected in ${dp}; handling reload...`);
+            lastMtimes[i] = now;
+            restarting = true;
+
+            const result = await handleReload(opts.disposeUrl, opts.disposeEnabled, state);
+            console.log(result.message);
+
+            if (result.shouldRestart && state.opProcess) {
+              try {
+                state.opProcess.kill();
+              } catch {}
+              setTimeout(() => {
                 restarting = false;
-              } else {
-                console.log('Server reload not available or failed; restarting local opencode process.');
-                if (opProcess) {
-                  try {
-                    opProcess.kill();
-                  } catch {}
-                }
-                setTimeout(() => {
-                  restarting = false;
-                  spawnOpencode();
-                }, 300);
-              }
+                state.opProcess = spawnOpencode(opts.workspaceRoot);
+              }, 300);
+            } else {
+              restarting = false;
             }
           }
         }
       } catch (err) {
         console.warn('Watch poll error', String(err));
       }
-    })().catch((err) => console.warn('Watch handler error', String(err)));
+    })();
   }, 1000);
 }
 
