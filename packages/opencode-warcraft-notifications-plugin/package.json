@@ -2,15 +2,7 @@
   "name": "@pantheon-org/opencode-warcraft-notifications-plugin",
   "version": "0.1.0",
   "description": "OpenCode plugin that plays Warcraft II sound notifications when your AI assistant goes idle",
-  "keywords": [
-    "opencode",
-    "plugin",
-    "typescript",
-    "warcraft",
-    "notifications",
-    "sound",
-    "idle"
-  ],
+  "keywords": ["opencode", "plugin", "typescript", "warcraft", "notifications", "sound", "idle"],
   "homepage": "https://github.com/pantheon-org/opencode-warcraft-notifications-plugin#readme",
   "bugs": {
     "url": "https://github.com/pantheon-org/opencode-warcraft-notifications-plugin/issues"
@@ -30,12 +22,7 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "files": [
-    "dist/",
-    "data/",
-    "README.md",
-    "LICENSE"
-  ],
+  "files": ["dist/", "data/", "README.md", "LICENSE"],
   "scripts": {
     "test": "bun test src",
     "test:coverage": "bun test --coverage src/",
@@ -54,13 +41,15 @@
     "prepublishOnly": "bun run build && bun test && bun run verify:package"
   },
   "dependencies": {
+    "@pantheon-org/opencode-config": "workspace:*",
+    "@pantheon-org/opencode-notification": "workspace:*",
     "csstype": "^3.1.3",
     "undici-types": "^7.16.0",
     "zod": "^4.1.8"
   },
   "devDependencies": {
     "@nx/js": "22.1.3",
-    "@opencode-ai/plugin": "^1.0.133",
+    "@opencode-ai/plugin": "^1.1.47",
     "@swc/cli": "~0.6.0",
     "@swc/helpers": "~0.5.11",
     "@types/bun": "^1.3.4",

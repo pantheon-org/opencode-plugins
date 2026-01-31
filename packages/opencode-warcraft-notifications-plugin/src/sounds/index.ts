@@ -1,4 +1,4 @@
-import { exists } from 'node:fs/promises';
+import { access } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import { DEFAULT_DATA_DIR, type Faction } from '../config/index.js';
@@ -43,7 +43,15 @@ export const soundExists = async (
   existsFn?: (path: string) => Promise<boolean>,
 ): Promise<boolean> => {
   const filePath = getSoundPath(filename, faction, dataDir);
-  const checker = existsFn ?? exists;
+  const defaultChecker = async (path: string) => {
+    try {
+      await access(path);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+  const checker = existsFn ?? defaultChecker;
   return await checker(filePath);
 };
 
