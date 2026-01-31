@@ -29,8 +29,9 @@ export const loadAllAgentSpecs = async (worktree: string, config: AugmentedPlugi
   const results = await Promise.all(files.map((file) => loadAgentSpec(file, verbose)));
 
   // Filter out failed loads and return successful specs
-  const successfulResults = results.filter((result) => result.spec !== undefined);
-  const specs: AgentSpec[] = successfulResults.map((result) => result.spec as AgentSpec);
+  const specs: AgentSpec[] = results
+    .filter((result): result is typeof result & { spec: AgentSpec } => result.spec !== undefined)
+    .map((result) => result.spec);
 
   const errorCount = results.length - specs.length;
   if (errorCount > 0) {
