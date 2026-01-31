@@ -1,8 +1,9 @@
 {
   "name": "opencode-config",
-  "$schema": "https://raw.githubusercontent.com/nrwl/nx/master/schemas/project-schema.json",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/opencode-config/src",
   "projectType": "library",
+  "implicitDependencies": ["opencode-notification"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
