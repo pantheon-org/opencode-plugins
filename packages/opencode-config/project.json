@@ -1,0 +1,34 @@
+{
+  "name": "opencode-config",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/opencode-config/src",
+  "projectType": "library",
+  "implicitDependencies": ["opencode-notification"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "command": "bun run build",
+        "cwd": "packages/opencode-config"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check --write .",
+        "cwd": "packages/opencode-config"
+      },
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/biome.json", "{projectRoot}/biome.json"]
+    },
+    "validate:tsdoc": {
+      "executor": "@pantheon-org/tools:validate-tsdoc",
+      "options": {
+        "projectRoot": "packages/opencode-config"
+      },
+      "cache": true
+    }
+  },
+  "tags": ["package", "opencode", "config", "utilities"]
+}
