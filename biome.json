@@ -50,7 +50,8 @@
         "noExcessiveCognitiveComplexity": {
           "level": "warn",
           "options": { "maxAllowedComplexity": 15 }
-        }
+        },
+        "useArrowFunction": "error"
       },
       "correctness": {
         "noUnusedVariables": "error"
