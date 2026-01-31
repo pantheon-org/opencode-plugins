@@ -30,6 +30,31 @@
     "check-mirror-exists": {
       "executor": "@pantheon-org/tools:check-mirror-exists"
     },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check --write .",
+        "cwd": "packages/opencode-agent-loader-plugin"
+      },
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/biome.json", "{projectRoot}/biome.json"]
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome format --write .",
+        "cwd": "packages/opencode-agent-loader-plugin"
+      },
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/biome.json", "{projectRoot}/biome.json"]
+    },
+    "validate:tsdoc": {
+      "executor": "@pantheon-org/tools:validate-tsdoc",
+      "options": {
+        "projectRoot": "packages/opencode-agent-loader-plugin"
+      },
+      "cache": true
+    },
     "type-check": {
       "executor": "nx:run-commands",
       "options": {
@@ -44,11 +69,7 @@
     },
     "dev-proxy": {
       "executor": "@pantheon-org/tools:dev-proxy",
-      "options": {
-        "plugins": ["opencode-agent-loader-plugin"],
-        "symlinkRoot": ".opencode/plugin",
-        "apply": true
-      }
+      "options": {}
     },
     "test": {
       "executor": "nx:run-commands",
