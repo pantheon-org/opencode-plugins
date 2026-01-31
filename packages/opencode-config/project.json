@@ -6,13 +6,11 @@
   "implicitDependencies": ["opencode-notification"],
   "targets": {
     "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
       "options": {
-        "outputPath": "packages/opencode-config/dist",
-        "main": "packages/opencode-config/src/index.ts",
-        "tsConfig": "packages/opencode-config/tsconfig.json",
-        "assets": []
+        "command": "bun run build",
+        "cwd": "packages/opencode-config"
       }
     },
     "lint": {
