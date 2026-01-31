@@ -1,0 +1,40 @@
+{
+  "name": "@pantheon-org/opencode-notification",
+  "version": "0.1.0",
+  "description": "Notification utilities for OpenCode plugins",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "bunx tsup src/index.ts --format esm,cjs --dts --out-dir dist",
+    "dev": "bunx tsup src/index.ts --format esm,cjs --dts --out-dir dist --watch",
+    "test": "bun test",
+    "lint": "bunx eslint . --ext .ts,.js",
+    "typecheck": "bunx tsc --noEmit"
+  },
+  "keywords": ["opencode", "plugin", "utilities", "notification", "toast", "message"],
+  "author": "Pantheon",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pantheon-org/opencode-notification.git"
+  },
+  "dependencies": {
+    "@opencode-ai/plugin": "^1.1.47"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "typescript": "latest",
+    "tsup": "latest",
+    "eslint": "latest"
+  }
+}

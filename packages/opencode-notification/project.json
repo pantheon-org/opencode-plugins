@@ -1,0 +1,42 @@
+{
+  "name": "opencode-notification",
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/master/schemas/project-schema.json",
+  "sourceRoot": "packages/opencode-notification/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/opencode-notification",
+        "main": "packages/opencode-notification/src/index.ts",
+        "tsConfig": "packages/opencode-notification/tsconfig.json",
+        "assets": []
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun test",
+        "cwd": "packages/opencode-notification"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check --write .",
+        "cwd": "packages/opencode-notification"
+      },
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/biome.json", "{projectRoot}/biome.json"]
+    },
+    "validate:tsdoc": {
+      "executor": "@pantheon-org/tools:validate-tsdoc",
+      "options": {
+        "projectRoot": "packages/opencode-notification"
+      },
+      "cache": true
+    }
+  },
+  "tags": ["package", "opencode", "notification", "utilities"]
+}
