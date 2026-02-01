@@ -387,6 +387,42 @@ biome check .
 biome check --error-on-warnings --reporter=github .
 ```
 
+#### Debugging CI Failures Locally
+
+When CI pipelines fail due to Biome errors, always replicate the issue locally first:
+
+```bash
+# Run the exact same command CI runs (check your .github/workflows/validate-pr.yml)
+biome ci --reporter=github --diagnostic-level=error . --verbose
+
+# Or if using biome check in CI:
+biome check --error-on-warnings --reporter=github .
+
+# Compare local results with CI output to identify environment differences
+```
+
+**Why run locally first?**
+
+- Faster iteration than waiting for CI
+- Can use `--write` flag to auto-fix issues locally
+- Identifies environment-specific issues (e.g., Biome version mismatches, config resolution)
+- Allows using `--verbose` for detailed diagnostics
+- Prevents commit noise from trial-and-error fixes
+
+**Common CI/Local discrepancies:**
+
+1. **Different Biome versions** - Ensure local version matches CI: `bunx biome --version`
+2. **Config not found** - CI might run from different working directory; use explicit `--config-path`
+3. **Line ending differences** - Windows (CRLF) vs Linux (LF); configure `formatter.lineEnding` in biome.json
+4. **File paths** - CI may check files you haven't modified; run on entire codebase locally: `biome check .`
+
+**Steps to resolve CI failures:**
+
+1. Run the same Biome command locally that failed in CI
+2. Apply fixes with `biome check --write .` (or manual fixes for unsafe changes)
+3. Verify all issues resolved: `biome check .`
+4. Commit and push changes
+
 ### Large Refactors
 
 ```bash
