@@ -14,6 +14,7 @@ export type {
   PluginContext,
   SoundDescription,
   ToastOptions,
+  ToastVariant,
 } from './notifier';
 // Export notification utilities
 export * from './notifier';
