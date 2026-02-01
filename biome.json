@@ -1,178 +1,221 @@
 {
-  "assist": {
-    "actions": {
-      "source": {
-        "organizeImports": "off"
-      }
-    }
-  },
+  "$schema": "https://biomejs.dev/schemas/2.3.13/schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
   "files": {
-    "experimentalScannerIgnores": ["**/*.html", "**/fonts/**"],
-    "includes": ["**", "!**/dist", "!**/node_modules"]
+    "ignoreUnknown": false,
+    "includes": [
+      "**",
+      "!**/dist",
+      "!**/node_modules",
+      "!libs/docs-builder/src/components/Header.astro",
+      "!libs/docs-builder/src/components/ASCIISiteTitle.astro"
+    ]
   },
   "formatter": {
     "enabled": true,
-    "indentStyle": "tab",
+    "formatWithErrors": false,
+    "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",
     "lineWidth": 120,
-    "attributePosition": "multiline",
-    "ignore": ["**/dist", "**/node_modules"]
+    "attributePosition": "auto",
+    "bracketSameLine": false,
+    "bracketSpacing": true,
+    "expand": "auto",
+    "useEditorconfig": true,
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/dist",
+      "!**/build",
+      "!**/coverage",
+      "!**/*.lock",
+      "!**/bun.lock",
+      "!**/pnpm-lock.yaml",
+      "!**/package-lock.json",
+      "!**/yarn.lock",
+      "!**/.nx",
+      "!**/.cache",
+      "!**/*.log",
+      "!**/.DS_Store",
+      "!./.nx/cache",
+      "!./.nx/workspace-data"
+    ]
   },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
       "complexity": {
-        "noBannedTypes": "error",
-        "noExcessiveCognitiveComplexity": "error",
-        "noForEach": "error",
-        "noStaticOnlyClass": "off",
-        "noThisInStatic": "error",
-        "noUselessSwitchCase": "error",
-        "useLiteralKeys": "error"
+        "noExcessiveCognitiveComplexity": {
+          "level": "warn",
+          "options": { "maxAllowedComplexity": 15 }
+        },
+        "useArrowFunction": "error"
       },
       "correctness": {
-        "noConstAssign": "error",
-        "noGlobalObjectCalls": "error",
-        "noInvalidBuiltinInstantiation": "error",
-        "noInvalidUseBeforeDeclaration": "error",
-        "noNodejsModules": "off",
-        "noUnusedVariables": "error",
-        "useArrayLiterals": "error",
-        "useExhaustiveDependencies": "warn",
-        "useHookAtTopLevel": "error"
-      },
-      "performance": {
-        "noBarrelFile": "off",
-        "noReExportAll": "off"
-      },
-      "security": {
-        "noGlobalEval": "error"
+        "noUnusedVariables": "error"
       },
       "style": {
-        "noArguments": "error",
-        "noCommaOperator": "error",
-        "noNamespace": "error",
-        "noNegationElse": "error",
-        "noNonNullAssertion": "error",
-        "noParameterAssign": "error",
-        "noRestrictedGlobals": "error",
-        "noShoutyConstants": "off",
-        "noUnusedTemplateLiteral": "error",
-        "noVar": "error",
-        "useBlockStatements": "error",
-        "useCollapsedElseIf": "error",
-        "useConst": "error",
-        "useExportType": "error",
         "useImportType": "error",
-        "useNamingConvention": "off",
-        "useNodeAssertStrict": "error",
-        "useSelfClosingElements": "error",
-        "useSingleVarDeclarator": "error",
-        "useTemplate": "error"
+        "useNodejsImportProtocol": "error",
+        "useNumberNamespace": "error",
+        "useForOf": "error",
+        "noNegationElse": "off"
       },
       "suspicious": {
-        "noApproximativeNumericConstant": "error",
-        "noAssignInExpressions": "error",
-        "noAsyncPromiseExecutor": "error",
-        "noCatchAssign": "error",
-        "noCommentText": "error",
-        "noCompareNegZero": "error",
-        "noConfusingLabels": "error",
-        "noConsole": "off",
-        "noConsoleLog": "off",
-        "noConstEnum": "error",
-        "noDebugger": "error",
-        "noDoubleEquals": "error",
-        "noDuplicateCase": "error",
-        "noDuplicateClassMembers": "error",
-        "noDuplicateJsxProps": "error",
-        "noDuplicateObjectKeys": "error",
-        "noDuplicateParameters": "error",
-        "noEmptyBlockStatements": "error",
-        "noEmptyInterface": "error",
-        "noEvolvingTypes": "error",
-        "noExplicitAny": "error",
-        "noExtraNonNullAssertion": "error",
-        "noFallthroughSwitchClause": "error",
-        "noFunctionAssign": "error",
-        "noGlobalIsFinite": "error",
-        "noGlobalIsNan": "error",
-        "noImplicitAnyLet": "error",
-        "noImportAssign": "error",
-        "noLabelVar": "error",
-        "noMisleadingCharacterClass": "error",
-        "noMisrefactoredShorthandAssign": "error",
-        "noPrototypeBuiltins": "error",
-        "noRedeclare": "error",
-        "noRedundantUseStrict": "error",
-        "noSelfCompare": "error",
-        "noShadowRestrictedNames": "error",
-        "noSparseArray": "error",
-        "noUnsafeDeclarationMerging": "error",
-        "noUnsafeNegation": "error",
-        "useAwait": "error",
-        "useDefaultSwitchClauseLast": "error",
-        "useErrorMessage": "error",
-        "useGetterReturn": "error",
-        "useIsArray": "error",
-        "useValidTypeof": "error"
+        "noDoubleEquals": "error"
       }
-    }
+    },
+    "includes": [
+      "**",
+      "!node_modules/",
+      "!dist/",
+      "!build/",
+      "!.nx/",
+      "!coverage/",
+      "!bun.lock"
+    ]
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "single",
       "jsxQuoteStyle": "double",
+      "quoteProperties": "asNeeded",
       "trailingCommas": "all",
       "semicolons": "always",
       "arrowParentheses": "always",
-      "enabled": true,
-      "lineEnding": "lf"
-    },
-    "globals": ["Bun", "console", "process", "fetch", "setTimeout", "clearTimeout", "setInterval", "clearInterval"]
-  },
-  "json": {
-    "formatter": {
-      "trailingCommas": "none"
+      "bracketSameLine": false,
+      "quoteStyle": "single",
+      "attributePosition": "auto",
+      "bracketSpacing": true
     }
   },
-  "vcs": {
-    "enabled": true,
-    "clientKind": "git",
-    "useIgnoreFile": true
+  "html": {
+    "formatter": {
+      "indentScriptAndStyle": false,
+      "selfCloseVoidElements": "always"
+    }
   },
   "overrides": [
     {
-      "includes": [
-        "**/scripts/**/*.{ts,js}",
-        "**/tools/**/*.{ts,js}"
-      ],
+      "includes": ["*.json", "*.json5", "*.jsonc"],
+      "javascript": { "formatter": { "quoteStyle": "double" } },
+      "formatter": { "indentWidth": 2, "lineWidth": 80 }
+    },
+    { "includes": ["*.md"], "formatter": { "lineWidth": 120 } },
+    { "includes": ["**/*.json"], "javascript": { "globals": [] } },
+    {
+      "includes": ["**/*.ts", "**/*.tsx"],
+      "javascript": {
+        "globals": [
+          "require",
+          "console",
+          "__filename",
+          "module",
+          "process",
+          "Buffer",
+          "__dirname",
+          "exports"
+        ]
+      },
       "linter": {
         "rules": {
-          "suspicious": {
-            "noAssignInExpressions": "off",
-            "noExplicitAny": "off",
-            "noImplicitAnyLet": "off",
-            "useIterableCallbackReturn": "off"
-          },
           "complexity": {
-            "noExcessiveCognitiveComplexity": "off",
-            "noForEach": "off"
+            "noBannedTypes": "error",
+            "noUselessThisAlias": "error",
+            "noUselessTypeConstraint": "error"
+          },
+          "correctness": {
+            "noUndeclaredVariables": "off",
+            "noUnusedVariables": "error"
+          },
+          "style": {
+            "noCommonJs": "error",
+            "noNamespace": "error",
+            "useArrayLiterals": "error",
+            "useAsConstAssertion": "error",
+            "useConst": "error"
+          },
+          "suspicious": {
+            "noExplicitAny": "warn",
+            "noExtraNonNullAssertion": "error",
+            "noMisleadingInstantiator": "error",
+            "noNonNullAssertedOptionalChain": "error",
+            "noTsIgnore": "error",
+            "noUnsafeDeclarationMerging": "error",
+            "noVar": "error",
+            "useNamespaceKeyword": "error"
           }
         }
       }
     },
     {
-      "includes": ["tools/generators/**/*__template__"],
+      "includes": ["**/*.test.ts", "**/*.spec.ts", "**/types/bun-test.d.ts"],
       "linter": {
         "rules": {
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off"
+          },
           "suspicious": {
             "noExplicitAny": "off"
+          },
+          "style": {
+            "noNonNullAssertion": "off"
           }
         }
       }
+    },
+    {
+      "includes": [
+        "packages/opencode-notification/src/notifier.ts",
+        "packages/opencode-config/src/loader.ts",
+        "libs/docs-builder/test-links.js",
+        "packages/opencode-warcraft-notifications-plugin/pages/test-links.js",
+        "packages/opencode-warcraft-notifications-plugin/src/notification.ts",
+        "packages/opencode-warcraft-notifications-plugin/src/schema-validator.ts",
+        "packages/opencode-font/scripts/**/*.ts",
+        "tools/executors/**/*.ts",
+        "tools/executors/**/*.test.ts"
+      ],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off"
+          },
+          "suspicious": {
+            "noExplicitAny": "off",
+            "noAssignInExpressions": "off"
+          },
+          "style": {
+            "noNonNullAssertion": "off",
+            "noCommonJs": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["packages/opencode-font/**/*"],
+      "linter": { "enabled": false },
+      "formatter": { "enabled": false }
+    },
+    {
+      "includes": ["**/*.js", "**/*.jsx"],
+      "javascript": {
+        "globals": [
+          "require",
+          "console",
+          "__filename",
+          "module",
+          "process",
+          "Buffer",
+          "__dirname",
+          "exports"
+        ]
+      }
     }
-  ]
+  ],
+  "assist": {
+    "enabled": true,
+    "actions": { "source": { "organizeImports": "on" } }
+  }
 }

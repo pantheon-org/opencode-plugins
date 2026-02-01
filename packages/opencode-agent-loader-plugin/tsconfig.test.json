@@ -12,6 +12,11 @@
     "types": ["bun-types"],
     "baseUrl": "."
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.spec.ts", "src/**/*.test.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }
