@@ -180,7 +180,8 @@
       "linter": {
         "rules": {
           "complexity": {
-            "noExcessiveCognitiveComplexity": "off"
+            "noExcessiveCognitiveComplexity": "off",
+            "noBannedTypes": "off"
           },
           "suspicious": {
             "noExplicitAny": "off",
@@ -188,7 +189,24 @@
           },
           "style": {
             "noNonNullAssertion": "off",
-            "noCommonJs": "off"
+            "noCommonJs": "off",
+            "noNamespace": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "tools/generators/**/*.template",
+        "tools/generators/**/*__template__"
+      ],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "off"
+          },
+          "style": {
+            "noNamespace": "off"
           }
         }
       }
