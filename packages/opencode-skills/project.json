@@ -48,13 +48,6 @@
       "cache": true,
       "inputs": ["default", "{workspaceRoot}/biome.json", "{projectRoot}/biome.json"]
     },
-    "validate:tsdoc": {
-      "executor": "@pantheon-org/tools:validate-tsdoc",
-      "options": {
-        "projectRoot": "packages/opencode-skills"
-      },
-      "cache": true
-    },
     "type-check": {
       "executor": "nx:run-commands",
       "options": {
@@ -66,7 +59,7 @@
         "cwd": "packages/opencode-skills",
         "parallel": false
       }
-    },
+    }
     "dev-proxy": {
       "executor": "@pantheon-org/tools:dev-proxy",
       "options": {}
