@@ -97,7 +97,7 @@ function extractLinks(content: string, filePath: string): Link[] {
   const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
 
   lines.forEach((line, index) => {
-    let match: RegExpExecArray | null;
+    let match;
     while ((match = linkRegex.exec(line)) !== null) {
       const [, text, url] = match;
       links.push({
@@ -230,9 +230,7 @@ function validateFile(filePath: string): void {
   const content = fs.readFileSync(filePath, 'utf-8');
   const links = extractLinks(content, filePath);
 
-  links.forEach((link) => {
-    validateLink(link, filePath);
-  });
+  links.forEach((link) => validateLink(link, filePath));
 }
 
 /**
