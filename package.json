@@ -2,11 +2,7 @@
   "name": "opencode-plugins",
   "private": true,
   "version": "0.0.0",
-  "workspaces": [
-    "packages/*",
-    "apps/*",
-    "tools/executors"
-  ],
+  "workspaces": ["packages/*", "apps/*", "tools/executors"],
   "scripts": {
     "bootstrap": "bun install",
     "build": "bunx nx run-many --target=build --all",

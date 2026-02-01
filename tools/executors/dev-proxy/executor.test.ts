@@ -135,7 +135,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
         kill: () => {
           childKilled = true;
         },
-        on: (_ev: string, _cb: Function) => {},
+        on: (_ev: string, _cb: (...args: unknown[]) => void) => {},
       } as any;
     };
 

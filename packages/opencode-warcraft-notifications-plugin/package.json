@@ -2,15 +2,7 @@
   "name": "@pantheon-org/opencode-warcraft-notifications-plugin",
   "version": "0.1.0",
   "description": "OpenCode plugin that plays Warcraft II sound notifications when your AI assistant goes idle",
-  "keywords": [
-    "opencode",
-    "plugin",
-    "typescript",
-    "warcraft",
-    "notifications",
-    "sound",
-    "idle"
-  ],
+  "keywords": ["opencode", "plugin", "typescript", "warcraft", "notifications", "sound", "idle"],
   "homepage": "https://github.com/pantheon-org/opencode-warcraft-notifications-plugin#readme",
   "bugs": {
     "url": "https://github.com/pantheon-org/opencode-warcraft-notifications-plugin/issues"
@@ -30,12 +22,7 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "files": [
-    "dist/",
-    "data/",
-    "README.md",
-    "LICENSE"
-  ],
+  "files": ["dist/", "data/", "README.md", "LICENSE"],
   "scripts": {
     "test": "bun test src",
     "test:coverage": "bun test --coverage src/",
