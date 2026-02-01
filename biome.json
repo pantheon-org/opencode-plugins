@@ -1,54 +1,37 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.3.13/schema.json",
-  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
   "files": {
-    "ignoreUnknown": false,
+    "experimentalScannerIgnores": ["**/*.html", "**/fonts/**"],
     "includes": [
       "**",
       "!**/dist",
       "!**/node_modules",
-      "!libs/docs-builder/src/components/Header.astro",
-      "!libs/docs-builder/src/components/ASCIISiteTitle.astro",
       "!packages/opencode-agent-loader-plugin",
       "!packages/opencode-font",
-      "!packages/opencode-warcraft-notifications-plugin",
-      "!tools/dev",
-      "!tools/executors/dev-proxy",
-      "!tools/executors/check-mirror-exists",
-      "!tools/executors/validate-skill-md",
-      "!tools/executors/validate-skills"
+      "!packages/opencode-warcraft-notifications-plugin"
     ]
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+    "defaultBranch": "main"
   },
   "formatter": {
     "enabled": true,
-    "formatWithErrors": false,
     "indentStyle": "space",
     "indentWidth": 2,
-    "lineEnding": "lf",
     "lineWidth": 120,
-    "attributePosition": "auto",
-    "bracketSameLine": false,
-    "bracketSpacing": true,
-    "expand": "auto",
-    "useEditorconfig": true,
-    "includes": [
-      "**",
-      "!**/node_modules",
-      "!**/dist",
-      "!**/build",
-      "!**/coverage",
-      "!**/*.lock",
-      "!**/bun.lock",
-      "!**/pnpm-lock.yaml",
-      "!**/package-lock.json",
-      "!**/yarn.lock",
-      "!**/.nx",
-      "!**/.cache",
-      "!**/*.log",
-      "!**/.DS_Store",
-      "!./.nx/cache",
-      "!./.nx/workspace-data"
-    ]
+    "lineEnding": "lf"
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "always",
+      "trailingCommas": "all",
+      "bracketSpacing": true,
+      "arrowParentheses": "always"
+    }
   },
   "linter": {
     "enabled": true,
@@ -59,184 +42,121 @@
           "level": "warn",
           "options": { "maxAllowedComplexity": 15 }
         },
+        "noForEach": "warn",
         "useArrowFunction": "error"
-      },
-      "correctness": {
-        "noUnusedVariables": "error"
       },
       "style": {
         "useImportType": "error",
+        "useExportType": "error",
         "useNodejsImportProtocol": "error",
-        "useNumberNamespace": "error",
-        "useForOf": "error",
-        "noNegationElse": "off"
+        "noNonNullAssertion": "warn",
+        "useConst": "error"
       },
       "suspicious": {
-        "noDoubleEquals": "error"
+        "noExplicitAny": "warn",
+        "noConsole": {
+          "level": "error",
+          "options": { "allow": ["warn", "error", "info", "debug"] }
+        }
+      },
+      "correctness": {
+        "noUnusedVariables": "error",
+        "noUnusedImports": "error"
+      },
+      "performance": {
+        "noDelete": "warn"
       }
-    },
-    "includes": [
-      "**",
-      "!node_modules/",
-      "!dist/",
-      "!build/",
-      "!.nx/",
-      "!coverage/",
-      "!bun.lock"
-    ]
-  },
-  "javascript": {
-    "formatter": {
-      "jsxQuoteStyle": "double",
-      "quoteProperties": "asNeeded",
-      "trailingCommas": "all",
-      "semicolons": "always",
-      "arrowParentheses": "always",
-      "bracketSameLine": false,
-      "quoteStyle": "single",
-      "attributePosition": "auto",
-      "bracketSpacing": true
-    }
-  },
-  "html": {
-    "formatter": {
-      "indentScriptAndStyle": false,
-      "selfCloseVoidElements": "always"
     }
   },
   "overrides": [
     {
-      "includes": ["*.json", "*.json5", "*.jsonc"],
-      "javascript": { "formatter": { "quoteStyle": "double" } },
-      "formatter": { "indentWidth": 2, "lineWidth": 80 }
-    },
-    { "includes": ["*.md"], "formatter": { "lineWidth": 120 } },
-    { "includes": ["**/*.json"], "javascript": { "globals": [] } },
-    {
-      "includes": ["**/*.ts", "**/*.tsx"],
-      "javascript": {
-        "globals": [
-          "require",
-          "console",
-          "__filename",
-          "module",
-          "process",
-          "Buffer",
-          "__dirname",
-          "exports"
-        ]
-      },
-      "linter": {
-        "rules": {
-          "complexity": {
-            "noBannedTypes": "error",
-            "noUselessThisAlias": "error",
-            "noUselessTypeConstraint": "error"
-          },
-          "correctness": {
-            "noUndeclaredVariables": "off",
-            "noUnusedVariables": "error"
-          },
-          "style": {
-            "noCommonJs": "error",
-            "noNamespace": "error",
-            "useArrayLiterals": "error",
-            "useAsConstAssertion": "error",
-            "useConst": "error"
-          },
-          "suspicious": {
-            "noExplicitAny": "warn",
-            "noExtraNonNullAssertion": "error",
-            "noMisleadingInstantiator": "error",
-            "noNonNullAssertedOptionalChain": "error",
-            "noTsIgnore": "error",
-            "noUnsafeDeclarationMerging": "error",
-            "noVar": "error",
-            "useNamespaceKeyword": "error"
-          }
-        }
+      "includes": ["**/*.json"],
+      "formatter": {
+        "lineWidth": 80
       }
     },
     {
-      "includes": ["**/*.test.ts", "**/*.spec.ts", "**/types/bun-test.d.ts"],
+      "includes": ["**/scripts/**/*.{ts,js}", "**/tools/**/*.{ts,js}"],
       "linter": {
         "rules": {
-          "complexity": {
-            "noExcessiveCognitiveComplexity": "off"
-          },
           "suspicious": {
-            "noExplicitAny": "off"
+            "noAssignInExpressions": "off",
+            "noExplicitAny": "off",
+            "noImplicitAnyLet": "off",
+            "useIterableCallbackReturn": "off"
           },
-          "style": {
-            "noNonNullAssertion": "off"
-          }
-        }
-      }
-    },
-    {
-      "includes": [
-        "packages/opencode-notification/src/notifier.ts",
-        "packages/opencode-config/src/loader.ts",
-        "libs/docs-builder/test-links.js",
-        "packages/opencode-warcraft-notifications-plugin/pages/test-links.js",
-        "packages/opencode-warcraft-notifications-plugin/src/notification.ts",
-        "packages/opencode-warcraft-notifications-plugin/src/schema-validator.ts",
-        "packages/opencode-font/scripts/**/*.ts",
-        "tools/executors/**/*.ts",
-        "tools/executors/**/*.test.ts"
-      ],
-      "linter": {
-        "rules": {
           "complexity": {
             "noExcessiveCognitiveComplexity": "off",
-            "noBannedTypes": "off"
-          },
-          "suspicious": {
-            "noExplicitAny": "off",
-            "noAssignInExpressions": "off"
-          },
-          "style": {
-            "noNonNullAssertion": "off",
-            "noCommonJs": "off",
-            "noNamespace": "off"
+            "noForEach": "off"
           }
         }
       }
     },
     {
-      "includes": [
-        "tools/generators/**/*.template",
-        "tools/generators/**/*__template__"
-      ],
+      "includes": ["**/*.test.ts", "**/*.spec.ts", "**/*test-utils*.ts"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "off",
+            "noConsole": "off"
+          },
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off",
+            "noForEach": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.d.ts"],
       "linter": {
         "rules": {
           "suspicious": {
             "noExplicitAny": "off"
-          },
-          "style": {
-            "noNamespace": "off"
           }
         }
       }
     },
     {
-      "includes": ["**/*.js", "**/*.jsx"],
-      "javascript": {
-        "globals": [
-          "require",
-          "console",
-          "__filename",
-          "module",
-          "process",
-          "Buffer",
-          "__dirname",
-          "exports"
-        ]
+      "includes": ["libs/docs-builder/**/*.js", "**/pages/**/*.js"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noAssignInExpressions": "off",
+            "noExplicitAny": "off"
+          },
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/scripts/**/*.{ts,js}", "**/tools/**/*.{ts,js}"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noAssignInExpressions": "off",
+            "noExplicitAny": "off",
+            "noImplicitAnyLet": "off",
+            "useIterableCallbackReturn": "off"
+          },
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off",
+            "noForEach": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["tools/generators/**/*__template__"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "off"
+          }
+        }
       }
     }
-  ],
-  "assist": {
-    "enabled": true,
-    "actions": { "source": { "organizeImports": "on" } }
-  }
+  ]
 }
