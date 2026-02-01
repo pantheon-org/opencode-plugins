@@ -4,6 +4,15 @@
   "sourceRoot": "tools/generators/plugin",
   "projectType": "library",
   "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check --write .",
+        "cwd": "tools/generators/plugin"
+      },
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/biome.json"]
+    },
     "type-check": {
       "executor": "nx:run-commands",
       "options": {

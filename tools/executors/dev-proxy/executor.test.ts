@@ -24,7 +24,11 @@ function makeMockIterator() {
     _returned() {
       return returned;
     },
-  } as any;
+  } as {
+    [Symbol.asyncIterator](): AsyncGenerator<{ success: boolean }>;
+    return(): Promise<IteratorResult<{ success: boolean }>>;
+    _returned(): boolean;
+  };
   return iterator;
 }
 
@@ -37,8 +41,8 @@ const _originalSpawn = childProcess.spawn;
 function _fakeSpawn(_cmd: string, _args: string[], _opts: any) {
   return {
     kill: () => {},
-    on: (_ev: string, _cb: Function) => {},
-  } as any;
+    on: (_ev: string, _cb: (data: unknown) => void) => {},
+  } as { kill(): void; on(event: string, callback: (data: unknown) => void): void };
 }
 
 let _originalExit: typeof process.exit;
@@ -131,7 +135,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
         kill: () => {
           childKilled = true;
         },
-        on: (_ev: string, _cb: Function) => {},
+        on: (_ev: string, _cb: (...args: unknown[]) => void) => {},
       } as any;
     };
 

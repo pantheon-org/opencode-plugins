@@ -33,26 +33,35 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          {
-            "command": "bunx eslint src/"
-          }
-        ],
-        "cwd": "<%= projectRoot %>",
-        "parallel": false
-      }
+        "command": "biome check --write .",
+        "cwd": "<%= projectRoot %>"
+      },
+      "cache": true,
+      "inputs": [
+        "default",
+        "{workspaceRoot}/biome.json",
+        "{projectRoot}/biome.json"
+      ]
     },
     "format": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          {
-            "command": "bunx prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\""
-          }
-        ],
-        "cwd": "<%= projectRoot %>",
-        "parallel": false
-      }
+        "command": "biome format --write .",
+        "cwd": "<%= projectRoot %>"
+      },
+      "cache": true,
+      "inputs": [
+        "default",
+        "{workspaceRoot}/biome.json",
+        "{projectRoot}/biome.json"
+      ]
+    },
+    "validate:tsdoc": {
+      "executor": "@pantheon-org/tools:validate-tsdoc",
+      "options": {
+        "projectRoot": "<%= projectRoot %>"
+      },
+      "cache": true
     },
     "type-check": {
       "executor": "nx:run-commands",

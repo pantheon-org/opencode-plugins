@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "projectRoot": {
+      "type": "string",
+      "description": "Root directory of the project"
+    },
+    "tsConfig": {
+      "type": "string",
+      "description": "Path to tsconfig.json (relative to projectRoot)",
+      "default": "tsconfig.json"
+    },
+    "failOnWarning": {
+      "type": "boolean",
+      "description": "Fail if warnings are found",
+      "default": false
+    }
+  },
+  "required": ["projectRoot"]
+}
