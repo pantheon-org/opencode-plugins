@@ -15,7 +15,9 @@ export const typescriptTddSkill: Skill = defineSkill({
   name: 'typescript-tdd',
   description: 'TypeScript development with TDD, single-function modules, and barrel exports',
   keywords: ['tdd', 'test-driven', 'testing', 'bun', 'typescript', 'ts'],
-  category: 'development',
+  metadata: {
+    category: 'development',
+  },
   content: `
 # TypeScript TDD Development
 
@@ -93,7 +95,9 @@ export const plainEnglishSkill: Skill = defineSkill({
   name: 'plain-english',
   description: 'Write technical content in plain English for non-technical stakeholders',
   keywords: ['plain-english', 'communication', 'documentation', 'stakeholders', 'business'],
-  category: 'communication',
+  metadata: {
+    category: 'communication',
+  },
   content: `
 # Plain English Communication
 
@@ -171,7 +175,9 @@ export const reactPatternsSkill: Skill = defineSkill({
   name: 'react-patterns',
   description: 'Modern React component patterns and best practices',
   keywords: ['react', 'components', 'hooks', 'jsx', 'tsx'],
-  category: 'development',
+  metadata: {
+    category: 'development',
+  },
   content: `
 # React Component Patterns
 
