@@ -30,8 +30,8 @@ export const loadAllAgentSpecs = async (worktree: string, config: AugmentedPlugi
 
   // Filter out failed loads and return successful specs
   const specs: AgentSpec[] = results
-    .filter((result): result is typeof result & { spec: AgentSpec } => result.spec !== undefined)
-    .map((result) => result.spec);
+    .filter((result) => result.spec !== undefined)
+    .map((result) => result.spec as AgentSpec);
 
   const errorCount = results.length - specs.length;
   if (errorCount > 0) {
