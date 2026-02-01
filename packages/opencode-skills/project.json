@@ -59,7 +59,7 @@
         "cwd": "packages/opencode-skills",
         "parallel": false
       }
-    }
+    },
     "dev-proxy": {
       "executor": "@pantheon-org/tools:dev-proxy",
       "options": {}
