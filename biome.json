@@ -8,7 +8,15 @@
       "!**/dist",
       "!**/node_modules",
       "!libs/docs-builder/src/components/Header.astro",
-      "!libs/docs-builder/src/components/ASCIISiteTitle.astro"
+      "!libs/docs-builder/src/components/ASCIISiteTitle.astro",
+      "!packages/opencode-agent-loader-plugin",
+      "!packages/opencode-font",
+      "!packages/opencode-warcraft-notifications-plugin",
+      "!tools/dev",
+      "!tools/executors/dev-proxy",
+      "!tools/executors/check-mirror-exists",
+      "!tools/executors/validate-skill-md",
+      "!tools/executors/validate-skills"
     ]
   },
   "formatter": {
