@@ -34,7 +34,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Run Biome CI
-        run: bunx biome ci --reporter=github . --verbose
+        run: bunx biome ci --reporter=github --diagnostic-level=error . --verbose
 
       - name: Run markdown linter
         run: bunx markdownlint-cli2 "**/*.md" "#node_modules" "#**/node_modules"
