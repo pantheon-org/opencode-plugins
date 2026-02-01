@@ -21,13 +21,6 @@
       },
       "cache": true,
       "inputs": ["default", "{workspaceRoot}/biome.json", "{projectRoot}/biome.json"]
-    },
-    "validate:tsdoc": {
-      "executor": "@pantheon-org/tools:validate-tsdoc",
-      "options": {
-        "projectRoot": "packages/opencode-config"
-      },
-      "cache": true
     }
   },
   "tags": ["package", "opencode", "config", "utilities"]
