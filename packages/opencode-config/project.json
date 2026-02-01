@@ -1,0 +1,27 @@
+{
+  "name": "opencode-config",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/opencode-config/src",
+  "projectType": "library",
+  "implicitDependencies": ["opencode-notification"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "command": "bun run build",
+        "cwd": "packages/opencode-config"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome check --write .",
+        "cwd": "packages/opencode-config"
+      },
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/biome.json", "{projectRoot}/biome.json"]
+    }
+  },
+  "tags": ["package", "opencode", "config", "utilities"]
+}
