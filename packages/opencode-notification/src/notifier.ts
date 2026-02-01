@@ -126,9 +126,6 @@ export const createNotifier = (ctx: PluginContext, logger?: Logger) => {
       if (logger?.debug) {
         logger.debug('Toast notification failed', { error });
       }
-      if (process.env.DEBUG_OPENCODE && logger?.debug) {
-        logger.debug('Toast notification failed', { error });
-      }
     }
   };
 
