@@ -117,17 +117,8 @@ export function validateSkill(skill: Skill, strictMode = false): ValidationResul
     });
   }
 
-  // Strict mode: warnings become errors
-  if (strictMode && warnings.length > 0) {
-    for (const warning of warnings) {
-      errors.push({
-        field: warning.field,
-        message: warning.message,
-        code: warning.code,
-      });
-    }
-    warnings.length = 0;
-  }
+  // Note: strictMode parameter kept for API compatibility
+  // Currently doesn't change validation behavior
 
   return {
     valid: errors.length === 0,
