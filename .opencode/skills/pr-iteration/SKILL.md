@@ -1,8 +1,8 @@
 ---
 name: pr-iteration
 description:
-  Guide the agent through iterative PR/MR refinement to ensure all CI checks, tests, linting, and validation
-  passes before considering the work complete. Never declare success until all automated checks pass.
+  Guide the agent through iterative PR/MR refinement to ensure all CI checks, tests, linting, and validation passes
+  before considering the work complete. Never declare success until all automated checks pass.
 license: MIT
 compatibility: opencode
 metadata:
@@ -12,7 +12,8 @@ metadata:
 
 ## What I Do
 
-I ensure that all Pull Requests (PRs) or Merge Requests (MRs) pass **every automated check** before being declared complete. I guide the agent through iterative refinement until CI is green.
+I ensure that all Pull Requests (PRs) or Merge Requests (MRs) pass **every automated check** before being declared
+complete. I guide the agent through iterative refinement until CI is green.
 
 ## Core Principles
 
@@ -100,6 +101,7 @@ bun run build
 **Symptom**: CI fails on `bun run lint` or biome/eslint errors
 
 **Fix Process**:
+
 ```bash
 # Run auto-fix first
 bun run lint --fix
@@ -118,6 +120,7 @@ bun run lint
 **Symptom**: `bun run typecheck` or `tsc` fails
 
 **Fix Process**:
+
 ```bash
 # Run type check
 bun run typecheck
@@ -138,6 +141,7 @@ bun run typecheck
 **Symptom**: Tests fail locally or in CI
 
 **Fix Process**:
+
 ```bash
 # Run failing test
 bun test path/to/failing-test.ts
@@ -161,6 +165,7 @@ bun run test
 **Symptom**: `bun run build` or `nx build` fails
 
 **Fix Process**:
+
 ```bash
 # Run build with verbose output
 bunx nx run-many --target=build --all --verbose
@@ -185,6 +190,7 @@ bun run build
 **Symptom**: Changes in one package break another
 
 **Fix Process**:
+
 ```bash
 # Identify affected packages
 bunx nx affected:graph
@@ -214,19 +220,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
-      
+
       - name: Install
         run: bun install
-      
+
       - name: Lint
         run: bun run lint
-      
+
       - name: Type Check
         run: bun run typecheck
-      
+
       - name: Test
         run: bun run test
-      
+
       - name: Build
         run: bun run build
 ```
@@ -234,6 +240,7 @@ jobs:
 ### Required Status Checks
 
 Configure branch protection to require:
+
 - ✅ Lint passing
 - ✅ Type check passing
 - ✅ Tests passing
@@ -256,6 +263,7 @@ biome ci --reporter=github --diagnostic-level=error . --verbose
 ### Step 2: Check Environment Differences
 
 Common differences:
+
 - **Node/Bun version** - Match CI version exactly
 - **Operating system** - CI runs Linux; develop on Linux/macOS/WSL
 - **Clean state** - CI starts fresh; you may have cached files
