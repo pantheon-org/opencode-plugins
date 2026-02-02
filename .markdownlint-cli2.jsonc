@@ -51,7 +51,7 @@
     "MD060": false
   },
   // Only lint specific directories - focus on core documentation
-  "globs": ["docs/**/*.md", "README.md", "CONTRIBUTING.md", "SECURITY.md"],
+  "globs": ["docs/**/*.md", "README.md", "CONTRIBUTING.md", "SECURITY.md", "AGENTS.md"],
   // Fix mode disabled by default
   "fix": false
 }
