@@ -1,11 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import type { ExecutorContext } from '@nx/devkit';
+import { formatValidationResult, markdownToSkill, validateSkill } from '@pantheon-org/opencode-skills';
 import { glob } from 'glob';
-import {
-  markdownToSkill,
-  formatValidationResult,
-  validateSkill,
-} from '@pantheon-org/opencode-skills';
 
 export interface ValidateSkillMdExecutorOptions {
   pattern: string;
