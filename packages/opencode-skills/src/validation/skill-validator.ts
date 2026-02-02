@@ -1,222 +1,177 @@
-import type {
-  Skill,
-  SkillDefinition,
-  SkillMetadata,
-  SkillRegistry,
-  SkillValidator,
-  ValidationContext,
-  ValidationIssue,
-  ValidationResult,
-  ValidationSeverity,
-} from '../types';
+import type { Skill, ValidationError, ValidationResult, ValidationSuggestion, ValidationWarning } from '../types.js';
 
-// Re-export types for backward compatibility
-export type {
-  SkillMetadata,
-  SkillDefinition,
-  Skill,
-  SkillRegistry,
-  SkillValidator,
-  ValidationResult,
-  ValidationIssue,
-  ValidationSeverity,
-  ValidationContext,
-};
+export function validateSkill(skill: Skill, strictMode = false): ValidationResult {
+  const errors: ValidationError[] = [];
+  const warnings: ValidationWarning[] = [];
+  const suggestions: ValidationSuggestion[] = [];
 
-export function createSkillRegistry(): SkillRegistry {
-  const skills = new Map<string, Skill>();
-
-  return {
-    register(skill: Skill): void {
-      skills.set(skill.name, skill);
-    },
-
-    get(name: string): Skill | undefined {
-      return skills.get(name);
-    },
-
-    has(name: string): boolean {
-      return skills.has(name);
-    },
-
-    list(): Skill[] {
-      return Array.from(skills.values());
-    },
-
-    clear(): void {
-      skills.clear();
-    },
-
-    size(): number {
-      return skills.size;
-    },
-  };
-}
-
-export function createDefaultValidator(): SkillValidator {
-  return {
-    validate(skill: SkillDefinition): ValidationResult {
-      const issues: ValidationIssue[] = [];
-
-      // Validate name
-      if (!skill.name || skill.name.trim() === '') {
-        issues.push({
-          code: 'MISSING_NAME',
-          message: 'Skill name is required',
-          severity: 'error',
-          path: 'name',
-        });
-      } else if (!/^[a-z0-9-]+$/.test(skill.name)) {
-        issues.push({
-          code: 'INVALID_NAME_FORMAT',
-          message: 'Skill name must contain only lowercase letters, numbers, and hyphens',
-          severity: 'error',
-          path: 'name',
-        });
-      }
-
-      // Validate description
-      if (!skill.description || skill.description.trim() === '') {
-        issues.push({
-          code: 'MISSING_DESCRIPTION',
-          message: 'Skill description is required',
-          severity: 'error',
-          path: 'description',
-        });
-      } else if (skill.description.length < 10) {
-        issues.push({
-          code: 'DESCRIPTION_TOO_SHORT',
-          message: 'Skill description should be at least 10 characters',
-          severity: 'warning',
-          path: 'description',
-        });
-      }
-
-      // Validate keywords
-      if (!skill.keywords || skill.keywords.length === 0) {
-        issues.push({
-          code: 'MISSING_KEYWORDS',
-          message: 'At least one keyword is recommended',
-          severity: 'warning',
-          path: 'keywords',
-        });
-      }
-
-      // Validate content sections if present
-      if (skill.contentSections) {
-        for (const [index, section] of skill.contentSections.entries()) {
-          if (!section.type || section.type.trim() === '') {
-            issues.push({
-              code: 'MISSING_SECTION_TYPE',
-              message: `Content section ${index + 1} is missing type`,
-              severity: 'error',
-              path: `contentSections[${index}].type`,
-            });
-          }
-
-          if (!section.content || section.content.trim() === '') {
-            issues.push({
-              code: 'MISSING_SECTION_CONTENT',
-              message: `Content section ${index + 1} is missing content`,
-              severity: 'error',
-              path: `contentSections[${index}].content`,
-            });
-          }
-        }
-      }
-
-      // Validate examples if present
-      if (skill.examples) {
-        for (const [index, example] of skill.examples.entries()) {
-          if (!example.description || example.description.trim() === '') {
-            issues.push({
-              code: 'MISSING_EXAMPLE_DESCRIPTION',
-              message: `Example ${index + 1} is missing description`,
-              severity: 'warning',
-              path: `examples[${index}].description`,
-            });
-          }
-        }
-      }
-
-      // Validate metadata if present
-      if (skill.metadata) {
-        if (skill.metadata.category && skill.metadata.category.trim() === '') {
-          issues.push({
-            code: 'EMPTY_CATEGORY',
-            message: 'Category should not be empty if provided',
-            severity: 'warning',
-            path: 'metadata.category',
-          });
-        }
-
-        if (skill.metadata.author && skill.metadata.author.trim() === '') {
-          issues.push({
-            code: 'EMPTY_AUTHOR',
-            message: 'Author should not be empty if provided',
-            severity: 'warning',
-            path: 'metadata.author',
-          });
-        }
-      }
-
-      return {
-        valid: !issues.some((issue) => issue.severity === 'error'),
-        issues,
-      };
-    },
-  };
-}
-
-export function validateSkillDefinition(skill: SkillDefinition): ValidationResult {
-  const validator = createDefaultValidator();
-  return validator.validate(skill);
-}
-
-// Alias for backward compatibility
-export const validateSkill = validateSkillDefinition;
-
-export function formatValidationIssues(issues: ValidationIssue[]): string {
-  return issues
-    .map(
-      (issue) =>
-        `[${issue.severity.toUpperCase()}] ${issue.code}: ${issue.message}${issue.path ? ` (at ${issue.path})` : ''}`,
-    )
-    .join('\n');
-}
-
-export function hasValidationErrors(result: ValidationResult): boolean {
-  return result.issues.some((issue) => issue.severity === 'error');
-}
-
-export function hasValidationWarnings(result: ValidationResult): boolean {
-  return result.issues.some((issue) => issue.severity === 'warning');
-}
-
-export function getValidationErrors(result: ValidationResult): ValidationIssue[] {
-  return result.issues.filter((issue) => issue.severity === 'error');
-}
-
-export function getValidationWarnings(result: ValidationResult): ValidationIssue[] {
-  return result.issues.filter((issue) => issue.severity === 'warning');
-}
-
-export function formatValidationResult(result: ValidationResult): string {
-  if (result.valid && result.issues.length === 0) {
-    return '✓ Valid skill definition';
+  // Validate name
+  if (!skill.name || skill.name.trim() === '') {
+    errors.push({
+      field: 'name',
+      message: 'Name is required',
+      code: 'MISSING_NAME',
+    });
+  } else if (!/^[a-z0-9-]+$/.test(skill.name)) {
+    errors.push({
+      field: 'name',
+      message: 'Name must be in kebab-case format (lowercase letters, numbers, and hyphens only)',
+      code: 'INVALID_NAME_FORMAT',
+    });
   }
 
+  // Validate description
+  if (!skill.description || skill.description.trim() === '') {
+    errors.push({
+      field: 'description',
+      message: 'Description is required',
+      code: 'MISSING_DESCRIPTION',
+    });
+  } else if (skill.description.length < 10) {
+    warnings.push({
+      field: 'description',
+      message: 'Description should be at least 10 characters',
+      code: 'SHORT_DESCRIPTION',
+    });
+  }
+
+  // Validate whatIDo (required in v2)
+  if (!skill.whatIDo || skill.whatIDo.trim() === '') {
+    errors.push({
+      field: 'whatIDo',
+      message: 'whatIDo is required (Core capabilities section)',
+      code: 'MISSING_WHAT_I_DO',
+    });
+  } else if (skill.whatIDo.length < 20) {
+    suggestions.push({
+      field: 'whatIDo',
+      message: 'Consider expanding whatIDo to be more descriptive (at least 20 characters)',
+    });
+  }
+
+  // Validate whenToUseMe (required in v2)
+  if (!skill.whenToUseMe || skill.whenToUseMe.trim() === '') {
+    errors.push({
+      field: 'whenToUseMe',
+      message: 'whenToUseMe is required (When to use me section)',
+      code: 'MISSING_WHEN_TO_USE',
+    });
+  }
+
+  // Validate instructions (required in v2)
+  if (!skill.instructions || skill.instructions.trim() === '') {
+    errors.push({
+      field: 'instructions',
+      message: 'instructions is required (Instructions section)',
+      code: 'MISSING_INSTRUCTIONS',
+    });
+  }
+
+  // Validate checklist (required in v2)
+  if (!skill.checklist || skill.checklist.length === 0) {
+    errors.push({
+      field: 'checklist',
+      message: 'checklist is required with at least one item',
+      code: 'MISSING_CHECKLIST',
+    });
+  } else if (skill.checklist.length === 1) {
+    suggestions.push({
+      field: 'checklist',
+      message: 'Consider adding more checklist items for better verification',
+    });
+  }
+
+  // Validate license (required in v2)
+  if (!skill.license || skill.license.trim() === '') {
+    warnings.push({
+      field: 'license',
+      message: 'license is recommended (e.g., MIT)',
+      code: 'MISSING_LICENSE',
+    });
+  }
+
+  // Validate compatibility (required in v2)
+  if (!skill.compatibility || skill.compatibility.trim() === '') {
+    warnings.push({
+      field: 'compatibility',
+      message: 'compatibility is recommended (e.g., opencode)',
+      code: 'MISSING_COMPATIBILITY',
+    });
+  }
+
+  // Validate metadata.category
+  if (!skill.metadata?.category || skill.metadata.category.trim() === '') {
+    warnings.push({
+      field: 'metadata.category',
+      message: 'metadata.category is recommended',
+      code: 'MISSING_CATEGORY',
+    });
+  }
+
+  // Check deprecated content field
+  if (skill.content && skill.content.trim() !== '') {
+    warnings.push({
+      field: 'content',
+      message: 'content field is deprecated. Use whatIDo, whenToUseMe, instructions, checklist instead',
+      code: 'DEPRECATED_CONTENT',
+    });
+  }
+
+  // Strict mode: warnings become errors
+  if (strictMode && warnings.length > 0) {
+    for (const warning of warnings) {
+      errors.push({
+        field: warning.field,
+        message: warning.message,
+        code: warning.code,
+      });
+    }
+    warnings.length = 0;
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+    warnings,
+    suggestions,
+  };
+}
+
+export function formatValidationResult(result: ValidationResult, skillName: string): string {
   const lines: string[] = [];
 
-  if (!result.valid) {
-    lines.push('✗ Invalid skill definition');
-  } else {
-    lines.push('✓ Valid skill definition with warnings');
-  }
+  lines.push(`Validation Results for "${skillName}"`);
+  lines.push('');
 
-  if (result.issues.length > 0) {
+  if (!result.valid) {
+    lines.push('❌ Errors:');
+    for (const error of result.errors) {
+      lines.push(`  - ${error.field}: ${error.message}`);
+    }
     lines.push('');
-    lines.push(formatValidationIssues(result.issues));
+    lines.push('Skill validation failed');
+  } else {
+    if (result.warnings.length > 0) {
+      lines.push('⚠️  Warnings:');
+      for (const warning of result.warnings) {
+        lines.push(`  - ${warning.field}: ${warning.message}`);
+      }
+      lines.push('');
+    }
+
+    if (result.suggestions.length > 0) {
+      lines.push('💡 Suggestions:');
+      for (const suggestion of result.suggestions) {
+        lines.push(`  - ${suggestion.field}: ${suggestion.message}`);
+      }
+      lines.push('');
+    }
+
+    if (result.warnings.length === 0 && result.suggestions.length === 0) {
+      lines.push('✅ Skill is valid');
+    } else {
+      lines.push('✅ Skill is valid (with warnings/suggestions)');
+    }
   }
 
   return lines.join('\n');

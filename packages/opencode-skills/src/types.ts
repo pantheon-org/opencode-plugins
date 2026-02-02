@@ -147,16 +147,28 @@ export type SkillDefinition = Skill;
 // Validation Types
 export type ValidationSeverity = 'error' | 'warning' | 'info';
 
-export interface ValidationIssue {
-  code: string;
+export interface ValidationError {
+  field: string;
   message: string;
-  severity: ValidationSeverity;
-  path?: string;
+  code: string;
+}
+
+export interface ValidationWarning {
+  field: string;
+  message: string;
+  code: string;
+}
+
+export interface ValidationSuggestion {
+  field: string;
+  message: string;
 }
 
 export interface ValidationResult {
   valid: boolean;
-  issues: ValidationIssue[];
+  errors: ValidationError[];
+  warnings: ValidationWarning[];
+  suggestions: ValidationSuggestion[];
 }
 
 export interface ValidationContext {
