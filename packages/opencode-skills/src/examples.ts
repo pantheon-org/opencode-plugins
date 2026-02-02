@@ -15,15 +15,16 @@ export const typescriptTddSkill: Skill = defineSkill({
   name: 'typescript-tdd',
   description: 'TypeScript development with TDD, single-function modules, and barrel exports',
   keywords: ['tdd', 'test-driven', 'testing', 'bun', 'typescript', 'ts'],
+  license: 'MIT',
+  compatibility: 'opencode',
   metadata: {
     category: 'development',
   },
-  content: `
-# TypeScript TDD Development
-
-Follow these guidelines for TypeScript development with Test-Driven Development:
-
-## Core Principles
+  whatIDo:
+    'I help you write TypeScript code using test-driven development practices, with single-function modules and proper barrel exports',
+  whenToUseMe:
+    'Use when writing TypeScript code with Bun, following TDD practices, or need guidance on module organization and testing patterns',
+  instructions: `## Core Principles
 
 1. **One Function Per Module** - Each file exports a single primary function
 2. **Test Collocation** - Place tests next to implementation with \`.test.ts\` suffix
@@ -82,8 +83,14 @@ export function validate(input: string): boolean {
 // utils/index.ts
 export { validate } from './validate';
 export { format } from './format';
-\`\`\`
-`,
+\`\`\``,
+  checklist: [
+    'Write tests before implementation',
+    'Use single-function modules',
+    'Place tests collocated with implementation',
+    'Use barrel modules for clean exports',
+    'Enable strict TypeScript mode',
+  ],
 });
 
 /**
@@ -95,15 +102,16 @@ export const plainEnglishSkill: Skill = defineSkill({
   name: 'plain-english',
   description: 'Write technical content in plain English for non-technical stakeholders',
   keywords: ['plain-english', 'communication', 'documentation', 'stakeholders', 'business'],
+  license: 'MIT',
+  compatibility: 'opencode',
   metadata: {
     category: 'communication',
   },
-  content: `
-# Plain English Communication
-
-Guidelines for writing technical content that non-technical stakeholders can understand.
-
-## Core Principles
+  whatIDo:
+    'I help you write technical content that non-technical stakeholders can understand, using clear language and simple structure',
+  whenToUseMe:
+    'Use when communicating technical information to executives, business managers, or non-technical team members',
+  instructions: `## Core Principles
 
 1. **Use Simple Words** - Prefer "use" over "utilize", "help" over "facilitate"
 2. **Short Sentences** - Keep sentences under 25 words when possible
@@ -164,8 +172,14 @@ High-level approach without technical details.
 **For Compliance/Legal:**
 - Be precise about security and privacy
 - Document controls and safeguards
-- Use clear, unambiguous language
-`,
+- Use clear, unambiguous language`,
+  checklist: [
+    'Start with an executive summary',
+    'Use simple words and short sentences',
+    'Write in active voice',
+    'Define technical jargon',
+    'Include specific metrics and timelines',
+  ],
 });
 
 /**
@@ -175,15 +189,14 @@ export const reactPatternsSkill: Skill = defineSkill({
   name: 'react-patterns',
   description: 'Modern React component patterns and best practices',
   keywords: ['react', 'components', 'hooks', 'jsx', 'tsx'],
+  license: 'MIT',
+  compatibility: 'opencode',
   metadata: {
     category: 'development',
   },
-  content: `
-# React Component Patterns
-
-Modern patterns and best practices for React development.
-
-## Component Structure
+  whatIDo: 'I help you write modern React components using best practices, hooks, and proven design patterns',
+  whenToUseMe: 'Use when building React applications, creating new components, or refactoring existing React code',
+  instructions: `## Component Structure
 
 \`\`\`typescript
 // Prefer function components with hooks
@@ -270,8 +283,15 @@ Tabs.Tab = function Tab({ index, children }) {
 2. **Keep Components Small** - Single responsibility
 3. **Avoid Prop Drilling** - Use Context or state management
 4. **Memoize Expensive Calculations** - useMemo, useCallback
-5. **Test Components** - Unit and integration tests
-`,
+5. **Test Components** - Unit and integration tests`,
+  checklist: [
+    'Use TypeScript for type safety',
+    'Keep components small and focused',
+    'Use custom hooks for reusable logic',
+    'Avoid prop drilling with Context',
+    'Memoize expensive calculations',
+    'Write unit and integration tests',
+  ],
 });
 
 /**

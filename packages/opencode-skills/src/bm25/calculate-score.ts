@@ -35,6 +35,11 @@ import { DEFAULT_BM25_CONFIG } from './types';
 export function calculateBM25Score(query: string, docIndex: number, index: BM25Index, config: BM25Config = {}): number {
   const { k1, b } = { ...DEFAULT_BM25_CONFIG, ...config };
 
+  // Handle out of bounds
+  if (docIndex < 0 || docIndex >= index.documents.length) {
+    return 0;
+  }
+
   const queryTerms = tokenize(query);
   const document = index.documents[docIndex];
   const docLength = document.length;
