@@ -35,50 +35,65 @@ export const validateSkill = (skill: Skill, _strictMode = false): ValidationResu
     });
   }
 
-  // Validate whatIDo (required in v2)
-  if (!skill.whatIDo || skill.whatIDo.trim() === '') {
-    errors.push({
-      field: 'whatIDo',
-      message: 'whatIDo is required (Core capabilities section)',
-      code: 'MISSING_WHAT_I_DO',
-    });
-  } else if (skill.whatIDo.length < 20) {
-    suggestions.push({
-      field: 'whatIDo',
-      message: 'Consider expanding whatIDo to be more descriptive (at least 20 characters)',
+  // Check for legacy content field (v1 format)
+  const hasLegacyContent = skill.content && skill.content.trim() !== '';
+
+  // If using legacy content, warn about deprecation but don't require v2 fields
+  if (hasLegacyContent) {
+    warnings.push({
+      field: 'content',
+      message: 'content field is deprecated. Use whatIDo, whenToUseMe, instructions, checklist instead',
+      code: 'DEPRECATED_CONTENT',
     });
   }
 
-  // Validate whenToUseMe (required in v2)
-  if (!skill.whenToUseMe || skill.whenToUseMe.trim() === '') {
-    errors.push({
-      field: 'whenToUseMe',
-      message: 'whenToUseMe is required (When to use me section)',
-      code: 'MISSING_WHEN_TO_USE',
-    });
-  }
+  // Validate v2 structured content fields (required only if not using legacy content)
+  if (!hasLegacyContent) {
+    // Validate whatIDo (required in v2)
+    if (!skill.whatIDo || skill.whatIDo.trim() === '') {
+      errors.push({
+        field: 'whatIDo',
+        message: 'whatIDo is required (Core capabilities section)',
+        code: 'MISSING_WHAT_I_DO',
+      });
+    } else if (skill.whatIDo.length < 20) {
+      suggestions.push({
+        field: 'whatIDo',
+        message: 'Consider expanding whatIDo to be more descriptive (at least 20 characters)',
+      });
+    }
 
-  // Validate instructions (required in v2)
-  if (!skill.instructions || skill.instructions.trim() === '') {
-    errors.push({
-      field: 'instructions',
-      message: 'instructions is required (Instructions section)',
-      code: 'MISSING_INSTRUCTIONS',
-    });
-  }
+    // Validate whenToUseMe (required in v2)
+    if (!skill.whenToUseMe || skill.whenToUseMe.trim() === '') {
+      errors.push({
+        field: 'whenToUseMe',
+        message: 'whenToUseMe is required (When to use me section)',
+        code: 'MISSING_WHEN_TO_USE',
+      });
+    }
 
-  // Validate checklist (required in v2)
-  if (!skill.checklist || skill.checklist.length === 0) {
-    errors.push({
-      field: 'checklist',
-      message: 'checklist is required with at least one item',
-      code: 'MISSING_CHECKLIST',
-    });
-  } else if (skill.checklist.length === 1) {
-    suggestions.push({
-      field: 'checklist',
-      message: 'Consider adding more checklist items for better verification',
-    });
+    // Validate instructions (required in v2)
+    if (!skill.instructions || skill.instructions.trim() === '') {
+      errors.push({
+        field: 'instructions',
+        message: 'instructions is required (Instructions section)',
+        code: 'MISSING_INSTRUCTIONS',
+      });
+    }
+
+    // Validate checklist (required in v2)
+    if (!skill.checklist || skill.checklist.length === 0) {
+      errors.push({
+        field: 'checklist',
+        message: 'checklist is required with at least one item',
+        code: 'MISSING_CHECKLIST',
+      });
+    } else if (skill.checklist.length === 1) {
+      suggestions.push({
+        field: 'checklist',
+        message: 'Consider adding more checklist items for better verification',
+      });
+    }
   }
 
   // Validate license (required in v2)
@@ -105,15 +120,6 @@ export const validateSkill = (skill: Skill, _strictMode = false): ValidationResu
       field: 'metadata.category',
       message: 'metadata.category is recommended',
       code: 'MISSING_CATEGORY',
-    });
-  }
-
-  // Check deprecated content field
-  if (skill.content && skill.content.trim() !== '') {
-    warnings.push({
-      field: 'content',
-      message: 'content field is deprecated. Use whatIDo, whenToUseMe, instructions, checklist instead',
-      code: 'DEPRECATED_CONTENT',
     });
   }
 

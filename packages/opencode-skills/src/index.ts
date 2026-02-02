@@ -41,4 +41,4 @@ export {
   type ValidationSuggestion,
   type ValidationWarning,
   validateSkill,
-} from './validation/index';
+} from './validation';
