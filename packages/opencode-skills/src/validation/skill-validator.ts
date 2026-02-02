@@ -8,7 +8,7 @@ import type {
   ValidationIssue,
   ValidationResult,
   ValidationSeverity,
-} from '../types.js';
+} from '../types';
 
 // Re-export types for backward compatibility
 export type {
@@ -173,6 +173,9 @@ export function validateSkillDefinition(skill: SkillDefinition): ValidationResul
   return validator.validate(skill);
 }
 
+// Alias for backward compatibility
+export const validateSkill = validateSkillDefinition;
+
 export function formatValidationIssues(issues: ValidationIssue[]): string {
   return issues
     .map(
@@ -196,4 +199,25 @@ export function getValidationErrors(result: ValidationResult): ValidationIssue[]
 
 export function getValidationWarnings(result: ValidationResult): ValidationIssue[] {
   return result.issues.filter((issue) => issue.severity === 'warning');
+}
+
+export function formatValidationResult(result: ValidationResult): string {
+  if (result.valid && result.issues.length === 0) {
+    return '✓ Valid skill definition';
+  }
+
+  const lines: string[] = [];
+
+  if (!result.valid) {
+    lines.push('✗ Invalid skill definition');
+  } else {
+    lines.push('✓ Valid skill definition with warnings');
+  }
+
+  if (result.issues.length > 0) {
+    lines.push('');
+    lines.push(formatValidationIssues(result.issues));
+  }
+
+  return lines.join('\n');
 }

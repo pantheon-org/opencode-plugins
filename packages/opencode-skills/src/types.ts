@@ -61,6 +61,18 @@ export interface Skill {
 
   /** @deprecated Use metadata.category instead */
   category?: string;
+
+  /** Content sections for structured skill content */
+  contentSections?: Array<{
+    type: string;
+    content: string;
+  }>;
+
+  /** Usage examples for the skill */
+  examples?: Array<{
+    description: string;
+    context?: string;
+  }>;
 }
 
 /**
@@ -127,4 +139,41 @@ export interface MatchResult {
 
   /** Whether negation was detected */
   hasNegation: boolean;
+}
+
+// SkillDefinition is an alias for Skill for backward compatibility
+export type SkillDefinition = Skill;
+
+// Validation Types
+export type ValidationSeverity = 'error' | 'warning' | 'info';
+
+export interface ValidationIssue {
+  code: string;
+  message: string;
+  severity: ValidationSeverity;
+  path?: string;
+}
+
+export interface ValidationResult {
+  valid: boolean;
+  issues: ValidationIssue[];
+}
+
+export interface ValidationContext {
+  packageName?: string;
+  filePath?: string;
+  strict?: boolean;
+}
+
+export interface SkillValidator {
+  validate(skill: Skill): ValidationResult;
+}
+
+export interface SkillRegistry {
+  register(skill: Skill): void;
+  get(name: string): Skill | undefined;
+  has(name: string): boolean;
+  list(): Skill[];
+  clear(): void;
+  size(): number;
 }
