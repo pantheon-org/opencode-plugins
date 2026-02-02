@@ -1,70 +1,41 @@
-/**
- * Format Validation Result
- *
- * Format validation results for human-readable console output.
- */
+import type { ValidationResult } from '../types.js';
 
-import type { ValidationResult } from './types';
+export const formatValidationResult = (result: ValidationResult, skillName: string): string => {
+  const lines: string[] = [];
 
-/**
- * Format validation result for console output
- *
- * @param result - Validation result to format
- * @param skillName - Name of the skill being validated
- * @returns Formatted string with errors, warnings, and suggestions
- *
- * @example
- * ```typescript
- * const result = {
- *   valid: false,
- *   errors: [{ field: 'name', message: 'Name is required', severity: 'error' }],
- *   warnings: [],
- *   suggestions: [],
- * };
- *
- * console.log(formatValidationResult(result, 'my-skill'));
- * // Outputs:
- * // 📋 Validation Results for "my-skill"
- * // ==================================================
- * //
- * // ❌ Errors (1):
- * //   • name: Name is required
- * // ...
- * ```
- */
-export function formatValidationResult(result: ValidationResult, skillName: string): string {
-  let output = `\n📋 Validation Results for "${skillName}"\n`;
-  output += `${'='.repeat(50)}\n\n`;
+  lines.push(`Validation Results for "${skillName}"`);
+  lines.push('');
 
-  if (result.errors.length > 0) {
-    output += `❌ Errors (${result.errors.length}):\n`;
-    result.errors.forEach((e) => {
-      output += `  • ${e.field}: ${e.message}\n`;
-    });
-    output += '\n';
-  }
-
-  if (result.warnings.length > 0) {
-    output += `⚠️  Warnings (${result.warnings.length}):\n`;
-    result.warnings.forEach((w) => {
-      output += `  • ${w.field}: ${w.message}\n`;
-    });
-    output += '\n';
-  }
-
-  if (result.suggestions.length > 0) {
-    output += `💡 Suggestions (${result.suggestions.length}):\n`;
-    result.suggestions.forEach((s) => {
-      output += `  • ${s.field}: ${s.message}\n`;
-    });
-    output += '\n';
-  }
-
-  if (result.valid) {
-    output += '✅ Skill is valid!\n';
+  if (!result.valid) {
+    lines.push('❌ Errors:');
+    for (const error of result.errors) {
+      lines.push(`  - ${error.field}: ${error.message}`);
+    }
+    lines.push('');
+    lines.push('Skill validation failed');
   } else {
-    output += '❌ Skill validation failed. Please fix errors above.\n';
+    if (result.warnings.length > 0) {
+      lines.push('⚠️  Warnings:');
+      for (const warning of result.warnings) {
+        lines.push(`  - ${warning.field}: ${warning.message}`);
+      }
+      lines.push('');
+    }
+
+    if (result.suggestions.length > 0) {
+      lines.push('💡 Suggestions:');
+      for (const suggestion of result.suggestions) {
+        lines.push(`  - ${suggestion.field}: ${suggestion.message}`);
+      }
+      lines.push('');
+    }
+
+    if (result.warnings.length === 0 && result.suggestions.length === 0) {
+      lines.push('✅ Skill is valid');
+    } else {
+      lines.push('✅ Skill is valid (with warnings/suggestions)');
+    }
   }
 
-  return output;
-}
+  return lines.join('\n');
+};

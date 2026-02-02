@@ -1,144 +1,124 @@
-/**
- * Validate Skill
- *
- * Comprehensive validation for Skill objects with structured content support.
- */
+import type { Skill, ValidationError, ValidationResult, ValidationSuggestion, ValidationWarning } from '../types.js';
 
-import type { Skill } from '../types';
-import type { ValidationError, ValidationResult, ValidationSuggestion, ValidationWarning } from './types';
-
-/**
- * Validate a skill object
- *
- * Validates required fields, content structure, and provides warnings and suggestions.
- *
- * @param skill - Skill object to validate
- * @param _strict - Reserved for future strict mode (currently unused)
- * @returns ValidationResult with errors, warnings, and suggestions
- *
- * @example
- * ```typescript
- * const skill = {
- *   name: 'typescript-tdd',
- *   description: 'TypeScript with TDD',
- *   whatIDo: 'I help with TypeScript development',
- *   whenToUseMe: 'Use me when starting a new project',
- *   instructions: 'Follow test-first development',
- *   checklist: ['Write tests', 'Implement feature'],
- * };
- *
- * const result = validateSkill(skill);
- * // => { valid: true, errors: [], warnings: [...], suggestions: [...] }
- * ```
- */
-// biome-ignore lint: Validation logic requires multiple condition checks for comprehensive skill validation
-export function validateSkill(skill: Skill, _strict?: boolean): ValidationResult {
+export const validateSkill = (skill: Skill, _strictMode = false): ValidationResult => {
   const errors: ValidationError[] = [];
   const warnings: ValidationWarning[] = [];
   const suggestions: ValidationSuggestion[] = [];
 
-  // Required field validation
-  if (!skill.name) {
-    errors.push({ field: 'name', message: 'Name is required', severity: 'error' });
-  } else if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(skill.name)) {
+  // Validate name
+  if (!skill.name || skill.name.trim() === '') {
     errors.push({
       field: 'name',
-      message: 'Name must be lowercase alphanumeric with hyphens (kebab-case)',
-      severity: 'error',
+      message: 'Name is required',
+      code: 'MISSING_NAME',
     });
-  }
-
-  if (!skill.description) {
-    errors.push({ field: 'description', message: 'Description is required', severity: 'error' });
-  }
-
-  // Check for structured content (new format)
-  const hasStructuredContent = skill.whatIDo || skill.whenToUseMe || skill.instructions || skill.checklist;
-  const hasLegacyContent = skill.content;
-
-  if (!hasStructuredContent && !hasLegacyContent) {
+  } else if (!/^[a-z0-9-]+$/.test(skill.name)) {
     errors.push({
-      field: 'content',
-      message:
-        'Either structured content (whatIDo, whenToUseMe, instructions, checklist) or legacy content field is required',
-      severity: 'error',
+      field: 'name',
+      message: 'Name must be in kebab-case format (lowercase letters, numbers, and hyphens only)',
+      code: 'INVALID_NAME_FORMAT',
     });
   }
 
-  if (hasLegacyContent && !hasStructuredContent) {
+  // Validate description
+  if (!skill.description || skill.description.trim() === '') {
+    errors.push({
+      field: 'description',
+      message: 'Description is required',
+      code: 'MISSING_DESCRIPTION',
+    });
+  } else if (skill.description.length < 10) {
     warnings.push({
-      field: 'content',
-      message:
-        'Using deprecated "content" field. Consider migrating to structured content (whatIDo, whenToUseMe, instructions, checklist)',
-      severity: 'warning',
+      field: 'description',
+      message: 'Description should be at least 10 characters',
+      code: 'SHORT_DESCRIPTION',
     });
   }
 
-  // Validate structured content fields
-  if (hasStructuredContent) {
-    if (!skill.whatIDo) {
-      errors.push({ field: 'whatIDo', message: 'whatIDo section is required', severity: 'error' });
-    }
-    if (!skill.whenToUseMe) {
-      errors.push({
-        field: 'whenToUseMe',
-        message: 'whenToUseMe section is required',
-        severity: 'error',
-      });
-    }
-    if (!skill.instructions) {
-      errors.push({
-        field: 'instructions',
-        message: 'instructions section is required',
-        severity: 'error',
-      });
-    }
-    if (!skill.checklist || skill.checklist.length === 0) {
-      errors.push({
-        field: 'checklist',
-        message: 'checklist must contain at least one item',
-        severity: 'error',
-      });
-    }
-  }
-
-  // Recommended field validation (warnings)
-  if (!skill.license) {
-    warnings.push({ field: 'license', message: 'License is recommended (e.g., MIT)', severity: 'warning' });
-  }
-
-  if (!skill.compatibility) {
-    warnings.push({
-      field: 'compatibility',
-      message: 'Compatibility should be set to "opencode"',
-      severity: 'warning',
+  // Validate whatIDo (required in v2)
+  if (!skill.whatIDo || skill.whatIDo.trim() === '') {
+    errors.push({
+      field: 'whatIDo',
+      message: 'whatIDo is required (Core capabilities section)',
+      code: 'MISSING_WHAT_I_DO',
     });
-  }
-
-  if (!skill.metadata?.category) {
-    warnings.push({
-      field: 'metadata.category',
-      message: 'Category is recommended (workflow, development, documentation, etc.)',
-      severity: 'warning',
-    });
-  }
-
-  // Quality suggestions
-  if (skill.whatIDo && skill.whatIDo.length < 50) {
+  } else if (skill.whatIDo.length < 20) {
     suggestions.push({
       field: 'whatIDo',
-      message: 'Consider expanding "What I do" section (current: < 50 chars)',
-      severity: 'info',
+      message: 'Consider expanding whatIDo to be more descriptive (at least 20 characters)',
     });
   }
 
-  if (skill.checklist && skill.checklist.length < 2) {
-    suggestions.push({
-      field: 'checklist',
-      message: 'Consider adding more checklist items (current: < 2 items)',
-      severity: 'info',
+  // Validate whenToUseMe (required in v2)
+  if (!skill.whenToUseMe || skill.whenToUseMe.trim() === '') {
+    errors.push({
+      field: 'whenToUseMe',
+      message: 'whenToUseMe is required (When to use me section)',
+      code: 'MISSING_WHEN_TO_USE',
     });
   }
+
+  // Validate instructions (required in v2)
+  if (!skill.instructions || skill.instructions.trim() === '') {
+    errors.push({
+      field: 'instructions',
+      message: 'instructions is required (Instructions section)',
+      code: 'MISSING_INSTRUCTIONS',
+    });
+  }
+
+  // Validate checklist (required in v2)
+  if (!skill.checklist || skill.checklist.length === 0) {
+    errors.push({
+      field: 'checklist',
+      message: 'checklist is required with at least one item',
+      code: 'MISSING_CHECKLIST',
+    });
+  } else if (skill.checklist.length === 1) {
+    suggestions.push({
+      field: 'checklist',
+      message: 'Consider adding more checklist items for better verification',
+    });
+  }
+
+  // Validate license (required in v2)
+  if (!skill.license || skill.license.trim() === '') {
+    warnings.push({
+      field: 'license',
+      message: 'license is recommended (e.g., MIT)',
+      code: 'MISSING_LICENSE',
+    });
+  }
+
+  // Validate compatibility (required in v2)
+  if (!skill.compatibility || skill.compatibility.trim() === '') {
+    warnings.push({
+      field: 'compatibility',
+      message: 'compatibility is recommended (e.g., opencode)',
+      code: 'MISSING_COMPATIBILITY',
+    });
+  }
+
+  // Validate metadata.category
+  if (!skill.metadata?.category || skill.metadata.category.trim() === '') {
+    warnings.push({
+      field: 'metadata.category',
+      message: 'metadata.category is recommended',
+      code: 'MISSING_CATEGORY',
+    });
+  }
+
+  // Check deprecated content field
+  if (skill.content && skill.content.trim() !== '') {
+    warnings.push({
+      field: 'content',
+      message: 'content field is deprecated. Use whatIDo, whenToUseMe, instructions, checklist instead',
+      code: 'DEPRECATED_CONTENT',
+    });
+  }
+
+  // Note: strictMode parameter kept for API compatibility
+  // Currently doesn't change validation behavior
 
   return {
     valid: errors.length === 0,
@@ -146,4 +126,4 @@ export function validateSkill(skill: Skill, _strict?: boolean): ValidationResult
     warnings,
     suggestions,
   };
-}
+};
