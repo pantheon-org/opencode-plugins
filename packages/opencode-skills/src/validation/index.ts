@@ -1,3 +1,3 @@
 export { formatValidationResult } from './format-validation-result';
-export * from './types';
+export type { ValidationError, ValidationResult, ValidationSuggestion, ValidationWarning } from './types';
 export { validateSkill } from './validate-skill';

@@ -20,6 +20,7 @@ export interface ParsedSkill {
 export interface SkillFrontmatter {
   name: string;
   description: string;
+  version?: string;
   license?: string;
   compatibility?: string;
   metadata?: SkillMetadata;

@@ -1,4 +1,4 @@
-import type { Skill, ValidationError, ValidationResult, ValidationSuggestion, ValidationWarning } from '../types.js';
+import type { Skill, ValidationError, ValidationResult, ValidationSuggestion, ValidationWarning } from '../types';
 
 export const validateSkill = (skill: Skill, _strictMode = false): ValidationResult => {
   const errors: ValidationError[] = [];
