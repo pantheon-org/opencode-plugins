@@ -77,37 +77,39 @@ flowchart LR
 
 Write one minimal test showing what should happen.
 
-#### Good
+#### Good
 
 ```typescript
-test('retries failed operations 3 times', async () => {
+test("retries failed operations 3 times", async () => {
   let attempts = 0;
   const operation = () => {
     attempts++;
-    if (attempts < 3) throw new Error('fail');
-    return 'success';
+    if (attempts < 3) throw new Error("fail");
+    return "success";
   };
 
-const result = await retryOperation(operation);
+  const result = await retryOperation(operation);
 
-expect(result).toBe('success'); expect(attempts).toBe(3); });
-
+  expect(result).toBe("success");
+  expect(attempts).toBe(3);
+});
 ```
-Clear name, tests real behavior, one thing
 
+Clear name, tests real behavior, one thing
 
 #### Bad
 
 ```typescript
-test('retry works', async () => {
-  const mock = jest.fn()
+test("retry works", async () => {
+  const mock = jest
+    .fn()
     .mockRejectedValueOnce(new Error())
     .mockRejectedValueOnce(new Error())
-    .mockResolvedValueOnce('success');
+    .mockResolvedValueOnce("success");
   await retryOperation(mock);
   expect(mock).toHaveBeenCalledTimes(3);
 });
-````
+```
 
 Vague name, tests mock not code
 
