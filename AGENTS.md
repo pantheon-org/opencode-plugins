@@ -1,6 +1,6 @@
-# Coding Conventions
+# AGENTS.md
 
-This document defines the mandatory coding standards for this repository.
+This document contains important rules and guidelines for AI agents working on this codebase.
 
 ## Arrow Functions Only
 
@@ -45,20 +45,189 @@ class DataFetcher {
 - No function hoisting surprises
 - Uniform codebase style
 
-## Unit Test Collocation
+## Code Organization Rules
 
-**Tests must be collocated with source files. Never use a separate `tests/` directory.**
+### 1. One Function Per Module Maximum
+
+- Each `.ts` file MUST export at most ONE function or class
+- Each module should have a single, well-defined responsibility
+- This promotes modularity, testability, and code reuse
+
+**BAD**:
+
+```typescript
+// math-utils.ts
+export function add(a: number, b: number): number { ... }
+export function subtract(a: number, b: number): number { ... }
+export function multiply(a: number, b: number): number { ... }
+```
+
+**GOOD**:
+
+```typescript
+// add.ts
+export function add(a: number, b: number): number { ... }
+
+// subtract.ts
+export function subtract(a: number, b: number): number { ... }
+
+// index.ts (barrel)
+export { add } from './add';
+export { subtract } from './subtract';
+```
+
+### Exceptions
+
+Private helper functions that are only used by the main exported function may be defined in the same file, but they must
+not be exported:
+
+```typescript
+// validators/is-valid-email.ts
+
+// Private helper - not exported
+const hasValidDomain = (email: string): boolean => {
+  return email.includes("@") && email.split("@")[1].includes(".");
+};
+
+// Single exported function
+export const isValidEmail = (email: string): boolean => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && hasValidDomain(email);
+};
+```
+
+### File Naming
+
+- Use kebab-case for file names: `calculate-total.ts`, `format-currency.ts`
+- Match the file name to the exported function name
+
+### Rationale
+
+- Maximum code discoverability
+- Easy to locate specific functions
+- Clear module boundaries
+- Simplifies code review (one concern per file)
+- Better tree-shaking for bundlers
+- Easier testing (isolated units)
+
+### 2. Barrel Module Pattern
+
+- Use barrel exports (`index.ts`) to expose public API of a directory
+- Each subdirectory should have an `index.ts` that re-exports its children
+- Consumers should import from the barrel, not individual files
+
+**BAD**:
+
+```typescript
+// Importing from specific files
+import { add } from "./utils/math/add";
+import { subtract } from "./utils/math/subtract";
+```
+
+**GOOD**:
+
+```typescript
+// foo/index.ts
+export { add } from "./add";
+export { subtract } from "./subtract";
+export { multiply } from "./multiply";
+
+// consumer.ts
+import { add, subtract } from "./foo"; // Not './foo/add'
+```
+
+### Import Conventions
+
+- Always import from barrel exports when available
+- Only import from specific files when the item is not exported from the barrel
+- Avoid deep relative imports (e.g., `../../../foo/bar/baz`)
 
 ### Structure
 
 ```
 src/
 ├── utils/
-│   ├── format-date.ts      # Source file
-│   ├── format-date.test.ts # Test file (same directory)
+│   ├── calculate-total.ts
+│   ├── format-currency.ts
 │   ├── retry.ts
-│   ├── retry.test.ts
-│   └── index.ts            # Barrel file
+│   └── index.ts          # Barrel: re-exports all utils
+```
+
+### Barrel File Pattern
+
+```typescript
+// utils/index.ts
+export { calculateTotal } from "./calculate-total";
+export { formatCurrency } from "./format-currency";
+export { withRetry } from "./retry";
+
+// Re-export types separately
+export type { Item, Currency } from "./types";
+```
+
+### Multiple Barrel Levels
+
+For nested structures, create barrels at each level:
+
+```
+src/
+├── scripts/
+│   ├── mirror-package/
+│   │   ├── parse-tag.ts
+│   │   ├── validate-mirror-url.ts
+│   │   └── index.ts        # Level 2 barrel
+│   ├── check-repo-settings/
+│   │   ├── checks.ts
+│   │   └── index.ts        # Level 2 barrel
+│   └── index.ts            # Level 1 barrel
+```
+
+```typescript
+// scripts/mirror-package/index.ts
+export { detectChanges } from "./detect-changes";
+export { parseTag } from "./parse-tag";
+export { validateMirrorUrl } from "./validate-mirror-url";
+export type { PackageInfo, MirrorUrl } from "./types";
+```
+
+```typescript
+// scripts/index.ts
+export { detectChanges, parseTag, validateMirrorUrl } from "./mirror-package";
+export { checkRepoSettings } from "./check-repo-settings";
+```
+
+### Rationale
+
+- Clean import statements throughout the codebase
+- Encapsulation of internal module structure
+- Easy to refactor (change internal organization without affecting imports)
+- Clear public API surface for each directory
+- Reduces import complexity
+
+### 3. Test Collocation
+
+**Tests must be collocated with source files. Never use a separate `tests/` directory.**
+
+- Test files MUST be collocated with the source files they test
+- Each source file `foo.ts` should have its own `foo.test.ts` next to it
+- NEVER create consolidated test files for an entire directory
+
+**BAD**:
+
+```
+foo/
+  baa-0.ts
+  baa-1.ts
+  foo.test.ts     <-- WRONG: consolidated test file
+```
+
+**GOOD**:
+
+```
+foo/
+  baa-0.ts
+  baa-0.test.ts   <-- CORRECT: test next to source
+  baa-1.ts
+  baa-1.test.ts   <-- CORRECT: test next to source
 ```
 
 ### Naming Convention
@@ -248,153 +417,28 @@ it("should return all active users", async () => {
 });
 ```
 
-## One Function Per Module (Maximum)
+## Testing Requirements
 
-**Each module file must contain exactly ONE exported function maximum.**
+- Every public function must have corresponding test coverage
+- Test files must follow the naming convention: `{source-file}.test.ts`
+- Use descriptive test names that explain the behavior being tested
+- Test both success and error cases
 
-### Good
-
-```typescript
-// utils/calculate-total.ts
-export const calculateTotal = (items: Item[]): number => {
-  return items.reduce((sum, item) => sum + item.price, 0);
-};
-```
-
-```typescript
-// utils/format-currency.ts
-export const formatCurrency = (amount: number, currency: string = "USD"): string => {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-  }).format(amount);
-};
-```
-
-### Bad
-
-```typescript
-// NEVER export multiple functions from one file
-export const calculateTotal = (items: Item[]): number => { ... };
-export const formatCurrency = (amount: number): string => { ... };
-export const parseDate = (date: string): Date => { ... };
-```
-
-### Exceptions
-
-Private helper functions that are only used by the main exported function may be defined in the same file, but they must
-not be exported:
-
-```typescript
-// validators/is-valid-email.ts
-
-// Private helper - not exported
-const hasValidDomain = (email: string): boolean => {
-  return email.includes("@") && email.split("@")[1].includes(".");
-};
-
-// Single exported function
-export const isValidEmail = (email: string): boolean => {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && hasValidDomain(email);
-};
-```
-
-### File Naming
-
-- Use kebab-case for file names: `calculate-total.ts`, `format-currency.ts`
-- Match the file name to the exported function name
-
-### Rationale
-
-- Maximum code discoverability
-- Easy to locate specific functions
-- Clear module boundaries
-- Simplifies code review (one concern per file)
-- Better tree-shaking for bundlers
-- Easier testing (isolated units)
-
-## Barrel Modules
-
-**Use barrel files (index.ts) to consolidate exports from subdirectories.**
-
-### Structure
+## Directory Structure Example
 
 ```
-src/
-├── utils/
-│   ├── calculate-total.ts
-│   ├── format-currency.ts
-│   ├── retry.ts
-│   └── index.ts          # Barrel: re-exports all utils
+libs/
+  workflows/
+    src/
+      utils/
+        index.ts
+        string-utils.ts
+        string-utils.test.ts
+        math-utils.ts
+        math-utils.test.ts
+        date-utils.ts
+        date-utils.test.ts
 ```
-
-### Barrel File Pattern
-
-```typescript
-// utils/index.ts
-export { calculateTotal } from "./calculate-total";
-export { formatCurrency } from "./format-currency";
-export { withRetry } from "./retry";
-
-// Re-export types separately
-export type { Item, Currency } from "./types";
-```
-
-### Import Patterns
-
-**Within the same directory level:**
-
-```typescript
-// Import directly from the module
-import { withRetry } from "./retry";
-```
-
-**From parent or sibling directories:**
-
-```typescript
-// Import from the barrel
-import { withRetry, calculateTotal } from "../utils";
-import { parseTag } from "./mirror-package";
-```
-
-### Multiple Barrel Levels
-
-For nested structures, create barrels at each level:
-
-```
-src/
-├── scripts/
-│   ├── mirror-package/
-│   │   ├── parse-tag.ts
-│   │   ├── validate-mirror-url.ts
-│   │   └── index.ts        # Level 2 barrel
-│   ├── check-repo-settings/
-│   │   ├── checks.ts
-│   │   └── index.ts        # Level 2 barrel
-│   └── index.ts            # Level 1 barrel
-```
-
-```typescript
-// scripts/mirror-package/index.ts
-export { detectChanges } from "./detect-changes";
-export { parseTag } from "./parse-tag";
-export { validateMirrorUrl } from "./validate-mirror-url";
-export type { PackageInfo, MirrorUrl } from "./types";
-```
-
-```typescript
-// scripts/index.ts
-export { detectChanges, parseTag, validateMirrorUrl } from "./mirror-package";
-export { checkRepoSettings } from "./check-repo-settings";
-```
-
-### Rationale
-
-- Clean import statements throughout the codebase
-- Encapsulation of internal module structure
-- Easy to refactor (change internal organization without affecting imports)
-- Clear public API surface for each directory
-- Reduces import complexity
 
 ## Quick Reference
 
