@@ -29,9 +29,9 @@ import type { ParsedSkill } from './types';
  * // => { frontmatter: { name: 'typescript-tdd', ... }, sections: { whatIDo: '...', ... } }
  * ```
  */
-export function parseSkillMarkdown(markdown: string): ParsedSkill {
+export const parseSkillMarkdown = (markdown: string): ParsedSkill => {
   const { frontmatter, content } = extractFrontmatter(markdown);
   const sections = extractSections(content);
 
   return { frontmatter, sections };
-}
+};

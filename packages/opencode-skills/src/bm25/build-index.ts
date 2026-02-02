@@ -25,7 +25,7 @@ import type { BM25Index } from './types';
  * console.log(index.totalDocs); // => 2
  * ```
  */
-export function buildBM25Index(skills: Map<string, string>): BM25Index {
+export const buildBM25Index = (skills: Map<string, string>): BM25Index => {
   const documents: string[][] = [];
   const skillNames: string[] = [];
 
@@ -60,4 +60,4 @@ export function buildBM25Index(skills: Map<string, string>): BM25Index {
     totalDocs: documents.length,
     idfCache,
   };
-}
+};

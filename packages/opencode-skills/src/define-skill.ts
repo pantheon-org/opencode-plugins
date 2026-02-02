@@ -25,10 +25,10 @@ import { formatValidationResult, validateSkill } from './validation/index';
  * });
  * ```
  */
-export function defineSkill(
+export const defineSkill = (
   skill: Pick<Skill, 'name' | 'description'> & Partial<Omit<Skill, 'name' | 'description'>>,
   options?: { strict?: boolean; validate?: boolean },
-): Skill {
+): Skill => {
   const fullSkill: Skill = {
     version: '1.0.0',
     updatedAt: new Date().toISOString(),
@@ -64,4 +64,4 @@ export function defineSkill(
   }
 
   return fullSkill;
-}
+};

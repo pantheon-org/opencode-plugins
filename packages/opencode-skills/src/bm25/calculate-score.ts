@@ -32,7 +32,12 @@ import { DEFAULT_BM25_CONFIG } from './types';
  * @param config - BM25 configuration parameters
  * @returns BM25 relevance score
  */
-export function calculateBM25Score(query: string, docIndex: number, index: BM25Index, config: BM25Config = {}): number {
+export const calculateBM25Score = (
+  query: string,
+  docIndex: number,
+  index: BM25Index,
+  config: BM25Config = {},
+): number => {
   const { k1, b } = { ...DEFAULT_BM25_CONFIG, ...config };
 
   // Handle out of bounds
@@ -61,4 +66,4 @@ export function calculateBM25Score(query: string, docIndex: number, index: BM25I
   }
 
   return score;
-}
+};

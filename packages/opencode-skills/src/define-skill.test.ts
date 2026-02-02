@@ -1,6 +1,11 @@
-import { describe, expect, it } from 'bun:test';
+/**
+ * Define Skill Tests
+ *
+ * Tests for the skill definition functionality.
+ */
 
-import { defineSkill } from './index';
+import { describe, expect, it } from 'bun:test';
+import { defineSkill } from './define-skill';
 
 describe('defineSkill', () => {
   it('should create skill with structured content', () => {

@@ -44,12 +44,12 @@ const DEFAULT_NEGATION_KEYWORDS = ["don't", 'do not', 'avoid', 'skip', 'ignore',
  * // => { matches: false, hasNegation: true }
  * ```
  */
-export function hasIntentToUse(
+export const hasIntentToUse = (
   content: string,
   skillName: string,
   keywords: string[] = [],
   config?: SkillsPluginConfig['patternMatching'],
-): MatchResult {
+): MatchResult => {
   // Normalize content for matching
   const normalizedContent = content.toLowerCase();
   const normalizedSkillName = skillName.toLowerCase();
@@ -130,4 +130,4 @@ export function hasIntentToUse(
     matchedPattern,
     hasNegation,
   };
-}
+};

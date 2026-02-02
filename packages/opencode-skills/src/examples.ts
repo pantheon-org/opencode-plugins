@@ -73,9 +73,9 @@ describe('myFunction', () => {
 **Single Function Export:**
 \`\`\`typescript
 // utils/validate.ts
-export function validate(input: string): boolean {
+export const validate = (input: string): boolean => {
   return /^[a-z]+$/.test(input);
-}
+};
 \`\`\`
 
 **Barrel Module:**
@@ -137,17 +137,17 @@ High-level approach without technical details.
 
 ## Writing Tips
 
-**❌ Avoid:**
-- Technical jargon without explanation
-- Passive voice
-- Long, complex sentences
-- Acronyms without definitions
+**Avoid:**
+    - Technical jargon without explanation
+    - Passive voice
+    - Long, complex sentences
+    - Acronyms without definitions
 
-**✅ Use:**
-- Clear, direct language
-- Concrete examples
-- Bullet points for lists
-- Visual aids (diagrams, charts)
+    **Use:**
+    - Clear, direct language
+    - Concrete examples
+    - Bullet points for lists
+    - Visual aids (diagrams, charts)
 
 ## Example Transformation
 
@@ -199,20 +199,20 @@ export const reactPatternsSkill: Skill = defineSkill({
   instructions: `## Component Structure
 
 \`\`\`typescript
-// Prefer function components with hooks
-export function MyComponent({ name, onAction }: Props) {
+// Prefer arrow function components with hooks
+export const MyComponent = ({ name, onAction }: Props) => {
   const [state, setState] = useState(initialValue);
-  
+
   useEffect(() => {
     // Side effects
   }, [dependencies]);
-  
+
   return (
     <div>
       {/* JSX */}
     </div>
   );
-}
+};
 \`\`\`
 
 ## Patterns

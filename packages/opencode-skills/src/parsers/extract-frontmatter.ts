@@ -27,7 +27,7 @@ import type { SkillFrontmatter } from './types';
  * // => { frontmatter: { name: 'typescript-tdd', ... }, content: '# Content here' }
  * ```
  */
-export function extractFrontmatter(markdown: string): { frontmatter: SkillFrontmatter; content: string } {
+export const extractFrontmatter = (markdown: string): { frontmatter: SkillFrontmatter; content: string } => {
   const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
   const match = markdown.match(frontmatterRegex);
 
@@ -39,4 +39,4 @@ export function extractFrontmatter(markdown: string): { frontmatter: SkillFrontm
   const frontmatter = parseYAML(yamlContent) as SkillFrontmatter;
 
   return { frontmatter, content: markdownContent };
-}
+};

@@ -37,7 +37,7 @@ import type { Skill } from '../types';
  * // ...
  * ```
  */
-export function skillToMarkdown(skill: Skill): string {
+export const skillToMarkdown = (skill: Skill): string => {
   const frontmatter = {
     name: skill.name,
     description: skill.description,
@@ -65,4 +65,4 @@ ${skill.checklist?.map((item) => `- [ ] ${item}`).join('\n') || ''}
   `.trim();
 
   return `---\n${yamlFrontmatter}---\n\n${content}`;
-}
+};

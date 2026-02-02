@@ -61,7 +61,7 @@ describe('validateSkill', () => {
     expect(result.errors.some((e) => e.field === 'description')).toBe(true);
   });
 
-  it('should error on missing structured content', () => {
+  it('should error on missing structured content fields', () => {
     const skill: Skill = {
       name: 'test-skill',
       description: 'A test skill',
@@ -70,7 +70,10 @@ describe('validateSkill', () => {
     const result = validateSkill(skill);
 
     expect(result.valid).toBe(false);
-    expect(result.errors.some((e) => e.field === 'content')).toBe(true);
+    expect(result.errors.some((e) => e.field === 'whatIDo')).toBe(true);
+    expect(result.errors.some((e) => e.field === 'whenToUseMe')).toBe(true);
+    expect(result.errors.some((e) => e.field === 'instructions')).toBe(true);
+    expect(result.errors.some((e) => e.field === 'checklist')).toBe(true);
   });
 
   it('should warn on deprecated content field', () => {
@@ -249,7 +252,7 @@ describe('formatValidationResult', () => {
     const formatted = formatValidationResult(result, 'test-skill');
 
     expect(formatted).toContain('Validation Results for "test-skill"');
-    expect(formatted).toContain('❌ Errors');
+    expect(formatted).toContain('[ERROR]');
     expect(formatted).toContain('description: Description is required');
     expect(formatted).toContain('Skill validation failed');
   });
@@ -267,9 +270,9 @@ describe('formatValidationResult', () => {
     const result = validateSkill(skill);
     const formatted = formatValidationResult(result, 'test-skill');
 
-    expect(formatted).toContain('⚠️  Warnings');
+    expect(formatted).toContain('[WARNING]');
     expect(formatted).toContain('license');
-    expect(formatted).toContain('✅ Skill is valid');
+    expect(formatted).toContain('[OK] Skill is valid');
   });
 
   it('should format validation result for valid skill', () => {
@@ -290,7 +293,7 @@ describe('formatValidationResult', () => {
     const result = validateSkill(skill);
     const formatted = formatValidationResult(result, 'test-skill');
 
-    expect(formatted).toContain('✅ Skill is valid');
+    expect(formatted).toContain('[OK] Skill is valid');
     expect(formatted).not.toContain('❌ Errors');
   });
 });

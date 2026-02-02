@@ -19,6 +19,6 @@
  * // => 'skill-name'
  * ```
  */
-export function escapeRegex(str: string): string {
+export const escapeRegex = (str: string): string => {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
+};

@@ -28,12 +28,12 @@ import { hasIntentToUse } from './has-intent-to-use';
  * // => ['typescript-tdd']
  * ```
  */
-export function findMatchingSkills(
+export const findMatchingSkills = (
   content: string,
   skillNames: string[],
   skillKeywords: Map<string, string[]> = new Map(),
   config?: SkillsPluginConfig['patternMatching'],
-): string[] {
+): string[] => {
   const matchingSkills: string[] = [];
 
   for (const skillName of skillNames) {
@@ -46,4 +46,4 @@ export function findMatchingSkills(
   }
 
   return matchingSkills;
-}
+};

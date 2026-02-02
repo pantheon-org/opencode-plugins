@@ -7,7 +7,7 @@ export const formatValidationResult = (result: ValidationResult, skillName: stri
   lines.push('');
 
   if (!result.valid) {
-    lines.push('❌ Errors:');
+    lines.push('[ERROR] Validation failed:');
     for (const error of result.errors) {
       lines.push(`  - ${error.field}: ${error.message}`);
     }
@@ -15,7 +15,7 @@ export const formatValidationResult = (result: ValidationResult, skillName: stri
     lines.push('Skill validation failed');
   } else {
     if (result.warnings.length > 0) {
-      lines.push('⚠️  Warnings:');
+      lines.push('[WARNING] Issues found:');
       for (const warning of result.warnings) {
         lines.push(`  - ${warning.field}: ${warning.message}`);
       }
@@ -23,7 +23,7 @@ export const formatValidationResult = (result: ValidationResult, skillName: stri
     }
 
     if (result.suggestions.length > 0) {
-      lines.push('💡 Suggestions:');
+      lines.push('[SUGGESTION] Improvements:');
       for (const suggestion of result.suggestions) {
         lines.push(`  - ${suggestion.field}: ${suggestion.message}`);
       }
@@ -31,9 +31,9 @@ export const formatValidationResult = (result: ValidationResult, skillName: stri
     }
 
     if (result.warnings.length === 0 && result.suggestions.length === 0) {
-      lines.push('✅ Skill is valid');
+      lines.push('[OK] Skill is valid');
     } else {
-      lines.push('✅ Skill is valid (with warnings/suggestions)');
+      lines.push('[OK] Skill is valid (with warnings/suggestions)');
     }
   }
 

@@ -27,12 +27,12 @@ import { DEFAULT_BM25_CONFIG } from './types';
  * // => [['typescript-tdd', 12.5], ['bun-runtime', 3.2]]
  * ```
  */
-export function rankSkillsByBM25(
+export const rankSkillsByBM25 = (
   query: string,
   skillNames: string[],
   index: BM25Index,
   config: BM25Config = {},
-): Array<[string, number]> {
+): Array<[string, number]> => {
   const { threshold } = { ...DEFAULT_BM25_CONFIG, ...config };
 
   const scores: Array<[string, number]> = [];
@@ -50,4 +50,4 @@ export function rankSkillsByBM25(
   scores.sort((a, b) => b[1] - a[1]);
 
   return scores;
-}
+};

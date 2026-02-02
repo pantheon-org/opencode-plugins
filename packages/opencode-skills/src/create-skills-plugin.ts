@@ -52,10 +52,10 @@ const DEFAULT_CONFIG: SkillsPluginConfig = {
  * export const MyPlugin = createSkillsPlugin(skills, { debug: true });
  * ```
  */
-export function createSkillsPlugin(
+export const createSkillsPlugin = (
   skills: Record<string, Skill>,
   userConfig: Partial<SkillsPluginConfig> = {},
-): Plugin {
+): Plugin => {
   const config: SkillsPluginConfig = {
     ...DEFAULT_CONFIG,
     ...userConfig,
@@ -229,4 +229,4 @@ export function createSkillsPlugin(
       },
     };
   };
-}
+};

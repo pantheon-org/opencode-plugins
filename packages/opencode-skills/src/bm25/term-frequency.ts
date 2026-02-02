@@ -17,6 +17,6 @@
  * // => 2
  * ```
  */
-export function termFrequency(term: string, document: string[]): number {
+export const termFrequency = (term: string, document: string[]): number => {
   return document.filter((t) => t === term).length;
-}
+};

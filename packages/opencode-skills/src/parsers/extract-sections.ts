@@ -4,6 +4,8 @@
  * Parse markdown content and extract structured sections by heading.
  */
 
+import { parseChecklistItems } from './parse-checklist-items';
+import { splitByHeadings } from './split-by-headings';
 import type { SkillSections } from './types';
 
 /**
@@ -33,8 +35,7 @@ import type { SkillSections } from './types';
  * // => { whatIDo: 'I help...', checklist: ['Write tests', 'Implement feature'], ... }
  * ```
  */
-// biome-ignore lint: Section extraction requires multiple heading pattern checks
-export function extractSections(markdown: string): SkillSections {
+export const extractSections = (markdown: string): SkillSections => {
   const sections: SkillSections = {
     whatIDo: '',
     whenToUseMe: '',
@@ -42,30 +43,8 @@ export function extractSections(markdown: string): SkillSections {
     checklist: [],
   };
 
-  // Split by ## headings
-  const headingRegex = /^##\s+(.+?)$/gm;
-  const parts: Array<{ heading: string; content: string }> = [];
+  const parts = splitByHeadings(markdown);
 
-  let lastIndex = 0;
-  let match: RegExpExecArray | null = null;
-
-  match = headingRegex.exec(markdown);
-  while (match !== null) {
-    if (lastIndex > 0) {
-      const previousHeading = parts[parts.length - 1];
-      previousHeading.content = markdown.slice(lastIndex, match.index).trim();
-    }
-    parts.push({ heading: match[1].trim(), content: '' });
-    lastIndex = match.index + match[0].length;
-    match = headingRegex.exec(markdown);
-  }
-
-  // Get content for last heading
-  if (parts.length > 0) {
-    parts[parts.length - 1].content = markdown.slice(lastIndex).trim();
-  }
-
-  // Map headings to sections
   for (const part of parts) {
     const heading = part.heading.toLowerCase();
 
@@ -76,20 +55,9 @@ export function extractSections(markdown: string): SkillSections {
     } else if (heading === 'instructions') {
       sections.instructions = part.content;
     } else if (heading === 'checklist') {
-      // Parse checklist items (markdown list format)
-      const checklistRegex = /^[-*]\s+\[[ x]\]\s+(.+)$/gm;
-      const items: string[] = [];
-      let itemMatch: RegExpExecArray | null = null;
-
-      itemMatch = checklistRegex.exec(part.content);
-      while (itemMatch !== null) {
-        items.push(itemMatch[1].trim());
-        itemMatch = checklistRegex.exec(part.content);
-      }
-
-      sections.checklist = items;
+      sections.checklist = parseChecklistItems(part.content);
     }
   }
 
   return sections;
-}
+};

@@ -28,13 +28,13 @@ import type { BM25Config, BM25Index } from './types';
  * // => ['typescript-tdd', 'react-testing']
  * ```
  */
-export function getTopSkillsByBM25(
+export const getTopSkillsByBM25 = (
   query: string,
   skillNames: string[],
   index: BM25Index,
   topN: number = 3,
   config: BM25Config = {},
-): string[] {
+): string[] => {
   const ranked = rankSkillsByBM25(query, skillNames, index, config);
   return ranked.slice(0, topN).map(([name]) => name);
-}
+};

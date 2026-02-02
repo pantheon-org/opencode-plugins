@@ -28,18 +28,20 @@ import { parseSkillMarkdown } from './parse-skill-markdown';
  * // => { name: 'typescript-tdd', description: '...', whatIDo: '...', ... }
  * ```
  */
-export function markdownToSkill(markdown: string): Skill {
+export const markdownToSkill = (markdown: string): Skill => {
   const { frontmatter, sections } = parseSkillMarkdown(markdown);
 
   return {
     name: frontmatter.name,
     description: frontmatter.description,
+    version: frontmatter.version ?? '1.0.0',
+    updatedAt: new Date().toISOString(),
     license: frontmatter.license,
-    compatibility: frontmatter.compatibility,
+    compatibility: frontmatter.compatibility ?? 'opencode',
     metadata: frontmatter.metadata,
     whatIDo: sections.whatIDo,
     whenToUseMe: sections.whenToUseMe,
     instructions: sections.instructions,
     checklist: sections.checklist,
   };
-}
+};

@@ -18,7 +18,7 @@
  * @param totalDocs - Total number of documents
  * @returns IDF score for the term
  */
-export function inverseDocumentFrequency(term: string, documents: string[][], totalDocs: number): number {
+export const inverseDocumentFrequency = (term: string, documents: string[][], totalDocs: number): number => {
   const docsWithTerm = documents.filter((doc) => doc.includes(term)).length;
   return Math.log((totalDocs - docsWithTerm + 0.5) / (docsWithTerm + 0.5) + 1);
-}
+};
