@@ -17,6 +17,9 @@
       "@pantheon-org/opencode-config": [
         "packages/opencode-config/src/index.ts"
       ],
+      "@pantheon-org/opencode-skills": [
+        "packages/opencode-skills/src/index.ts"
+      ],
       "@pantheon-org/opencode-warcraft-notifications-plugin": [
         "packages/opencode-warcraft-notifications-plugin/src/index.ts"
       ],
