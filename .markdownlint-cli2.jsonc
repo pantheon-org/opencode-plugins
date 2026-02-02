@@ -21,9 +21,7 @@
     "MD041": false,
 
     // MD024/no-duplicate-heading - Multiple headings with the same content
-    "MD024": {
-      "siblings_only": true
-    },
+    "MD024": false,
 
     // MD045/no-alt-text - Images should have alt text
     "MD045": false,
@@ -53,7 +51,13 @@
     "MD060": false
   },
   // Only lint specific directories - focus on core documentation
-  "globs": ["docs/**/*.md", "README.md", "CONTRIBUTING.md", "SECURITY.md"],
+  "globs": [
+    "docs/**/*.md",
+    "README.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "AGENTS.md"
+  ],
   // Fix mode disabled by default
   "fix": false
 }

@@ -58,6 +58,6 @@ tmp/
 
 # OpenCode
 .opencode/
-!.opencode/skills/
+!.opencode/skills/*.md
 .context/
 .nx/
