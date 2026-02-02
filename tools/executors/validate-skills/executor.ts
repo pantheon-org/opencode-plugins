@@ -1,9 +1,10 @@
 import type { ExecutorContext } from '@nx/devkit';
-import type { Skill, ValidationResult } from '../../../packages/opencode-skills/src/types';
 import {
   formatValidationResult,
+  type Skill,
+  type ValidationResult,
   validateSkill,
-} from '../../../packages/opencode-skills/src/validation/skill-validator';
+} from '@pantheon-org/opencode-skills';
 
 export interface ValidateSkillsExecutorOptions {
   skillsPath: string;
