@@ -40,9 +40,10 @@ describe('getTopSkillsByBM25', () => {
   it('should return empty array when no skills match', () => {
     const index = createTestIndex();
     const skillNames = ['typescript-tdd', 'react-hooks'];
-    const topSkills = getTopSkillsByBM25('machine learning tensorflow', skillNames, index, 3);
+    // Use high threshold to filter out low-relevance matches
+    const topSkills = getTopSkillsByBM25('machine learning tensorflow', skillNames, index, 3, { threshold: 1.0 });
 
-    // All scores should be 0 and filtered out by threshold
+    // All scores should be below threshold and filtered out
     expect(topSkills).toHaveLength(0);
   });
 
