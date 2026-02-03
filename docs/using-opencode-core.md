@@ -104,7 +104,7 @@ await notify.showToast({
 ## Example: Plugin with Loading Messages
 
 ```typescript
-import { Plugin } from '@opencode-ai/plugin';
+import { Plugin, tool } from '@opencode-ai/plugin';
 import { createNotifier } from '@pantheon-org/opencode-core/notification';
 
 export const MyPlugin: Plugin = async (ctx) => {
