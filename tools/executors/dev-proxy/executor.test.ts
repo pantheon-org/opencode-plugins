@@ -131,10 +131,8 @@ describe('dev-proxy executor with mocked runExecutor', () => {
 
     const childProcess = require('node:child_process');
     const originalSpawn = childProcess.spawn;
-    childProcess.spawn = (cmd: string, args: string[], _opts: any) => {
+    childProcess.spawn = (_cmd: string, _args: string[], _opts: any) => {
       _childSpawned = true;
-      // biome-ignore lint/suspicious/noConsole: Debug logging for test
-      console.log('[TEST] child_process.spawn called with:', cmd, args);
       // return a fake child with kill()
       return {
         kill: () => {
