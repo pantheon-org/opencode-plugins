@@ -41,10 +41,7 @@
       "dependsOn": ["build"],
       "cache": true,
       "executor": "@nx/js:prune-lockfile",
-      "outputs": [
-        "{workspaceRoot}/dist/libs/workflows/package.json",
-        "{workspaceRoot}/dist/libs/workflows/bun.lock"
-      ],
+      "outputs": ["{workspaceRoot}/dist/libs/workflows/package.json", "{workspaceRoot}/dist/libs/workflows/bun.lock"],
       "options": {
         "buildTarget": "build"
       }

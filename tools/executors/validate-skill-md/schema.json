@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "title": "Validate SKILL.md Files",
+  "description": "Validate markdown SKILL.md files with YAML frontmatter",
+  "type": "object",
+  "properties": {
+    "pattern": {
+      "type": "string",
+      "description": "Glob pattern for SKILL.md files",
+      "default": ".opencode/skills/*/SKILL.md"
+    },
+    "strict": {
+      "type": "boolean",
+      "description": "Enable strict validation (fail on warnings)",
+      "default": false
+    },
+    "format": {
+      "type": "string",
+      "description": "Output format",
+      "enum": ["text", "json"],
+      "default": "text"
+    }
+  }
+}

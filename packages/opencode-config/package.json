@@ -1,0 +1,42 @@
+{
+  "name": "@pantheon-org/opencode-config",
+  "version": "0.1.0",
+  "description": "Configuration utilities for OpenCode plugins",
+  "keywords": ["opencode", "config", "plugin", "typescript", "utilities"],
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --out-dir dist --clean",
+    "dev": "tsup src/index.ts --format esm --dts --out-dir dist --watch",
+    "type-check": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pantheon-org/opencode-config.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pantheon-org/opencode-config/issues"
+  },
+  "homepage": "https://github.com/pantheon-org/opencode-config#readme",
+  "author": "Pantheon Systems",
+  "license": "MIT",
+  "dependencies": {
+    "@pantheon-org/opencode-notification": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

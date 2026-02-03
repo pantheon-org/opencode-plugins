@@ -105,7 +105,8 @@
       "executor": "@pantheon-org/tools:typecheck",
       "options": {},
       "cache": true,
-      "inputs": ["default", "^production"]
+      "inputs": ["default", "^production"],
+      "dependsOn": ["^build"]
     },
     "@nx/js:tsc": {
       "cache": true,

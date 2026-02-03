@@ -1,0 +1,9 @@
+{
+  "executors": {
+    "validate-tsdoc": {
+      "implementation": "./impl",
+      "schema": "./schema.json",
+      "description": "Validate TSDoc comments in TypeScript files"
+    }
+  }
+}

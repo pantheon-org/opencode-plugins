@@ -25,7 +25,11 @@ function makeMockIterator() {
     _returned() {
       return returned;
     },
-  } as any;
+  } as {
+    [Symbol.asyncIterator](): AsyncGenerator<{ success: boolean }>;
+    return(): Promise<IteratorResult<{ success: boolean }>>;
+    _returned(): boolean;
+  };
   return iterator;
 }
 

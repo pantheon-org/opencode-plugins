@@ -1,0 +1,48 @@
+{
+  "name": "@pantheon-org/opencode-skills",
+  "version": "0.1.0",
+  "description": "TypeScript-based skill injection plugin for OpenCode with smart pattern matching",
+  "keywords": ["opencode", "plugin", "typescript", "skills", "tdd", "development", "knowledge-base"],
+  "homepage": "https://github.com/pantheon-org/opencode-skills#readme",
+  "bugs": {
+    "url": "https://github.com/pantheon-org/opencode-skills/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pantheon-org/opencode-skills.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "main": "index.ts",
+  "files": ["index.ts", "src/", "README.md", "LICENSE"],
+  "scripts": {
+    "test": "bun test src",
+    "test:coverage": "bun test --coverage src/",
+    "test:watch": "bun test --watch src/",
+    "test:verbose": "bun test src/ --reporter tap",
+    "type-check": "bun tsc --noEmit --project tsconfig.test.json",
+    "lint": "eslint src/",
+    "lint:md": "markdownlint-cli2",
+    "lint:md:fix": "markdownlint-cli2 --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,mjs,cjs,css}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,mjs,cjs,css}\"",
+    "clean": "rm -rf dist/ .bun-cache/ coverage/",
+    "build": "bun tsc",
+    "dev": "bun tsc --watch",
+    "verify:package": "npm pack --dry-run",
+    "prepublishOnly": "bun run build && bun test && bun run verify:package"
+  },
+  "dependencies": {
+    "yaml": "^2.3.4",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.13",
+    "@types/bun": "latest",
+    "@types/glob": "^8.1.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "bun": ">=1.0.0"
+  }
+}

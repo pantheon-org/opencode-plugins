@@ -68,5 +68,9 @@ export default async function (tree: Tree, options: LibraryGeneratorSchema) {
 
   await formatFiles(tree);
 
-  return () => {};
+  return () => {
+    console.log(`✅ Internal library '${projectName}' created in ${projectRoot}/`);
+    console.log(`   This library is NOT mirrored or published to npm.`);
+    console.log(`   Run: nx build ${projectName}`);
+  };
 }

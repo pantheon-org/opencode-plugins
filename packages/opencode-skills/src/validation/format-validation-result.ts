@@ -1,0 +1,41 @@
+import type { ValidationResult } from '../types.js';
+
+export const formatValidationResult = (result: ValidationResult, skillName: string): string => {
+  const lines: string[] = [];
+
+  lines.push(`Validation Results for "${skillName}"`);
+  lines.push('');
+
+  if (!result.valid) {
+    lines.push('[ERROR] Validation failed:');
+    for (const error of result.errors) {
+      lines.push(`  - ${error.field}: ${error.message}`);
+    }
+    lines.push('');
+    lines.push('Skill validation failed');
+  } else {
+    if (result.warnings.length > 0) {
+      lines.push('[WARNING] Issues found:');
+      for (const warning of result.warnings) {
+        lines.push(`  - ${warning.field}: ${warning.message}`);
+      }
+      lines.push('');
+    }
+
+    if (result.suggestions.length > 0) {
+      lines.push('[SUGGESTION] Improvements:');
+      for (const suggestion of result.suggestions) {
+        lines.push(`  - ${suggestion.field}: ${suggestion.message}`);
+      }
+      lines.push('');
+    }
+
+    if (result.warnings.length === 0 && result.suggestions.length === 0) {
+      lines.push('[OK] Skill is valid');
+    } else {
+      lines.push('[OK] Skill is valid (with warnings/suggestions)');
+    }
+  }
+
+  return lines.join('\n');
+};

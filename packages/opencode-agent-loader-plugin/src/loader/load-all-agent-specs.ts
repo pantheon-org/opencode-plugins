@@ -2,7 +2,7 @@
  * Load all agent specifications from the workspace
  */
 
-import type { AgentSpec, AugmentedPluginConfig } from '../types';
+import type { AgentSpec, AgentSpecLoadResult, AugmentedPluginConfig } from '../types';
 
 import { DEFAULT_CONFIG } from './config';
 import { discoverAgentSpecs } from './discover-agent-specs';
@@ -29,7 +29,9 @@ export const loadAllAgentSpecs = async (worktree: string, config: AugmentedPlugi
   const results = await Promise.all(files.map((file) => loadAgentSpec(file, verbose)));
 
   // Filter out failed loads and return successful specs
-  const specs = results.filter((result) => result.spec !== undefined).map((result) => result.spec!);
+  const specs = results
+    .filter((result): result is AgentSpecLoadResult & { spec: AgentSpec } => result.spec !== undefined)
+    .map((result) => result.spec);
 
   const errorCount = results.length - specs.length;
   if (errorCount > 0) {
