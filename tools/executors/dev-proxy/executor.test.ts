@@ -129,14 +129,14 @@ describe('dev-proxy executor with mocked runExecutor', () => {
     const originalSpawn = childProcess.spawn;
     childProcess.spawn = (cmd: string, args: string[], _opts: any) => {
       _childSpawned = true;
+      // biome-ignore lint/suspicious/noConsole: Debug logging for test
       console.log('[TEST] child_process.spawn called with:', cmd, args);
       // return a fake child with kill()
       return {
         kill: () => {
           childKilled = true;
         },
-        // biome-ignore lint/complexity/noBannedTypes: Mock EventEmitter interface
-        on: (_ev: string, _cb: Function) => {},
+        on: (_ev: string, _cb: (...args: unknown[]) => void) => {},
       } as any;
     };
 
@@ -156,7 +156,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
 
     const beforeListeners = process.listeners('SIGINT').slice();
 
-    const resPromise = runExecutor(
+    const gen = runExecutor(
       {
         plugins: ['opencode-warcraft-notifications-plugin'],
         __runExecutor: mockRunExecutor,
@@ -166,6 +166,9 @@ describe('dev-proxy executor with mocked runExecutor', () => {
       context,
     );
 
+    // Start the generator to execute the executor body
+    const resPromise = gen.next();
+
     await new Promise((r) => setTimeout(r, 100));
 
     process.emit('SIGINT' as any);
@@ -173,7 +176,7 @@ describe('dev-proxy executor with mocked runExecutor', () => {
 
     expect(childKilled).toBe(true);
 
-    const res = await resPromise.next();
+    const res = await resPromise;
     expect(res?.value?.success).toBe(true);
 
     // restore spawn and listeners
