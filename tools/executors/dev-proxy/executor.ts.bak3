@@ -50,6 +50,7 @@ async function* runExecutor(options: DevProxyOptions, context: ExecutorContext):
   const runExecutorImpl = options.__runExecutor ?? nxRunExecutor;
   const spawnSyncImpl = options.__spawnSync ?? spawnSync;
 
+  // biome-ignore lint/suspicious/noConsole: Intentional logging for dev-proxy executor
   console.info('dev-proxy: workspaceRoot=', workspaceRoot);
 
   for (const r of resolved) {
@@ -84,6 +85,7 @@ async function* runExecutor(options: DevProxyOptions, context: ExecutorContext):
               // Failed to stop iterator
             }
           });
+          // biome-ignore lint/suspicious/noConsole: Intentional logging for dev-proxy executor
           console.info(`Started build target for ${projName} via @nx/devkit.runExecutor`);
           started = true;
         }
@@ -94,6 +96,7 @@ async function* runExecutor(options: DevProxyOptions, context: ExecutorContext):
 
     if (!started) {
       try {
+        // biome-ignore lint/suspicious/noConsole: Intentional logging for dev-proxy executor
         console.info(`Falling back to CLI watcher for ${projName}`);
         const child = spawn('bunx', ['nx', 'run', `${projName}:build`, '--watch'], {
           stdio: 'inherit',
@@ -119,6 +122,7 @@ async function* runExecutor(options: DevProxyOptions, context: ExecutorContext):
   if (options.apply === false) args.push('--no-apply');
   args.push(...requestedPlugins);
 
+  // biome-ignore lint/suspicious/noConsole: Intentional logging for dev-proxy executor
   console.info('Running dev proxy runtime:', ['bunx', 'tsx', script, ...args].join(' '));
 
   // Ensure cleanup on SIGINT
@@ -126,6 +130,7 @@ async function* runExecutor(options: DevProxyOptions, context: ExecutorContext):
   const sigintHandler = async () => {
     if (exiting) return;
     exiting = true;
+    // biome-ignore lint/suspicious/noConsole: Intentional logging for dev-proxy executor
     console.info('\nInterrupted. Stopping build watchers and exiting...');
     for (const fn of stopFns) {
       try {

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines -- Executor file with comprehensive error handling and documentation */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 

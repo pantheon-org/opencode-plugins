@@ -16,6 +16,16 @@
       "type": "boolean",
       "description": "Whether to apply filesystem symlink changes. Set to false for a dry-run.",
       "default": true
+    },
+    "__runExecutor": {
+      "description": "Internal: mock implementation for testing (do not use)"
+    },
+    "__spawnSync": {
+      "description": "Internal: mock implementation for testing (do not use)"
+    },
+    "__noExit": {
+      "type": "boolean",
+      "description": "Internal: prevent process exit for testing (do not use)"
     }
   },
   "required": [],
