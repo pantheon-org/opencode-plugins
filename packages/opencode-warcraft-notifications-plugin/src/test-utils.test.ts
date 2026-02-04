@@ -92,6 +92,7 @@ describe('test-utils helpers', () => {
   it('silenceConsole returns restore function', () => {
     const restore = silenceConsole();
     try {
+      console.log('this should be silent');
       console.error('also silent');
     } finally {
       restore();
