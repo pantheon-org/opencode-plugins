@@ -1,0 +1,21 @@
+name: 'Setup Node.js for NPM'
+description: 'Sets up Node.js configured for npm registry publishing'
+
+inputs:
+  node-version:
+    description: 'Node.js version to install'
+    required: false
+    default: '20'
+  registry-url:
+    description: 'NPM registry URL'
+    required: false
+    default: 'https://registry.npmjs.org'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js for npm
+      uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+      with:
+        node-version: ${{ inputs.node-version }}
+        registry-url: ${{ inputs.registry-url }}
